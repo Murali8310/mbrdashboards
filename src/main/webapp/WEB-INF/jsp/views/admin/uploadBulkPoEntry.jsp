@@ -335,7 +335,7 @@ h1 {
 										style="padding-top: 25px; padding: 15px 6px 6px 6px; color: #fff"
 										id="selectedFileType"
 										class="sidebar-link far sidebar-link dwn"
-										href="downloadbudgetFormatFile"> <b><span
+										href="downloadPoentryFile"> <b><span
 											class="hide-menu" style="font-family: 'Montserrat'">
 												PO Entry File </span></b></a>
 								</div>
@@ -434,8 +434,8 @@ var file = $('#file').val();
 	}
 
 	$(".loading").show();
-		     /*  $.ajax({
-		        url: "uploadBulkbudgetExcelFile",
+		     $.ajax({
+		        url: "uploadBulkPoentryExcelFile",
 		        type: "POST",
 		        enctype: 'multipart/form-data',
 		        data: data, //pass the form data
@@ -444,13 +444,12 @@ var file = $('#file').val();
 		        success: function (data) {
 		       
 	        	if(data == 'Sucessfully created'){
-	        		
 	        		  $("#example-form")[0].reset();
 	  	            $(".loading").hide();    
 	  	            $('.filename').html("");    
 		        	Swal.fire({
-		    			icon : 'warning',
-		    			title : 'Budget Master',
+		    			icon : 'success',
+		    			title : 'PO Entry ',
 		    			html: 'Sucessfully created. <br/>Upload completed',
 		    			
 		    			focusConfirm : false,
@@ -460,8 +459,8 @@ var file = $('#file').val();
 	        	}else {
 
 					Swal.fire({
-						icon : 'warning',
-		    			title : 'Budget Master',
+						icon : 'success',
+		    			title : 'PO Entry',
 						html: data+' <br/>Upload completed',
 						
 						focusConfirm : false,
@@ -483,7 +482,7 @@ var file = $('#file').val();
 		    		})
 		    		return;
 		        }
-		      }); */
+		      }); 
 
 
 

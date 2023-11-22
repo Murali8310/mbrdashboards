@@ -12,6 +12,7 @@ import com.titan.stationary.bean.Budgetmasterbean;
 import com.titan.stationary.bean.BuyerIndentBean;
 import com.titan.stationary.bean.HolidayMasterBean;
 import com.titan.stationary.bean.IndentMasterBean;
+import com.titan.stationary.bean.PoEntryBean;
 import com.titan.stationary.bean.Product;
 import com.titan.stationary.bean.UserBean;
 import com.titan.stationary.bean.UserLoginBean;
@@ -108,6 +109,7 @@ public interface UserDao {
 	//String userCreationByForm(String empid, String empname, String designation, String city, String email, String mobile,String loginId);
 	
 	StringBuilder insertExcelbudgetMaster(List<Budgetmasterbean> listOfUserMasters, String loginId);
+	StringBuilder insertExcelPoEntry(List<PoEntryBean> listOfUserMasters, String loginId);
 
 	StringBuilder insertExcelholidayMaster(List<HolidayMasterBean> listOfUserMasters, String loginId);
 	

@@ -68,6 +68,7 @@ import com.titan.stationary.bean.Budgetmasterbean;
 import com.titan.stationary.bean.BuyerIndentBean;
 import com.titan.stationary.bean.HolidayMasterBean;
 import com.titan.stationary.bean.IndentMasterBean;
+import com.titan.stationary.bean.PoEntryBean;
 import com.titan.stationary.bean.Product;
 import com.titan.stationary.bean.UserBean;
 import com.titan.stationary.bean.UserLoginBean;
@@ -779,37 +780,52 @@ public class UserDaoimpl implements UserDao {
 
 	/*
 	 * Gokul Indent DOCUMENT NUMBER GENERATE
+	 * 
+	 * 
+	 * public String getIndenttransactionId(String UserID, String yearfromCal,
+	 * String monthFromCal) { int cFY = Integer.valueOf(yearfromCal); int cFM =
+	 * Integer.valueOf(monthFromCal); int index = 1; int maxOrderID_DB = 0; String
+	 * OrderIdString = ""; Query queryToGetMaximumOrderId =
+	 * entityManager.createNativeQuery(
+	 * "SELECT isnull(MAX(CAST(SUBSTRING(DOC_NUMBER,11,LEN(DOC_NUMBER)-9) AS INT)),0) FROM Indent_Transaction"
+	 * );
+	 * 
+	 * Optional<Integer> maxOrderId = null; try { maxOrderID_DB = (int)
+	 * queryToGetMaximumOrderId.getSingleResult(); maxOrderId =
+	 * Optional.ofNullable(maxOrderID_DB); if (maxOrderId.isPresent()) {
+	 * OrderIdString = Integer.toString(maxOrderId.get()); } // int to String
+	 * Conversion } catch (Exception e) { e.printStackTrace(); e.getCause(); }
+	 * 
+	 * if (OrderIdString != null) { OrderIdString = UserID + cFY + cFM + ("00" +
+	 * (maxOrderID_DB + 1)); return OrderIdString; } OrderIdString = UserID + cFY +
+	 * cFM + ("00" + index);
+	 * 
+	 * return OrderIdString; }
 	 */
-
+	
+	
 	public String getIndenttransactionId(String UserID, String yearfromCal, String monthFromCal) {
-		int cFY = Integer.valueOf(yearfromCal);
-		int cFM = Integer.valueOf(monthFromCal);
-		int index = 1;
-		int maxOrderID_DB = 0;
-		String OrderIdString = "";
-		Query queryToGetMaximumOrderId = entityManager.createNativeQuery(
-				"SELECT isnull(MAX(CAST(SUBSTRING(DOC_NUMBER,20,LEN(DOC_NUMBER)-9) AS INT)),0) FROM Indent_Transaction");
+	    int cFY = Integer.valueOf(yearfromCal);
+	    int cFM = Integer.valueOf(monthFromCal);
+	    int maxOrderID_DB = 0;
+	    String OrderIdString = "";
 
-		Optional<Integer> maxOrderId = null;
-		try {
-			maxOrderID_DB = (int) queryToGetMaximumOrderId.getSingleResult();
-			maxOrderId = Optional.ofNullable(maxOrderID_DB);
-			if (maxOrderId.isPresent()) {
-				OrderIdString = Integer.toString(maxOrderId.get());
-			}
-			// int to String Conversion
-		} catch (Exception e) {
-			e.printStackTrace();
-			e.getCause();
-		}
-
-		if (OrderIdString != null) {
-			OrderIdString = UserID + cFY + cFM + ("00" + (maxOrderID_DB + 1));
-			return OrderIdString;
-		}
-		OrderIdString = UserID + cFY + cFM + ("00" + index);
-
-		return OrderIdString;
+	    Query queryToGetMaximumOrderId = entityManager.createNativeQuery(
+	            "SELECT ISNULL(MAX(CAST(SUBSTRING(DOC_NUMBER, 11, LEN(DOC_NUMBER) - 10) AS INT)), 0) FROM Indent_Transaction");
+ 
+	    try {
+	        maxOrderID_DB = (int) queryToGetMaximumOrderId.getSingleResult();
+	        OrderIdString = String.format("%05d", maxOrderID_DB + 1); 
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        e.getCause();
+	    }
+ 
+	   
+	    OrderIdString = UserID + cFY + cFM + OrderIdString;
+ 
+	   
+	    return OrderIdString;
 	}
 
 	/*
@@ -3648,16 +3664,14 @@ public class UserDaoimpl implements UserDao {
 
 	public String sendToVendor(Map<String, Object> payload) {
 		String r = "";
-		
-		
+
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat year_Date = new SimpleDateFormat("YYYY");
 		String yearfromCal = year_Date.format(cal.getTime());
 
-    	SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
+		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
 		String MonthText = month.format(cal.getTime());
 
-		
 		try {
 
 			Query getemailID = entityManager.createNativeQuery(
@@ -3667,16 +3681,16 @@ public class UserDaoimpl implements UserDao {
 			getemailID.setParameter("MonthText", MonthText);
 			getemailID.setParameter("YEAR", yearfromCal);
 			List<Object[]> emailIDPoduct = (List<Object[]>) getemailID.getResultList();
-		
+
 			Map<String, List<Object>> indentData = new HashMap<>();
 
 			for (Object[] result : emailIDPoduct) {
-				
-			List<Object> resultdata = new ArrayList<>();
+
+				List<Object> resultdata = new ArrayList<>();
 				resultdata.add(result[0]);
 				resultdata.add(result[1]);
 				resultdata.add(result[2]);
-			//	resultdata.add(result[4]);
+				// resultdata.add(result[4]);
 
 				String key = result[3].toString();
 
@@ -3689,108 +3703,99 @@ public class UserDaoimpl implements UserDao {
 					indentData.put(key, resultdata);
 				}
 			}
-			
-		     
-         
-            
-            
+
 			for (Map.Entry<String, List<Object>> entry : indentData.entrySet()) {
 				String key = entry.getKey();
 				List<Object> value = entry.getValue();
-				
-				
-				 Workbook workbook = new XSSFWorkbook();
-                 Sheet sheet = workbook.createSheet("DataTable");
-                // Row headerRow = sheet.createRow(0);
-                 
-                       
-                 // Add headers to the header row
-               
-					/*
-					 * int counter = 0; int counter2 = 0;
-					 * 
-					 * for (Object element : value) { // Create a new Row every 3 iterations Row
-					 * dataRow = sheet.createRow(1); Cell cell = dataRow.createCell(counter2);
-					 * cell.setCellValue( element.toString()); System.out.println("  Element: " +
-					 * counter2); counter2++; }
-					 */
-                 
-                 int counter2 = 0;
-                 Row headerRow = sheet.createRow(0);  // Assuming the header row is at index 0
 
-                 String[] headers = {"Product ID", "Description", "Quantity"};
-                 for (int i = 0; i < headers.length; i++) {
-                     Cell cell = headerRow.createCell(i);
-                     cell.setCellValue(headers[i]);
-                 }
+				Workbook workbook = new XSSFWorkbook();
+				Sheet sheet = workbook.createSheet("DataTable");
+				// Row headerRow = sheet.createRow(0);
 
-                 Row dataRow = null;
+				// Add headers to the header row
 
-                 for (Object element : value) {
-                     // Create a new Row every 3 iterations starting from index 1
-                     if (counter2 % 3 == 0) {
-                         dataRow = sheet.createRow(counter2 / 3 + 1);  // Adjust row index based on your requirements
-                     }
+				/*
+				 * int counter = 0; int counter2 = 0;
+				 * 
+				 * for (Object element : value) { // Create a new Row every 3 iterations Row
+				 * dataRow = sheet.createRow(1); Cell cell = dataRow.createCell(counter2);
+				 * cell.setCellValue( element.toString()); System.out.println("  Element: " +
+				 * counter2); counter2++; }
+				 */
 
-                     Cell cell = dataRow.createCell(counter2 % 3);
-                     cell.setCellValue(element.toString());
-                     System.out.println("Element: " + counter2);
+				int counter2 = 0;
+				Row headerRow = sheet.createRow(0); // Assuming the header row is at index 0
 
-                     counter2++;
-                 }
+				String[] headers = { "Product ID", "Description", "Quantity" };
+				for (int i = 0; i < headers.length; i++) {
+					Cell cell = headerRow.createCell(i);
+					cell.setCellValue(headers[i]);
+				}
 
-				
-				  File excelFile = File.createTempFile("Indent_Number", ".xlsx");
-	                 FileOutputStream fileOut = new FileOutputStream(excelFile);
-	                 workbook.write(fileOut);
-	                  fileOut.close(); 
-	                  String filePath = excelFile.getAbsolutePath();
-	                  System.out.println("File Path: " + filePath);
-	                  
-	               //  System.out.println("keyfor email" + key);
-					//System.out.println("keyfor value" + value);
+				Row dataRow = null;
 
-				
-				//mail related changes
-				
-				
-				  String smtpHostServer = "smtp-relay.gmail.com";
-				  
-				  Properties props = System.getProperties(); props.put("mail.smtp.host",
-				  smtpHostServer); Session session = Session.getInstance(props, null);
-				  System.out.println(session); MimeMessage msg = new MimeMessage(session);
-				  msg.setFrom(new InternetAddress("noreply_stationary@titan.co.in",
-				  "No Reply-stationary Employee Portal"));
-				  msg.setReplyTo(InternetAddress.parse(key, false));
-				  msg.setSubject("Indent Details from Buyer: text/HTML");
-				  
-				  MimeMultipart multipart = new MimeMultipart();
-				  
-				  MimeBodyPart textPart = new MimeBodyPart();
-				  textPart.setText("Dear Vendor,\n\n" + "Greetings!\n" +
-				  "Find buyer indent value information in the portal.\n" +
-				  "\nIMPORTANT: Please do not reply to this message or mail address.\n\n" +
-				  "DISCLAIMER: This communication is confidential and privileged and is directed to and for the use of the addressee only. The recipient if not the addressee should not use this message if erroneously received, and access and use of this e-mail in any manner by anyone other than the addressee is unauthorized. The recipient acknowledges that Titan Company Pvt Ltd may be unable to exercise control or ensure or guarantee the integrity of the text of the email message and the text is not warranted as to completeness and accuracy. Before opening and accessing the attachment, if any, please check and scan for a virus.\n\n\n"
-				  + "Thanks & Regards,\n" + "Admin\n" + "Stationary Portal.");
-				  multipart.addBodyPart(textPart);
-				  
-				  
-				  
-				  System.out.println("Email Body:\n" ); MimeBodyPart excelAttachment = new
-				  MimeBodyPart(); DataSource source = new
-				  FileDataSource(excelFile.getAbsolutePath());
-				  excelAttachment.setDataHandler(new DataHandler(source));
-				  excelAttachment.setFileName(excelFile.getName());
-				  multipart.addBodyPart(excelAttachment);
-				  
-				  msg.setContent(multipart); msg.setSentDate(new Date());
-				  
-				  msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(key,
-				  false)); Transport.send(msg);
-				 
+				for (Object element : value) {
+					// Create a new Row every 3 iterations starting from index 1
+					if (counter2 % 3 == 0) {
+						dataRow = sheet.createRow(counter2 / 3 + 1); // Adjust row index based on your requirements
+					}
+
+					Cell cell = dataRow.createCell(counter2 % 3);
+					cell.setCellValue(element.toString());
+					System.out.println("Element: " + counter2);
+
+					counter2++;
+				}
+
+				File excelFile = File.createTempFile("Indent_Number", ".xlsx");
+				FileOutputStream fileOut = new FileOutputStream(excelFile);
+				workbook.write(fileOut);
+				fileOut.close();
+				String filePath = excelFile.getAbsolutePath();
+				System.out.println("File Path: " + filePath);
+
+				// System.out.println("keyfor email" + key);
+				// System.out.println("keyfor value" + value);
+
+				// mail related changes
+
+				String smtpHostServer = "smtp-relay.gmail.com";
+
+				Properties props = System.getProperties();
+				props.put("mail.smtp.host", smtpHostServer);
+				Session session = Session.getInstance(props, null);
+				System.out.println(session);
+				MimeMessage msg = new MimeMessage(session);
+				msg.setFrom(
+						new InternetAddress("noreply_stationary@titan.co.in", "No Reply-stationary Employee Portal"));
+				msg.setReplyTo(InternetAddress.parse(key, false));
+				msg.setSubject("Indent Details from Buyer: text/HTML");
+
+				MimeMultipart multipart = new MimeMultipart();
+
+				MimeBodyPart textPart = new MimeBodyPart();
+				textPart.setText("Dear Vendor,\n\n" + "Greetings!\n"
+						+ "Find buyer indent value information in the portal.\n"
+						+ "\nIMPORTANT: Please do not reply to this message or mail address.\n\n"
+						+ "DISCLAIMER: This communication is confidential and privileged and is directed to and for the use of the addressee only. The recipient if not the addressee should not use this message if erroneously received, and access and use of this e-mail in any manner by anyone other than the addressee is unauthorized. The recipient acknowledges that Titan Company Pvt Ltd may be unable to exercise control or ensure or guarantee the integrity of the text of the email message and the text is not warranted as to completeness and accuracy. Before opening and accessing the attachment, if any, please check and scan for a virus.\n\n\n"
+						+ "Thanks & Regards,\n" + "Admin\n" + "Stationary Portal.");
+				multipart.addBodyPart(textPart);
+
+				System.out.println("Email Body:\n");
+				MimeBodyPart excelAttachment = new MimeBodyPart();
+				DataSource source = new FileDataSource(excelFile.getAbsolutePath());
+				excelAttachment.setDataHandler(new DataHandler(source));
+				excelAttachment.setFileName(excelFile.getName());
+				multipart.addBodyPart(excelAttachment);
+
+				msg.setContent(multipart);
+				msg.setSentDate(new Date());
+
+				msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(key, false));
+				Transport.send(msg);
 
 				// Process key and value as needed
-				//System.out.println("keymurali: " + key + ", Value: " + value);
+				// System.out.println("keymurali: " + key + ", Value: " + value);
 			}
 			r = "Email sent by successfully!";
 
@@ -5124,6 +5129,7 @@ public class UserDaoimpl implements UserDao {
 		}
 		return response;
 	}
+
 // Murali
 	@SuppressWarnings("unchecked")
 	@Override
@@ -5139,6 +5145,92 @@ public class UserDaoimpl implements UserDao {
 			getPoEntryList = null;
 		}
 		return getPoEntryList;
+	}
+	
+	
+	/**
+	 * @author Murali chari - 22-11-2023 Used by excel poentry master upload
+	 */
+	@Override
+	public StringBuilder insertExcelPoEntry(List<PoEntryBean> PoEntryBeanList, String loginId) {
+
+		List<PoEntryBean> poEntryFinalList = new ArrayList<PoEntryBean>();
+		StringBuilder messBuilder = new StringBuilder();
+		for (Iterator iterator = PoEntryBeanList.iterator(); iterator.hasNext();) {
+			PoEntryBean poEntryBean = (PoEntryBean) iterator.next();
+			boolean specalChar = Validations.validation(poEntryBean.getCCID());
+			
+			if (specalChar) {
+				return messBuilder
+						.append("Cost centre " + poEntryBean.getCCID() + "  column has invalid character.");
+			}
+			
+			
+			specalChar = Validations.validation(poEntryBean.getYear());
+			if (specalChar) {
+				return messBuilder.append("Year " + poEntryBean.getYear() + "  column has invalid character.");
+			}
+			
+			
+			specalChar = Validations.validation(poEntryBean.getPOAmount());
+			if (specalChar) {
+				return messBuilder.append("GL " + poEntryBean.getPOAmount() + " column has invalid character.");
+			}
+			
+			
+			specalChar = Validations.validation(poEntryBean.getMonth());
+			if (specalChar) {
+				return messBuilder.append(
+						"GLDescription " + poEntryBean.getMonth() + " column has invalid character.");
+			}
+
+		}
+		messBuilder.append(insertPoEntryData(PoEntryBeanList, loginId));
+
+		return messBuilder;
+	}
+	
+	
+	/**
+	 * Used by excel PoEntry upload
+	 * 
+	 * @param poEntry Bean
+	 * @param loginId
+	 * @author 832044_CNST4 murali chari
+	 * @return
+	 */
+	private String insertPoEntryData(List<PoEntryBean> poEntryList, String loginId) {
+		String response = "";
+		try {
+
+			for (int j = 0; j < poEntryList.size(); j++) {
+				PoEntryBean poEntryMaster = poEntryList.get(j);
+				// String animals = abmUserMaster.getStoreCode();
+				// String animals_list[] = animals.split(",");
+				// String animal1 = animals_list[0];
+				// System.out.println("array" + animal1);
+				System.out.println("arrayeeee" + poEntryMaster.getYear() + poEntryMaster.getMonth() + poEntryMaster.getCCID());
+				Query insertPoEntry = entityManager.createNativeQuery(
+						"Insert Into PO_Entry (Year,cost_Center,Month,poamount,CreatedBy,CreatedOn)\n"
+						+ "VALUES(:Year,:CCID,:MONTH,:POAMOUNT,:CreatedBy,:CreatedOn)");
+				insertPoEntry.setParameter("CCID", poEntryMaster.getCCID());
+				insertPoEntry.setParameter("Year", poEntryMaster.getYear());
+				insertPoEntry.setParameter("POAMOUNT", poEntryMaster.getPOAmount());
+				insertPoEntry.setParameter("MONTH", poEntryMaster.getMonth());
+				insertPoEntry.setParameter("CreatedBy", loginId);
+				insertPoEntry.setParameter("CreatedOn", new Date());
+				int intresponse = insertPoEntry.executeUpdate();
+				if (intresponse != 0) {
+					System.out.println("indent updated successfully");
+					System.out.println("<<<<<<<<<<< WP created successfully>>>>>>>>>>>");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			response = e.getMessage();
+			System.out.println(response);
+		}
+		return response;
 	}
 
 }

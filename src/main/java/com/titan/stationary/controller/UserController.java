@@ -2409,7 +2409,41 @@ List<Object> BuyerList;
 		 * return modelAndView; } }
 		 */
 		
+		@GetMapping(value = "downloadPoentryFile")
+		public ResponseEntity<ByteArrayResource> downloadPoentryFile(Model model) throws IOException {
+
+			String BULK_USERS_MASTER_FILE_ROOT = "D:/FORMATE_FILE/";
+			String BULK_USERS_MASTER_FILE_NAME = "PO-BULK-UPLOAD.xlsx";
+
+			String fileDirectory = BULK_USERS_MASTER_FILE_ROOT + BULK_USERS_MASTER_FILE_NAME;
+			Path path = Paths.get(fileDirectory);
+			byte[] bytesData = Files.readAllBytes(path);
+			ByteArrayResource resource = new ByteArrayResource(bytesData);
+
+			return ResponseEntity.ok()
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + path.getFileName().toString())
+					.contentType(MediaType.APPLICATION_OCTET_STREAM).contentLength(bytesData.length).body(resource);
+
+		}
 		
+		@PostMapping(value = "uploadBulkPoentryExcelFile")
+		public StringBuilder uploadBulkPoentryExcelFile(HttpServletRequest request, HttpServletResponse response,
+				@RequestParam(value = "file") MultipartFile file, RedirectAttributes redirect, Model model) {
+
+			HttpSession session = request.getSession();
+			String loginId = "";
+			try {
+				Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+				loginId = (String) userMap.get("login_id");
+			} catch (Exception er) {
+				er.printStackTrace();
+				return new StringBuilder("Session is timeout, <a href='login' >click here</a> to login");
+			}
+			StringBuilder uploadedStatus = userService.uploadBulkPoentryExcelFile(file, loginId);
+			redirect.addFlashAttribute("MESSAGE", uploadedStatus);
+			model.addAttribute("MESSAGE", uploadedStatus);
+			return uploadedStatus;
+		}
 		
 		
 		}

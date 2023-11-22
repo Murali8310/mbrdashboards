@@ -91,6 +91,8 @@ public interface Userservice {
 	
 	StringBuilder uploadBulkbudgetExcelFile(MultipartFile file, String loginId);
 	StringBuilder uploadBulkholidayExcelFile(MultipartFile file, String loginId);
+	StringBuilder uploadBulkPoentryExcelFile(MultipartFile file, String loginId);
+
 
 	List<Object> getAllindentDetails();
 	List<Object> getAllindentmanagerDetails(String loginId);

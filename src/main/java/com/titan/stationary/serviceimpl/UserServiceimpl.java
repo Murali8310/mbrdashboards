@@ -30,6 +30,7 @@ import com.titan.stationary.bean.Budgetmasterbean;
 import com.titan.stationary.bean.BuyerIndentBean;
 import com.titan.stationary.bean.HolidayMasterBean;
 import com.titan.stationary.bean.IndentMasterBean;
+import com.titan.stationary.bean.PoEntryBean;
 import com.titan.stationary.bean.Product;
 import com.titan.stationary.bean.UserLoginBean;
 import com.titan.stationary.bean.productMasterbean;
@@ -929,5 +930,110 @@ public class UserServiceimpl implements Userservice {
 		return userDao.getAllcolumnlength(Year,Month);
 	}
 	
+	/*
+	 * @Override public String userCreationByForm(IndentMasterBean storemaster,
+	 * String loginId) { return userDao.userCreationByForm( storemaster, loginId); }
+	 */
+
+	@Override
+	public StringBuilder uploadBulkPoentryExcelFile(MultipartFile fileData, String loginId) {
+
+		Workbook workbook = null;
+		Sheet sheet = null;
+		ByteArrayInputStream bis = null;
+
+		StringBuilder messageBuilder = new StringBuilder();
+
+		List<PoEntryBean> listOfUserMasters = new ArrayList<>();
+
+		try {
+
+			bis = new ByteArrayInputStream(fileData.getBytes());
+			if (fileData.getOriginalFilename().endsWith("xls")) {
+				workbook = new HSSFWorkbook(bis);
+
+			} else if (fileData.getOriginalFilename().endsWith("xlsx")) {
+				workbook = new XSSFWorkbook(bis);
+			} else {
+
+				messageBuilder.append("Received file does not have a standard excel extension.");
+				return messageBuilder;
+			}
+
+			sheet = workbook.getSheetAt(0);
+
+			messageBuilder = extractPoEntryExcelData(sheet, listOfUserMasters);
+			System.out.println(messageBuilder);
+
+			messageBuilder = userDao.insertExcelPoEntry(listOfUserMasters, loginId);
+			System.out.println(messageBuilder);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			messageBuilder.append(e.getMessage());
+		}
+		return messageBuilder;
+
+	}
+	
+	
+	/**
+	 * @param sheet
+	 * @param poentrybean
+	 */
+	public StringBuilder extractPoEntryExcelData(Sheet sheet, List<PoEntryBean> listOfPoentryBean)
+			throws Exception {
+		PoEntryBean poentryBean;
+		Row row;
+		Set set = new HashSet<>();
+		StringBuilder messageBuilder = new StringBuilder();
+
+		try {
+			for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+				poentryBean = new PoEntryBean();
+				row = sheet.getRow(i);
+				Cell cell = null;
+
+				// System.out.println("userselection" + row.getCell(0));
+				cell = row.getCell(0);
+				String CCID = checkCellType(cell);
+
+				// System.out.println("userselection" + checkCellType(cell));
+				cell = row.getCell(1);
+				String Year = checkCellType(cell);
+
+				cell = row.getCell(2);
+				String MONTH = checkCellType(cell);
+
+				cell = row.getCell(3);
+				String POAMOUNT = checkCellType(cell);
+
+				boolean check = set.add(CCID);
+
+				if (check != true) {
+					messageBuilder.append("line number " + i + " have duplicate loginId " + CCID + "\n");
+					continue;
+				}
+
+				poentryBean.setCCID(CCID); // create method to check employee in HR data...
+
+				poentryBean.setYear(Year);
+				poentryBean.setPOAmount(POAMOUNT); // create method to check employee in
+																					// HR data...
+				poentryBean.setMonth(MONTH);
+				
+				// create method to check employee in HR data...
+
+				listOfPoentryBean.add(poentryBean);
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new Exception("Error in excel file, check and upload again.");
+
+		}
+
+		return messageBuilder;
+	}
 
 }
