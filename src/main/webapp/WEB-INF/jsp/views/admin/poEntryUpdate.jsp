@@ -296,10 +296,8 @@
 						success : function(response) {
 							var data = jQuery.parseJSON(response);
 							if (data == "po Data Updated Sucessfully") {
-				                  location.href = 'poEntryTable';
 								$(".loading").hide();
-								const successMessage = "PO Data updated successFully"
-									console.log('this is from messafe')
+								const successMessage = "Po data updated successfully"
 								Swal.fire({
 									icon : 'success',
 									title : successMessage,
@@ -308,7 +306,7 @@
 									focusConfirm : false,
 								}).then((result) => {
 						    	    if (result.isConfirmed) {
-						    	    	//location.href = 'BudgetMasterList';
+						                  location.href = 'poEntryTable';
 						    	    }})	
 
 							} else {

@@ -317,6 +317,28 @@ vertical-align: text-bottom ; footer {
 										<table id="example"
 											class="table table-striped table-bordered display nowrap example"
 											style="width: 100%;">
+																																
+<style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th {
+      font-size: 21px;
+      text-align: center !important;
+    }
+
+    td, th {
+      border: 1px solid #dddddd;
+      padding: 8px;
+      font-size: 17px;
+    }
+    table {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-radious:3px;
+}
+  </style>
 											<thead class="thead-light">
 												<tr>
 													<!-- <th scope="col"><b>SL.NO</b></th> -->

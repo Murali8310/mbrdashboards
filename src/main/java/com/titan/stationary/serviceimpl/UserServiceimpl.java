@@ -766,6 +766,11 @@ public class UserServiceimpl implements Userservice {
 	}
 	
 	@Override
+	public String ccCreationSave( String CCID, String Year, String COSTCENTERDESC, String GL,  String GLDESC, String LOCATION, String Department,String CCOwner, String YEARLYBUDGET, String loginId) {
+		return userDao.ccCreationSave(CCID,Year,COSTCENTERDESC,GL,GLDESC,LOCATION,Department,CCOwner,YEARLYBUDGET,loginId);
+	}
+	
+	@Override
 	public String poEntryCreationSave(String Year, String Month, String CostCenter,  String PoAmount,String loginId) {
 		return userDao.poEntryCreationSave(Year,Month,CostCenter,PoAmount,loginId);
 	}

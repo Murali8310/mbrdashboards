@@ -292,6 +292,20 @@ h1 {
 							</a>
 						</div>
 					</div>
+					<div class="col-md-6 col-lg-4 col-xlg-3">
+						<div class="card card-hover">
+							<a href="cccreation" id="cccreation">
+								<div class="box tile-color text-center">
+									<h1 class="font-light text-white display-2">
+										<i class="fa fa-university fa-3x" aria-hidden="true"></i>
+									</h1>
+								</div>
+								<div class="box tile-color text-center">
+									<h6 class="text-white display-5">Cost Center Creation</h6>
+								</div>
+							</a>
+						</div>
+					</div>
 					</div>
 				</c:if>
 	

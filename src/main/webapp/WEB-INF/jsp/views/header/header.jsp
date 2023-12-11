@@ -192,7 +192,7 @@ a:hover {
 
 
  						
-					<a class="dropdown-item" href="javascript:void(0)">
+					<a class="dropdown-item" id="userName" href="javascript:void(0)" id="">
 					<i class="ti-user m-r-5 m-l-5"></i> <%
 						 String name = "";
 													
@@ -215,7 +215,7 @@ a:hover {
 							 }
 							 %> </a>
 					
-					<a class=" dropdown-item" href="javascript:void(0)"><i
+					<a class=" dropdown-item" id="userRole" href="javascript:void(0)"><i
 						class="ti-wallet m-r-5 m-l-5"></i> 
 						<% String role = "";
 						Object objss = (String) session.getAttribute("role");

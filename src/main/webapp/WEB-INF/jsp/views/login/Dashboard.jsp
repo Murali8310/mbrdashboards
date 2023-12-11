@@ -18,7 +18,93 @@
 <link href="assets/libs/flot/css/float-chart.css" rel="stylesheet">
 <!-- Custom CSS -->
 <link href=" dist/css/style.min.css" rel="stylesheet">
+</script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+     <script>
+    document.addEventListener("DOMContentLoaded", function() {
+    	  if(document.getElementById('userRole').textContent.split(':')[1].trim() == 'Indent Manager'){
+    	     $.ajax({
+    	 			type : 'GET',
+    	 			url : 'getBudgetDetails',
+    	 			//dataType : 'json',
 
+    	 			success : function(response) {
+    	 				var allData =jQuery.parseJSON(response)[0];
+    	 	        	console.log('response',allData)
+    	 	        	var chartData = [];
+    	 	        	
+    	 	        	if(typeof allData === 'undefined'){
+    	 	        		console.log('if is 0')
+    	 	        		chartData = [0,0,0]
+    	 	        		return;
+    	 	        	}else {
+        	 	        	chartData = [Number(allData[3]),allData[3]-allData[4],allData[4]]
+    	 	        	}
+    	 	        	console.log('chartData',chartData)
+    	 	           var options = {
+    	 			        chart: {
+    	 			          type: 'pie',
+    	 			          width: '700',
+    	 			          height: '700'
+    	 			        },
+    	 			        series: chartData,
+    	 			        labels: ['Yearly Budget Value', 'Cumulative Indent Value', 'Balance Budget Value']
+    	 			      };
+
+    	 			      var chart = new ApexCharts(document.querySelector("#chart"), options);
+    	 			      chart.render();
+    	 			}
+    	 		});
+    	     }
+   
+    });
+  </script>
+  
+   <script>
+    document.addEventListener("DOMContentLoaded", function() {
+    	         $.ajax({
+        url: 'getBudgetDataforChart', 
+        method: 'GET', 
+        success: function(response) {
+        	var costCenter;
+        	var costCenterDetails;
+            var parsedData = JSON.parse(response);
+            sessionStorage.setItem("allData", response);
+            console.log('allData', parsedData);
+            if(document.getElementById('userRole').textContent.split(':')[1].trim() == 'Indent Manager'){
+            	costCenter = document.getElementById('userName').textContent.split(':')[1].trim();
+            	const index = parsedData.findIndex(function(element) {
+            		  return element[0] == Number(costCenter);
+            		});
+            	if(index != -1){
+            	costCenterDetails = parsedData[index]; 
+            	 var options = {
+            		        chart: {
+            		          type: 'bar',
+            		          height: '500' // Set the desired height here
+            		        },
+            		        series: [{
+            		          name: 'Indent Amount',
+            		          data: [costCenterDetails[22], costCenterDetails[23], costCenterDetails[24], costCenterDetails[13], costCenterDetails[14], costCenterDetails[15], costCenterDetails[16], costCenterDetails[17], costCenterDetails[18],costCenterDetails[19],costCenterDetails[20],costCenterDetails[21]]
+            		        }],
+            		        xaxis: {
+            		          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep','Oct','Nov','Dec']
+            		        }
+            		      };
+
+            		      var chart = new ApexCharts(document.querySelector("#chart3"), options);
+            		      chart.render();
+            	}
+            	console.log('costCenterDetails',costCenterDetails[13])
+            }
+            },
+        error: function(error) {
+            console.error('Error fetching data:', error);
+        }
+    }); 
+    });
+  </script>
 <style>
 .resp-iframe {
 	position: fixed;
@@ -84,27 +170,19 @@
 </head>
 
 <body>
-	<!-- ============================================================== -->
-	<!-- Preloader - style you can find in spinners.css -->
-	<!-- ============================================================== -->
 	<div class="preloader">
 		<div class="lds-ripple">
 			<div class="lds-pos"></div>
 			<div class="lds-pos"></div>
 		</div>
 	</div>
-	<!-- ============================================================== -->
-	<!-- Main wrapper - style you can find in pages.scss -->
-	<!-- ============================================================== -->
 	<div id="main-wrapper" data-sidebartype="full" class="mini-sidebar">
-		
 		 <jsp:include page="/WEB-INF/jsp/views/header/header.jsp"></jsp:include> 
 		<jsp:include page="/WEB-INF/jsp/views/header/sideBar.jsp"></jsp:include> 
-		
 		<div class="page-wrapper" style="margin-top:80px;">
 			<div class="row" >
 				<div class="col-sm-12">
-					<div class="filter-controls">
+					<%-- <div class="filter-controls">
 						<div class="col-md-3 filter-item">
 							<label for="Month" class="month-label">Month:</label> <select
 								id="Month" name="Month" class="form-control" aria-invalid="true"
@@ -136,23 +214,24 @@
 						<div class="col-md-3 filter-item">
 							<button class="btn btn-primary btn-search" onclick="search()">Search</button>
 						</div>
-					</div>
-				</div>
-				<div class="col-sm-6 col-lg-6 col-md-6">
-					<canvas id="pieChart"></canvas>
-					<div id="chart-notes"></div>
-				</div>
-				<!-- <div class="col-sm-12 col-lg-3 col-md-3 col-12">
+					</div> --%>
+					<span style="font-weight: bold;margin-left:208px">Budget Details</span><span style="font-weight: bold;float:right;margin-right:258px">Indent Details</span>
 					
-				</div> -->
+					
+				</div>
+				 <div class="col-sm-6 col-lg-6 col-md-6" style="margin-top: 12px;">
+					<div id="chart"></div>
+				</div>
+				 <div class="col-sm-6 col-lg-6 col-md-6">
+	           <div id="chart3"></div>
+				</div>   
 			</div>
-
-			<jsp:include page="/WEB-INF/jsp/views/header/footer.jsp"></jsp:include>
 		</div>
 
 	</div>
 
 	<script type="text/javascript">
+	console.log('murali')
 		history.pushState(null, null, location.href);
 		window.onpopstate = function() {
 			history.go(1);
@@ -175,158 +254,6 @@
 	<!--Custom JavaScript -->
 	<script src="dist/js/custom.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-const currentDate = new Date();
-
-// Get the current month as a string
-const currentMonth = currentDate.toLocaleString('default', { month: 'long' });
-
-// Find the option element with the corresponding value and set it as selected
-const monthSelect = document.getElementById("Month");
-for (let i = 0; i < monthSelect.options.length; i++) {
-    if (monthSelect.options[i].value === currentMonth) {
-        monthSelect.options[i].selected = true;
-        break;
-    }
-}
-
-var Year = document.getElementById("Year");
-var currentYear = new Date().getFullYear();
-
-
-var currentYearExists = false;
-for (var i = 0; i < Year.options.length; i++) {
-    if (Year.options[i].value === currentYear.toString()) {
-        currentYearExists = true;
-        break;
-    }
-}
-
-// If the current year doesn't exist, add it to the dropdown
-if (!currentYearExists) {
-    var option = document.createElement("option");
-    option.value = currentYear;
-    option.text = currentYear;
-    option.selected = true;
-    Year.appendChild(option);
-}
-
-var ctx = document.getElementById('pieChart').getContext('2d');
-var color=['#FF6384', '#36A2EB', '#FFCE56']
-var data = { 
-    labels: ['Yearly Budget Value', 'Cumulative Indent Value', 'Balance Budget Value'],
-    datasets: [{
-    	label: 'Sales',
-        data: [0, 0, 0], // Data values for each segment
-        backgroundColor:color  // Colors for each segment
-    }]
-};
-
-// Create a new pie chart
-var myPieChart = new Chart(ctx, {
-    type: 'pie',
-    data: data,
-    options: {
-        responsive: true,
-    }
-});
-
-
-$.ajax({
-    url: 'getBudgetDataforChart', 
-    method: 'GET', 
-    success: function(response) {
-        var parsedData = JSON.parse(response);
-        sessionStorage.setItem("allData", response);
-        search();
-        },
-    error: function(error) {
-        console.error('Error fetching data:', error);
-    }
-});
-
-function updatePieChart(data) {
-	var backgroundColors = ['#FF6384', '#36A2EB', '#FFCE56']; // Your slice colors
-	myPieChart.data.datasets[0].data = data[0];
-    myPieChart.data.datasets[0].backgroundColor = backgroundColors;
-    myPieChart.data.datasets[0].borderColor = 'transparent';	
-    myPieChart.update();
-    var chartNotes = document.getElementById('chart-notes');
-    var labels = myPieChart.data.labels;
-    var values = myPieChart.data.datasets[0].data;
-    console.log( myPieChart.data.datasets[0].data,' myPieChart.data.datasets[0].data')
-	    for (var i = 0; i < labels.length; i++) {
-	    	 var note = document.createElement('div');
-	         note.className = 'chart-note';
-	         note.style.color  = color[i];
-	         note.innerHTML = labels[i] + ': ' + values[i];
-	         chartNotes.appendChild(note);
-	    }
-}
-
-function search(){
-const textContent = document.getElementById("chart-notes");
-// Reset the inner HTML to an empty string
-textContent.innerHTML = "";
-myPieChart.data.datasets[0].data = [];
-const allData = JSON.parse(sessionStorage.getItem("allData"));
-const selectedMonth = document.getElementById('Month').value;
-const selectedYear = document.getElementById('Year').value;
-console.log('search',selectedMonth, selectedYear)
-updatePieChartData(allData ,selectedMonth ,selectedYear);
-}
-
-function updatePieChartData(totalData,monthName,yearName) {
-	console.log(totalData)
-const yearIndex = totalData.findIndex(function(element) {
-  return (element[1] == yearName);
-});
- const months = [
-	  "April",
-	  "May",
-	  "June",
-	  "July",
-	  "August",
-	  "September",
-	  "October",
-	  "November",
-	  "December",
-	  "January",
-	  "February",
-	  "March"
-	];
- const monthIndex = months.findIndex(function(element) {
-	  return element == monthName;
-	});
- let cumulativeAmount = 0;
- for(let index = 13; index< (13 + monthIndex);index++){
-	 if(totalData[yearIndex][index] != null){
-	cumulativeAmount = cumulativeAmount + totalData[yearIndex][index];
-	 }
- }
- 	var backgroundColors = ['#FF6384', '#36A2EB', '#FFCE56']; // Your slice colors
-	myPieChart.data.datasets[0].data = [];
- 	console.log('checking',totalData[yearIndex])
-	myPieChart.data.datasets[0].data.push(totalData[yearIndex][8]);
-	myPieChart.data.datasets[0].data.push(cumulativeAmount);
-	myPieChart.data.datasets[0].data.push(totalData[yearIndex][8]-cumulativeAmount);
-    myPieChart.data.datasets[0].backgroundColor = backgroundColors;
-    myPieChart.data.datasets[0].borderColor = 'transparent';
-    myPieChart.update();
-    var chartNotes = document.getElementById('chart-notes');
-    var labels = myPieChart.data.labels;
-    var values = myPieChart.data.datasets[0].data;
-   // console.log( myPieChart.data.datasets[0].data,' myPieChart.data.datasets[0].data')
-	    for (var i = 0; i < labels.length; i++) {
-	    	 var note = document.createElement('div');
-	         note.className = 'chart-note';
-	         note.style.color  = color[i];
-	         note.innerHTML = labels[i] + ': ' + values[i];
-	         chartNotes.appendChild(note);
-	    }
-}
-</script>
-
 </body>
 
 </html>

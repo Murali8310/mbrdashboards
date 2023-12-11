@@ -181,14 +181,13 @@ label {
 		<div class="page-breadcrumb">
 			<div class="row">
 				<div class="col-12 d-flex no-block align-items-center">
-					<h4 class="page-title display-5">Budget Master Update</h4>
+					<h4 class="page-title display-5">Cost Center Creation</h4>
 					<div class="ml-auto text-right">
 						<nav aria-label="breadcrumb">
 							<ol class="breadcrumb">
 								<li class="breadcrumb-item"><a href="landPage">Home</a></li>
 								<li class="breadcrumb-item"><a href="manageByAdmin">Management</a></li>
-								<li class="breadcrumb-item active" aria-current="page">Budget
-									Master Update</li>
+								<li class="breadcrumb-item active" aria-current="page">Cost Center Creation</li>
 							</ol>
 						</nav>
 					</div>
@@ -221,13 +220,8 @@ label {
 									</label>
 								</div>
 								<div class="col-md-5">
-										<select id="CCID" name="CCID" class="form-control" disabled
-										aria-invalid="true" required="required">
-										<option value="">Select CCID</option>
-										<c:forEach items="${designation}" var="ccid">
-											<option value="${ccid[0]}">${ccid[0]}</option>
-										</c:forEach>
-									</select>
+											<input type="text" id="CCID" name="CCID" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+										class="form-control" aria-invalid="true" required="required">
 								</div>
 							</div>
 
@@ -239,14 +233,19 @@ label {
 									</label>
 								</div>
 								<div class="col-md-5">
-									
 										
-										<select id="Year" name="Year" class="form-control" disabled
+										<select id="Year" name="Year" class="form-control"
 										aria-invalid="true" required="required">
 										<option value="">Select Year</option>
-										<c:forEach items="${years}" var="year">
+										<option value="2023">2023</option>
+										<option value="2022">2022</option>
+										<option value="2021">2021</option>
+										<option value="2019">2019</option>
+										<option value="2018">2018</option>
+										<option value="2017">2017</option>
+										<%-- <c:forEach items="${years}" var="year">
 											<option value="${year[0]}">${year[0]}</option>
-										</c:forEach>
+										</c:forEach> --%>
 									</select>
 								</div>
 							</div>
@@ -260,16 +259,23 @@ label {
 								<div class="col-md-5">
 								<input type="text" id="COSTCENTERDESC" name="COSTCENTERDESC" 
 										class="form-control" aria-invalid="true" required="required">
-									<%-- <select id="COSTCENTERDESC" name="COSTCENTERDESC" class="form-control"
-										aria-invalid="true" required="required">
-										<option value="">Select Vendor</option>
-										<c:forEach items="${vendorList}" var="vendor">
-											<option value="${vendor}">${vendor}</option>
-										</c:forEach>
-									</select> --%>
+									
 								
 								</div>
 							</div>
+							
+							<div class="col-md-12 oneline">
+								<div class="col-md-2"></div>
+								<div style="margin-top: 10px;" class="col-md-3">
+									<label for="ccowner"> CC Owner<label style="color: red;">*</label>:
+									</label>
+								</div>
+								<div class="col-md-5">
+									<input type="text" id="ccowner" name="ccowner" 
+	class="form-control" aria-invalid="true" required="required">
+								</div>
+							</div>
+							
 							<div class="col-md-12 oneline">
 								<div class="col-md-2"></div>
 								<div style="margin-top: 10px;" class="col-md-3">
@@ -277,7 +283,7 @@ label {
 									</label>
 								</div>
 								<div class="col-md-5">
-									<input type="text" id="GL" name="GL"  oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+									<input type="text" id="GL" name="GL" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
 										class="form-control" aria-invalid="true" required="required">
 								</div>
 							</div>
@@ -292,6 +298,8 @@ label {
 	class="form-control" aria-invalid="true" required="required">
 								</div>
 							</div>
+							
+							
 
 
 							<div class="col-md-12 oneline">
@@ -339,7 +347,7 @@ label {
 								class="btn btn-primary" id="expiryDatebut" value="Cancel">
 							</a>
 									<button onclick="ProductMasterCreation()" class="btn btn-success"
-										id="submitId">Update</button>
+										id="submitId">Submit</button>
 								</div>
 								<div class="col-md-4"></div>
 							</div>
@@ -373,29 +381,18 @@ label {
 <div class="loading" style="display: none;">Loading&#8230;</div>
 
 <script>
-
-$(document).on('focusin', 'input#YEARLYBUDGET', function(){
-    console.log("Saving value " + $(this).val());
-    $(this).data('val', $(this).val());
-}).on('change','input#YEARLYBUDGET', function(){
-    var prev = $(this).data('val');
-    sessionStorage.setItem('prev', prev);
-    var current = $(this).val();
-    
-});
-
 	function ProductMasterCreation() {
 		var CCID = $("#CCID").val();
 		var Year = $("#Year").val();
 		var COSTCENTERDESC = $("#COSTCENTERDESC").val();
+		var CCOWNER = $("#ccowner").val();
 		var GL = $("#GL").val();
 		var GLDESC = $("#GLDESC").val();
 		var LOCATION = $("#LOCATION").val();
 		var Department = $("#Department").val();
 		var YEARLYBUDGET = $("#YEARLYBUDGET").val();
-		var oldYEARLYBUDGET=sessionStorage.getItem('prev')
-				console.log("this is murali",CCID)
-
+		
+		
 		if (CCID == "") {
 			Swal.fire({
 				icon : 'warning',
@@ -420,6 +417,16 @@ $(document).on('focusin', 'input#YEARLYBUDGET', function(){
 			Swal.fire({
 				icon : 'warning',
 				title : 'Please enter cost center description',
+				focusConfirm : false,
+			})
+			return;
+		}
+		
+		if (CCOWNER == "") {
+
+			Swal.fire({
+				icon : 'warning',
+				title : 'Please enter cost center Owner',
 				focusConfirm : false,
 			})
 			return;
@@ -470,6 +477,10 @@ $(document).on('focusin', 'input#YEARLYBUDGET', function(){
 			return;
 		}
 		
+		
+		console.log('this is the data from the UI')
+
+		
 		/* function capitalizeFirstLetterOfEachWord(Category) {
 			  return Category.toLowerCase().replace(/(^|\s)\S/g, function (match) {
 			    return match.toUpperCase();
@@ -481,31 +492,27 @@ $(document).on('focusin', 'input#YEARLYBUDGET', function(){
 		$(".loading").show();
 		$.ajax({
 			type : "POST",
-			url : "BudgetMasterUpdateByForm",
+			url : "CCCreationSave",
 			data : "CCID=" + CCID + "&Year=" + Year + "&COSTCENTERDESC="
 					+ COSTCENTERDESC + "&GL=" + GL
 					+ "&GLDESC=" + GLDESC + "&LOCATION="
-					+ LOCATION + "&Department="
-					+ Department+ "&YEARLYBUDGET=" + YEARLYBUDGET + "&oldYEARLYBUDGET=" + oldYEARLYBUDGET,
-
+					+ LOCATION + "&CCCOWNER="
+					+ CCOWNER + "&Department="
+					+ Department+ "&YEARLYBUDGET=" + YEARLYBUDGET,
 			success : function(response) {
 				var data = jQuery.parseJSON(response);
-
-				if (data == "Budget Updated Sucessfully") {
-
+				if (data == "CC created sucessfully") {
 					$(".loading").hide();
-
 					Swal.fire({
-
 						icon : 'success',
-						title : 'Budget master updated successfully',
+						title : 'Cost center added successfully',
 						showCloseButton : false,
 						showCancelButton : false,
 						focusConfirm : false,
 					}).then((result) => {
 			    	    if (result.isConfirmed) {
 			    	    	location.href = 'BudgetMasterList';
-			    	    }})
+			    	    }})	
 
 				} else {
 
@@ -513,14 +520,14 @@ $(document).on('focusin', 'input#YEARLYBUDGET', function(){
 					Swal.fire({
 
 						icon : 'error',
-						title : JSON.stringify(data),
+						title : data,
 						showCloseButton : false,
 						focusConfirm : false,
 
 					}).then((result) => {
 			    	    if (result.isConfirmed) {
-			    	    	location.href = 'BudgetMasterList';
-			    	    }})
+			    	    	location.href = 'cccreation';
+			    	    }})	
 				}
 
 			},//end of success function
@@ -544,33 +551,6 @@ $(document).on('focusin', 'input#YEARLYBUDGET', function(){
 
 
 
-<script>
-$(document).ready(function() {
-	console.log(JSON.parse(sessionStorage.getItem("rowData")),"sessionStorage.getItem('rowData')")
-	var data =JSON.parse(sessionStorage.getItem("rowData"));
-	console.log(data,"data")
-	console.log(data["Product ID"],"data['Product ID']")
-	console.log(data["Product Name"],"data['Product Name']")
-	$.ajax({
-		type : "GET",
-		url : "getBidgetDetailsByID",
-		data : "CCID=" +  data["Cost Center"]+"&Year=" +  data["Year"],
-		success : function(response) {
-			data = jQuery.parseJSON(response);
-			$(".loading").hide();
-			console.log(data,'murali for checking')
-			$("#CCID").val(data[0][0]);
-			$("#Year").val(data[0][1]);
-			 $("#COSTCENTERDESC").val(data[0][2]);
-			 $("#GL").val(data[0][3]);
-			 $("#GLDESC").val(data[0][4]);
-		 $("#LOCATION").val(data[0][5]);
-			$("#Department").val(data[0][6]);
-			 $("#YEARLYBUDGET").val(data[0][7]);
-			}
-	});
-});
-</script>
 
 
 <style>

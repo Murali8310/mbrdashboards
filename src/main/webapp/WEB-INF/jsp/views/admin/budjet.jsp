@@ -382,7 +382,7 @@ document.getElementById("currentYear").textContent = currentYear;
 				var data = jQuery.parseJSON(response);
 				if (data == "Budget created sucessfully") {
 					$(".loading").hide();
-					const successMessage = "PO Data created successFully"
+					const successMessage = "Po data entered successfully"
 					Swal.fire({
 						icon : 'success',
 						title : successMessage,

@@ -172,24 +172,57 @@ padding:0px !important;
 					</div>
 				</div>
 			</div>
-			<div class="container-fluid">
-				<div class="card" style="background-color: #0000a0;">
-					<div class="row" style="padding: 10px; align-items: baseline;">
-					<div class="col-md-12 col-lg-12 col-12" id="totalOutput2"
-							style="text-align: start;
-							font-size: 18px;
-							background-color: #0000a0;
-							margin-right: 8px;
-							color: white;"></div>
+			
+				<style>
+						/* Style for the cell */
+.cell {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+/* Style for the title */
+.title {
+   /* flex: 0 0 40%;  *//* Adjust width of the title */
+    font-weight: bold;
+    margin-left: 30px;
+        font-size: 18px;
+    color: white;
+}
+
+/* Style for the value */
+.value {
+    flex: 0 0 60%; /* Adjust width of the value */
+}
+
+/* Style for the highlight */
+.highlight {
+    color: white !important; /* Adjust highlight color */
+        margin-left: 3px;
+    /* Any other highlight styles */
+}
+</style>
+			<div class="container-fluid2 card-total card-static">
+					<div  id="totalOutput2" class="row"style="background-color: #01AFAE; align-items: baseline;padding-top: 5px;margin-left:13px !important;width: 98%;box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    margin-bottom: 2px;">
+					<div style="text-align: start; font-size: 18px; background-color: #01AFAE;color: white;padding: 6px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+        height: 27px;"></div>
 					</div>
-					<div class="row" style="padding: 10px;
-    align-items: baseline;
-    background: #0000a0;
-    color: white;">
+					<div class="cell" style="text-align: start; font-size: 18px; background-color: #01AFAE;color: white;padding: 6px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+        height: 49px;
+    width: 98%;
+    margin-left: 13px;">
 						<div class="col-md-4 col-lg-4 col-12" id="IndentNumber"
-							style="text-align: start; font-size: 18px; "></div>
+							style="text-align: start; font-size: 18px;    font-weight: bold;
+							 "></div>
 						<div class="col-md-4 col-lg-4 col-12" id="totalOutput"
-							style="text-align: start; font-size: 18px; "></div>
+							style="text-align: start; font-size: 18px;    font-weight: bold;
+							 "></div>
 						<div class="col-md-4 col-lg-4 col-12" style="text-align: end;">
 						
 							<a href="indentTransactionUpdates"> <input type="button"
@@ -197,7 +230,6 @@ padding:0px !important;
 							</a> <a class="btn btn-success" id="submitId" onclick="submit()">Update</a>
 						</div>
 					</div>
-				</div>
 				<div class="row el-element-overlay" id="el-element-overlay"></div>
 			<style>
 .footer {
@@ -309,8 +341,8 @@ function getProductByIndent(){
 				localStorage.setItem('totalQuantity', totalQuantity);
 				
 				totalPrice = totalPrice.toFixed(2);
-				var output = "Indent Value: ₹<span class='highlight'>" + totalPrice
-						+ "</span> Indent Qty: <span class='highlight'>" + totalQuantity
+				var output = "<span class='title'>Indent Value: ₹</span><span class='highlight' style='font-size: 18px;font-weight: bold;'>" + totalPrice
+						+ "</span> <span class='title'>No of items:</span> <span class='highlight'>" + totalQuantity
 						+ "</span>";
 				$('#totalOutput').html(output);
 			
@@ -320,7 +352,7 @@ function getProductByIndent(){
 						.getElementById("productImage");
 				
 			if(product[10]!=0){ 
-			var output = "Indent Number: <span class='highlight1'>" +  response[0][8]
+			var output = "Indent Number: <span class='highlight1' style='font-size: 18px;font-weight: bold;'>" +  response[0][8]
 					+ "</span> ";
 			$('#IndentNumber').html(output);
 			}
@@ -394,7 +426,6 @@ function getProductByIndent(){
 }
 
 	function calculateTotal() {
-		//alert("calculateTotal");
 		var countInputs = document.querySelectorAll('.count-input');
 		var prices = document.querySelectorAll('.price');
 		
@@ -422,8 +453,8 @@ function getProductByIndent(){
 		totalQuantitys = totalQuantity +currentTotalQuantity;
 		console.log(totalPrices,'totalPrice');
 		console.log(totalQuantitys,'totalQuantity');
-		var output = "Indent val: ₹<span class='highlight'>" + totalPrices.toFixed(2)
-				+ "</span> Indent Qty: <span class='highlight'>" + totalQuantitys
+		var output = "<span class='title'>Indent val: ₹</span><span class='highlight'>" + totalPrices.toFixed(2)
+				+ "</span> <span class='title'>No of items: </span><span class='highlight'>" + totalQuantitys
 				+ "</span>";
 		$('#totalOutput').html(output);
 
@@ -452,7 +483,7 @@ function getProductByIndent(){
 		var monthlyBalance = parseFloat(monthlyBalanceText.replace(/[^\d.]/g, ''));
 		var indentBalanceText = $("#totalOutput2 span.highlight:eq(4)").text();
 		var indentBalance = parseFloat(indentBalanceText.replace(/[^\d.]/g, ''));
-		var totalAmount = document.querySelector("#totalOutput .highlight:nth-child(1)");
+		var totalAmount = document.querySelector("#totalOutput .highlight:nth-child(4)");
 		var total = monthlyBalance -( parseFloat(totalAmount.textContent) -indentBalance);
 			
 		if(total<=0){
@@ -519,15 +550,15 @@ function getProductByIndent(){
 	
 	function calculateIncrementTotal(value,price) {
 		
-	//	alert("calculateIncrementTotal");
-		console.log(value,'value');
+		console.log(value,'valuevaluevaluevaluevalue');
 		console.log(price,'price');
 		
-		var totalQuantityElement = document.querySelector("#totalOutput .highlight:nth-child(2)");
-		var totalPriceElement = document.querySelector("#totalOutput .highlight:nth-child(1)");
+		var totalQuantityElement = document.querySelector("#totalOutput .highlight:nth-child(4)");
+		var totalPriceElement = document.querySelector("#totalOutput .highlight:nth-child(2)");
 		var currentTotalQuantity = parseInt(totalQuantityElement.textContent);
 		var currentTotalPrice = parseFloat(totalPriceElement.textContent);
-		
+		console.log(totalPriceElement,'totalPriceElement');
+
 		$('#totalOutput').html('');
 		var totalPrice = 0;
 		var totalQuantity = 0;
@@ -544,10 +575,10 @@ function getProductByIndent(){
 		
 		totalPrices = +currentTotalPrice + +totalPrice  ;
 		totalQuantitys =currentTotalQuantity + totalQuantity ;
-		console.log(totalPrices,'totalPrice');
+		console.log(totalPrices,'totalPricDDDDDDDDDDDe');
 		console.log(totalQuantitys,'totalQuantity');
-		var output = "Total Price: ₹<span class='highlight'>" + totalPrices.toFixed(2)
-				+ "</span> Total Qty: <span class='highlight'>" + totalQuantitys
+		var output = "<span class='title'>Total Price: ₹</span><span class='highlight'>" + totalPrices.toFixed(2)
+				+ "</span> <span class='title'>Total Qty: </span><span class='highlight'>" + totalQuantitys
 				+ "</span>";
 		$('#totalOutput').html(output);
 
@@ -573,17 +604,17 @@ function getProductByIndent(){
 		
 		totalPrices = +currentTotalPrice + +totalPrice  ;
 		totalQuantitys =currentTotalQuantity + cuurentQTY ;
-		var output = "Total Price: ₹<span class='highlight'>" + totalPrices.toFixed(2)
-				+ "</span> Total Qty: <span class='highlight'>" + totalQuantitys
+		var output = "<span class='title'>Total Price: ₹</span><span class='highlight'>" + totalPrices.toFixed(2)
+				+ "</span> <span class='title'>Total Qty:</span> <span class='highlight'>" + totalQuantitys
 				+ "</span>";
 		$('#totalOutput').html(output);
 		
 	}
 	
 	function calculateDecrementTotal(value,price) {
-		
-		var totalQuantityElement = document.querySelector("#totalOutput .highlight:nth-child(2)");
-		var totalPriceElement = document.querySelector("#totalOutput .highlight:nth-child(1)");
+		//alert('this is updated')
+		var totalQuantityElement = document.querySelector("#totalOutput .highlight:nth-child(4)");
+		var totalPriceElement = document.querySelector("#totalOutput .highlight:nth-child(2)");
 		var currentTotalQuantity = parseInt(totalQuantityElement.textContent);
 		var currentTotalPrice = parseFloat(totalPriceElement.textContent);
 		$('#totalOutput').html('');
@@ -609,8 +640,8 @@ function getProductByIndent(){
 		totalQuantitys =currentTotalQuantity - totalQuantity ;
 		console.log(totalPrices,'totalPrice');
 		console.log(totalQuantitys,'totalQuantity');
-		var output = "Indent Val: ₹<span class='highlight'>" + totalPrices.toFixed(2)
-				+ "</span> Indent Qty: <span class='highlight'>" + totalQuantitys
+		var output = "<span class='title'>Indent Val: ₹</span><span class='highlight'>" + totalPrices.toFixed(2)
+				+ "</span><span class='title'> No of items: </span><span class='highlight'>" + totalQuantitys
 				+ "</span>";
 		$('#totalOutput').html(output);
 
@@ -794,7 +825,7 @@ function getProductByIndent(){
 			}
 		}
 		console.log('this is changes',quantity)
-   var pricelement = document.querySelector("#totalOutput .highlight:nth-child(1)").textContent
+   var pricelement = document.querySelector("#totalOutput .highlight:nth-child(2)").textContent
    var yearlyAmount = document.getElementById('yearlyAmount').textContent
 		if(Number(pricelement) > Number(yearlyAmount)){
 			Swal.fire({
@@ -859,12 +890,11 @@ function getProductByIndent(){
 							+ budgt[5]   + "</span>  "+ "</span> Indended Amount:   ₹<span class='highlight'>"
 							+ budgt[6]   + "</span>  "; */
 							
-							var output = "Yearly Budget:   ₹  <span id='yearlyAmount'>"
-								+ budgt[3]  + "</span>&nbsp;&nbsp;  Cumulative Actual Value:   ₹  <span>"
-								 + budgt[5]   + "</span>&nbsp;&nbsp;   "+ "<span>  Monthly bal:   ₹  <span>" 
-								+ budgt[7]   + "</span>  &nbsp;&nbsp; "+ " Budget bal:   ₹  <span>"
-								+ budgt[4]   + "</span>&nbsp;&nbsp;  "+ " Indent Amt(Current month):   ₹  <span>" 
-								+ budgt[6]   + "</span>  " ;
+							var output = "<div class='cell'><span class='title'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yearly Budget:   ₹</span> &nbsp; <span id='yearlyAmount' style='font-size: 18px;color: white;'>&nbsp;"
+								+ budgt[3]  + "</span>&nbsp;&nbsp; <span class='title'> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cumulative Actual Value:   ₹ </span>&nbsp; <span style='font-size: 18px;color: white;'>"
+								 + budgt[5]   + "</span>&nbsp;&nbsp;   "+ "<span class='title'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Budget bal:   ₹</span> &nbsp; <span style='font-size: 18px;color: white;'>"
+								+ budgt[4]   + "</span>&nbsp;&nbsp;  "+ " <span class='title'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Indent Amt(Current month):   ₹</span>  &nbsp;&nbsp;<span style='font-size: 18px;color: white;'>" 
+								+ budgt[6]   + "</span>  </div> " ;
 								
 					$('#totalOutput2').html(output); 
 					}

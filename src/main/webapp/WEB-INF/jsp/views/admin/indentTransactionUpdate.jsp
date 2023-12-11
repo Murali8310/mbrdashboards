@@ -187,25 +187,54 @@ padding:0px !important;
 					</div>
 				</div>
 			</div>
-			<div class="container-fluid">
-				<div class="card" style="background: #0000a0;">
-				<div class="row" style="padding: 10px; align-items: baseline;">
-				<div class="col-md-12 col-lg-12 col-12" id="totalOutput2"
-							style="text-align: start;
-    font-size: 18px;
-    background-color: #0000a0;
-    margin-right: 8px;
-    color: white;"></div>
+			<style>
+						/* Style for the cell */
+.cell {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+/* Style for the title */
+.title {
+   /* flex: 0 0 40%;  *//* Adjust width of the title */
+    font-weight: bold;
+    margin-left: 30px;
+}
+
+/* Style for the value */
+.value {
+    flex: 0 0 60%; /* Adjust width of the value */
+}
+
+/* Style for the highlight */
+.highlight {
+    color: white; /* Adjust highlight color */
+        margin-left: 3px;
+    /* Any other highlight styles */
+}
+</style>
+			<div class="container-fluid2 card-total card-static">
+				<div class="row" style="background-color: #01AFAE; align-items: baseline;padding-top: 5px;margin-left:13px !important;width: 98%;box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    margin-bottom: 2px;">
+				<div id="totalOutput2"
+							style="text-align: start; font-size: 18px; background-color: #01AFAE;color: white;padding: 6px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+        height: 27px;"></div>
 				</div>
-					<div class="row" style="    padding: 10px;
-    align-items: baseline;
-    color: white;
-    background: #0000a0;s">
-						<div class="col-md-4 col-lg-4 col-12" id="IndentNumber"
+					<div class="cell" style="text-align: start; font-size: 18px; background-color: #01AFAE;color: white;padding: 6px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+        height: 49px;
+    width: 98%;
+    margin-left: 13px;">
+						<div id="IndentNumber"
 							style="text-align: start; font-size: 18px;"></div>
-						<div class="col-md-4 col-lg-4 col-12" id="totalOutput"
+						<div id="totalOutput"
 							style="text-align: start; font-size: 18px; "></div>
-						<div class="col-md-4 col-lg-4 col-12" style="text-align: end;">
+						<div class="col-md-4 col-lg-4 col-12" style="text-align: end;float: right;">
 						<a href="AddMoreProducts"> <input type="button"
 								class="btn btn-primary" id="expiryDatebut" value="Add More Products">
 							</a> 
@@ -215,7 +244,6 @@ padding:0px !important;
 							 <!-- <a class="btn btn-success" id="submitId" onclick="submit()">Update</a> -->
 						</div>
 					</div>
-				</div>
 				<div class="row el-element-overlay"  id="el-element-overlay"></div>
     <footer class="footer">
 				<div class="footer-copyright">
@@ -280,7 +308,7 @@ function getProduct(id){
 				var product = response[i];
 				/* const productImage = document
 						.getElementById("productImage"); */
-				 var output = "Indent Number: <span class='highlight1'>" +  response[0][8]
+				 var output = "<span class='title'>Indent Number:</span> <span class='highlight1'>" +  response[0][8]
 					+ "</span> ";
 			$('#IndentNumber').html(output);
 			if(product[7]!=0){
@@ -350,6 +378,7 @@ function getProduct(id){
 
 	function calculateTotal() {
 		//alert("HI");
+		console.log()
 		var countInputs = document.querySelectorAll('.count-input');
 		var prices = document.querySelectorAll('.price');
 		$('#totalOutput').html('');
@@ -363,8 +392,8 @@ function getProduct(id){
 			totalQuantity += quantity;
 		}
 		totalPrice = totalPrice.toFixed(2);
-		var output = "Indent Value: ₹<span class='highlight'>" + totalPrice
-				+ "</span> Indent Qty: <span class='highlight'>" + totalQuantity
+		var output = "<span class='title'>Indent Value: ₹</span><span class='highlight'>" + totalPrice
+				+ "</span> <span class='title'>Indent Qty:</span> <span class='highlight'>" + totalQuantity
 				+ "</span>";
 		$('#totalOutput').html(output);
 
@@ -388,15 +417,15 @@ function getProduct(id){
 				productID : productID
 			});
 		calculateTotal();
-			var yearlybudget = document.querySelector("#totalOutput2 .highlight:nth-child(1)");
-			var totalAmount = document.querySelector("#totalOutput .highlight:nth-child(1)");
+			var yearlybudget = document.querySelector("#totalOutput2 .highlight:nth-child(2)");
+			var totalAmount = document.querySelector("#totalOutput .highlight:nth-child(2)");
 			var monthlyBalanceText = $("#totalOutput2 span.highlight:eq(2)").text();
 			var monthlyBalance = parseFloat(monthlyBalanceText.replace(/[^\d.]/g, ''));
 			var indentBalanceText = $("#totalOutput2 span.highlight:eq(4)").text();
 			var indentBalance = parseFloat(indentBalanceText.replace(/[^\d.]/g, ''));
 			var total = monthlyBalance -( parseFloat(totalAmount.textContent) -indentBalance);
 			//alert(total)
-			var pricelement = document.querySelector("#totalOutput .highlight:nth-child(1)").textContent;
+			var pricelement = document.querySelector("#totalOutput .highlight:nth-child(2)").textContent;
 			var yearlyAmount = document.getElementById('yearAmount').textContent;
 
 			console.log('this is checking',pricelement,yearlyAmount)
@@ -556,7 +585,7 @@ function getProduct(id){
 			input.value = currentValue ;
 			calculateInputTotal(input.value,productPrice,prev);
 		}
-		var yearlybudget = document.querySelector("#totalOutput2 .highlight:nth-child(1)");
+		var yearlybudget = document.querySelector("#totalOutput2 .highlight:nth-child(2)");
 		var monthlyBalanceText = $("#totalOutput2 span.highlight:eq(2)").text();
 		var indentBalanceText = $("#totalOutput2 span.highlight:eq(4)").text();
 		var monthlyBalance = parseFloat(monthlyBalanceText.replace(/[^\d.]/g, ''));
@@ -849,12 +878,11 @@ function getBudgetDetails(){
 						//console.log( jQuery.parseJSON(response)[0] ,'response')
 						var budgt =jQuery.parseJSON(response)[0]
 					
-						var output = "Yearly Budget:   ₹  <span class='highlight' id='yearAmount'>"
-							+ budgt[3]  + "</span> &nbsp;&nbsp; Cumulative (Incl. PO, Route) Indent Value:   ₹  <span class='highlight'>"
-							 + budgt[5]   + "</span>  &nbsp;&nbsp; "+ "<span>  Monthly bal:   ₹  <span class='highlight'>" 
-							+ budgt[7]   + "</span>  &nbsp;&nbsp; "+ " Budget bal:   ₹  <span class='highlight'>"
-							+ budgt[4]   + "</span> &nbsp;&nbsp; "+ " Indent Amt(Current month):   ₹  <span class='highlight'>" 
-							+ budgt[6]   + "</span>  " ;
+						var output = "<div class='cell'>&nbsp;&nbsp;<span class='title'>Yearly Budget:   ₹ </span> <span class='highlight' id='yearAmount'>"
+							+ budgt[3]  + "</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class='title'>Cumulative (Incl. PO, Route) Indent Value:   ₹</span>  <span class='highlight'>"
+							 + budgt[5]   + "</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+ " <span class='title'>Budget bal:   ₹</span>  <span class='highlight'>"
+							+ budgt[4]   + "</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "+ "<span class='title'> Indent Amt(Current month):   ₹</span>  <span class='highlight'>" 
+							+ budgt[6]   + "</span> </div> " ;
 							
 					$('#totalOutput2').html(output); 
 					}

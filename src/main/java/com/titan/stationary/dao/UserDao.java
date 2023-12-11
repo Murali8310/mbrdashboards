@@ -247,6 +247,10 @@ public interface UserDao {
 	List<String> getAllcolumnlength(String Year, String Month);
 
 
+	String ccCreationSave(String CCID, String Year, String COSTCENTERDESC, String GL, String GLDESC, String LOCATION,
+			String Department, String CCowner, String YEARLYBUDGET, String loginId);
+
+
 	
 
 

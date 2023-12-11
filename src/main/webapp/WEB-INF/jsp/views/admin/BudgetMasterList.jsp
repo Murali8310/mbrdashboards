@@ -173,37 +173,78 @@ vertical-align: text-bottom ; footer {
 										<div class="col-sm-12">
 										<div style="text-align:end;margin-bottom:4px;"><button onclick="redirectToProductMasterCreation()" class='btn btn-primary'>Add Budget</button>
 										</div>
+										<c:set var="counter" value="1" />
   										<table id="example"
 											class="table table-striped table-bordered display nowrap"
 											style="width: 100%;">
+																								
+<style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th {
+      font-size: 21px;
+      text-align: center !important;
+    }
+
+    td, th {
+      border: 1px solid #dddddd;
+      padding: 8px;
+      font-size: 17px;
+    }
+    table {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-radious:3px;
+}
+body
+{
+    counter-reset: Serial;           /* Set the Serial counter to 0 */
+}
+
+table
+{
+    border-collapse: separate;
+}
+
+tr td:first-child:before
+{
+  counter-increment: Serial;      /* Increment the Serial counter */
+  content: counter(Serial); /* Display the counter */
+}
+  </style>
 											<thead class="thead-light">
 												<tr>
-													<th scope="col"><b>CCID</b></th>
-													<th scope="col"><b>Year</b></th>
-													<th scope="col"><b>Cost Center Description</b></th>
-													<th scope="col"><b>GL</b></th>
+									             <th scope="col"><b>Sl No.</b></th>
+													<th scope="col"><b>GL No.</b></th>
 													<th scope="col"><b>GL Description</b></th>
+													<th scope="col"><b>Cost Center</b></th>
+													<th scope="col"><b>Cost Center Description</b></th>
 													<th scope="col"><b>Location</b></th>
-													<th scope="col"><b>Yearly Budget</b></th>
+											        <th scope="col"><b>CC Owner</b></th>
+													<th scope="col"><b>Yearly Budget(Rs.lak)</b></th>
+											       <th scope="col"><b>Year</b></th>
 													<th>Actions</th>
 												</tr>
 											</thead>
 											<tbody class="customtable">
-
-
+											 <c:set var="serialNumber" value="1" />
 												<c:forEach items="${ProductListt}" var="indent"
 													varStatus="loop">
 													<tr>
-														<td >${indent[0]}</td>
-														<td>${indent[1]}</td>
-														<td>${indent[2]}</td>
+														<td ></td>
 														<td>${indent[3]}</td>
 														<td>${indent[4]}</td>
+														<td>${indent[0]}</td>
+														<td>${indent[2]}</td>
 														<td>${indent[5]}</td>
-														<td>${indent[6]}</td>
+														<td>${indent[7]}</td>
+													    <td>${indent[6]}</td>
+														<td>${indent[1]}</td>
 														<td></td> 
 													</tr>
-
+            <c:set var="serialNumber" value="${serialNumber + 1}" /> <!-- Increment the serial number -->
 												</c:forEach>
 											</tbody>
 										</table>
@@ -342,19 +383,26 @@ $(document).ready(function() {
         ],
         responsive: true,
         "columns" : [{
-			"data" : "Product ID"
+			"data" : "SL NO"
 		},{
-			"data" : "Product Name"
+			"data" : "GL NO"
 		}, {
-			"data" : "Make"
+			"data" : "GL Description"
 		}, {
-			"data" : "Price"
+			"data" : "Cost Center"
 		},{
-			"data" : "UOM"
+			"data" : "Cost Center Description"
 		},{
-			"data" : "Category"
-		} ,{
+			"data" : "Location"
+		} ,
+		{
+			"data" : "CC Owner"
+		},
+		{
 			"data" : "Yearly Budget"
+		},
+		{
+			"data" : "Year"
 		}  ,{"targets": -1, // The last column (Actions)
             "data": null,
             "render": function(data, type, row) {

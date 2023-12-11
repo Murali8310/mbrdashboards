@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
 <head>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <meta charset="UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <!-- Tell the browser to be responsive to screen width -->
@@ -337,7 +337,7 @@ h1 {
 										class="sidebar-link far sidebar-link dwn"
 										href="downloadPoentryFile"> <b><span
 											class="hide-menu" style="font-family: 'Montserrat'">
-												PO Entry File </span></b></a>
+												<i class="fas fa-download"></i> PO Entry File </span></b></a>
 								</div>
 
 							</div>

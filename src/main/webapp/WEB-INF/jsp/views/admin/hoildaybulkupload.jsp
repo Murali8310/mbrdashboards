@@ -36,6 +36,8 @@
 
 	<script src="dist/js/sweetalert2.min.js"></script>
 		<link rel="stylesheet" href="dist/css/sweetalert2.min.css" /> 
+		    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+		        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <style>
 .frame {
 	position: absolute;
@@ -338,6 +340,7 @@ h1 {
 										class="sidebar-link far sidebar-link dwn"
 										href="downloadholidayFormatFile"> <b><span
 											class="hide-menu" style="font-family: 'Montserrat'">
+											    <i class="fas fa-download"></i>
 												Holiday Master File </span></b></a>
 								</div>
 

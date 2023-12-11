@@ -491,7 +491,7 @@ label {
 					$(".loading").hide();
 					Swal.fire({
 						icon : 'success',
-						title : data,
+						title : 'Budget master added successfully',
 						showCloseButton : false,
 						showCancelButton : false,
 						focusConfirm : false,

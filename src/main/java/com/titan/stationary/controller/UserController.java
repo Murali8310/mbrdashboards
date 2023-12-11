@@ -150,12 +150,16 @@ public class UserController {
 	public ModelAndView dashboard(HttpServletRequest request, HttpServletResponse response, Model model) {
 
 		HttpSession session = request.getSession();
+		String userRole = null;
 		try {
+			Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+			userRole = (String) userMap.get("role");
 			String user = (String) session.getAttribute("login_id");
 		} catch (Exception er) {
 			er.printStackTrace();
 			return new ModelAndView("login/login");
 		}
+		model.addAttribute("userRole",userRole);
 		return new ModelAndView("login/Dashboard");
 	}
 
@@ -1977,6 +1981,23 @@ List<Object> BuyerList;
 			return new ModelAndView("admin/budgetmastercreation");
 		}
 		
+		
+		@RequestMapping(value = "cccreation", method = RequestMethod.GET)
+		public ModelAndView ccCreation(HttpServletRequest request, HttpServletResponse response, Model model) {
+			try {
+				HttpSession session = request.getSession();
+				String loginId = (String) session.getAttribute("login_id");
+			} catch (Exception er) {
+				er.printStackTrace();
+				return new ModelAndView("login/login");
+			}
+			List<Object> designation = userService.getAllCCIDDe();
+			model.addAttribute("designation", designation);
+			List<Object> Year = userService.getAllyearDetails();
+			model.addAttribute("years", Year);
+			return new ModelAndView("admin/cccreation");
+		}
+		
 
 		@RequestMapping(value = "BudgetMasterCreationSave", method = RequestMethod.POST)
 		public String BudgetMasterCreationSave(HttpServletRequest request,
@@ -1993,6 +2014,28 @@ List<Object> BuyerList;
 			Map<String, Object> userMap = (Map) session.getAttribute("userMap");
 			String loginId = (String) userMap.get("login_id");
 			String generatehelioscopon = userService.BudgetMasterCreationSave(CCID,Year,COSTCENTERDESC,GL,GLDESC,LOCATION,Department,YEARLYBUDGET,loginId);
+			
+			Gson jsonToString = new GsonBuilder().setPrettyPrinting().create();
+			String jsonData = jsonToString.toJson(generatehelioscopon);
+			return jsonData;
+		}
+		
+		@RequestMapping(value = "CCCreationSave", method = RequestMethod.POST)
+		public String CCMasterCreationSave(HttpServletRequest request,
+				@RequestParam("CCID") String CCID,
+				@RequestParam("Year") String Year,
+				@RequestParam("COSTCENTERDESC") String COSTCENTERDESC,
+				@RequestParam("CCCOWNER") String CCCOWNER,
+				@RequestParam("GL") String GL,
+				@RequestParam("GLDESC") String GLDESC,
+				@RequestParam("LOCATION") String LOCATION,
+				@RequestParam("Department") String Department,
+				@RequestParam("YEARLYBUDGET") String YEARLYBUDGET) {
+System.out.println("CCCOWNER"+CCCOWNER);
+			HttpSession session = request.getSession();
+			Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+			String loginId = (String) userMap.get("login_id");
+			String generatehelioscopon = userService.ccCreationSave(CCID,Year,COSTCENTERDESC,GL,GLDESC,LOCATION,Department,CCCOWNER,YEARLYBUDGET,loginId);
 			
 			Gson jsonToString = new GsonBuilder().setPrettyPrinting().create();
 			String jsonData = jsonToString.toJson(generatehelioscopon);
@@ -2445,5 +2488,29 @@ List<Object> BuyerList;
 			return uploadedStatus;
 		}
 		
+		@RequestMapping(value = "learn", method = RequestMethod.GET)
+		public ModelAndView learn(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+			HttpSession session = request.getSession();
+			try {
+				String user = (String) session.getAttribute("login_id");
+			} catch (Exception er) {
+				er.printStackTrace();
+				return new ModelAndView("login/login");
+			}
+			
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat year_Date = new SimpleDateFormat("YYYY");
+			String yearfromCal = year_Date.format(cal.getTime());
+
+			SimpleDateFormat month_Date = new SimpleDateFormat("MM");
+			// String monthFromCal = month_Date.format(cal.getTime());
+			String monthFromCal = String.format("%02d", Integer.parseInt(month_Date.format(cal.getTime())));
+
+			SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
+			String MonthText = month.format(cal.getTime());
+		
+			return new ModelAndView("admin/learn");
+		}
 		
 		}

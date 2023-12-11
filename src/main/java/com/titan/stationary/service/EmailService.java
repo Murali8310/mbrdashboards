@@ -24,10 +24,12 @@ public class EmailService {
 
 		
 		try {
-			String smtpHostServer = "smtp-relay.gmail.com";
+			//String smtpHostServer = "smtp-relay.gmail.com";
+			String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
 			String emailID = sMUserMasterBean.getEmail();
 			Properties props = System.getProperties();
 			props.put("mail.smtp.host", smtpHostServer);
+			props.put("mail.smtp.port", "25");
 			Session session = Session.getInstance(props, null);
 			System.out.println(session);
 			MimeMessage msg = new MimeMessage(session);
@@ -95,10 +97,12 @@ public class EmailService {
 	 */
 	public void sendPasswordSuccessMessage(String tomail, String subject, String message) {
 		try {
-			String smtpHostServer = "smtp-relay.gmail.com";
+			//String smtpHostServer = "smtp-relay.gmail.com";
+			String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
 			String emailID = tomail;
 			Properties props = System.getProperties();
 			props.put("mail.smtp.host", smtpHostServer);
+			props.put("mail.smtp.port", "25");
 			Session session = Session.getInstance(props, null);
 			System.out.println(session);
 			MimeMessage msg = new MimeMessage(session);
@@ -124,10 +128,12 @@ public class EmailService {
 	}
 	public void sendmessagetoreward(String tomail, String subject, String message,String serial,String feedbacktype,String uname) {
 		try {
-			String smtpHostServer = "smtp-relay.gmail.com";
+			//String smtpHostServer = "smtp-relay.gmail.com";
+			String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
 			String emailID = tomail;
 			Properties props = System.getProperties();
 			props.put("mail.smtp.host", smtpHostServer);
+			props.put("mail.smtp.port", "25");
 			Session session = Session.getInstance(props, null);
 			System.out.println(session);
 			MimeMessage msg = new MimeMessage(session);
@@ -162,10 +168,12 @@ public class EmailService {
 	public void sendOtpMessage(String tomail,String subject, String message) {
 
 		try {
-			String smtpHostServer = "smtp-relay.gmail.com";
+			//String smtpHostServer = "smtp-relay.gmail.com";
+			String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
 			String emailID = tomail;
 			Properties props = System.getProperties();
 			props.put("mail.smtp.host", smtpHostServer);
+			props.put("mail.smtp.port", "25");
 			Session session = Session.getInstance(props, null);
 			System.out.println(session);
 			MimeMessage msg = new MimeMessage(session);

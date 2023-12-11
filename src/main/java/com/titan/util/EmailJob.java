@@ -123,10 +123,11 @@ import org.springframework.stereotype.Component;
 	            
 	            
 	            
-	            String smtpHostServer = "smtp-relay.gmail.com";
-
+	           // String smtpHostServer = "smtp-relay.gmail.com";
+	            String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
 	           Properties props = System.getProperties();
 	           props.put("mail.smtp.host", smtpHostServer);
+	           props.put("mail.smtp.port", "25");
 	            Session session = Session.getInstance(props, null);
 	            System.out.println(session);
 	            MimeMessage msg = new MimeMessage(session);

@@ -2919,10 +2919,12 @@ public class UserDaoimpl implements UserDao {
 	 */
 	public void senduserMail(IndentMasterBean IndentMasterBean, String loginID, String password) {
 		try {
-			String smtpHostServer = "smtp-relay.gmail.com";
+			//String smtpHostServer = "smtp-relay.gmail.com";
+			String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
 
 			Properties props = System.getProperties();
 			props.put("mail.smtp.host", smtpHostServer);
+			props.put("mail.smtp.port", "25");
 			Session session = Session.getInstance(props, null);
 			System.out.println(session);
 			MimeMessage msg = new MimeMessage(session);
@@ -3380,7 +3382,7 @@ public class UserDaoimpl implements UserDao {
 		} // for loop finish
 		if (response != 0) {
 
-			r = "Indent updated successfully";
+			r = "Data updated successfully";
 		} else {
 			r = "Update failed";
 		}
@@ -3488,10 +3490,12 @@ public class UserDaoimpl implements UserDao {
 	public void sendpasswordMail(String email, String email_id, String user_Name, String pwd, String newPwd,
 			String login_id) {
 		try {
-			String smtpHostServer = "smtp-relay.gmail.com";
-
+			//String smtpHostServer = "smtp-relay.gmail.com";
+			
+			String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
 			Properties props = System.getProperties();
 			props.put("mail.smtp.host", smtpHostServer);
+			props.put("mail.smtp.port", "25");
 			Session session = Session.getInstance(props, null);
 			System.out.println(session);
 			MimeMessage msg = new MimeMessage(session);
@@ -3759,10 +3763,11 @@ public class UserDaoimpl implements UserDao {
 
 				// mail related changes
 
-				String smtpHostServer = "smtp-relay.gmail.com";
-
+				//String smtpHostServer = "smtp-relay.gmail.com";
+				String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
 				Properties props = System.getProperties();
 				props.put("mail.smtp.host", smtpHostServer);
+				props.put("mail.smtp.port", "25");
 				Session session = Session.getInstance(props, null);
 				System.out.println(session);
 				MimeMessage msg = new MimeMessage(session);
@@ -3799,7 +3804,8 @@ public class UserDaoimpl implements UserDao {
 			}
 			r = "Email sent by successfully!";
 
-			String smtpHostServer = "smtp-relay.gmail.com";
+			//String smtpHostServer = "smtp-relay.gmail.com";
+			String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
 
 			/*
 			 * Properties props = System.getProperties(); props.put("mail.smtp.host",
@@ -3968,10 +3974,12 @@ public class UserDaoimpl implements UserDao {
 			workbook.write(fileOut);
 			fileOut.close();
 
-			String smtpHostServer = "smtp-relay.gmail.com";
+			//String smtpHostServer = "smtp-relay.gmail.com";
+			String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
 
 			Properties props = System.getProperties();
 			props.put("mail.smtp.host", smtpHostServer);
+			props.put("mail.smtp.port", "25");
 			Session session = Session.getInstance(props, null);
 			System.out.println(session);
 			MimeMessage msg = new MimeMessage(session);
@@ -4376,10 +4384,12 @@ public class UserDaoimpl implements UserDao {
 			workbook.write(fileOut);
 			fileOut.close();
 
-			String smtpHostServer = "smtp-relay.gmail.com";
+			//String smtpHostServer = "smtp-relay.gmail.com";
+			String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
 
 			Properties props = System.getProperties();
 			props.put("mail.smtp.host", smtpHostServer);
+			props.put("mail.smtp.port", "25");
 			Session session = Session.getInstance(props, null);
 			System.out.println(session);
 			for (String recipientEmail : emailIDPoduct) {
@@ -4826,7 +4836,7 @@ public class UserDaoimpl implements UserDao {
 		List<String> getStoreManagerDetials;
 
 		Query selectQuery = entityManager.createNativeQuery(
-				"select CCID,Year,CostCenterDescription,gl,GLDescription,Location,BudValueRsL from BUDGET_MASTER");
+				"select CCID,Year,CostCenterDescription,gl,GLDescription,Location,BudValueRsL,CostOwner from BUDGET_MASTER");
 
 		try {
 			getStoreManagerDetials = selectQuery.getResultList();
@@ -4882,6 +4892,61 @@ public class UserDaoimpl implements UserDao {
 
 				insertInitiateWorkPermitStatus = insertInitiateWorkPermit.executeUpdate();
 				return "Budget created sucessfully";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+//				insertInitiateWorkPermitStatus=0;
+			return "error";
+		}
+
+	}
+	
+	@Override
+	public String ccCreationSave(String CCID, String Year, String COSTCENTERDESC, String GL, String GLDESC,
+			String LOCATION, String Department,String CCowner, String YEARLYBUDGET, String loginId) {
+		String permitNumber = "";
+		System.out.println("ccowner"+CCowner);
+		try {
+
+			System.out.println("Product is already available." + CCID);
+
+			String labelExistanceSQL = "SELECT COUNT(*) FROM budget_master WHERE ccid=:CCID and Year=:Year";
+			Query labelExistanceQuery = entityManager.createNativeQuery(labelExistanceSQL);
+			labelExistanceQuery.setParameter("CCID", CCID);
+			labelExistanceQuery.setParameter("Year", Year);
+			int isExistance = (int) labelExistanceQuery.getSingleResult();
+
+			if (isExistance != 0) {
+				return "cost center : " + CCID + " is already available for this year : " + Year;
+			} else {
+
+				Query insertInitiateWorkPermit = entityManager.createNativeQuery(
+						"INSERT INTO BUDGET_MASTER(CCID,Year,CostCenterDescription,GL,GLDescription,Location,CostOwner\n"
+								+ "	,Department,BudValueRsL,CreatedBy,CreatedOn,ModifiedBy,ModifiedOn,\n"
+								+ "	April,May,June,July,August,\n"
+								+ "	September,October,November,December,January,February,March,Budget_Extension,SAPBILL,monthlybudget)\n"
+								+ "	VALUES(:CCID,:Year,:COSTCENTERDESC,:GL,:GLDESC,:LOCATION,:CCOWNer,\n"
+								+ "	:Department,:YEARLYBUDGET,:CreatedBy,:CreatedOn,:CreatedBy,:CreatedOn,\n"
+								+ "	NULL,NULL,NULL,NULL,NULL\n"
+								+ "	,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,:MONTHLY)");
+
+				insertInitiateWorkPermit.setParameter("CCID", CCID);
+				insertInitiateWorkPermit.setParameter("Year", Year);
+				insertInitiateWorkPermit.setParameter("COSTCENTERDESC", COSTCENTERDESC);
+				insertInitiateWorkPermit.setParameter("GL", GL);
+				insertInitiateWorkPermit.setParameter("GLDESC", GLDESC);
+				// insertInitiateWorkPermit.setParameter("IsActive", 1);//
+				insertInitiateWorkPermit.setParameter("LOCATION", LOCATION);//
+				insertInitiateWorkPermit.setParameter("CCOWNer", CCowner);//
+				insertInitiateWorkPermit.setParameter("CreatedBy", loginId);
+				insertInitiateWorkPermit.setParameter("CreatedOn", new Date());
+				insertInitiateWorkPermit.setParameter("Department", Department);
+				insertInitiateWorkPermit.setParameter("YEARLYBUDGET", YEARLYBUDGET);
+				insertInitiateWorkPermit.setParameter("MONTHLY", (Float.parseFloat(YEARLYBUDGET) / 12));
+				int insertInitiateWorkPermitStatus = 0;
+
+				insertInitiateWorkPermitStatus = insertInitiateWorkPermit.executeUpdate();
+				return "CC created sucessfully";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
