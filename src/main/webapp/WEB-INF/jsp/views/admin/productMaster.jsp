@@ -199,16 +199,26 @@ vertical-align: text-bottom ; footer {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     border-radious:3px;
 }
+.headerStyles{
+ background: #01AFAE !important;
+ color: white !important;      
+    font-size: 17px;
+ 
+	}
+	.tbodyCustomColor {
+	    color: black !important;
+    font-size: 17px;
+	}
   </style>
 											<thead class="thead-light">
 												<tr>
-													<th scope="col"><b>Product ID</b></th>
-													<th scope="col"><b>Product Name</b></th>
-													<th scope="col"><b>Make</b></th>
-													<th scope="col"><b>Price</b></th>
-													<th scope="col"><b>UOM</b></th>
-													<th scope="col"><b>Category</b></th>
-													<th>Actions</th>
+													<th class='headerStyles' scope="col"><b>Product ID</b></th>
+													<th class='headerStyles' scope="col"><b>Product Name</b></th>
+													<th class='headerStyles' scope="col"><b>Make</b></th>
+													<th class='headerStyles' scope="col"><b>Price</b></th>
+													<th class='headerStyles' scope="col"><b>UOM</b></th>
+													<th class='headerStyles' scope="col"><b>Category</b></th>
+													<th class='headerStyles'>Actions</th>
 												</tr>
 											</thead>
 											<tbody class="customtable">
@@ -217,13 +227,13 @@ vertical-align: text-bottom ; footer {
 												<c:forEach items="${ProductListt}" var="indent"
 													varStatus="loop">
 													<tr>
-														<td >${indent[0]}</td>
-														<td>${indent[1]}</td>
-														<td>${indent[3]}</td>
-														<td>${indent[4]}</td>
-														<td>${indent[5]}</td>
-														<td>${indent[6]}</td>
-														<td></td> 
+														<td class='tbodyCustomColor' >${indent[0]}</td>
+														<td class='tbodyCustomColor'>${indent[1]}</td>
+														<td class='tbodyCustomColor'>${indent[3]}</td>
+														<td class='tbodyCustomColor'>${indent[4]}</td>
+														<td class='tbodyCustomColor'>${indent[5]}</td>
+														<td class='tbodyCustomColor'>${indent[6]}</td>
+														<td class='tbodyCustomColor'></td> 
 													</tr>
 
 												</c:forEach>

@@ -33,13 +33,29 @@
     	 				var allData =jQuery.parseJSON(response)[0];
     	 	        	console.log('response',allData)
     	 	        	var chartData = [];
-    	 	        	
+    	 	        	var Cumulative = '';
+    	 	        	var yearlyBudget = '';
+    	 	        	var balancevalue = '';
     	 	        	if(typeof allData === 'undefined'){
     	 	        		console.log('if is 0')
     	 	        		chartData = [0,0,0]
+    	 	        		Cumulative = 'Cumulative Indent Value Rs:' + 0; 
+    	 	        		balancevalue = 'Balance Budget Value Rs:'+ 0;
+    	 	        		yearlyBudget = 'Yearly Budget Value Rs:'+ 0;
+    	 	        		document.getElementsByClassName('NoBudgetIsDefined')[0].style.visibility = 'visible';
+    	 	        		document.getElementsByClassName('NoBudgetIsDefined')[1].style.visibility = 'visible'
+
     	 	        		return;
     	 	        	}else {
-        	 	        	chartData = [Number(allData[3]),allData[3]-allData[4],allData[4]]
+        	 	        	chartData = [allData[3]-allData[4],allData[4]];
+        	 	        	yearlyBudget = 'Yearly Budget Value Rs:'+ allData[3];
+        	 	        	balancevalue = 'Balance Budget Value Rs:'+ allData[4].toFixed(2);
+        	 	        	console.log('Number(allData[3]hhhhh)',Number(allData[3]),Number(allData[3])- Number(allData[4]))
+    	 	        		Cumulative = 'Cumulative Indent Value Rs:' + (Number(allData[3])- Number(allData[4])).toFixed(2); 
+        	 	        	console.log('allData[3]),allData[3]-allData[4],allData[4]',allData[3],allData[3]-allData[4],allData[4])
+        	 	        	document.getElementsByClassName('NoBudgetIsDefined')[0].style.visibility = 'hidden'
+        	 	           document.getElementsByClassName('NoBudgetIsDefined')[1].style.visibility = 'hidden'
+
     	 	        	}
     	 	        	console.log('chartData',chartData)
     	 	           var options = {
@@ -49,7 +65,7 @@
     	 			          height: '700'
     	 			        },
     	 			        series: chartData,
-    	 			        labels: ['Yearly Budget Value', 'Cumulative Indent Value', 'Balance Budget Value']
+    	 			        labels: [Cumulative, balancevalue,yearlyBudget]
     	 			      };
 
     	 			      var chart = new ApexCharts(document.querySelector("#chart"), options);
@@ -96,7 +112,6 @@
             		      var chart = new ApexCharts(document.querySelector("#chart3"), options);
             		      chart.render();
             	}
-            	console.log('costCenterDetails',costCenterDetails[13])
             }
             },
         error: function(error) {
@@ -166,6 +181,14 @@
 .btn-search {
 	margin-top: 2px;
 }
+
+.apexcharts-legend {
+
+    position: absolute;
+    left: 410px !important;
+    top: 5px;
+    right: 5px;
+}
 </style>
 </head>
 
@@ -221,9 +244,52 @@
 				</div>
 				 <div class="col-sm-6 col-lg-6 col-md-6" style="margin-top: 12px;">
 					<div id="chart"></div>
+					<div class="NoBudgetIsDefined">
+  No Budget is defined
+  <style>
+  /* Basic styling */
+.NoBudgetIsDefined {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  color: #333;
+  background-color: #01AFAE;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 200px !important;
+}
+
+/* Center the div */
+.NoBudgetIsDefined {
+  margin: 0 auto;
+  width: 60%; /* Adjust width as needed */
+}
+
+/* Text alignment and spacing */
+.NoBudgetIsDefined {
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* Adding shadow effect */
+.NoBudgetIsDefined {
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover effect */
+.NoBudgetIsDefined:hover {
+  background-color: #01AFAE;
+  transition: background-color 0.3s ease;
+}
+  
+  </style>
+</div>
 				</div>
 				 <div class="col-sm-6 col-lg-6 col-md-6">
 	           <div id="chart3"></div>
+	           <div class="NoBudgetIsDefined">
+  No Indent Data
+  </div>
 				</div>   
 			</div>
 		</div>

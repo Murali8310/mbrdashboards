@@ -170,18 +170,29 @@ padding:0px !important;
 			<!-- End Sidebar scroll-->
 		</aside>
 		<div class="page-wrapper" style="background-color: #d9d9cd;overflow:scroll;">
+	<style>
 	
+	.page-title {
+    color: white !important;
+    background: #01AFAE;
+    box-shadow: 1px 1px;
+    padding: 3px;
+    border-radius: 3px;
+}
+	</style>
 			<div class="page-breadcrumb" >
 				
 				<div class="row">
 					<div class="col-12 d-flex no-block align-items-center">
-						<h4 class="page-title">Indent Update</h4>
-						<div class="ml-auto text-right">
+						<h4 class="page-title">Indent View</h4>
+						<div class="ml-auto text-right" style='background: #01AFAE;
+    padding: 1px 4px;
+    border-radius: 5px;'>
 							<nav aria-label="breadcrumb">
 								<ol class="breadcrumb">
-									<li class="breadcrumb-item"><a href="landPage">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">
-										Indent Update <!-- <a href="productDetails">Product Details</a> -->
+									<li class="breadcrumb-item" style='color:white'><a style='color:white' href="landPage">Home</a></li>
+									<li class="breadcrumb-item active" style='color:white' aria-current="page">
+										Indent View <!-- <a href="productDetails">Product Details</a> -->
 									</li>
 								</ol>
 							</nav>
@@ -189,14 +200,58 @@ padding:0px !important;
 					</div>
 				</div>
 			</div>
-			<div class="container-fluid">
-				<div class="card" style="background: #0000a0;
-    color: white;">
-				<div class="row" style="padding: 10px; align-items: baseline;">
-				<div class="col-md-12 col-lg-12 col-12" id="totalOutput2"
-							style="text-align: start; font-size: 18px; margin-right: 8px;"></div>
+				<style>
+						/* Style for the cell */
+.cell {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+    
+}
+
+/* Style for the title */
+.title {
+   /* flex: 0 0 40%;  *//* Adjust width of the title */
+    font-weight: bold;
+    margin-left: 30px;
+        font-size: 18px;
+    color: white;
+}
+
+/* Style for the value */
+.value {
+    flex: 0 0 60%; /* Adjust width of the value */
+}
+
+/* Style for the highlight */
+.highlight {
+    color: white !important; /* Adjust highlight color */
+        margin-left: 3px;
+    /* Any other highlight styles */
+}
+.product {
+text-align: start;
+font-weight:600;
+}
+h5 label {
+font-weight:600 !important;
+
+}
+</style>
+			<div class="container-fluid2 card-total card-static">
+				<div id="totalOutput2" class="row"style="background-color: #01AFAE; align-items: baseline;padding-top: 5px;margin-left:13px !important;width: 98%;box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    margin-bottom: 2px;">
+				<div id="totalOutput2" class="row"style="background-color: #01AFAE; align-items: baseline;padding-top: 5px;margin-left:13px !important;width: 98%;box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    margin-bottom: 2px;"></div>
 				</div>
-					<div class="row" style="padding: 10px; align-items: baseline;">
+					<div class="cell" style="text-align: start; font-size: 18px; background-color: #01AFAE;color: white;padding: 11px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+        height: 49px;
+    width: 98%;
+    margin-left: 13px;">
 						<div class="col-md-4 col-lg-4 col-12" id="IndentNumber"
 							style="text-align: start; font-size: 18px;"></div>
 						<div class="col-md-4 col-lg-4 col-12" id="totalOutput"
@@ -210,7 +265,6 @@ padding:0px !important;
 							</a>
 							 <!-- <a class="btn btn-success" id="submitId" onclick="submit()">Update</a> -->
 						</div>
-					</div>
 				</div>
 				<div class="row el-element-overlay" id="el-element-overlay"></div>
 					<style>
@@ -326,7 +380,7 @@ function getProduct(id){
 				var product = response[i];
 				/* const productImage = document
 						.getElementById("productImage"); */
-				 var output = "Indent Number: <span class='highlight1'>" +  response[0][8]
+				 var output = "<span class='title' style='margin-left:1px !important'>Indent Number: </span><span class='highlight1'>" +  response[0][8]
 					+ "</span> ";
 			$('#IndentNumber').html(output);
 			if(product[7]!=0){
@@ -405,8 +459,8 @@ function getProduct(id){
 			totalQuantity += quantity;
 		}
 		totalPrice = totalPrice.toFixed(2);
-		var output = "Indent Value: ₹<span>" + totalPrice
-				+ "</span> Indent Qty: <span>" + totalQuantity
+		var output = "<span class='title'>Indent Value: ₹</span><span>" + totalPrice
+				+ "</span><span class='title' style='margin-left: 22px;'> Indent Qty:</span> <span>" + totalQuantity
 				+ "</span>";
 		$('#totalOutput').html(output);
 
@@ -837,12 +891,11 @@ function getBudgetDetails(){
 						//console.log( jQuery.parseJSON(response)[0] ,'response')
 						var budgt =jQuery.parseJSON(response)[0]
 					
-						var output = "Yearly Budget:   ₹  <span>"
-							+ budgt[3]  + "</span> &nbsp; &nbsp; Cumulative (Incl. PO, Route) Indent Value:   ₹  <span>"
-							 + budgt[5]   + "</span>   &nbsp; &nbsp;"+ "<span>  Monthly bal:   ₹  <span>" 
-							+ budgt[7]   + "</span>  &nbsp; &nbsp; "+ " Budget bal:   ₹  <span>"
-							+ budgt[4]+ "</span>  &nbsp; &nbsp;"+ " Indent Amt(Curr. month):   ₹  <span>" 
-							+ budgt[6]   + "</span>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;  Final Qty ₹  <span>" 
+						var output = "<span class='title'>Yearly Budget:   ₹ </span> <span style='font-size: 18px;color: white;'>"
+							+ budgt[3]  + "</span> &nbsp; &nbsp; <span class='title'>Cumulative (Incl. PO, Route) Indent Value:   ₹ </span> <span style='font-size: 18px !important;color: white !important;'>"
+							 + budgt[5]   + "</span>"+" <span class='title'>Budget bal:   ₹ </span> <span style='font-size: 18px;color: white;'>"
+							+ budgt[4]+ "</span>"+ " <span class='title'>Indent Amt(Curr. month):   ₹ </span> <span style='font-size: 18px;color: white;'>" 
+							+ budgt[6]   + "</span><span class='title'>Final Qty ₹ </span> <span style='font-size: 18px;color: white;'>" 
 							+ budgt[8]   + "</span>  " ;
 					$('#totalOutput2').html(output); 
 					}

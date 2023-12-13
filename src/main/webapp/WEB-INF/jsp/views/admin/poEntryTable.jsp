@@ -128,15 +128,14 @@ vertical-align: text-bottom ; footer {
 }
 
 .headerStyles{
- width: 183.199px !important;
  background: rgb(39 150 203) !important;
  color: white !important;      
- font-weight: 600 !important;
+    font-size: 17px;
  
 	}
 	.tbodyCustomColor {
 	    color: black !important;
-        font-weight: 600 !important;
+    font-size: 17px;
 	}
 </style>
 
@@ -233,6 +232,16 @@ vertical-align: text-bottom ; footer {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     border-radious:3px;
 }
+.headerStyles{
+ background: #01AFAE !important;
+ color: white !important;      
+    font-size: 17px;
+ 
+	}
+	.tbodyCustomColor {
+	    color: black !important;
+    font-size: 17px;
+	}
   </style>
 											<thead class="thead-light">
 												<tr>

@@ -328,17 +328,17 @@ function getProduct(id){
 				productListHTML += '	<div class="el-overlay"></div>';
 				productListHTML += '</div>';
 				productListHTML += ' <div class="el-card-content " style="padding-left: 10px">';
-				productListHTML += '<h5 class="product" class="m-b-0" style="text-align: start;">'
+				productListHTML += '<h5 class="product" class="m-b-0" style="text-align: start;font-weight:600">'
 						+ product[1] + '</h5>';
 
 				productListHTML += '<div class="row">';
 				productListHTML += '<div class="col-7">';
-				productListHTML += '	<h5 class="m-b-0" style="text-align: start;">';
-				productListHTML += '		<label class="price" id="price">₹ '
+				productListHTML += '	<h5 class="m-b-0" style="text-align: start;font-weight: 600">';
+				productListHTML += '		<label class="price" style="font-weight: 600 !important" id="price">₹ '
 						+ product[4] + '</label>';
-				productListHTML += '		<label style="border:1px solid lightgrey;left:5px;">UOM : '
+				productListHTML += '		<label style="border:1px solid lightgrey;left:5px;font-weight : 600 !important">UOM : '
 						+ product[5] + '</label>';
-				productListHTML += '		<label class="productID" style="left:5px;">Product ID : '
+				productListHTML += '		<label class="productID" style="left:5px;font-weight: 600 !important">Product ID : '
 						+ product[0] + '</label>';
 				productListHTML += '	</h5>';
 				productListHTML += '</div>';
@@ -830,12 +830,12 @@ function getProduct(id){
 
 			productListHTML += '<div class="row">';
 			productListHTML += '<div class="col-7">';
-			productListHTML += '	<h5 class="m-b-0" style="text-align: start;">';
-			productListHTML += '		<label class="price" id="price">₹ '
+			productListHTML += '	<h5 class="m-b-0" style="text-align: start;font-weight: 600">';
+			productListHTML += '		<label class="price" id="price" style="font-weight:600 !important">₹ '
 					+ product[4] + '</label>';
-			productListHTML += '		<label style="border:1px solid lightgrey;left:5px;">UOM : '
+			productListHTML += '		<label style="border:1px solid lightgrey;left:5px;font-weight:600 !important">UOM : '
 					+ product[5] + '</label>';
-			productListHTML += '		<label class="productID" style="left:5px;">Product ID : '
+			productListHTML += '		<label class="productID" style="left:5px;font-weight:600 !important">Product ID : '
 					+ product[0] + '</label>';
 			productListHTML += '	</h5>';
 			productListHTML += '</div>';
@@ -879,9 +879,9 @@ function getBudgetDetails(){
 						var budgt =jQuery.parseJSON(response)[0]
 					
 						var output = "<div class='cell'>&nbsp;&nbsp;<span class='title'>Yearly Budget:   ₹ </span> <span class='highlight' id='yearAmount'>"
-							+ budgt[3]  + "</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class='title'>Cumulative (Incl. PO, Route) Indent Value:   ₹</span>  <span class='highlight'>"
-							 + budgt[5]   + "</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+ " <span class='title'>Budget bal:   ₹</span>  <span class='highlight'>"
-							+ budgt[4]   + "</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "+ "<span class='title'> Indent Amt(Current month):   ₹</span>  <span class='highlight'>" 
+							+ budgt[3]  + "</span> &nbsp;&nbsp;&nbsp;&nbsp;<span class='title'>Cumulative (Incl. PO, Route) Indent Value:   ₹</span>  <span class='highlight'>"
+							 + budgt[5]   + "</span>  &nbsp;&nbsp;&nbsp;"+ " <span class='title'>Budget bal:   ₹</span>  <span class='highlight'>"
+							+ budgt[4]   + "</span> &nbsp;&nbsp;&nbsp;&nbsp;"+ "<span class='title'> Indent Amt(Current month):₹</span>  <span class='highlight'>" 
 							+ budgt[6]   + "</span> </div> " ;
 							
 					$('#totalOutput2').html(output); 

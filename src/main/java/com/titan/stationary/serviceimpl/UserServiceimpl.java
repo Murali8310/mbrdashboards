@@ -915,14 +915,14 @@ public class UserServiceimpl implements Userservice {
 
 			String finalcc = userDao.getAllIndentedCostCenters(Year,Month);
 			System.out.println("print"+finalcc);
-			finalcc = finalcc.replaceAll("\\[", "<th scope='col'><b>CC");
+			finalcc = finalcc.replaceAll("\\[", "<th scope='col' class=\"headerStyles\"><b>CC");
 			finalcc = finalcc.replaceAll("],", "</b></th>");
 			finalcc = finalcc.replaceAll("]", "</b></th>");
 			
-			finalcc = "<th scope='col'><b>Description</b></th><th scope='col'><b>Vendors</b></th>	<th scope='col'><b>UOM</b></th>"
+			finalcc = "<th scope='col' class=\"headerStyles\"><b>Description</b></th><th scope='col' class=\"headerStyles\"><b>Vendors</b></th>	<th scope='col' class=\"headerStyles\"><b>UOM</b></th>"
 			+finalcc+			
-			"<th scope='col'><b>User Qty</b></th><th scope='col'><b>MOQ Qty</b></th><th scope='col'><b>MOQ Val(RS)</b></th><th scope='col'><b>Total Qty</b></th>"
-			+ "	<th scope='col'><b>Total Val</b></th><th scope='col'><b>Unit Price(RS)</b></th><th scope='col'><b>Stock At TMT (QTY)</b></th><th scope='col'><b>STK Val(RS)</b></th>";
+			"<th scope='col' class=\"headerStyles\"><b>User Qty</b></th><th scope='col' class=\"headerStyles\"><b>MOQ Qty</b></th><th scope='col' class=\"headerStyles\"><b>MOQ Val(RS)</b></th><th scope='col' class=\"headerStyles\"><b>Total Qty</b></th>"
+			+ "	<th scope='col' class=\"headerStyles\"><b>Total Val</b></th><th scope='col' class=\"headerStyles\"><b>Unit Price(RS)</b></th><th scope='col' class=\"headerStyles\"><b>Stock At TMT (QTY)</b></th><th scope='col' class=\"headerStyles\"><b>STK Val(RS)</b></th>";
 			System.out.println(finalcc);
 			getAllfinalcc.add(finalcc);
 			

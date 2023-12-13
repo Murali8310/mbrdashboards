@@ -306,23 +306,33 @@ margin-top: 20px !important;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     border-radious:3px;
 }
+.headerStyles{
+ background: #01AFAE !important;
+ color: white !important;      
+    font-size: 17px;
+ 
+	}
+	.tbodyCustomColor {
+	    color: black !important;
+    font-size: 17px;
+	}
   </style>
 												<thead class="thead-light">
 													<tr>
 														<!-- <th scope="col"><b>SL.NO</b></th> -->
 														<!--                                                 <th scope="col" hidden><b>USER ID</b></th> -->
-														<th scope="col"><b>Document Number</b></th>
-														<th scope="col"><b>Cost Center</b></th>
-														<th scope="col"><b>Product</b></th>
-														<th scope="col"><b>Department</b></th>
-														<th scope="col"><b>QTY</b></th>
-														<th scope="col"><b>Buyer QTY</b></th>
-														<th scope="col"><b>Received QTY</b></th>
-														<th scope="col"><b>Document Date</b></th>
-														<th scope="col"><b>Value</b></th>
-														<th scope="col"><b>Month</b></th>
-														<th scope="col"><b>Year</b></th>
-														<th scope="col"><b>Status</b></th>
+														<th scope="col" class='headerStyles'><b>Document Number</b></th>
+														<th scope="col" class='headerStyles'><b>Cost Center</b></th>
+														<th scope="col" class='headerStyles'><b>Product</b></th>
+														<th scope="col" class='headerStyles'><b>Department</b></th>
+														<th scope="col" class='headerStyles'><b>QTY</b></th>
+														<th scope="col" class='headerStyles'><b>Buyer QTY</b></th>
+														<th scope="col" class='headerStyles'><b>Received QTY</b></th>
+														<th scope="col" class='headerStyles'><b>Document Date</b></th>
+														<th scope="col" class='headerStyles'><b>Value</b></th>
+														<th scope="col" class='headerStyles'><b>Month</b></th>
+														<th scope="col" class='headerStyles'><b>Year</b></th>
+														<th scope="col" class='headerStyles'><b>Status</b></th>
 													</tr>
 												</thead>
 												<tbody class="customtable">
@@ -518,16 +528,12 @@ $(document).ready(function () {
  
     // Setup - add a text input to each footer cell
     $('#example thead tr')
-        .clone(true)
-        .addClass('filters')
-        .appendTo('#example thead');
-  
     var table = $('#example').DataTable({
     	
             dom: 'Bfrtip',
             buttons: [{
             	extend : 'excelHtml5',
-				text : '<i class="fa fa-file-excel-o"></i>',
+				text : '<i class="fa fa-file-excel-o">Export</i>',
 				titleAttr : 'Excel',
 				title : 'Indent Report'
             }

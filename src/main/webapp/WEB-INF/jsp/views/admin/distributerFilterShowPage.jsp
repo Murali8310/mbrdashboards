@@ -314,23 +314,33 @@ table.dataTable tbody tr.selected a {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     border-radious:3px;
 }
+.headerStyles{
+ background: #01AFAE !important;
+ color: white !important;      
+    font-size: 17px;
+ 
+	}
+	.tbodyCustomColor {
+	color: black !important;
+    font-size: 17px !important;
+	}
   </style>
 											<thead class="thead-light">
 												<tr>
-													<th scope="col"><b>Description</b></th>
-													<th scope="col"><b>Make</b></th>
-													<th scope="col"><b>UOM</b></th>
+													<th scope="col" class='headerStyles'><b>Description</b></th>
+													<th scope="col" class='headerStyles'><b>Make</b></th>
+													<th scope="col" class='headerStyles'><b>UOM</b></th>
 													<c:forEach items="${Collen}" var="costcenter" varStatus="loop2">
-													<th scope="col"><b>CC${costcenter}</b></th>
+													<th scope="col" class='headerStyles'><b>CC${costcenter}</b></th>
 													</c:forEach> 
-													<th scope="col"><b>Final Qty</b></th>
-													<th scope="col"><b>Final Val(RS)</b></th>
-													<th scope="col"><b>Unit Price(RS)</b></th>													
+													<th scope="col" class='headerStyles'><b>Final Qty</b></th>
+													<th scope="col" class='headerStyles'><b>Final Val(RS)</b></th>
+													<th scope="col" class='headerStyles'><b>Unit Price(RS)</b></th>													
 													<!-- Receipt -->
-													<th scope="col"><b>Receipt Qty</b></th>
-													<th scope="col"><b>Receipt Val</b></th>
-													<th scope="col"><b>Stock At DIST.Team (QTY)</b></th>
-													<th scope="col"><b>STK Val(RS)</b></th>
+													<th scope="col" class='headerStyles'><b>Receipt Qty</b></th>
+													<th scope="col" class='headerStyles'><b>Receipt Val</b></th>
+													<th scope="col" class='headerStyles'><b>Stock At DIST.Team (QTY)</b></th>
+													<th scope="col" class='headerStyles'><b>STK Val(RS)</b></th>
 													
 												</tr>
 											</thead>
@@ -338,23 +348,23 @@ table.dataTable tbody tr.selected a {
 												<c:forEach items="${BuyerList}" var="user" varStatus="loop">
 													<tr>
 														<%-- <td>${loop.index+1}</td> --%>
-														<td>${user[0]}</td>
-														<td>${user[1]}</td>
-														<td>${user[2]}</td>
+														<td class='tbodyCustomColor'>${user[0]}</td>
+														<td class='tbodyCustomColor'>${user[1]}</td>
+														<td class='tbodyCustomColor'>${user[2]}</td>
 														<c:set var="collectionSize" value="${0}" />
 														<c:forEach items="${Collen}" var="ccen" varStatus="loop2">
-													<td class="editable-cell">${user[loop2.index + 3]}</td>
+													<td class="editable-cell tbodyCustomColor">${user[loop2.index + 3]}</td>
 													  <c:set var="collectionSize" value="${collectionSize + 1}" />
 													
 													</c:forEach>													
-														<td>${user[collectionSize + 8]}</td>
-														<td>${user[7]*user[6]}</td>
-														<td>${user[collectionSize + 3]}</td>
+														<td class='tbodyCustomColor'>${user[collectionSize + 8]}</td>
+														<td class='tbodyCustomColor'>${user[7]*user[6]}</td>
+														<td class='tbodyCustomColor'>${user[collectionSize + 3]}</td>
 														<!-- Receipt -->
-														<td class="editable-cell">${user[collectionSize + 8]}</td>
-														<td></td>
-														<td class="editable-cell">${user[collectionSize + 6]}</td>
-														<td></td>
+														<td class="editable-cell tbodyCustomColor">${user[collectionSize + 8]}</td>
+														<td class='tbodyCustomColor '></td>
+														<td class="editable-cell tbodyCustomColor">${user[collectionSize + 6]}</td>
+														<td class='tbodyCustomColor'></td>
 
 													</tr>
 

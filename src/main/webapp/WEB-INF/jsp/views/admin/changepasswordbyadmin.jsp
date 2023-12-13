@@ -269,18 +269,28 @@ label {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     border-radious:3px;
 }
+ .headerStyles{
+ background: #01AFAE !important;
+ color: white !important;      
+    font-size: 17px;
+ 
+	}
+	.tbodyCustomColor {
+	    color: black !important;
+    font-size: 17px;
+	}
   </style>
 											<thead class="thead-light">
 												<tr>
 													<!-- <th scope="col"><b>SL.NO</b></th> -->
 													<!--                                                 <th scope="col" hidden><b>USER ID</b></th> -->
-													<th scope="col"><b>Cost Centre</b></th>
-													<th scope="col"><b>Employee Name</b></th>
-													<th scope="col"><b>Email</b></th>
-													<th scope="col"><b>Department</b></th>
-													<th scope="col"><b>Password</b></th>
-													<th scope="col"><b>New Password</b></th>
-													<th scope="col"><b>Update</b></th>
+													<th scope="col" class='headerStyles'><b>Cost Centre</b></th>
+													<th scope="col" class='headerStyles'><b>Employee Name</b></th>
+													<th scope="col" class='headerStyles'><b>Email</b></th>
+													<th scope="col" class='headerStyles'><b>Department</b></th>
+													<th scope="col" class='headerStyles'><b>Password</b></th>
+													<th scope="col" class='headerStyles'><b>New Password</b></th>
+													<th scope="col" class='headerStyles'><b>Update</b></th>
 
 												</tr>
 											</thead>
@@ -291,12 +301,12 @@ label {
 													varStatus="loop">
 													<tr>
 														<%-- <td>${loop.index+1}</td> --%>
-														<td class="costcenter">${user[0]}</td>
-														<td>${user[1]}</td>
-														<td class="address">${user[2]}</td>
-														<td>${user[3]}</td>
-														<td class="account">${user[4]}</td>
-														<td class="editable-cell">${user[5]}</td>
+														<td class="costcenter tbodyCustomColor">${user[0]}</td>
+														<td class='tbodyCustomColor'>${user[1]}</td>
+														<td class="address tbodyCustomColor">${user[2]}</td>
+														<td class='tbodyCustomColor'>${user[3]}</td>
+														<td class="account tbodyCustomColor">${user[4]}</td>
+														<td class="editable-cell tbodyCustomColor">${user[5]}</td>
 
 														<td><button class="btn btn-primary update-btn">Update</button></td>
 

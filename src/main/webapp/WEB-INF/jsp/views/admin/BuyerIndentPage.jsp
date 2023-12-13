@@ -329,6 +329,16 @@ vertical-align: text-bottom ; footer {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     border-radious:3px;
 }
+.headerStyles{
+ background: #01AFAE !important;
+ color: white !important;      
+    font-size: 17px;
+ 
+	}
+	.tbodyCustomColor {
+	    color: black !important;
+    font-size: 17px;
+	}
   </style>
 											<thead class="thead-light">
 												<tr>

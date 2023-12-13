@@ -213,19 +213,29 @@ tr td:first-child:before
   counter-increment: Serial;      /* Increment the Serial counter */
   content: counter(Serial); /* Display the counter */
 }
+.headerStyles{
+ background: #01AFAE !important;
+ color: white !important;      
+    font-size: 17px;
+ 
+	}
+	.tbodyCustomColor {
+	    color: black !important;
+    font-size: 17px;
+	}
   </style>
 											<thead class="thead-light">
 												<tr>
-									             <th scope="col"><b>Sl No.</b></th>
-													<th scope="col"><b>GL No.</b></th>
-													<th scope="col"><b>GL Description</b></th>
-													<th scope="col"><b>Cost Center</b></th>
-													<th scope="col"><b>Cost Center Description</b></th>
-													<th scope="col"><b>Location</b></th>
-											        <th scope="col"><b>CC Owner</b></th>
-													<th scope="col"><b>Yearly Budget(Rs.lak)</b></th>
-											       <th scope="col"><b>Year</b></th>
-													<th>Actions</th>
+									             <th class="headerStyles" scope="col"><b>Sl No.</b></th>
+													<th class="headerStyles" scope="col"><b>GL No.</b></th>
+													<th class="headerStyles" scope="col"><b>GL Description</b></th>
+													<th class="headerStyles" scope="col"><b>Cost Center</b></th>
+													<th class="headerStyles" scope="col"><b>Cost Center Description</b></th>
+													<th class="headerStyles" scope="col"><b>Location</b></th>
+											        <th  class="headerStyles" scope="col"><b>CC Owner</b></th>
+													<th class="headerStyles" scope="col"><b>Yearly Budget(Rs.lak)</b></th>
+											       <th class="headerStyles" scope="col"><b>Year</b></th>
+													<th class="headerStyles">Actions</th>
 												</tr>
 											</thead>
 											<tbody class="customtable">
@@ -233,16 +243,16 @@ tr td:first-child:before
 												<c:forEach items="${ProductListt}" var="indent"
 													varStatus="loop">
 													<tr>
-														<td ></td>
-														<td>${indent[3]}</td>
-														<td>${indent[4]}</td>
-														<td>${indent[0]}</td>
-														<td>${indent[2]}</td>
-														<td>${indent[5]}</td>
-														<td>${indent[7]}</td>
-													    <td>${indent[6]}</td>
-														<td>${indent[1]}</td>
-														<td></td> 
+														<td class="tbodyCustomColor"></td>
+														<td class="tbodyCustomColor">${indent[3]}</td>
+														<td class="tbodyCustomColor">${indent[4]}</td>
+														<td class="tbodyCustomColor">${indent[0]}</td>
+														<td class="tbodyCustomColor">${indent[2]}</td>
+														<td class="tbodyCustomColor">${indent[5]}</td>
+														<td class="tbodyCustomColor">${indent[7]}</td>
+													    <td class="tbodyCustomColor">${indent[6]}</td>
+														<td class="tbodyCustomColor">${indent[1]}</td>
+														<td class="tbodyCustomColor"></td> 
 													</tr>
             <c:set var="serialNumber" value="${serialNumber + 1}" /> <!-- Increment the serial number -->
 												</c:forEach>
