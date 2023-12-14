@@ -3661,7 +3661,7 @@ public class UserDaoimpl implements UserDao {
 			return "fine";
 		}
 		return "For the month of " + MonthText + " an Indent has already been generated: " + id
-				+ " for this cost center " + userId + "and Please modify the indent in the indent list Menu.";
+				+ " for this cost center " + userId + " and please modify the indent in the indent list menu.";
 		// return "fine";
 
 	}

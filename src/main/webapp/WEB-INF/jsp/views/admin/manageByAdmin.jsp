@@ -123,12 +123,25 @@ h1 {
 				<div class="row">
 					<div class="col-12 d-flex no-block align-items-center">
 					
-					<h4 class="page-title display-10" style="color: red !important;">
+					<div class="error-text" id="movingError" style='width: 80%;
+    padding: 7px;
+    border-radius: 5px;'>
 		<c:if test="${message !='fine'}">
 		<c:out value="${message}"></c:out>
 	        	</c:if>
 		
- 						</h4>
+					</div>
+					<style>
+        /* Style for the moving error text */
+        .error-text {
+            position: absolute;
+            left: -200px; /* Start position off the screen */
+            top: 50%; /* Adjust as needed */
+            color: red;
+            font-size: 18px;
+            white-space: nowrap;
+        }
+    </style>
  						<div class="ml-auto text-right">
 							<nav aria-label="breadcrumb">
 								<ol class="breadcrumb">
@@ -440,5 +453,29 @@ h1 {
 		<script src="assets/libs/flot/jquery.flot.crosshair.js"></script>
 		<script src="assets/libs/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
 		<script src="dist/js/pages/chart/chart-page-init.js"></script>
+		 <script>
+        // JavaScript to animate the error text
+        function moveError() {
+            var error = document.getElementById("movingError");
+            var position = 200; // Start position off the screen
+            var screenWidth = window.innerWidth;
+
+            // Move the error text from left to right
+            var animation = setInterval(frame, 25);
+            function frame() {
+                if (position >= screenWidth) {
+                    position = -200; // Reset position off the screen
+                } else {
+                    position++;
+                    error.style.left = position + 'px';
+                }
+            }
+        }
+
+        // Call the function to start the animation when the page loads
+        window.onload = function() {
+            moveError();
+        };
+    </script>
 </body>
 </html>

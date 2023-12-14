@@ -466,6 +466,7 @@ vertical-align: text-bottom ; footer {
 															<td>${user[collectionSize + 3]}</td>
 															<td>${user[collectionSize + 6]}</td>
 															<td>${user[collectionSize + 7]}</td>
+															<div>${ collectionSize}kk</div>
  </tr>
 													</c:forEach>
 												</tbody>

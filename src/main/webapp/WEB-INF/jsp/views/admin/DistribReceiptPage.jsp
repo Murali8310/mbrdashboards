@@ -808,7 +808,7 @@ console.log("murali checkking",data)
                     const unitPrice = item["Unit Price(RS)"];
                     const MoqQty = item["MOQ Qty"];
                     const MOQValue = item["MOQ Val(RS)"];
-                    const TMTQty = item["Stock At TMT (QTY)"];
+                    const TMTQty = item["Stock At DIST.Team (QTY)"];
                     const TMTValue = item["STK Val(RS)"];
                     const receivedqty = item["Receipt Qty"];
                     const receivedvalue = item["Receipt Val"];
