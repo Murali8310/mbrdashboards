@@ -224,6 +224,19 @@ label {
 										class="form-control" aria-invalid="true" required="required">
 								</div>
 							</div>
+							
+							<div class="col-md-12 oneline">
+								<div class="col-md-2"></div>
+								<div style="margin-top: 10px;" class="col-md-3">
+									<label for="COSTEMAIL"> Email <label
+										style="color: red;">*</label>:
+									</label>
+								</div>
+								<div class="col-md-5">
+											<input type="email" id="COSTEMAIL" name="COSTEMAIL" 
+										class="form-control" aria-invalid="true" required="required">
+								</div>
+							</div>
 
 							<div class="col-md-12 oneline">
 								<div class="col-md-2"></div>
@@ -391,12 +404,22 @@ label {
 		var LOCATION = $("#LOCATION").val();
 		var Department = $("#Department").val();
 		var YEARLYBUDGET = $("#YEARLYBUDGET").val();
+		var COSTEMAIL = $("#COSTEMAIL").val();
 		
 		
 		if (CCID == "" ||CCID == undefined) {
 			Swal.fire({
 				icon : 'warning',
 				title : ' Please enter cost center',
+				focusConfirm : false,
+			})
+			return;
+		}
+		
+		if (COSTEMAIL == "" ||COSTEMAIL == undefined) {
+			Swal.fire({
+				icon : 'warning',
+				title : ' Please Enter the Email address.',
 				focusConfirm : false,
 			})
 			return;
@@ -498,7 +521,7 @@ label {
 					+ "&GLDESC=" + GLDESC + "&LOCATION="
 					+ LOCATION + "&CCCOWNER="
 					+ CCOWNER + "&Department="
-					+ Department+ "&YEARLYBUDGET=" + YEARLYBUDGET,
+					+ Department+ "&YEARLYBUDGET=" + YEARLYBUDGET + "&COSTEMAIL=" + COSTEMAIL,
 			success : function(response) {
 				var data = jQuery.parseJSON(response);
 				if (data == "CC created sucessfully") {

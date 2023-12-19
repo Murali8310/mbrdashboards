@@ -217,6 +217,7 @@ public class UserController {
 		userLoginBean.setLogin_id(userLoginBean.getLogin_id());
 
 		if (userLoginBean.getLogin_id() == null) {
+			System.out.println("userLoginBean.getLogin_id()"+userLoginBean.getLogin_id());
 			return "login";
 		}
 		if (userMap.get("message").equals("SUCCESS")) {
@@ -2031,12 +2032,13 @@ List<Object> BuyerList;
 				@RequestParam("GLDESC") String GLDESC,
 				@RequestParam("LOCATION") String LOCATION,
 				@RequestParam("Department") String Department,
-				@RequestParam("YEARLYBUDGET") String YEARLYBUDGET) {
+				@RequestParam("YEARLYBUDGET") String YEARLYBUDGET,
+				@RequestParam("COSTEMAIL") String COSTEMAIL) {
 System.out.println("CCCOWNER"+CCCOWNER);
 			HttpSession session = request.getSession();
 			Map<String, Object> userMap = (Map) session.getAttribute("userMap");
 			String loginId = (String) userMap.get("login_id");
-			String generatehelioscopon = userService.ccCreationSave(CCID,Year,COSTCENTERDESC,GL,GLDESC,LOCATION,Department,CCCOWNER,YEARLYBUDGET,loginId);
+			String generatehelioscopon = userService.ccCreationSave(CCID,Year,COSTCENTERDESC,GL,GLDESC,LOCATION,Department,CCCOWNER,YEARLYBUDGET,loginId,COSTEMAIL);
 			
 			Gson jsonToString = new GsonBuilder().setPrettyPrinting().create();
 			String jsonData = jsonToString.toJson(generatehelioscopon);

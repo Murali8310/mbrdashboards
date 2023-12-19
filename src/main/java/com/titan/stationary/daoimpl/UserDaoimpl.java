@@ -4828,7 +4828,7 @@ public class UserDaoimpl implements UserDao {
 	
 	@Override
 	public String ccCreationSave(String CCID, String Year, String COSTCENTERDESC, String GL, String GLDESC,
-			String LOCATION, String Department,String CCowner, String YEARLYBUDGET, String loginId) {
+			String LOCATION, String Department,String CCowner, String YEARLYBUDGET, String loginId,String COSTEMAIL) {
 		String permitNumber = "";
 		System.out.println("ccowner"+CCowner);
 		try {
@@ -4841,6 +4841,65 @@ public class UserDaoimpl implements UserDao {
 			labelExistanceQuery.setParameter("Year", Year);
 			int isExistance = (int) labelExistanceQuery.getSingleResult();
 
+			
+			/**
+			 * Here we are validating whether the cost center is already available in indent manager or not.
+			 */
+			
+			String ccidExistanceSQL = "SELECT COUNT(*) FROM INDENT_MANAGER WHERE EmpCode=:CCID";
+			Query ccidExistanceQuery = entityManager.createNativeQuery(ccidExistanceSQL);
+			ccidExistanceQuery.setParameter("CCID", CCID);
+			int isccidExistance = (int) labelExistanceQuery.getSingleResult();
+			
+			if (isccidExistance == 0) {
+				Query insetIntoIndentManager = entityManager.createNativeQuery("INSERT INTO INDENT_MANAGER (EmpCode,\n"
+						+ "    Password,\n"
+						+ "    EmpName,\n"
+						+ "    StoreCode,\n"
+						+ "    MobileNumber,\n"
+						+ "    DateOfJoin,\n"
+						+ "    dateofleaving,\n"
+						+ "    isactive,\n"
+						+ "    changedBy,\n"
+						+ "    Changedon,\n"
+						+ "    CreatedBY,\n"
+						+ "    CreatedOn,\n"
+						+ "    LMSID,\n"
+						+ "    Email,\n"
+						+ "    abm,\n"
+						+ "    region\n"
+						+ ")\n"
+						+ "VALUES (\n"
+						+ "    :EmpCode,\n"
+						+ "    :Password,\n"
+						+ "    :EmpName,\n"
+						+ "    :StoreCode,\n"
+						+ "    :MobileNumber,\n"
+						+ "    NULL,\n"
+						+ "    NULL,\n"
+						+ "    1, \n"
+						+ "    :CreatedBy,\n"
+						+ "    NULL,\n"
+						+ "    :CreatedBy,\n"
+						+ "    :CreatedOn,\n"
+						+ "    :CCID,\n"
+						+ "    :CostEmail,\n"
+						+ "    NULL,\n"
+						+ "    :region\n"
+						+ ")");
+				insetIntoIndentManager.setParameter("CCID", CCID);
+				insetIntoIndentManager.setParameter("EmpCode", CCID);
+				insetIntoIndentManager.setParameter("Password", "GH7Yz0xddaPTsXa01bcc4w==");
+				insetIntoIndentManager.setParameter("EmpName",CCowner);
+				insetIntoIndentManager.setParameter("StoreCode",Department);
+				insetIntoIndentManager.setParameter("MobileNumber",null);
+				//insetIntoIndentManager.setParameter("MobileNumber",null);
+				insetIntoIndentManager.setParameter("CreatedBy", loginId);
+				insetIntoIndentManager.setParameter("CreatedOn", new Date());
+				insetIntoIndentManager.setParameter("CostEmail", COSTEMAIL);
+				insetIntoIndentManager.setParameter("region", "Indent Manager");
+				insetIntoIndentManager.executeUpdate();
+			}	
 			if (isExistance != 0) {
 				return "cost center : " + CCID + " is already available for this year : " + Year;
 			} else {
