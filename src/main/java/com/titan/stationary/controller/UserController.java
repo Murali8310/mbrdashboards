@@ -651,7 +651,7 @@ public class UserController {
 	@RequestMapping(value = "tempCartIndentCreation", method = RequestMethod.POST)
 	public String tempCartIndentCreation(HttpServletRequest request, HttpServletResponse response, Model model,
 			@RequestBody Product[] products) throws JsonMappingException, JsonProcessingException {
-
+System.err.println("murali debugger");
 		HttpSession session = request.getSession();
 		ObjectMapper objectMapper = new ObjectMapper();
 

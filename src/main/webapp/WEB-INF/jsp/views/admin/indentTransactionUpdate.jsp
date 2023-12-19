@@ -347,7 +347,7 @@ function getProduct(id){
 				 productListHTML += '	style="align-items: center;">';
 				productListHTML += '	<a onclick="decrementCount(this)"';
 				productListHTML += '		class="btn btn-sm btn-decre decreme"><i';
-			    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input type="text"';
+			    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input disabled type="text"';
 				productListHTML += '		id="countInput'
 						+ i
 						+ '" name="quantity" class="form-control count-input bold-and-large"';
@@ -846,7 +846,7 @@ function getProduct(id){
 	 productListHTML += '	style="align-items: center;">';
 			productListHTML += '	<a onclick="decrementCount(this)"';
 			productListHTML += '		class="btn btn-sm btn-decre decreme"><i';
-    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input type="text"';
+    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input disabled type="text"';
 			productListHTML += '		id="countInput' + i
 					+ '" name="quantity" class="form-control count-input bold-and-large"';
 			productListHTML += '		value="' + product[7]

@@ -105,7 +105,7 @@ a:hover {
 		<!-- toggle and nav items -->
 		<!-- ============================================================== -->
 		<ul class="navbar-nav float-left mr-auto">
-			<li class="nav-item d-none d-md-block"><a
+			<li class="nav-item d-none d-md-block" id='sidebarToggle'><a
 				class="nav-link sidebartoggler waves-effect waves-light"
 				href="javascript:void(0)" data-sidebartype="mini-sidebar"><i
 					class="mdi mdi-menu font-24"></i></a></li>
@@ -250,18 +250,21 @@ a:hover {
 		</script> -->
 		
 		<script type="text/javascript">
-		/* var myDate = new Date();
-		var hrs = myDate.getHours();
+		// Execute the click action on page load
+		window.addEventListener('load', function() {
+		    // Get the element by its ID
+		    const sidebarToggle = document.getElementById('sidebarToggle');
 
-		var greet;
+		    // Check if the element exists
+		    if (sidebarToggle) {
+		        // Create a click event
+		        const clickEvent = new Event('click');
 
-		if (hrs < 12)
-		  greet = 'Good Morning!';
-		else if (hrs >= 12 && hrs <= 17)
-		  greet = 'Good Afternoon!';
-		else if (hrs >= 17 && hrs <= 24)
-		  greet = 'Good Evening!';
-		document.getElementById('greetings').innerHTML = greet; */
+		        // Dispatch the click event on the element
+		        sidebarToggle.dispatchEvent(clickEvent);
+		    }
+		});
+
 		</script>
 		
 </body>

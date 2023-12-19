@@ -736,14 +736,14 @@ padding:0px !important;
 					quantity : quantity,
 					productID : productID
 				});
-				console.log(InputArray);
+				console.log(InputArray,'murali2');
 			}
 		}
 		
 		var pricelement = document.querySelector("#totalOutput .highlight:nth-child(1)").textContent;
 		var yearlyAmount = document.getElementById('yearAmount').textContent;
 
-		console.log('this is checking',pricelement,yearlyAmount)
+		console.log('this is checkingd',pricelement,yearlyAmount)
 		
 		if(Number(pricelement.trim()) > Number(yearlyAmount.trim())){
 			Swal.fire({
@@ -850,7 +850,7 @@ padding:0px !important;
 			var productName = productCard.querySelector('.product').innerText;
 			var productPrice = productCard.querySelector('.price').innerText;
 			var productID = productCard.querySelector('.productID').innerText.split(':')[1].trim();
-			console.log('this is checking',productID)
+			console.log('this is checkinge',productID)
 		rrentValue = parseInt(input.value);
 			input.value = currentValue + 1;
 
@@ -1035,7 +1035,7 @@ padding:0px !important;
 		var pricelement = document.querySelector("#totalOutput .highlight:nth-child(1)").textContent;
 		var yearlyAmount = document.getElementById('yearAmount').textContent;
 
-		console.log('this is checking',pricelement,yearlyAmount)
+		console.log('this is checkings',pricelement,yearlyAmount)
 		
 		if(Number(pricelement.trim()) > Number(yearlyAmount.trim())){
 			Swal.fire({
@@ -1433,7 +1433,7 @@ function calculateDecrementTotal(value,price) {
 												var productCard = input.closest('.card');
 												var productName = productCard.querySelector('.product').innerText;
 												var productPrice = productCard.querySelector('.price').innerText;
-												var productID = productCard.querySelector('.productID').innerText;
+												var productID = productCard.querySelector('.productID').innerText.split(':')[1].trim();
 												var currentValue = parseInt(input.value);
 												if (currentValue >= 0) {
 													input.value = currentValue ;
@@ -1512,7 +1512,7 @@ function calculateDecrementTotal(value,price) {
 								var productCard = input.closest('.card');
 								var productName = productCard.querySelector('.product').innerText;
 								var productPrice = productCard.querySelector('.price').innerText;
-								var productID = productCard.querySelector('.productID').innerText;
+								var productID = productCard.querySelector('.productID').innerText.split(':')[1].trim();
 								var currentValue = parseInt(input.value);
 								if (currentValue >= 0) {
 									input.value = currentValue ;
@@ -1523,7 +1523,7 @@ function calculateDecrementTotal(value,price) {
 										quantity : currentValue,
 										productID : productID
 									});
-									console.log(InputArray)
+									console.log(InputArray,'murali1')
 									//calculateTotal();
 									$.ajax({
 										type : "POST",
