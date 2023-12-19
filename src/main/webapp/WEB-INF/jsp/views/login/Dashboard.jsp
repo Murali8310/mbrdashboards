@@ -38,7 +38,7 @@
     	 	        	var balancevalue = '';
     	 	        	if(typeof allData === 'undefined'){
     	 	        		console.log('if is 0')
-    	 	        		chartData = [0,0,0]
+    	 	        		chartData = [0,0]
     	 	        		Cumulative = 'Cumulative Indent Value Rs:' + 0; 
     	 	        		balancevalue = 'Balance Budget Value Rs:'+ 0;
     	 	        		yearlyBudget = 'Yearly Budget Value Rs:'+ 0;
@@ -65,7 +65,7 @@
     	 			          height: '700'
     	 			        },
     	 			        series: chartData,
-    	 			        labels: [Cumulative, balancevalue,yearlyBudget]
+    	 			        labels: [Cumulative, balancevalue]
     	 			      };
 
     	 			      var chart = new ApexCharts(document.querySelector("#chart"), options);
@@ -95,22 +95,32 @@
             		});
             	if(index != -1){
             	costCenterDetails = parsedData[index]; 
-            	 var options = {
-            		        chart: {
-            		          type: 'bar',
-            		          height: '500' // Set the desired height here
-            		        },
-            		        series: [{
-            		          name: 'Indent Amount',
-            		          data: [costCenterDetails[22], costCenterDetails[23], costCenterDetails[24], costCenterDetails[13], costCenterDetails[14], costCenterDetails[15], costCenterDetails[16], costCenterDetails[17], costCenterDetails[18],costCenterDetails[19],costCenterDetails[20],costCenterDetails[21]]
-            		        }],
-            		        xaxis: {
-            		          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep','Oct','Nov','Dec']
+            	var options = {
+            		    chart: {
+            		        type: 'bar',
+            		        height: '500' // Set the desired height here
+            		    },
+            		    series: [{
+            		        name: 'Indent Amount',
+            		        data: [costCenterDetails[13], costCenterDetails[14], costCenterDetails[15], costCenterDetails[16], costCenterDetails[17], costCenterDetails[18],costCenterDetails[19],costCenterDetails[20],costCenterDetails[21],costCenterDetails[22], costCenterDetails[23], costCenterDetails[24]]
+            		    }],
+            		    xaxis: {
+            		        categories: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep','Oct','Nov','Dec','Jan', 'Feb', 'Mar'],
+            		        title: {
+            		            text: 'Months'
             		        }
-            		      };
+            		    },
+            		    yaxis: {
+            		        title: {
+            		            text: 'Indent Amount'
+            		        }
+            		    }
+            		};
 
-            		      var chart = new ApexCharts(document.querySelector("#chart3"), options);
-            		      chart.render();
+            		var chart = new ApexCharts(document.querySelector("#chart3"), options);
+            		chart.render();
+
+
             	}
             }
             },
@@ -238,7 +248,7 @@
 							<button class="btn btn-primary btn-search" onclick="search()">Search</button>
 						</div>
 					</div> --%>
-					<span style="font-weight: bold;margin-left:208px">Budget Details</span><span style="font-weight: bold;float:right;margin-right:258px">Indent Details</span>
+					<span style="font-weight: bold;margin-left:208px">Budget Details  vs Actual</span><span style="font-weight: bold;float:right;margin-right:258px">Indent Details</span>
 					
 					
 				</div>

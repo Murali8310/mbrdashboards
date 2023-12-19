@@ -392,8 +392,8 @@ function getProduct(id){
 			totalQuantity += quantity;
 		}
 		totalPrice = totalPrice.toFixed(2);
-		var output = "<span class='title'>Indent Value: ₹</span><span class='highlight'>" + totalPrice
-				+ "</span> <span class='title'>Indent Qty:</span> <span class='highlight'>" + totalQuantity
+		var output = "<span class='title' style='background: red;padding: 2px;border-radius: 3px;' >Indent Value: ₹</span><span style='background: red;padding: 2px;border-radius: 3px;' class='highlight'>" + totalPrice
+				+ "</span> <span style='background: red;padding: 2px;border-radius: 3px;' class='title'>Indent Qty:</span> <span style='background: red;padding: 2px;border-radius: 3px;' class='highlight'>" + totalQuantity
 				+ "</span>";
 		$('#totalOutput').html(output);
 
@@ -565,11 +565,13 @@ function getProduct(id){
 		
 		totalPrices = +currentTotalPrice + +totalPrice  ;
 		totalQuantitys =currentTotalQuantity + cuurentQTY ;
+		console.log('this is murali calling')
+
 		var output = "Total Price: ₹<span class='highlight'>" + totalPrices.toFixed(2)
 				+ "</span> Total Qty: <span class='highlight'>" + totalQuantitys
 				+ "</span>";
 		$('#totalOutput').html(output);
-		
+
 	}
 	
 	function saveInputdata(element,prev) {

@@ -228,15 +228,25 @@ vertical-align: text-bottom ; footer {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     border-radious:3px;
 }
+.headerStyles{
+ background: #01AFAE !important;
+ color: white !important;      
+    font-size: 17px;
+ 
+	}
+	.tbodyCustomColor {
+	    color: black !important;
+    font-size: 17px !important;
+	}
   </style>	
 											<thead class="thead-light">
 												<tr>
-													<th scope="col"><b>SL.NO</b></th>
-													<th scope="col"><b>Indent Number</b></th>
-													<th scope="col"><b>Indent creation/modification Date</b></th>
-													<th scope="col"><b>Indent By</b></th>
-													<th scope="col"><b>Status</b></th>
-													<th>Actions</th>
+													<th class='headerStyles' scope="col"><b>SL.NO</b></th>
+													<th class='headerStyles' scope="col"><b>Indent Number</b></th>
+													<th class='headerStyles' scope="col"><b>Indent creation/modification Date</b></th>
+													<th class='headerStyles' scope="col"><b>Indent By</b></th>
+													<th class='headerStyles' scope="col"><b>Status</b></th>
+													<th class='headerStyles'>Actions</th>
 												</tr>
 											</thead>
 											<tbody class="customtable">
@@ -245,12 +255,12 @@ vertical-align: text-bottom ; footer {
 												<c:forEach items="${IndentList}" var="indent"
 													varStatus="loop">
 													<tr>
-														<td>${loop.index+1}</td>
-														<td >${indent[0]}</td>
-														<td>${indent[1]}</td>
-														<td>${indent[2]}</td>
-														<td>${indent[3]}</td>
-														<td></td> 
+														<td class='tbodyCustomColor'>${loop.index+1}</td>
+														<td class='tbodyCustomColor'>${indent[0]}</td>
+														<td class='tbodyCustomColor'>${indent[1]}</td>
+														<td class='tbodyCustomColor'>${indent[2]}</td>
+														<td class='tbodyCustomColor'>${indent[3]}</td>
+														<td class='tbodyCustomColor'></td> 
 													</tr>
 
 												</c:forEach>
@@ -373,7 +383,7 @@ $(document).ready(function() {
         buttons: [
         	 {
                  extend: 'excelHtml5',
-					text : '<i class="fa fa-file-excel-o"></i>',
+					text : '<i class="fa fa-file-excel-o">Export</i>',
 					titleAttr : 'Excel',
                  title: 'Indent List'
              },

@@ -457,14 +457,14 @@ h1 {
         // JavaScript to animate the error text
         function moveError() {
             var error = document.getElementById("movingError");
-            var position = 200; // Start position off the screen
+            var position = 10; // Start position off the screen
             var screenWidth = window.innerWidth;
 
             // Move the error text from left to right
-            var animation = setInterval(frame, 25);
+            var animation = setInterval(frame, 60);
             function frame() {
                 if (position >= screenWidth) {
-                    position = -200; // Reset position off the screen
+                    position = -50; // Reset position off the screen
                 } else {
                     position++;
                     error.style.left = position + 'px';

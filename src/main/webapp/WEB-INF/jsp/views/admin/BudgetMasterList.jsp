@@ -133,7 +133,7 @@ vertical-align: text-bottom ; footer {
 			<div class="page-breadcrumb">
 				<div class="row">
 					<div class="col-12 d-flex no-block align-items-center">
-						<h4 class="page-title display-5">Budget Master List</h4>
+						<h4 class="page-title display-5">Cost Center & Budget Report</h4>
 						<div class="ml-auto text-right">
 							<nav aria-label="breadcrumb">
 								<ol class="breadcrumb">
@@ -170,8 +170,8 @@ vertical-align: text-bottom ; footer {
 								<div id="zero_config_wrapper"
 									class="dataTables_wrapper container-fluid dt-bootstrap4">
 									<div class="row">
-										<div class="col-sm-12">
-										<div style="text-align:end;margin-bottom:4px;"><button onclick="redirectToProductMasterCreation()" class='btn btn-primary'>Add Budget</button>
+										<div  class="col-sm-12">
+										<div style='display:none' style="text-align:end;margin-bottom:4px;"><button onclick="redirectToProductMasterCreation()" class='btn btn-primary'>Add Budget</button>
 										</div>
 										<c:set var="counter" value="1" />
   										<table id="example"

@@ -229,7 +229,7 @@ label {
 									</label>
 								</div>
 								<div class="col-md-5">
-									<input type="text" id="ProductID" name="ProductID"
+									<input type="text" onblur="myFunction()" id="ProductID" name="ProductID"
 										class="form-control" aria-invalid="true" required="required">
 								</div>
 							</div>
@@ -630,6 +630,47 @@ tr:nth-child(odd) {
 	$(function() {
 		$('#storecode').multiSelect();
 	});
+</script>
+
+<script>
+function myFunction(){
+	console.log('this is workig')
+	var prodId = document.getElementById('ProductID').value;
+	$.ajax({
+		type : "POST",
+		url : "productValidation",
+		data : "prodId=" + prodId,
+		success : function(response) {
+			var data = jQuery.parseJSON(response);
+			
+			if(data.trim() === 'Product is already available.')
+			{
+			Swal.fire({
+				icon : 'error',
+				title : 'Product ID is already used. Use different ID.',
+				showCloseButton : false,
+				focusConfirm : false,
+			})	
+			document.getElementById('ProductID').value = '';
+			}
+		},//end of success function
+		error : function(error) {
+
+			$(".loading").hide();
+			Swal.fire({
+
+				icon : 'error',
+				title : JSON.stringify(error),
+				showCloseButton : false,
+				focusConfirm : false,
+
+			})
+			//$(".loading").hide();
+		}
+	});
+	
+}
+
 </script>
 </body>
 

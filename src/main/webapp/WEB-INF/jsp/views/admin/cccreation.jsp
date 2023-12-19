@@ -181,13 +181,13 @@ label {
 		<div class="page-breadcrumb">
 			<div class="row">
 				<div class="col-12 d-flex no-block align-items-center">
-					<h4 class="page-title display-5">Cost Center Creation</h4>
+					<h4 class="page-title display-5">Cost Center & Budget Creation</h4>
 					<div class="ml-auto text-right">
 						<nav aria-label="breadcrumb">
 							<ol class="breadcrumb">
 								<li class="breadcrumb-item"><a href="landPage">Home</a></li>
 								<li class="breadcrumb-item"><a href="manageByAdmin">Management</a></li>
-								<li class="breadcrumb-item active" aria-current="page">Cost Center Creation</li>
+								<li class="breadcrumb-item active" aria-current="page">Cost Center & Budget Creation</li>
 							</ol>
 						</nav>
 					</div>
@@ -220,7 +220,7 @@ label {
 									</label>
 								</div>
 								<div class="col-md-5">
-											<input type="text" id="CCID" name="CCID" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+											<input type="text" onblur="myFunction()" id="CCID" name="CCID" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
 										class="form-control" aria-invalid="true" required="required">
 								</div>
 							</div>
@@ -333,7 +333,7 @@ label {
 								</div>
 								<div class="col-md-5">
 									<input type="text" id="YEARLYBUDGET" name="YEARLYBUDGET"
-									onkeypress="return (event.charCode != 8 && event.charCode == 0) || (event.charCode >= 48 && event.charCode <= 57) || (event.charCode == 46 && this.value.indexOf('.') === -1)"
+								oninput="this.value = this.value.replace(/[^0-9]/g, '')"	onkeypress="return (event.charCode != 8 && event.charCode == 0) || (event.charCode >= 48 && event.charCode <= 57) || (event.charCode == 46 && this.value.indexOf('.') === -1)"
 	
 										class="form-control" aria-invalid="true" required="required">
 								</div>
@@ -393,7 +393,7 @@ label {
 		var YEARLYBUDGET = $("#YEARLYBUDGET").val();
 		
 		
-		if (CCID == "") {
+		if (CCID == "" ||CCID == undefined) {
 			Swal.fire({
 				icon : 'warning',
 				title : ' Please enter cost center',
@@ -660,6 +660,47 @@ tr:nth-child(odd) {
 	$(function() {
 		$('#storecode').multiSelect();
 	});
+</script>
+
+<script>
+function myFunction(){
+	console.log('this is workig')
+	var CCID = document.getElementById('CCID').value;
+	$.ajax({
+		type : "POST",
+		url : "ccvalidation",
+		data : "CCID=" + CCID,
+		success : function(response) {
+			var data = jQuery.parseJSON(response);
+			
+			if(data.trim() === 'CCID is already available.')
+			{
+			Swal.fire({
+				icon : 'error',
+				title : 'Cost Center is already available.',
+				showCloseButton : false,
+				focusConfirm : false,
+			})	
+			document.getElementById('CCID').value = '';
+			}
+		},//end of success function
+		error : function(error) {
+
+			$(".loading").hide();
+			Swal.fire({
+
+				icon : 'error',
+				title : JSON.stringify(error),
+				showCloseButton : false,
+				focusConfirm : false,
+
+			})
+			//$(".loading").hide();
+		}
+	});
+	
+}
+
 </script>
 </body>
 

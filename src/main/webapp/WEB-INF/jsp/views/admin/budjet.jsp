@@ -273,7 +273,7 @@ label {
 									</label>
 								</div>
 								<div class="col-md-5">
-								<input type="text" id="po-element" maxlength="7" name="COSTCENTERDESC" 
+								<input type="number" onkeypress="return (event.charCode != 8 && event.charCode == 0) || (event.charCode >= 48 && event.charCode <= 57) || (event.charCode == 46 && this.value.indexOf('.') === -1)" id="po-element" id="po-element" maxlength="7" name="COSTCENTERDESC" 
 										class="form-control" aria-invalid="true" required="required">
 									<%-- <select id="COSTCENTERDESC" name="COSTCENTERDESC" class="form-control"
 										aria-invalid="true" required="required">

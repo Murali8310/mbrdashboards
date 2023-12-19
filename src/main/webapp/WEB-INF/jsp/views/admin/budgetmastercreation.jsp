@@ -225,7 +225,7 @@ label {
 										aria-invalid="true" required="required">
 										<option value="">Select CCID</option>
 										<c:forEach items="${designation}" var="ccid">
-											<option value="${ccid[0]}">${ccid[0]}</option>
+											<option value="${ccid}">${ccid}</option>
 										</c:forEach>
 									</select>
 								</div>

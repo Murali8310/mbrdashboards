@@ -1974,7 +1974,8 @@ List<Object> BuyerList;
 				er.printStackTrace();
 				return new ModelAndView("login/login");
 			}
-			List<Object> designation = userService.getAllCCIDDe();
+			List<Object> designation = userService.getAllBudgetCCIDDe();
+			System.out.println("allccids"+designation);
 			model.addAttribute("designation", designation);
 			List<Object> Year = userService.getAllyearDetails();
 			model.addAttribute("years", Year);
@@ -2511,6 +2512,44 @@ System.out.println("CCCOWNER"+CCCOWNER);
 			String MonthText = month.format(cal.getTime());
 		
 			return new ModelAndView("admin/learn");
+		}
+		
+		/**
+		 * @author 832044_CNST4 Murali chari.
+		 * @param request
+		 * @param prodId
+		 * @return
+		 */
+		@RequestMapping(value = "productValidation", method = RequestMethod.POST)
+		public String productValidation(HttpServletRequest request, @RequestParam("prodId") String prodId
+				) {
+
+			HttpSession session = request.getSession();
+			Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+			String loginId = (String) userMap.get("login_id");
+			String generatehelioscopon = userService.productValidation(prodId,loginId);
+			Gson jsonToString = new GsonBuilder().setPrettyPrinting().create();
+			String jsonData = jsonToString.toJson(generatehelioscopon);
+			return jsonData;
+		}
+		
+		/**
+		 * @author 832044_CNST4 murali chari
+		 * @param request
+		 * @param prodId
+		 * @return
+		 */
+		@RequestMapping(value = "ccvalidation", method = RequestMethod.POST)
+		public String ccIdvalidate(HttpServletRequest request, @RequestParam("CCID") String CCID
+				) {
+
+			HttpSession session = request.getSession();
+			Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+			String loginId = (String) userMap.get("login_id");
+			String generatehelioscopon = userService.ccValidation(CCID,loginId);
+			Gson jsonToString = new GsonBuilder().setPrettyPrinting().create();
+			String jsonData = jsonToString.toJson(generatehelioscopon);
+			return jsonData;
 		}
 		
 		}

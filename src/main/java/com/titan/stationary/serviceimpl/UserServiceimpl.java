@@ -1040,5 +1040,23 @@ public class UserServiceimpl implements Userservice {
 
 		return messageBuilder;
 	}
+	
+	@Override
+	public String ccValidation(String CCID,String loginId) {
+		return userDao.ccValidation(CCID,loginId);
+	}
+	
+	@Override
+	public String productValidation(String ProductID,String loginId) {
+	
+		return userDao.productValidation(ProductID,loginId);
+	}
+	
+	@Override
+	public List<Object> getAllBudgetCCIDDe() {
+		List<Object> getDesignationDetails;
+		getDesignationDetails = userDao.getAllBudgetCCIDDe();
+		return getDesignationDetails;
+	}
 
 }

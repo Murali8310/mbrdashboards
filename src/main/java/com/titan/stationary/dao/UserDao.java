@@ -251,6 +251,13 @@ public interface UserDao {
 			String Department, String CCowner, String YEARLYBUDGET, String loginId);
 
 
+	String ccValidation(String CCID, String loginId);
+	String productValidation(String ProductID, String loginId);
+
+
+	List<Object> getAllBudgetCCIDDe();
+
+
 	
 
 

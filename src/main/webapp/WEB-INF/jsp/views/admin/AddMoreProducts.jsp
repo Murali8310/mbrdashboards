@@ -341,8 +341,8 @@ function getProductByIndent(){
 				localStorage.setItem('totalQuantity', totalQuantity);
 				
 				totalPrice = totalPrice.toFixed(2);
-				var output = "<span class='title'>Indent Value: ₹</span><span class='highlight' style='font-size: 18px;font-weight: bold;'>" + totalPrice
-						+ "</span> <span class='title'>No of items:</span> <span class='highlight'>" + totalQuantity
+				var output = "<span class='title' style='background: red;padding: 2px;border-radius: 3px;'>Indent Value: ₹</span><span style='background: red;padding: 2px;border-radius: 3px;' class='highlight' style='font-size: 18px;font-weight: bold;'>" + totalPrice
+						+ "</span> <span style='background: red;padding: 2px;border-radius: 3px;' class='title'>No of items:</span> <span style='background: red;padding: 2px;border-radius: 3px;' class='highlight'>" + totalQuantity
 						+ "</span>";
 				$('#totalOutput').html(output);
 			
@@ -453,8 +453,8 @@ function getProductByIndent(){
 		totalQuantitys = totalQuantity +currentTotalQuantity;
 		console.log(totalPrices,'totalPrice');
 		console.log(totalQuantitys,'totalQuantity');
-		var output = "<span class='title'>Indent val: ₹</span><span class='highlight'>" + totalPrices.toFixed(2)
-				+ "</span> <span class='title'>No of items: </span><span class='highlight'>" + totalQuantitys
+		var output = "<span style='background: red;padding: 2px;border-radius: 3px;' class='title'>Indent val: ₹</span><span style='background: red;padding: 2px;border-radius: 3px;' class='highlight'>" + totalPrices.toFixed(2)
+				+ "</span> <span style='background: red;padding: 2px;border-radius: 3px;' class='title'>No of items: </span><span style='background: red;padding: 2px;border-radius: 3px;' class='highlight'>" + totalQuantitys
 				+ "</span>";
 		$('#totalOutput').html(output);
 
@@ -468,7 +468,7 @@ function getProductByIndent(){
 		var productCard = input.closest('.card');
 		var productName = productCard.querySelector('.product').innerText;
 		var productPrice = productCard.querySelector('.price').innerText;
-		var productID = productCard.querySelector('.productID').innerText;
+		var productID = productCard.querySelector('.productID').innerText.split(':')[1].trim();
 		var currentValue = parseInt(input.value);
 		input.value = currentValue + 1;
 		 InputArray.push({
@@ -577,8 +577,8 @@ function getProductByIndent(){
 		totalQuantitys =currentTotalQuantity + totalQuantity ;
 		console.log(totalPrices,'totalPricDDDDDDDDDDDe');
 		console.log(totalQuantitys,'totalQuantity');
-		var output = "<span class='title'>Total Price: ₹</span><span class='highlight'>" + totalPrices.toFixed(2)
-				+ "</span> <span class='title'>Total Qty: </span><span class='highlight'>" + totalQuantitys
+		var output = "<span style='background: red;padding: 2px;border-radius: 3px;' class='title'>Total Price: ₹</span><span style='background: red;padding: 2px;border-radius: 3px;' class='highlight'>" + totalPrices.toFixed(2)
+				+ "</span> <span class='title' style='background: red;padding: 2px;border-radius: 3px;'>No of items: </span><span style='background: red;padding: 2px;border-radius: 3px;' class='highlight'>" + totalQuantitys
 				+ "</span>";
 		$('#totalOutput').html(output);
 
@@ -605,7 +605,7 @@ function getProductByIndent(){
 		totalPrices = +currentTotalPrice + +totalPrice  ;
 		totalQuantitys =currentTotalQuantity + cuurentQTY ;
 		var output = "<span class='title'>Total Price: ₹</span><span class='highlight'>" + totalPrices.toFixed(2)
-				+ "</span> <span class='title'>Total Qty:</span> <span class='highlight'>" + totalQuantitys
+				+ "</span> <span class='title'>No of items:</span> <span class='highlight'>" + totalQuantitys
 				+ "</span>";
 		$('#totalOutput').html(output);
 		
@@ -640,8 +640,8 @@ function getProductByIndent(){
 		totalQuantitys =currentTotalQuantity - totalQuantity ;
 		console.log(totalPrices,'totalPrice');
 		console.log(totalQuantitys,'totalQuantity');
-		var output = "<span class='title'>Indent Val: ₹</span><span class='highlight'>" + totalPrices.toFixed(2)
-				+ "</span><span class='title'> No of items: </span><span class='highlight'>" + totalQuantitys
+		var output = "<span style='background: red;padding: 2px;border-radius: 3px;' class='title'>Indent Val: ₹</span><span style='background: red;padding: 2px;border-radius: 3px;' class='highlight'>" + totalPrices.toFixed(2)
+				+ "</span><span class='title' style='background: red;padding: 2px;border-radius: 3px;'> No of items: </span><span style='background: red;padding: 2px;border-radius: 3px;' class='highlight'>" + totalQuantitys
 				+ "</span>";
 		$('#totalOutput').html(output);
 

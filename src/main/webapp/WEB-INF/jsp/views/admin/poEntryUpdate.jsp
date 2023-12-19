@@ -235,7 +235,7 @@
 											</label>
 										</div>
 										<div class="col-md-5">
-											<input type="text" maxlength="7" id="po-element" name="COSTCENTERDESC"
+											<input type="number" maxlength="7" onkeypress="return (event.charCode != 8 && event.charCode == 0) || (event.charCode >= 48 && event.charCode <= 57) || (event.charCode == 46 && this.value.indexOf('.') === -1)" id="po-element" name="COSTCENTERDESC"
 												class="form-control" aria-invalid="true" required="required">
 										</div>
 									</div>

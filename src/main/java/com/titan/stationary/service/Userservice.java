@@ -209,6 +209,14 @@ public interface Userservice {
 
 	String ccCreationSave(String CCID, String Year, String COSTCENTERDESC, String GL, String GLDESC, String LOCATION,
 			String Department, String CCOwner, String YEARLYBUDGET, String loginId);
+	
+	
+	String ccValidation(String CCID, String loginId);
+	String productValidation(String ProductID, String loginId);
+
+
+	List<Object> getAllBudgetCCIDDe();
+
 
 
 }

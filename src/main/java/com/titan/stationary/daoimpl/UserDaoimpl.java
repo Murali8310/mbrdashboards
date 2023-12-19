@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -490,6 +491,9 @@ public class UserDaoimpl implements UserDao {
 	 * getindentManagerDetials; }
 	 */
 
+	
+	
+	
 	/**
 	 * Gokul Get All Products for catelogue page
 	 */
@@ -637,9 +641,9 @@ public class UserDaoimpl implements UserDao {
 
 			Query InsertIndenttransaction = entityManager.createNativeQuery("INSERT INTO Indent_Transaction"
 					+ "(DOC_NUMBER,DOC_DATE,MONTH,COST_CENTER,YEAR,DEPARTMENT,CREATEDBY,ITEM,TOTAL_USER_QTY,VALUE,UnitPrice,CLOSE_DATE"
-					+ ",STATUS,BUYER_id,BUYER_CONFIRMATION,BUYER_QTY,BUYER_CONFIRMATION_DATE,TRYMNGTID,ISTRYMNGT,RECEIVED_TMT_QTY,Received_date) "
+					+ ",STATUS,BUYER_id,BUYER_CONFIRMATION,BUYER_QTY,BUYER_CONFIRMATION_DATE,TRYMNGTID,ISTRYMNGT,RECEIVED_TMT_QTY,Received_date,PROD_NUMBER) "
 					+ "select :DOC_NUMBER,:DOC_DATE,MONTH,COST_CENTER,YEAR,DEPARTMENT,CREATEDBY,ITEM,TOTAL_USER_QTY,VALUE,UnitPrice,CLOSE_DATE, "
-					+ "STATUS,null,0,TOTAL_USER_QTY,null,null,0,null,null from  temp_cart_indent_Transaction where TempId=:tempid");
+					+ "STATUS,null,0,TOTAL_USER_QTY,null,null,0,null,null,PROD_NUMBER from  temp_cart_indent_Transaction where TempId=:tempid");
 
 			InsertIndenttransaction.setParameter("tempid", tempid);
 			InsertIndenttransaction.setParameter("DOC_NUMBER", maxId);
@@ -921,14 +925,16 @@ public class UserDaoimpl implements UserDao {
 									+ " set TOTAL_USER_QTY = :TOTAL_USER_QTY ," + " BUYER_QTY = :TOTAL_USER_QTY ,"
 									+ " Value =:total," + "	Created_date = :Created_date "
 									+ " where year=:YEAR and month=:MONTH and cost_center=:COST_CENTER "
-									+ " and tempId=:DOC_NUMBER and ITEM=:ITEM");
+									//+ " and tempId=:DOC_NUMBER and ITEM=:ITEM");
+									+ " and tempId=:DOC_NUMBER and PROD_NUMBER=:ITEM");
 					updatetempIndenttransaction.setParameter("DOC_NUMBER", id);
 					updatetempIndenttransaction.setParameter("total", totalString);
 					updatetempIndenttransaction.setParameter("Created_date", formattedDate);
 					updatetempIndenttransaction.setParameter("MONTH", MonthText);
 					updatetempIndenttransaction.setParameter("COST_CENTER", userId);
 					updatetempIndenttransaction.setParameter("YEAR", cFY);
-					updatetempIndenttransaction.setParameter("ITEM", products[i].getProductName());
+					updatetempIndenttransaction.setParameter("ITEM", products[i].getProductID());
+					//updatetempIndenttransaction.setParameter("ITEM", products[i].getProductName());
 					updatetempIndenttransaction.setParameter("TOTAL_USER_QTY",
 							Integer.valueOf(products[i].getQuantity()));
 
@@ -940,9 +946,9 @@ public class UserDaoimpl implements UserDao {
 						Query InsertIndenttransaction = entityManager
 								.createNativeQuery("INSERT INTO temp_cart_indent_Transaction"
 										+ "(TempID,Created_date,MONTH,COST_CENTER,YEAR,DEPARTMENT,CREATEDBY,ITEM,TOTAL_USER_QTY,VALUE,CLOSE_DATE"
-										+ ",STATUS,BUYER_id,BUYER_CONFIRMATION,BUYER_QTY,BUYER_CONFIRMATION_DATE,TRYMNGTID,ISTRYMNGT,RECEIVED_QTY,Received_date,UnitPrice)"
+										+ ",STATUS,BUYER_id,BUYER_CONFIRMATION,BUYER_QTY,BUYER_CONFIRMATION_DATE,TRYMNGTID,ISTRYMNGT,RECEIVED_QTY,Received_date,UnitPrice,PROD_NUMBER)"
 										+ "VALUES(:DOC_NUMBER,:DOC_DATE,:MONTH,:COST_CENTER,:YEAR,:DEPARTMENT,:CREATEDBY,:ITEM,:TOTAL_USER_QTY,:VALUE,:CLOSE_DATE,"
-										+ ":STATUS,null,0,:TOTAL_USER_QTY,null,null,0,null,null,:total)");
+										+ ":STATUS,null,0,:TOTAL_USER_QTY,null,null,0,null,null,:total,:PROD_NUMBER)");
 
 						InsertIndenttransaction.setParameter("DOC_NUMBER", id);
 						InsertIndenttransaction.setParameter("DOC_DATE", formattedDate);
@@ -953,6 +959,7 @@ public class UserDaoimpl implements UserDao {
 						InsertIndenttransaction.setParameter("DEPARTMENT", userName);
 						InsertIndenttransaction.setParameter("CREATEDBY", userId);
 						InsertIndenttransaction.setParameter("ITEM", products[i].getProductName());
+						InsertIndenttransaction.setParameter("PROD_NUMBER", products[i].getProductID());
 						InsertIndenttransaction.setParameter("TOTAL_USER_QTY",
 								Integer.valueOf(products[i].getQuantity()));
 						InsertIndenttransaction.setParameter("VALUE", stringValue);
@@ -978,9 +985,9 @@ public class UserDaoimpl implements UserDao {
 					Query InsertIndenttransaction = entityManager
 							.createNativeQuery("INSERT INTO temp_cart_indent_Transaction"
 									+ "(TempID,Created_date,MONTH,COST_CENTER,YEAR,DEPARTMENT,CREATEDBY,ITEM,TOTAL_USER_QTY,VALUE,CLOSE_DATE"
-									+ ",STATUS,BUYER_id,BUYER_CONFIRMATION,BUYER_QTY,BUYER_CONFIRMATION_DATE,TRYMNGTID,ISTRYMNGT,RECEIVED_QTY,Received_date,UnitPrice)"
+									+ ",STATUS,BUYER_id,BUYER_CONFIRMATION,BUYER_QTY,BUYER_CONFIRMATION_DATE,TRYMNGTID,ISTRYMNGT,RECEIVED_QTY,Received_date,UnitPrice,PROD_NUMBER)"
 									+ "VALUES(:DOC_NUMBER,:DOC_DATE,:MONTH,:COST_CENTER,:YEAR,:DEPARTMENT,:CREATEDBY,:ITEM,:TOTAL_USER_QTY,:total,:CLOSE_DATE,"
-									+ ":STATUS,null,0,:TOTAL_USER_QTY,null,null,0,null,null,:VALUE)");
+									+ ":STATUS,null,0,:TOTAL_USER_QTY,null,null,0,null,null,:VALUE,:PROD_NUMBER)");
 
 					InsertIndenttransaction.setParameter("DOC_NUMBER", maxId);
 					InsertIndenttransaction.setParameter("DOC_DATE", formattedDate);
@@ -991,6 +998,8 @@ public class UserDaoimpl implements UserDao {
 					InsertIndenttransaction.setParameter("CREATEDBY", userId);
 					InsertIndenttransaction.setParameter("total", total);
 					InsertIndenttransaction.setParameter("ITEM", products[i].getProductName());
+					InsertIndenttransaction.setParameter("PROD_NUMBER", products[i].getProductID());
+
 					InsertIndenttransaction.setParameter("TOTAL_USER_QTY", Integer.valueOf(products[i].getQuantity()));
 					InsertIndenttransaction.setParameter("VALUE", stringValue);
 					InsertIndenttransaction.setParameter("CLOSE_DATE", null);
@@ -1069,9 +1078,9 @@ public class UserDaoimpl implements UserDao {
 		List<String> getProductsByIndent;
 
 		Query selectQuery = entityManager
-				.createNativeQuery("select pm.PRODUCT_NUMBER,pm.PROD_NAME,pm.PROD_DESC,pm.MAKE,pm.ucp,pm.uom, "
+				.createNativeQuery("select tcit.PROD_NUMBER,pm.PROD_NAME,pm.PROD_DESC,pm.MAKE,pm.ucp,pm.uom, "
 						+ "tcit.COST_CENTER,isnull(tcit.TOTAL_USER_QTY,0) as quantity,tcit.DOC_NUMBER from PRODUCT_MASTER pm "
-						+ "left join Indent_Transaction tcit on pm.PROD_NAME = tcit.item "
+						+ "inner join Indent_Transaction tcit on pm.PRODUCT_NUMBER = tcit.PROD_NUMBER"
 						+ " and COST_CENTER=:userId and tcit.DOC_NUMBER = :IndentNumber  order by quantity desc");
 
 		selectQuery.setParameter("userId", userId);
@@ -1669,237 +1678,148 @@ public class UserDaoimpl implements UserDao {
 		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
 		String MonthText = month.format(cal.getTime());
 
-		/*
-		 * Query selectQuery = entityManager.
-		 * createNativeQuery("SELECT bm.ccid,bm.Year,bm.CostCenterDescription,bm.BudValueRsL,(bm.BudValueRsL-((\n"
-		 * +
-		 * "CASE WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) \n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june, 0)\n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) +ISNULL(bm.July, 0)\n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.April, 0) + ISNULL(bm.MaY, 0) +ISNULL( bm.june, 0) + ISNULL(bm.July, 0) + ISNULL(bm.August , 0)\n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)\n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)\n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)\n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)\n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)\n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)\n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'march' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)+ ISNULL(bm.March , 0)\n"
-		 * + "END) + isnull(poe.POAmount,0)) ) as BalanceValue,\n"
-		 * 
-		 * + "(((\n" + "CASE WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN 0\n" +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.April,0)  \n" +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) \n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) \n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.April, 0) + ISNULL(bm.MaY, 0) +ISNULL( bm.june, 0) + ISNULL(bm.July, 0) \n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)\n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)\n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)\n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)\n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)\n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)\n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'march' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)\n"
-		 * + "END)  + isnull(poe.POAmount,0)) ) as cumulative_budget,\n"
-		 * 
-		 * + "(CASE\n" +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n" +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.may , 0)\n" +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.june  , 0)\n" +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.July  , 0)\n" +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.August, 0)\n" +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.September , 0)\n"
-		 * + "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.October , 0)\n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.November , 0)\n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.December, 0)\n"
-		 * + "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.January, 0)\n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.February, 0)\n"
-		 * + "END) AS currentIndentValue,\n" + "(BudValueRsL/12)-((CASE\n" +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n" +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.may , 0)\n" +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.june  , 0)\n" +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.July  , 0)\n" +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.August, 0)\n" +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.September , 0)\n"
-		 * + "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.October , 0)\n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.November , 0)\n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.December, 0)\n"
-		 * + "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.January, 0)\n"
-		 * +
-		 * "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.February, 0)\n"
-		 * + "END) + isnull(poe.POAmount,0))  AS Month_Balance\n" +
-		 * "FROM BUDGET_MASTER bm \n" +
-		 * "left join PO_Entry poe on poe.COST_CENTER=bm.CCID AND POE.Year=BM.Year and poe.MONTH=:MonthText \n"
-		 * + "WHERE CCID=:userId AND bm.YEAR=:year\n"
-		 * 
-		 * +
-		 * "GROUP BY bm.ccid,bm.Year,bm.CostCenterDescription,POAmount,bm.BudValueRsL,bm.April,bm.MaY,bm.june,bm.July, bm.August,bm.September,\n"
-		 * + "bm.October,bm.November,bm.December,January,February,March");
-		 */
+//		Query selectQuery = entityManager.createNativeQuery(
+//				" SELECT bm.ccid,bm.Year,bm.CostCenterDescription,bm.BudValueRsL,(bm.BudValueRsL-((\n"
+//						+ "CASE WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) \n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june, 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) +ISNULL(bm.July, 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.April, 0) + ISNULL(bm.MaY, 0) +ISNULL( bm.june, 0) + ISNULL(bm.July, 0) + ISNULL(bm.August , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'march' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)+ ISNULL(bm.March , 0)\n"
+//						+ "END) + isnull(poe.POAmount,0)) ) as BalanceValue,\n" + "(((\n"
+//						+ "CASE WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN 0\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.April,0)  \n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) \n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) \n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.April, 0) + ISNULL(bm.MaY, 0) +ISNULL( bm.june, 0) + ISNULL(bm.July, 0) \n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'march' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)\n"
+//						+ "END)  + isnull(poe.POAmount,0) + CASE\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.may , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.june  , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.July  , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.August, 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.September , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.October , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.November , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.December, 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.January, 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.February, 0)\n"
+//						+ "END)) as cumulative_budget,\n" + "(CASE\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.may , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.june  , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.July  , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.August, 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.September , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.October , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.November , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.December, 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.January, 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.February, 0)\n"
+//						+ "END) AS currentIndentValue,\n" + "(BudValueRsL/12)-((CASE\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.may , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.june  , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.July  , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.August, 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.September , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.October , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.November , 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.December, 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.January, 0)\n"
+//						+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.February, 0)\n"
+//						+ "END) + isnull(poe.POAmount,0))  AS Month_Balance,\n" + "(\n"
+//						+ "        SELECT SUM(BUYER_QTY) \n" + "        FROM Indent_Transaction \n"
+//						+ "        WHERE COST_CENTER = :userId  \n" + "        AND MONTH = :MonthText	\n"
+//						+ "    ) AS BuyerQuantity\n" + "FROM BUDGET_MASTER bm \n"
+//						+ "left join PO_Entry poe on poe.COST_CENTER=bm.CCID AND POE.Year=BM.Year and poe.MONTH=:MonthText \n"
+//						+ "WHERE CCID=:userId AND bm.YEAR=:year\n"
+//						+ " GROUP BY bm.ccid,bm.Year,bm.CostCenterDescription,POAmount,bm.BudValueRsL,bm.April,bm.MaY,bm.june,bm.July, bm.August,bm.September,\n"
+//						+ "bm.October,bm.November,bm.December,January,February,March\n" + "");
 
-		Query selectQuery = entityManager.createNativeQuery(
-				" SELECT bm.ccid,bm.Year,bm.CostCenterDescription,bm.BudValueRsL,(bm.BudValueRsL-((\n"
-						+ "CASE WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) \n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june, 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) +ISNULL(bm.July, 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.April, 0) + ISNULL(bm.MaY, 0) +ISNULL( bm.june, 0) + ISNULL(bm.July, 0) + ISNULL(bm.August , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'march' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)+ ISNULL(bm.March , 0)\n"
-						+ "END) + isnull(poe.POAmount,0)) ) as BalanceValue,\n" + "(((\n"
-						+ "CASE WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN 0\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.April,0)  \n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) \n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) \n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.April, 0) + ISNULL(bm.MaY, 0) +ISNULL( bm.june, 0) + ISNULL(bm.July, 0) \n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'march' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)\n"
-						+ "END)  + isnull(poe.POAmount,0) + CASE\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.may , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.june  , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.July  , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.August, 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.September , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.October , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.November , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.December, 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.January, 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.February, 0)\n"
-						+ "END)) as cumulative_budget,\n" + "(CASE\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.may , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.june  , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.July  , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.August, 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.September , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.October , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.November , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.December, 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.January, 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.February, 0)\n"
-						+ "END) AS currentIndentValue,\n" + "(BudValueRsL/12)-((CASE\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.may , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.june  , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.July  , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.August, 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.September , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.October , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.November , 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.December, 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.January, 0)\n"
-						+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.February, 0)\n"
-						+ "END) + isnull(poe.POAmount,0))  AS Month_Balance,\n" + "(\n"
-						+ "        SELECT SUM(BUYER_QTY) \n" + "        FROM Indent_Transaction \n"
-						+ "        WHERE COST_CENTER = :userId  \n" + "        AND MONTH = :MonthText	\n"
-						+ "    ) AS BuyerQuantity\n" + "FROM BUDGET_MASTER bm \n"
-						+ "left join PO_Entry poe on poe.COST_CENTER=bm.CCID AND POE.Year=BM.Year and poe.MONTH=:MonthText \n"
-						+ "WHERE CCID=:userId AND bm.YEAR=:year\n"
-						+ " GROUP BY bm.ccid,bm.Year,bm.CostCenterDescription,POAmount,bm.BudValueRsL,bm.April,bm.MaY,bm.june,bm.July, bm.August,bm.September,\n"
-						+ "bm.October,bm.November,bm.December,January,February,March\n" + "");
-
-//					("SELECT bm.ccid,bm.Year,bm.CostCenterDescription,bm.BudValueRsL,(bm.BudValueRsL-(\n"
-//					+ "CASE\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.April + bm.MaY , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.April + bm.MaY + bm.june , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.April+ bm.MaY + bm.june + bm.July , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September , 0) \n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(ISNULL(bm.April,0) +ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September + bm.October +bm.November, 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September + bm.October +bm.November+bm.December, 0) \n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September + bm.October +bm.November+bm.December+bm.January, 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'February' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September + bm.October +bm.November +bm.December+bm.January +bm.February, 0) \n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'March' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September + bm.October +bm.November +bm.December+bm.January +bm.February+bm.March, 0) \n"
-//					+ "\n"
-//					+ "END)) as BalanceValue,\n"
-//					+ "					 \n"
-//					+ "(CASE\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN 0\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.April , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.April + bm.MaY , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.April + bm.MaY + bm.june , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September + bm.October , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September + bm.October \n"
-//					+ "+bm.November, 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September + bm.October \n"
-//					+ "+bm.November+bm.December, 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September + bm.October \n"
-//					+ "+bm.November+bm.December+bm.January, 0)\n"
-//					+ "ELSE ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September + bm.October +bm.November +bm.December+bm.January +bm.February, 0) \n"
-//					+ "END) AS cumulative_budget,\n"
-//					+ "\n"
-//					+ "(CASE\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.may , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.june  , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.July  , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.August, 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.September , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.October , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.November , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.December, 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.January, 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.February, 0)\n"
-//					+ "END) AS currentIndentValue,\n"
-//					+ "(BudValueRsL/12)-"
-//					+ "(CASE\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.may , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.june  , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.July  , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.August, 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.September , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.October , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.November , 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.December, 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.January, 0)\n"
-//					+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.February, 0)\n"
-//					+ "END) AS Month_Balance\n"
-//					+ "FROM BUDGET_MASTER bm \n"
-//					+ "WHERE CCID=:userId AND YEAR=:year\n"
-//					+ "GROUP BY bm.ccid,bm.Year,bm.CostCenterDescription,bm.BudValueRsL,bm.April,bm.MaY,bm.june,bm.July, bm.August,bm.September,\n"
-//					+ "bm.October,bm.November,bm.December,January,February,March");
-
+		Query selectQuery = entityManager.createNativeQuery("SELECT bm.ccid,bm.Year,bm.CostCenterDescription,bm.BudValueRsL,(bm.BudValueRsL-((\n"
+				+ "CASE WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) \n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june, 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) +ISNULL(bm.July, 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.April, 0) + ISNULL(bm.MaY, 0) +ISNULL( bm.june, 0) + ISNULL(bm.July, 0) + ISNULL(bm.August , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'march' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)+ ISNULL(bm.March , 0)\n"
+				+ "END) + isnull(sum(poe.POAmount),0)) ) as BalanceValue,\n"
+				+ "(((\n"
+				+ "CASE WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) \n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june, 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) +ISNULL(bm.July, 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.April, 0) + ISNULL(bm.MaY, 0) +ISNULL( bm.june, 0) + ISNULL(bm.July, 0) + ISNULL(bm.August , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'march' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)+ ISNULL(bm.March , 0)\n"
+				+ "END) \n"
+				+ "+ isnull(sum(poe.POAmount),0)\n"
+				+ "\n"
+				+ ")) as cumulative_indent,\n"
+				+ "(CASE\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.may , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.june  , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.July  , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.August, 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.September , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.October , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.November , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.December, 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.January, 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.February, 0)\n"
+				+ "END) AS currentIndentValue,\n"
+				+ "(BudValueRsL/12)-((CASE\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.may , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.june  , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.July  , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.August, 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.September , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.October , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.November , 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.December, 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.January, 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.February, 0)\n"
+				+ "END) + isnull(sum(poe.POAmount),0))  AS Month_Balance,\n"
+				+ "(\n"
+				+ "        SELECT SUM(BUYER_QTY) \n"
+				+ "        FROM Indent_Transaction \n"
+				+ "        WHERE COST_CENTER = :userId \n"
+				+ "        AND MONTH =:MonthText	\n"
+				+ "    ) AS BuyerQuantity\n"
+				+ "FROM BUDGET_MASTER bm \n"
+				+ "left join PO_Entry poe on poe.COST_CENTER=bm.CCID AND POE.Year=BM.Year and poe.MONTHNUMBER > 3 \n"
+				+ "AND poe.MONTHNUMBER <= DATEPART(MM,GETDATE())  \n"
+				+ "WHERE CCID=:userId AND bm.YEAR=:year\n"
+				+ " GROUP BY bm.ccid,bm.Year,bm.CostCenterDescription,bm.BudValueRsL,bm.April,bm.MaY,bm.june,bm.July, bm.August,bm.September,\n"
+				+ "bm.October,bm.November,bm.December,January,February,March");
+		
 		selectQuery.setParameter("userId", userId);
 
 		selectQuery.setParameter("year", yearfromCal);
@@ -2051,13 +1971,14 @@ public class UserDaoimpl implements UserDao {
 						.createNativeQuery("update temp_indent_Transaction " + " set TOTAL_USER_QTY = :TOTAL_USER_QTY ,"
 								+ " BUYER_QTY = :TOTAL_USER_QTY," + "	DOC_DATE = :Created_date ," + " Value=:Value"
 								+ " where year=:YEAR and month=:MONTH and cost_center=:COST_CENTER "
-								+ " and DOC_NUMBER=:DOC_NUMBER and ITEM=:ITEM");
+								+ " and DOC_NUMBER=:DOC_NUMBER and ITEM=:ITEM and PROD_NUMBER=:PROD_NUMBER ");
 				updatetempIndenttransaction.setParameter("DOC_NUMBER", id);
 				updatetempIndenttransaction.setParameter("Created_date", formattedDate);
 				updatetempIndenttransaction.setParameter("MONTH", MonthText);
 				updatetempIndenttransaction.setParameter("COST_CENTER", userId);
 				updatetempIndenttransaction.setParameter("YEAR", cFY);
 				updatetempIndenttransaction.setParameter("ITEM", products[i].getProductName());
+				updatetempIndenttransaction.setParameter("PROD_NUMBER", products[i].getProductID());
 				updatetempIndenttransaction.setParameter("TOTAL_USER_QTY", products[i].getQuantity());
 				updatetempIndenttransaction.setParameter("Value", totalString);
 
@@ -2070,9 +1991,9 @@ public class UserDaoimpl implements UserDao {
 					Query InsertIndenttransaction = entityManager
 							.createNativeQuery("INSERT INTO temp_indent_Transaction"
 									+ "(DOC_NUMBER,DOC_DATE,MONTH,COST_CENTER,YEAR,DEPARTMENT,CREATEDBY,ITEM,TOTAL_USER_QTY,VALUE,CLOSE_DATE"
-									+ ",STATUS,BUYER_id,BUYER_CONFIRMATION,BUYER_QTY,BUYER_CONFIRMATION_DATE,TRYMNGTID,ISTRYMNGT,RECEIVED_QTY,Received_date,UnitPrice)"
+									+ ",STATUS,BUYER_id,BUYER_CONFIRMATION,BUYER_QTY,BUYER_CONFIRMATION_DATE,TRYMNGTID,ISTRYMNGT,RECEIVED_QTY,Received_date,UnitPrice,PROD_NUMBER)"
 									+ "VALUES(:DOC_NUMBER,:DOC_DATE,:MONTH,:COST_CENTER,:YEAR,:DEPARTMENT,:CREATEDBY,:ITEM,:TOTAL_USER_QTY,:VALUE,:CLOSE_DATE,"
-									+ ":STATUS,null,0,:TOTAL_USER_QTY,null,null,0,null,null,:unitPrice)");
+									+ ":STATUS,null,0,:TOTAL_USER_QTY,null,null,0,null,null,:unitPrice,:PROD_NUMBER)");
 
 					InsertIndenttransaction.setParameter("DOC_NUMBER", id);
 					InsertIndenttransaction.setParameter("DOC_DATE", formattedDate);
@@ -2082,6 +2003,7 @@ public class UserDaoimpl implements UserDao {
 					InsertIndenttransaction.setParameter("DEPARTMENT", userName);
 					InsertIndenttransaction.setParameter("CREATEDBY", userId);
 					InsertIndenttransaction.setParameter("ITEM", products[i].getProductName());
+					InsertIndenttransaction.setParameter("PROD_NUMBER", products[i].getProductID());
 					InsertIndenttransaction.setParameter("TOTAL_USER_QTY", Integer.valueOf(products[i].getQuantity()));
 					InsertIndenttransaction.setParameter("unitPrice", productPrice);
 					InsertIndenttransaction.setParameter("VALUE", totalString);
@@ -2109,9 +2031,9 @@ public class UserDaoimpl implements UserDao {
 				}
 				Query InsertIndenttransaction = entityManager.createNativeQuery("INSERT INTO temp_indent_Transaction"
 						+ "(DOC_NUMBER,DOC_DATE,MONTH,COST_CENTER,YEAR,DEPARTMENT,CREATEDBY,ITEM,TOTAL_USER_QTY,VALUE,CLOSE_DATE"
-						+ ",STATUS,BUYER_id,BUYER_CONFIRMATION,BUYER_QTY,BUYER_CONFIRMATION_DATE,TRYMNGTID,ISTRYMNGT,RECEIVED_QTY,Received_date,UnitPrice)"
+						+ ",STATUS,BUYER_id,BUYER_CONFIRMATION,BUYER_QTY,BUYER_CONFIRMATION_DATE,TRYMNGTID,ISTRYMNGT,RECEIVED_QTY,Received_date,UnitPrice,PROD_NUMBER)"
 						+ "VALUES(:DOC_NUMBER,:DOC_DATE,:MONTH,:COST_CENTER,:YEAR,:DEPARTMENT,:CREATEDBY,:ITEM,:TOTAL_USER_QTY,:VALUE,:CLOSE_DATE,"
-						+ ":STATUS,null,0,:TOTAL_USER_QTY,null,null,0,null,null,:unitPrice)");
+						+ ":STATUS,null,0,:TOTAL_USER_QTY,null,null,0,null,null,:unitPrice,:PROD_NUMBER)");
 
 				InsertIndenttransaction.setParameter("DOC_NUMBER", id);
 				InsertIndenttransaction.setParameter("DOC_DATE", formattedDate);
@@ -2121,6 +2043,8 @@ public class UserDaoimpl implements UserDao {
 				InsertIndenttransaction.setParameter("DEPARTMENT", userName);
 				InsertIndenttransaction.setParameter("CREATEDBY", userId);
 				InsertIndenttransaction.setParameter("ITEM", products[i].getProductName());
+				InsertIndenttransaction.setParameter("PROD_NUMBER", products[i].getProductID());
+
 				InsertIndenttransaction.setParameter("TOTAL_USER_QTY", Integer.valueOf(products[i].getQuantity()));
 				InsertIndenttransaction.setParameter("VALUE", totalString);
 				InsertIndenttransaction.setParameter("unitPrice", productPrice);
@@ -2182,9 +2106,9 @@ public class UserDaoimpl implements UserDao {
 
 		Query InsertIndenttransaction = entityManager.createNativeQuery("INSERT INTO Indent_Transaction"
 				+ "(DOC_NUMBER,DOC_DATE,MONTH,COST_CENTER,YEAR,DEPARTMENT,CREATEDBY,ITEM,TOTAL_USER_QTY,VALUE,CLOSE_DATE"
-				+ ",STATUS,BUYER_id,BUYER_CONFIRMATION,BUYER_QTY,BUYER_CONFIRMATION_DATE,TRYMNGTID,ISTRYMNGT,RECEIVED_TMT_QTY,Received_date,UnitPrice) "
+				+ ",STATUS,BUYER_id,BUYER_CONFIRMATION,BUYER_QTY,BUYER_CONFIRMATION_DATE,TRYMNGTID,ISTRYMNGT,RECEIVED_TMT_QTY,Received_date,UnitPrice,PROD_NUMBER) "
 				+ "select DOC_NUMBER,:DOC_DATE,MONTH,COST_CENTER,YEAR,DEPARTMENT,CREATEDBY,ITEM,TOTAL_USER_QTY,VALUE,CLOSE_DATE, "
-				+ "STATUS,null,0,TOTAL_USER_QTY,null,null,0,null,null,UnitPrice from  temp_indent_Transaction where DOC_NUMBER=:tempid");
+				+ "STATUS,null,0,TOTAL_USER_QTY,null,null,0,null,null,UnitPrice,PROD_NUMBER from  temp_indent_Transaction where DOC_NUMBER=:tempid");
 
 		InsertIndenttransaction.setParameter("tempid", tempid);
 		InsertIndenttransaction.setParameter("DOC_DATE", formattedDate);
@@ -2268,13 +2192,13 @@ public class UserDaoimpl implements UserDao {
 //					+ "		[1552],[1554],[1555],[1557],[1558],[1559],[7646])) AS pivottable\n"
 //					+ "		order by PROD_NAME desc");
 
-				"sELECT PROD_NAME, MAKE, UOM," + finalcc + ",ucp,MoqQty,MoqValue,PrevMonthTMTQty,BalanceTMTValue \n"
+				"sELECT PROD_NAME, MAKE, UOM," + finalcc + ",ucp,MoqQty,MoqValue,BalanceTMTQTy,BalanceTMTValue \n"
 						+ "		FROM (\n"
-						+ "		SELECT PROD_NAME, isnull(MAKE,'') MAKE, UOM, COST_CENTER, ISNULL(BUYER_QTY , 0) AS cost_value,ucp,MoqQty,MoqValue,PrevMonthTMTQty,BalanceTMTValue\n"
+						+ "		SELECT PROD_NAME, isnull(MAKE,'') MAKE, UOM, COST_CENTER, ISNULL(BUYER_QTY , 0) AS cost_value,ucp,MoqQty,MoqValue,BalanceTMTQTy,BalanceTMTValue\n"
 						+ "		FROM PRODUCT_MASTER pm \n"
 						+ "		left join Indent_Transaction it on pm.PROD_NAME=it.ITEM\n"
 						+ "		WHERE COST_CENTER IS NOT NULL and month=:Month and year=:Year\n"
-						+ "		GROUP BY PROD_NAME, MAKE, UOM, COST_CENTER,BUYER_QTY,ucp,MoqQty,MoqValue,PrevMonthTMTQty,BalanceTMTValue\n"
+						+ "		GROUP BY PROD_NAME, MAKE, UOM, COST_CENTER,BUYER_QTY,ucp,MoqQty,MoqValue,BalanceTMTQTy,BalanceTMTValue\n"
 						+ "		) AS src\n" + "		PIVOT (MAX(cost_value)\n" + "		FOR COST_CENTER IN (" + finalcc
 						+ ")) AS pivottable\n" + "		order by PROD_NAME desc");
 
@@ -3660,9 +3584,10 @@ public class UserDaoimpl implements UserDao {
 		} catch (NoResultException er) {
 			return "fine";
 		}
-		return "For the month of " + MonthText + " an Indent has already been generated: " + id
-				+ " for this cost center " + userId + " and please modify the indent in the indent list menu.";
-		// return "fine";
+//		return "For the month of " + MonthText + " an Indent has already been generated: " + id
+//				+ " for this cost center " + userId + " and please modify the indent in the indent list menu.";
+		
+	return "Indent is already generated for this cost center in Current month. Please modify the indent in the indent list.";
 
 	}
 
@@ -4747,7 +4672,7 @@ public class UserDaoimpl implements UserDao {
 				int insertInitiateWorkPermitStatus = 0;
 
 				insertInitiateWorkPermitStatus = insertInitiateWorkPermit.executeUpdate();
-				return "Product Created Sucessfully";
+				return "Product master Created Sucessfully";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -4863,7 +4788,7 @@ public class UserDaoimpl implements UserDao {
 			int isExistance = (int) labelExistanceQuery.getSingleResult();
 
 			if (isExistance != 0) {
-				return "cost center : " + CCID + " is already available for this year : " + Year;
+				return "Budget for cost center : " + CCID + " is already added for this year : " + Year;
 			} else {
 
 				Query insertInitiateWorkPermit = entityManager.createNativeQuery(
@@ -4956,6 +4881,12 @@ public class UserDaoimpl implements UserDao {
 
 	}
 
+	
+	  public static int getMonthNumber(String monthName) {
+	        Month month = Month.valueOf(monthName.toUpperCase());
+	        return month.getValue();
+	    }
+	  
 	@Override
 	public String poEntryCreationSave(String Year, String Month, String CostCenter, String PoAmount, String loginId) {
 		try {
@@ -4965,13 +4896,13 @@ public class UserDaoimpl implements UserDao {
 			labelExistanceQuery.setParameter("CostCenter", CostCenter);
 			labelExistanceQuery.setParameter("year", Year);
 			labelExistanceQuery.setParameter("Month", Month);
-
+			labelExistanceQuery.setParameter("Month", Month);
 			int isExistance = (int) labelExistanceQuery.getSingleResult();
 			if (isExistance != 0) {
 				return "PO Entry : " + CostCenter + " is already available for this year : " + Year;
 			} else {
-				String sqlInsertQuery = "INSERT INTO PO_Entry (Year, COST_CENTER, MONTH, POAmount, CreatedBy, CreatedOn) "
-						+ "VALUES (:Year,:CostCenter,:MONTH,:PoAmount,:CreatedBy,:CreatedOn)";
+				String sqlInsertQuery = "INSERT INTO PO_Entry (Year, COST_CENTER, MONTH, POAmount, CreatedBy, CreatedOn,MONTHNUMBER) "
+						+ "VALUES (:Year,:CostCenter,:MONTH,:PoAmount,:CreatedBy,:CreatedOn,:MONTHNUMBER)";
 				Query insertInitiatePoEntryData = entityManager.createNativeQuery(sqlInsertQuery);
 				insertInitiatePoEntryData.setParameter("Year", Year);
 				insertInitiatePoEntryData.setParameter("CostCenter", CostCenter);
@@ -4981,6 +4912,8 @@ public class UserDaoimpl implements UserDao {
 				System.out.println("Product is already Month after available." + CostCenter);
 				insertInitiatePoEntryData.setParameter("CreatedBy", loginId);
 				insertInitiatePoEntryData.setParameter("CreatedOn", new Date());
+			    int monthNumber = getMonthNumber(Month);
+			    insertInitiatePoEntryData.setParameter("MONTHNUMBER", monthNumber);
 				int insertInitiatePoEntryStatus = 0;
 				insertInitiatePoEntryStatus = insertInitiatePoEntryData.executeUpdate();
 				return "Budget created sucessfully";
@@ -4995,13 +4928,11 @@ public class UserDaoimpl implements UserDao {
 	public String poEntryDataUpdation(String costCenter, String PoAmount, String Month, String year, String createdBy,
 			String createdOn, String loginId) {
 		try {
-			String labelExistanceSQL = "UPDATE PO_Entry set POAmount=:PoAmount,Year=:year,CreatedBy=:createdBy,CreatedOn=:createdOn,MONTH=:month where COST_CENTER =:costCenter";
+			String labelExistanceSQL = "update po_Entry set poamount =:PoAmount where COST_CENTER =:costCenter and MONTH =:month and YEAR =:year";
 			Query labelExistanceQuery = entityManager.createNativeQuery(labelExistanceSQL);
 			labelExistanceQuery.setParameter("PoAmount", PoAmount);
 			labelExistanceQuery.setParameter("costCenter", costCenter);
 			labelExistanceQuery.setParameter("year", year);
-			labelExistanceQuery.setParameter("createdBy", createdBy);
-			labelExistanceQuery.setParameter("createdOn", new Date());
 			labelExistanceQuery.setParameter("month", Month);
 			System.out.println("update api murali" + " PoAmount" + PoAmount + " costCenter" + costCenter + " year"
 					+ year + " createdBy" + createdBy + "Month" + Month);
@@ -5296,6 +5227,71 @@ public class UserDaoimpl implements UserDao {
 			System.out.println(response);
 		}
 		return response;
+	}
+	
+	@Override
+	public String productValidation(String ProductID, String loginId) {
+		String permitNumber = "";
+		try {
+			String labelExistanceSQL = "SELECT COUNT(*) FROM PRODUCT_MASTER WHERE PRODUCT_NUMBER=:ProductID";
+			Query labelExistanceQuery = entityManager.createNativeQuery(labelExistanceSQL);
+  			labelExistanceQuery.setParameter("ProductID", ProductID);
+			int isExistance = (int) labelExistanceQuery.getSingleResult();
+			if (isExistance != 0) {
+				return "Product is already available.";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "error";
+		}
+		return "product is not available";
+	}
+	
+	@Override
+	public String ccValidation(String CCID, String loginId) {
+		String permitNumber = "";
+		try {
+			String labelExistanceSQL = "SELECT COUNT(*) FROM BUDGET_MASTER WHERE CCID=:CCID";
+			Query labelExistanceQuery = entityManager.createNativeQuery(labelExistanceSQL);
+  			labelExistanceQuery.setParameter("CCID", CCID);
+			int isExistance = (int) labelExistanceQuery.getSingleResult();
+			if (isExistance != 0) {
+				return "CCID is already available.";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "error";
+		}
+		return "CCID is not available";
+	}
+	
+	
+	/**
+	 * @author 832044_CNST4 murali chari.
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Object> getAllBudgetCCIDDe() {
+
+		List<Object> getDesignationDetails;
+
+Calendar cal = Calendar.getInstance();
+		SimpleDateFormat year_Date = new SimpleDateFormat("YYYY");
+		String yearfromCal = year_Date.format(cal.getTime());
+
+		int cFY = Integer.valueOf(yearfromCal);
+		Query selectQuery = entityManager.createNativeQuery("SELECT CCID "
+				+ "    FROM BUDGET_MASTER \n");
+			//	+ "    WHERE year=:YEAR and (BUDVALUERSL = '' OR BUDVALUERSL IS NULL)");
+	//	selectQuery.setParameter("YEAR", cFY);
+		try {
+			getDesignationDetails = selectQuery.getResultList();
+		} catch (HibernateException e) {
+
+			e.printStackTrace();
+			getDesignationDetails = null;
+		}
+		return getDesignationDetails;
 	}
 
 }

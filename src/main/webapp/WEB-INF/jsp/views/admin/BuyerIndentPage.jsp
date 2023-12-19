@@ -252,7 +252,7 @@ vertical-align: text-bottom ; footer {
 			<!-- ============================================================== -->
 			<!-- Container fluid  -->
 			<!-- ============================================================== -->
-			<div class="container-fluid">
+			<div class="container-fluid" style="min-height:556px;max-height:556px;overflow:scroll;">
 				<!-- ============================================================== -->
 				<!-- Start Page Content -->
 				<!-- ============================================================== -->
@@ -305,30 +305,7 @@ vertical-align: text-bottom ; footer {
 											<button class="btn btn-primary" id="btn-sendtovendor"><span id="sending-text">Send to Vendor</span> <i id="sending-spin-icon" class="fas fa-spinner fa-spin"></i></button>
 										</div>
 
-										<table id="example"
-											class="table table-striped table-bordered display nowrap example"
-											style="width: 100%;">
-											
 <style>
-    table {
-      border-collapse: collapse;
-      width: 100%;
-    }
-
-    th {
-      font-size: 21px;
-      text-align: center !important;
-    }
-
-    td, th {
-      border: 1px solid #dddddd;
-      padding: 8px;
-      font-size: 17px;
-    }
-    table {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    border-radious:3px;
-}
 .headerStyles{
  background: #01AFAE !important;
  color: white !important;      
@@ -337,155 +314,62 @@ vertical-align: text-bottom ; footer {
 	}
 	.tbodyCustomColor {
 	    color: black !important;
-    font-size: 17px;
+    font-size: 17px !important;
 	}
-  </style>
+</style>
+
+										<table id="example"
+											class="table table-striped table-bordered display nowrap example"
+											style="width: 100%;">
 											<thead class="thead-light">
-												<tr>
-													<!-- <th scope="col"><b>SL.NO</b></th> -->
-													<!-- <th scope="col" hidden><b>USER ID</b></th> -->
-													
+												<tr>	
 													<c:forEach items="${Finalcol}" var="finalcoll" varStatus="loop">
 													${finalcoll}
 													</c:forEach>
-													
-													
-												<!-- <th scope='col'><b>Description</b></th>
-												<th scope='col'><b>Vendors</b></th>	<th scope='col'><b>UOM</b></th>
-												<th scope='col'><b>1103</b></th>
-												<th scope='col'><b>1201]
-												<th scope='col'><b>User Qty</b></th><th scope='col'><b>MOQ Qty</b></th><th scope='col'><b>Total Qty</b></th><th scope='col'><b>Unit Price(RS)</b></th>	<th scope='col'><b>MOQ Val(RS)</b></th><th scope='col'><b>Total Val</b></th><th scope='col'><b>Stock At TMT (QTY)</b></th><th scope='col'><b>STK Val(RS)</b></th>
-													 -->
-													
-													<!-- <th scope="col"  ><b>Description</b></th>
-													<th scope="col"><b>Vendors</b></th>
-													<th scope="col"><b>UOM</b></th>
-													<th scope="col"><b>CC1100</b></th>
-													<th scope="col"><b>CC1101</b></th>
-													<th scope="col"><b>CC1102</b></th>
-													<th scope="col"><b>CC1103</b></th>
-													<th scope="col"><b>CC1200</b></th>
-													<th scope="col"><b>CC1201</b></th>
-													<th scope="col"><b>CC1202</b></th>
-													<th scope="col"><b>CC1203</b></th>
-													<th scope="col"><b>CC1204</b></th>
-													<th scope="col"><b>CC1205</b></th>
-													<th scope="col"><b>CC1206</b></th>
-													<th scope="col"><b>CC1207</b></th>
-													<th scope="col"><b>CC1209</b></th>
-													<th scope="col"><b>CC1230</b></th>
-													<th scope="col"><b>CC1231</b></th>
-													<th scope="col"><b>CC1232</b></th>
-													<th scope="col"><b>CC1233</b></th>
-													<th scope="col"><b>CC1234</b></th>
-													<th scope="col"><b>CC1235</b></th>
-													<th scope="col"><b>CC1300</b></th>
-													<th scope="col"><b>CC1301</b></th>
-													<th scope="col"><b>CC1302</b></th>
-													<th scope="col"><b>CC1303</b></th>
-													<th scope="col"><b>CC1305</b></th>
-													<th scope="col"><b>CC1313</b></th>
-													<th scope="col"><b>CC1320</b></th>
-													<th scope="col"><b>CC1321</b></th>
-													<th scope="col"><b>CC1322</b></th>
-													<th scope="col"><b>CC1323</b></th>
-													<th scope="col"><b>CC1330</b></th>
-													<th scope="col"><b>CC1331</b></th>
-													<th scope="col"><b>CC1332</b></th>
-													<th scope="col"><b>CC1333</b></th>
-													<th scope="col"><b>CC1334</b></th>
-													<th scope="col"><b>CC1335</b></th>
-													<th scope="col"><b>CC1337</b></th>
-													<th scope="col"><b>CC1338</b></th>
-													<th scope="col"><b>CC1340</b></th>
-													<th scope="col"><b>CC1380</b></th>
-													<th scope="col"><b>CC1400</b></th>
-													<th scope="col"><b>CC1401</b></th>
-													<th scope="col"><b>CC1402</b></th>
-													<th scope="col"><b>CC1406</b></th>
-													<th scope="col"><b>CC1500</b></th>
-													<th scope="col"><b>CC1501</b></th>
-													<th scope="col"><b>CC1502</b></th>
-													<th scope="col"><b>CC1503</b></th>
-													<th scope="col"><b>CC1504</b></th>
-													<th scope="col"><b>CC1506</b></th>
-													<th scope="col"><b>CC1515</b></th>
-													<th scope="col"><b>CC1520</b></th>
-													<th scope="col"><b>CC1521</b></th>
-													<th scope="col"><b>CC1522</b></th>
-													<th scope="col"><b>CC1523</b></th>
-													<th scope="col"><b>CC1524</b></th>
-													<th scope="col"><b>CC1525</b></th>
-													<th scope="col"><b>CC1528</b></th>
-													<th scope="col"><b>CC1529</b></th>
-													<th scope="col"><b>CC1540</b></th>
-													<th scope="col"><b>CC1542</b></th>
-													<th scope="col"><b>CC1544</b></th>
-													<th scope="col"><b>CC1545</b></th>
-													<th scope="col"><b>CC1546</b></th>
-													<th scope="col"><b>CC1547</b></th>
-													<th scope="col"><b>CC1549</b></th>
-													<th scope="col"><b>CC1551</b></th>
-													<th scope="col"><b>CC1552</b></th>
-													<th scope="col"><b>CC1554</b></th>
-													<th scope="col"><b>CC1555</b></th>
-													<th scope="col"><b>CC1557</b></th>
-													<th scope="col"><b>CC1558</b></th>
-													<th scope="col"><b>CC1559</b></th>
-													<th scope="col"><b>CC7646</b></th>
-													<th scope="col"><b>User Qty</b></th>
-													<th scope="col"><b>MOQ Qty</b></th>
-													<th scope="col"><b>Total Qty</b></th>
-													<th scope="col"><b>Unit Price(RS)</b></th>
-													<th scope="col"><b>MOQ Val(RS)</b></th>
-													<th scope="col"><b>Total Val</b></th>
-													<th scope="col"><b>Stock At TMT (QTY)</b></th>
-													<th scope="col"><b>STK Val(RS)</b></th> -->
 												</tr>
 											</thead>
 											<tbody class="customtable">
 												<c:forEach items="${BuyerList}" var="user" varStatus="loop">
 													<tr>
 													
-													<td class="first-cell" style="position:sticky;width:350px !important;">${user[0]}</td>
-														<td>${user[1]}</td>
-														<td>${user[2]}</td>
+													<td class="first-cell tbodyCustomColor" style="position:sticky;width:350px !important;">${user[0]}</td>
+														<td class='tbodyCustomColor'>${user[1]}</td>
+														<td class='tbodyCustomColor'>${user[2]}</td>
 													<c:set var="collectionSize" value="${0}" />
 													<c:forEach items="${Collen}" var="ccen" varStatus="loop2">
-													<td class="editable-cell">${user[loop2.index + 3]}</td>
+													<td class="editable-cell tbodyCustomColor">${user[loop2.index + 3]}</td>
 													<c:set var="collectionSize" value="${collectionSize + 1}" />
 													</c:forEach> 
 													
-														<td></td>
-														<td class="editable-cell remove">
+														<td class='tbodyCustomColor'></td>
+														<td class="editable-cell tbodyCustomColor remove">
 															${user[collectionSize + 4]}	
 														</td>
-															<td >${user[collectionSize + 3] * user[collectionSize + 4]}</td>
-															<td></td>
-															<td></td>
-															<td>${user[collectionSize + 3]}</td>
-															<td>${user[collectionSize + 6]}</td>
-															<td>${user[collectionSize + 7]}</td>
-															<div>${ collectionSize}kk</div>
+															<td class='tbodyCustomColor'>${user[collectionSize + 3] * user[collectionSize + 4]}</td>
+															<td class='tbodyCustomColor'></td>
+															<td class='tbodyCustomColor'></td>
+															<td class='tbodyCustomColor'>${user[collectionSize + 3]}</td>
+															<td class='tbodyCustomColor'>${user[collectionSize + 6]}</td>
+															<td class='tbodyCustomColor'>${user[collectionSize + 7]}</td>
  </tr>
 													</c:forEach>
 												</tbody>
 												<tfoot>
 													<tr>
-														<th>Total</th>
-														<th></th>
-														<th></th>
+														<th class='tbodyCustomColor'>Total</th>
+														<th class='tbodyCustomColor'></th>
+														<th class='tbodyCustomColor'></th>
 													<c:forEach items="${Collen}" var="ccen" varStatus="loop2">
-															<th></th>
+															<th class='tbodyCustomColor'></th>
 													</c:forEach>	
-																												<th id="footerUserQty"></th>
-																												<th id="footerMoqty"></th>
-																												<th id="footerMoqValue"></th>
-																												<th id="footerTotalQty"	></th>
-																												<th id="footerTotalValue"></th>
-																												<th></th>
-																												<th id="footerStockQty"></th>
-																												<th id="footerStockValue"></th>
+																												<th class='tbodyCustomColor' id="footerUserQty"></th>
+																												<th class='tbodyCustomColor' id="footerMoqty"></th>
+																												<th class='tbodyCustomColor' id="footerMoqValue"></th>
+																												<th class='tbodyCustomColor' id="footerTotalQty"	></th>
+																												<th class='tbodyCustomColor'  id="footerTotalValue"></th>
+																												<th class='tbodyCustomColor'></th>
+																												<th class='tbodyCustomColor' id="footerStockQty"></th>
+																												<th class='tbodyCustomColor' id="footerStockValue"></th>
 														
 
 												</tr>

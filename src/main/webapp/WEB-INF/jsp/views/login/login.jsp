@@ -218,7 +218,15 @@ border-color:#01AFAE;
                             <div class="col-12">
                             <div class="row" style="margin-bottom: 12px;">
 														<div class="col-md-4 col-sm-4 col-4">
-														
+						<style>
+						
+						
+						label {
+	color: #1F1B64;
+    font-size: 13px;
+    font-weight: 600 !important;
+						}
+						</style>								
 														
 														
 														<label class="labelcol"><input type="radio"  checked="checked"

@@ -109,17 +109,22 @@
 						</ol>
 						<div class="carousel-inner">
 							<div class="carousel-item active" style="height:530px">
-								<img class="d-block w-100" src="assets/images/Go-Green-With-Office-Supplies.jpg.webp"
+								<img class="d-block w-100" src="assets/images/stn%20img4.jpg"
 									style="border-radius: 15px 50px;"
 									height="600px" width="100%" alt="Manage Employee and Staff in single place" >
 							</div>
 							<div class="carousel-item" style="height:530px">
-								<img class="d-block w-100" src="assets/images/stationery-1000x1000.webp"
+								<img class="d-block w-100" src="assets/images/stn%20img3.jpg"
 									style="background-size: cover; border-radius: 15px 50px;"
 									height="600px" width="100%" alt="Manage Store and its Staff in single place">
 							</div>
 							<div class="carousel-item" style="height:530px">
-								<img class="d-block w-100" src="assets/images/360_F_34703220_TiczZRk73LnvUcvt2J2qj57mKzwKAtBT.jpg"
+								<img class="d-block w-100" src="assets/images/stn%20img2.jpg"
+									style="background-size: cover; border-radius: 15px 50px;"
+									height="600px" width="100%" alt="Central repository for all channel staff.">>
+							</div>
+							<div class="carousel-item" style="height:530px">
+								<img class="d-block w-100" src="assets/images/stn%20img1.jpg"
 									style="background-size: cover; border-radius: 15px 50px;"
 									height="600px" width="100%" alt="Central repository for all channel staff.">>
 							</div>

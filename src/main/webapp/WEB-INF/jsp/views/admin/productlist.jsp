@@ -842,15 +842,16 @@ padding:0px !important;
 		var noBudget =$('#totalOutput2').text();
 		if(noBudget != 'No budget is defined'){
 		var yearlybudget = document.querySelector("#totalOutput2 .highlight:nth-child(2)");
-	
+	alert('yearlybudget' + yearlybudget)
 		if(parseInt(yearlybudget.textContent)!=0){
 			var InputArray = [];
 			var input = element.parentNode.querySelector('.count-input');
 			var productCard = input.closest('.card');
 			var productName = productCard.querySelector('.product').innerText;
 			var productPrice = productCard.querySelector('.price').innerText;
-			var productID = productCard.querySelector('.productID').innerText;
-			var currentValue = parseInt(input.value);
+			var productID = productCard.querySelector('.productID').innerText.split(':')[1].trim();
+			console.log('this is checking',productID)
+		rrentValue = parseInt(input.value);
 			input.value = currentValue + 1;
 
 			InputArray.push({
@@ -1000,7 +1001,7 @@ padding:0px !important;
 		}
 		}
 	
-	
+	//..................
 	function incrementCount(element) {
 		var noBudget =$('#totalOutput2').text();
 		if(noBudget != 'No budget is defined'){
@@ -1012,10 +1013,9 @@ padding:0px !important;
 			var productCard = input.closest('.card');
 			var productName = productCard.querySelector('.product').innerText;
 			var productPrice = productCard.querySelector('.price').innerText;
-			var productID = productCard.querySelector('.productID').innerText;
+			var productID = productCard.querySelector('.productID').innerText.split(':')[1].trim();
 			var currentValue = parseInt(input.value);
 			input.value = currentValue + 1;
-
 			InputArray.push({
 				productName : productName,
 				productPrice : productPrice,
@@ -1187,7 +1187,7 @@ padding:0px !important;
 		var productCard = input.closest('.card');
 		var productName = productCard.querySelector('.product').innerText;
 		var productPrice = productCard.querySelector('.price').innerText;
-		var productID = productCard.querySelector('.productID').innerText;
+		var productID = productCard.querySelector('.productID').innerText.split(':')[1].trim();
 		var currentValue = parseInt(input.value);
 		if (currentValue > 0) {
 			input.value = currentValue - 1;
@@ -1273,7 +1273,7 @@ function calculateDecrementTotal(value,price) {
 					var productCard = input.closest('.card');
 					var productName = productCard.querySelector('.product').innerText;
 					var productPrice = productCard.querySelector('.price').innerText;
-					var productID = productCard.querySelector('.productID').innerText;
+					var productID = productCard.querySelector('.productID').innerText.split(':')[1].trim();
 					var currentValue = parseInt(input.value);
 					if (currentValue > 0) {
 						input.value = currentValue - 1;
