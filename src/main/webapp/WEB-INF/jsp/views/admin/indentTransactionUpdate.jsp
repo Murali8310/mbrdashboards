@@ -347,7 +347,7 @@ function getProduct(id){
 				 productListHTML += '	style="align-items: center;">';
 				productListHTML += '	<a onclick="decrementCount(this)"';
 				productListHTML += '		class="btn btn-sm btn-decre decreme"><i';
-			    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input disabled type="text"';
+			    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input style="background:white" disabled type="text"';
 				productListHTML += '		id="countInput'
 						+ i
 						+ '" name="quantity" class="form-control count-input bold-and-large"';
@@ -846,7 +846,7 @@ function getProduct(id){
 	 productListHTML += '	style="align-items: center;">';
 			productListHTML += '	<a onclick="decrementCount(this)"';
 			productListHTML += '		class="btn btn-sm btn-decre decreme"><i';
-    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input disabled type="text"';
+    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input style="background:white" disabled type="text"';
 			productListHTML += '		id="countInput' + i
 					+ '" name="quantity" class="form-control count-input bold-and-large"';
 			productListHTML += '		value="' + product[7]
@@ -882,8 +882,8 @@ function getBudgetDetails(){
 					
 						var output = "<div class='cell'>&nbsp;&nbsp;<span class='title'>Yearly Budget:   ₹ </span> <span class='highlight' id='yearAmount'>"
 							+ budgt[3]  + "</span> &nbsp;&nbsp;&nbsp;&nbsp;<span class='title'>Cumulative (Incl. PO, Route) Indent Value:   ₹</span>  <span class='highlight'>"
-							 + budgt[5]   + "</span>  &nbsp;&nbsp;&nbsp;"+ " <span class='title'>Budget bal:   ₹</span>  <span class='highlight'>"
-							+ budgt[4]   + "</span> &nbsp;&nbsp;&nbsp;&nbsp;"+ "<span class='title'> Indent Amt(Current month):₹</span>  <span class='highlight'>" 
+							 + budgt[5]   + "</span>"+ " <span class='title'>Budget bal:   ₹</span>  <span class='highlight'>"
+							+ budgt[4]   + "</span>"+ "<span class='title'> Indent Amt(Current month):₹</span>  <span class='highlight'>" 
 							+ budgt[6]   + "</span> </div> " ;
 							
 					$('#totalOutput2').html(output); 

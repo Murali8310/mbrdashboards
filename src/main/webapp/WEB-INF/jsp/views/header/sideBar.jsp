@@ -43,21 +43,31 @@
 }
 
 }
+.bottom-content {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: #01AFAE;
+    text-align: center;
+    /* Add other styling properties as needed */
+}
 
+
+/* Style for the link within the bottom-content */
+.bottom-content a {
+    color: #333; /* Link color */
+    /* Additional link styling */
+}
 </style>
 </head>
 <body>
 	<aside class="left-sidebar" style="position:fixed" data-sidebarbg="skin5"> <!-- Sidebar scroll-->
-	<div class="scroll-sidebar" style="height: 540px; position: relative;">
+	<div class="scroll-sidebar" style="position: relative;">
 		<!-- Sidebar navigation-->
 		<nav class="sidebar-nav">
 
 		<ul id="sidebarnav" class="p-t-30">
-		
-			<li class="sidebar-item"><a
-				class="sidebar-link waves-effect waves-dark"
-				href="dashboard" aria-expanded="false"><i
-					class="mdi mdi-view-dashboard"></i> <span class="hide-menu heading">Dashboard</span></a></li>
 			<%
 			String role = (String) session.getAttribute("role");
 				if(role == null)
@@ -67,6 +77,10 @@
 			
 			<%} %>
 						<c:if test="${role =='Indent Manager'}">
+							<li class="sidebar-item"id='dashboardiD' ><a
+				class="sidebar-link waves-effect waves-dark"
+				href="dashboard" aria-expanded="false"><i
+					class="mdi mdi-view-dashboard"></i> <span class="hide-menu heading">Dashboard</span></a></li>
 				<li class="sidebar-item"><a
 					class="sidebar-link far " href="manageByAdmin"
 					aria-expanded="false"><i  class="fa fa-users fa-5x"></i><span
@@ -129,6 +143,12 @@
 			
 				</ul>
 		</nav>
+		<!--  <div class="bottom-content">
+            <a class="sidebar-link waves-effect waves-dark" href="dashboard" aria-expanded="false">
+                <span class="hide-menu heading" style="text-align:center">© 2023 TITAN COMPANY LTD.</span> <br>
+                <span style="text-align:center" >ALL RIGHTS RESERVED.</span>
+            </a>
+        </div> -->
 		<!-- End Sidebar navigation -->
 	</div>
 	<!-- End Sidebar scroll--> </aside>

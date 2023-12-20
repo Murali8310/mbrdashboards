@@ -42,8 +42,8 @@
     	 	        		Cumulative = 'Cumulative Indent Value Rs:' + 0; 
     	 	        		balancevalue = 'Balance Budget Value Rs:'+ 0;
     	 	        		yearlyBudget = 'Yearly Budget Value Rs:'+ 0;
-    	 	        		document.getElementsByClassName('NoBudgetIsDefined')[0].style.visibility = 'visible';
-    	 	        		document.getElementsByClassName('NoBudgetIsDefined')[1].style.visibility = 'visible'
+    	 	        		//document.getElementsByClassName('NoBudgetIsDefined')[0].style.visibility = 'visible';
+    	 	        		//document.getElementsByClassName('NoBudgetIsDefined')[1].style.visibility = 'visible'
 
     	 	        		return;
     	 	        	}else {
@@ -53,20 +53,29 @@
         	 	        	console.log('Number(allData[3]hhhhh)',Number(allData[3]),Number(allData[3])- Number(allData[4]))
     	 	        		Cumulative = 'Cumulative Indent Value Rs:' + (Number(allData[3])- Number(allData[4])).toFixed(2); 
         	 	        	console.log('allData[3]),allData[3]-allData[4],allData[4]',allData[3],allData[3]-allData[4],allData[4])
-        	 	        	document.getElementsByClassName('NoBudgetIsDefined')[0].style.visibility = 'hidden'
-        	 	           document.getElementsByClassName('NoBudgetIsDefined')[1].style.visibility = 'hidden'
+        	 	        	//document.getElementsByClassName('NoBudgetIsDefined')[0].style.visibility = 'hidden'
+        	 	           //document.getElementsByClassName('NoBudgetIsDefined')[1].style.visibility = 'hidden'
 
     	 	        	}
     	 	        	console.log('chartData',chartData)
-    	 	           var options = {
-    	 			        chart: {
-    	 			          type: 'pie',
-    	 			          width: '700',
-    	 			          height: '700'
-    	 			        },
-    	 			        series: chartData,
-    	 			        labels: [Cumulative, balancevalue]
-    	 			      };
+    	 	          var options = {
+    chart: {
+        type: 'pie',
+        height: '450'
+    },
+    series: chartData,
+    labels: ['Cumulative (Incl. PO, Route) Indent Value (Rs)', 'Balance Budget Value (Rs)'],
+    legend: {
+        position: 'bottom'
+    },
+    dataLabels: {
+        style: {
+            fontSize: '12px !important', // You can adjust the font size if needed
+            padding: '10px !important' // Adjust the padding value as per your requirement
+        }
+    }
+};
+
 
     	 			      var chart = new ApexCharts(document.querySelector("#chart"), options);
     	 			      chart.render();
@@ -98,7 +107,7 @@
             	var options = {
             		    chart: {
             		        type: 'bar',
-            		        height: '500' // Set the desired height here
+            		        height: '400' // Set the desired height here
             		    },
             		    series: [{
             		        name: 'Indent Amount',
@@ -107,12 +116,18 @@
             		    xaxis: {
             		        categories: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep','Oct','Nov','Dec','Jan', 'Feb', 'Mar'],
             		        title: {
-            		            text: 'Months'
+            		            text: 'Month',
+            		            style: {
+            		                fontSize: '15px' // Adjust the font size for y-axis title
+            		            }
             		        }
             		    },
             		    yaxis: {
             		        title: {
-            		            text: 'Indent Amount'
+            		            text: 'Indent value(RS)',
+            		            style: {
+            		                fontSize: '15px' // Adjust the font size for y-axis title
+            		            }
             		        }
             		    }
             		};
@@ -131,6 +146,19 @@
     });
   </script>
 <style>
+
+      #chart .apexcharts-legend-text {
+     color: black !important;
+    font-size: 15px !important; 
+    font-weight: bold !important;
+    font-family: Helvetica, Arial, sans-serif;
+           }
+ #chart .apexcharts-legend {
+inset: auto 0px 1px;
+    position: absolute;
+    max-height: 250px;
+    margin-left: -400px !important;
+}
 .resp-iframe {
 	position: fixed;
 	top: 0;
@@ -199,6 +227,14 @@
     top: 5px;
     right: 5px;
 }
+.card {
+  width: 190px;
+  height: 254px;
+  border-radius: 10px;
+  background: #e0e0e0;
+  box-shadow: 15px 15px 30px #bebebe,
+             -15px -15px 30px #ffffff;
+}
 </style>
 </head>
 
@@ -215,92 +251,23 @@
 		<div class="page-wrapper" style="margin-top:80px;">
 			<div class="row" >
 				<div class="col-sm-12">
-					<%-- <div class="filter-controls">
-						<div class="col-md-3 filter-item">
-							<label for="Month" class="month-label">Month:</label> <select
-								id="Month" name="Month" class="form-control" aria-invalid="true"
-								required="required" style="width: 100%;">
-								<option value="January">January</option>
-								<option value="February">February</option>
-								<option value="March">March</option>
-								<option value="April">April</option>
-								<option value="May">May</option>
-								<option value="June">June</option>
-								<option value="July">July</option>
-								<option value="August">August</option>
-								<option value="September">September</option>
-								<option value="October">October</option>
-								<option value="November">November</option>
-								<option value="December">December</option>
-							</select>
-						</div>
-						<div class="col-md-3 filter-item">
-							<label for="yearDropdown" class="year-label">Year:</label> <select
-								id="Year" class="form-control" aria-invalid="true"
-								required="required" style="width: 97%;">
-								<c:forEach items="${years}" var="year">
-									<option value="${year}">${year}</option>
-								</c:forEach>
-
-							</select>
-						</div>
-						<div class="col-md-3 filter-item">
-							<button class="btn btn-primary btn-search" onclick="search()">Search</button>
-						</div>
-					</div> --%>
-					<span style="font-weight: bold;margin-left:208px">Budget Details  vs Actual</span><span style="font-weight: bold;float:right;margin-right:258px">Indent Details</span>
-					
-					
+				<div class="col-sm-6 col-lg-6 col-md-6" style="text-align: center;font-weight: bold;">
+				<h4 style="font-weight:bold">Budget vs Actual</h4>
 				</div>
-				 <div class="col-sm-6 col-lg-6 col-md-6" style="margin-top: 12px;">
-					<div id="chart"></div>
-					<div class="NoBudgetIsDefined">
-  No Budget is defined
-  <style>
-  /* Basic styling */
-.NoBudgetIsDefined {
-  font-family: Arial, sans-serif;
-  font-size: 16px;
-  color: #333;
-  background-color: #01AFAE;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-top: 200px !important;
-}
-
-/* Center the div */
-.NoBudgetIsDefined {
-  margin: 0 auto;
-  width: 60%; /* Adjust width as needed */
-}
-
-/* Text alignment and spacing */
-.NoBudgetIsDefined {
-  text-align: center;
-  line-height: 1.5;
-}
-
-/* Adding shadow effect */
-.NoBudgetIsDefined {
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-/* Hover effect */
-.NoBudgetIsDefined:hover {
-  background-color: #01AFAE;
-  transition: background-color 0.3s ease;
-}
-  
-  </style>
-</div>
+				<div class="col-sm-6 col-lg-6 col-md-6" style="text-align: center;font-weight: bold;	">
+                <h4 style="font-weight:bold">Monthly Indent Used Amount Comparison</h4>
 				</div>
-				 <div class="col-sm-6 col-lg-6 col-md-6">
-	           <div id="chart3"></div>
-	           <div class="NoBudgetIsDefined">
-  No Indent Data
-  </div>
+				<!-- 	<span style="font-weight: bold;margin-left:266px">Budget vs Actual</span>
+					<span style="font-weight: bold;float:right;margin-right:258px">Monthly Indent Used Amount Comparison</span> -->
+				</div>
+				 <div class="col-sm- 5 col-lg-5 col-md-5 card" id="chart"  style="margin-top: 25px;margin-left: 28px;">
+				</div>
+				 <div class="col-sm-1 col-lg-1 col-md-1"   style="margin-top: 25px;">
+				</div>
+				 <div class="col-sm-5 col-lg-5 col-md-5 card" style="margin-top: 25px;" id="chart3">
 				</div>   
+				 <div class="col-sm-1 col-lg-1 col-md-1"   style="margin-top: 25px;">
+				</div>
 			</div>
 		</div>
 

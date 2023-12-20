@@ -107,8 +107,7 @@ a:hover {
 		<ul class="navbar-nav float-left mr-auto">
 			<li class="nav-item d-none d-md-block" id='sidebarToggle'><a
 				class="nav-link sidebartoggler waves-effect waves-light"
-				href="javascript:void(0)" data-sidebartype="mini-sidebar"><i
-					class="mdi mdi-menu font-24"></i></a></li>
+				href="javascript:void(0)" data-sidebartype="mini-sidebar" id='clickid'></a></li>		
 		<ul class="navbar-nav" style="align-items: center;font-size: 20px;font-weight:550;"> Welcome To Stationery Portal</ul>	
 			<!-- ============================================================== -->
 			<!-- create new -->
@@ -250,21 +249,31 @@ a:hover {
 		</script> -->
 		
 		<script type="text/javascript">
-		// Execute the click action on page load
-		window.addEventListener('load', function() {
-		    // Get the element by its ID
-		    const sidebarToggle = document.getElementById('sidebarToggle');
+		document.addEventListener("DOMContentLoaded", function() {
+		    setTimeout(function() {
+		        var element = document.getElementById('clickid');
+		        if (element) {
+		            element.click();
+		        }
+		        console.log('it is calling in header')
 
-		    // Check if the element exists
-		    if (sidebarToggle) {
-		        // Create a click event
-		        const clickEvent = new Event('click');
-
-		        // Dispatch the click event on the element
-		        sidebarToggle.dispatchEvent(clickEvent);
-		    }
+		    }, 10); // Adjust the time in milliseconds (e.g., 1000 for 1 second)
 		});
 
+		</script>
+		<script type="text/javascript">
+		$.ajax({
+ 			type : 'GET',
+ 			url : 'getBudgetDetails',
+ 			//dataType : 'json',
+
+ 			success : function(response) {
+ 				var allData =jQuery.parseJSON(response)[0];
+ 	        if(allData == undefined){
+ 	        	document.getElementById('dashboardiD').remove();
+ 	        }
+ 			}
+ 		});
 		</script>
 		
 </body>

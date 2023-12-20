@@ -13,7 +13,7 @@
 .footer {
 	background-color: Teal;
 	padding-bottom: 1px;
-	height: 300px;
+	/* height: 300px; */
 }
 
 footer h6 {
@@ -43,6 +43,7 @@ footer ul {
 	text-align: center;
 	font-weight: 600;
 	font-size: 11px;
+	text-align:center !important;
 }
 
 .footer-copyright:hover {
@@ -53,15 +54,24 @@ footer ul {
 	color: Teal;
 	font-weight: bolder;
 }
+
+.footer {
+ position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: #01AFAE;
+    text-align: center;
+}
 </style>
 </head>
 
 <body>
-	<footer class="footer"> 
-	<div class="footer-copyright">
-		<p>
+	<footer class="footer" > 
+	<div class="footer-copyright" >
+		<h6 style='text-align: center;'>
 			&copy 2023 <span>TITAN COMPANY LTD.</span> ALL RIGHTS RESERVED.
-		</p>
+		</h6>
 	</div>
 	</footer>
 

@@ -578,7 +578,7 @@ padding:0px !important;
 						 productListHTML += '	style="align-items: center;">';
 						productListHTML += '	<a onclick="decrementCount1(this)"';
 						productListHTML += '		class="btn btn-sm btn-decre decreme"><i';
-					    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input type="number"';
+					    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input oninput="restrictNegative(this)" type="number"';
 						productListHTML += '		id="countInput'
 								+ i
 								+ '" name="quantity" class="form-control count-input bold-and-large"';
@@ -655,7 +655,7 @@ padding:0px !important;
 					 productListHTML += '	style="align-items: center;">';
 					productListHTML += '	<a onclick="decrementCount(this)"';
 					productListHTML += '		class="btn btn-sm btn-decre decreme"><i';
-				    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input type="number"';
+				    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input oninput="restrictNegative(this)" type="number"' ;
 					productListHTML += '		id="countInput'
 							+ i
 							+ '" name="quantity" class="form-control count-input bold-and-large"';
@@ -1678,5 +1678,17 @@ footer ul {
 	<script
 		src="assets/libs/magnific-popup/dist/jquery.magnific-popup.min.js"></script>
 	<script src="assets/libs/magnific-popup/meg.init.js"></script>
+	 <script>
+    function restrictNegative(e) {
+      // Get the input element value
+      var inputValue = e.value;
+
+      // Check if the input value is a negative number
+      if (parseFloat(inputValue) < 0) {
+        // Clear the input field
+        e.value = 0;
+          }
+    }
+  </script>
 </body>
 </html>
