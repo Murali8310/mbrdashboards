@@ -20,6 +20,7 @@ AesUtil.prototype.encrypt = function(salt, iv, passPhrase, plainText) {
   return encrypted.ciphertext.toString(CryptoJS.enc.Base64);
 }
 
+
 AesUtil.prototype.decrypt = function(salt, iv, passPhrase, cipherText) {
   var key = this.generateKey(salt, passPhrase);
   var cipherParams = CryptoJS.lib.CipherParams.create({

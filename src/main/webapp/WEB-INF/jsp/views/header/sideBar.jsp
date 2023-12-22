@@ -59,13 +59,33 @@
     color: #333; /* Link color */
     /* Additional link styling */
 }
+.sidebar-item {
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+margin: 5px;
+    border-radius: 3px;
+        background: #00e8ff;
+}
+
+
+.left-sidebar {
+    position: absolute;
+    width: 250px;
+    height: 100%;
+    top: 0px;
+    z-index: 10;
+    padding-top: 64px;
+   background: #01AFAE !important;
+    -webkit-box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.08);
+}
+
+
 </style>
 </head>
 <body>
-	<aside class="left-sidebar" style="position:fixed" data-sidebarbg="skin5"> <!-- Sidebar scroll-->
-	<div class="scroll-sidebar" style="position: relative;">
+	<!-- <div class="scroll-ksidebar" style="position: relative;"> -->
 		<!-- Sidebar navigation-->
-		<nav class="sidebar-nav">
+		<nav class="sidebar-nav left-sidebar">
 
 		<ul id="sidebarnav" class="p-t-30">
 			<%
@@ -150,8 +170,8 @@
             </a>
         </div> -->
 		<!-- End Sidebar navigation -->
-	</div>
-	<!-- End Sidebar scroll--> </aside>
+	<!-- </div> -->
+	<!-- End Sidebar scroll-->
 </body>
 
 

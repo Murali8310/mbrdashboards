@@ -299,4 +299,10 @@ inset: auto 0px 1px;
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 
+<script>
+
+document.body.style.zoom = 0.85
+
+</script>
+
 </html>

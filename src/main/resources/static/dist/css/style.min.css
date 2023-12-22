@@ -16,6 +16,12 @@
 	border-radius: 0px
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .topbar .dropdown-menu .with-arrow>span {
 	transform: rotate(45deg);
 	-ms-transform: rotate(45deg);
@@ -380,6 +386,7 @@ legend {
 
 .page-title {
 	color: #1F1B64 !important;
+	font-size: 24px;
 }
 
 progress {
@@ -667,12 +674,13 @@ pre code {
 	}
 }
 
-.container-fluid {
+.container-fluid {    
 	width: 100%;
 	padding-right: 10px;
 	padding-left: 10px;
 	margin-right: auto;
-	margin-left: auto
+	margin-left: auto;
+	overflow-x: auto !important; /* murali @21-12-23 */
 }
 
 .row {
@@ -2316,7 +2324,7 @@ pre code {
 	border: 0
 }
 
-.form-control {
+/* .form-control {
 	display: block;
 	width: 100%;
 	padding: 0.375rem 0.75rem;
@@ -2333,6 +2341,25 @@ pre code {
 	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out,
 		-webkit-box-shadow 0.15s ease-in-out
+} */
+
+.form-control {
+    display: block;
+    width: 100%;
+    height: 41px !important;
+    padding: 6px 12px;
+    font-size: 18px !important;
+    line-height: 1.42857143;
+    color: black !important;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
 
 @media screen and (prefers-reduced-motion:reduce) {
@@ -12322,7 +12349,8 @@ ul.list-style-none li a:hover {
 .sidebar-nav ul .sidebar-item .sidebar-link.active,
 .sidebar-nav ul .sidebar-item .sidebar-link:hover {
 	opacity: 1;
-	color: #1F1B64 !important
+	color: #1F1B64 !important;
+	background-color: #ffcfbf; /* niraj @21-12-23 */
 }
 
 .sidebar-nav ul .sidebar-item.selected>.sidebar-link {
@@ -13184,22 +13212,22 @@ html body .waves-notransition {
 		transform: translateX(0)
 	}
 
-	6 .5 % {
+	6.5% {
 		-webkit-transform: translateX(-6px) rotateY(-9deg);
 		transform: translateX(-6px) rotateY(-9deg)
 	}
 
-	18 .5 % {
+	18.5% {
 		-webkit-transform: translateX(5px) rotateY(7deg);
 		transform: translateX(5px) rotateY(7deg)
 	}
 
-	31 .5 % {
+	31.5% {
 		-webkit-transform: translateX(-3px) rotateY(-5deg);
 		transform: translateX(-3px) rotateY(-5deg)
 	}
 
-	43 .5 % {
+	43.5% {
 		-webkit-transform: translateX(2px) rotateY(3deg);
 		transform: translateX(2px) rotateY(3deg)
 	}
@@ -13226,7 +13254,7 @@ html body .waves-notransition {
 		transform: translateX(5px) rotateY(7deg)
 	}
 
-	31.5 % {
+	31.5% {
 		-webkit-transform: translateX(-3px) rotateY(-5deg);
 		transform: translateX(-3px) rotateY(-5deg)
 	}
@@ -13672,37 +13700,37 @@ html body .waves-notransition {
 		transform: none
 	}
 
-	22.2 % {
+	22.2% {
 		-webkit-transform: skewX(-12.5deg) skewY(-12.5deg);
 		transform: skewX(-12.5deg) skewY(-12.5deg)
 	}
 
-	33.3 % {
+	33.3% {
 		-webkit-transform: skewX(6.25deg) skewY(6.25deg);
 		transform: skewX(6.25deg) skewY(6.25deg)
 	}
 
-	44.4 % {
+	44.4% {
 		-webkit-transform: skewX(-3.125deg) skewY(-3.125deg);
 		transform: skewX(-3.125deg) skewY(-3.125deg)
 	}
 
-	55.5 % {
+	55.5% {
 		-webkit-transform: skewX(1.5625deg) skewY(1.5625deg);
 		transform: skewX(1.5625deg) skewY(1.5625deg)
 	}
 
-	66.6 % {
+	66.6% {
 		-webkit-transform: skewX(-0.78125deg) skewY(-0.78125deg);
 		transform: skewX(-0.78125deg) skewY(-0.78125deg)
 	}
 
-	77.7 % {
+	77.7% {
 		-webkit-transform: skewX(0.39063deg) skewY(0.39063deg);
 		transform: skewX(0.39063deg) skewY(0.39063deg)
 	}
 
-	88.8 % {
+	88.8% {
 		-webkit-transform: skewX(-0.19531deg) skewY(-0.19531deg);
 		transform: skewX(-0.19531deg) skewY(-0.19531deg)
 	}
@@ -13718,37 +13746,37 @@ html body .waves-notransition {
 		transform: none
 	}
 
-	22.2 % {
+	22.2% {
 		-webkit-transform: skewX(-12.5deg) skewY(-12.5deg);
 		transform: skewX(-12.5deg) skewY(-12.5deg)
 	}
 
-	33.3 % {
+	33.3% {
 		-webkit-transform: skewX(6.25deg) skewY(6.25deg);
 		transform: skewX(6.25deg) skewY(6.25deg)
 	}
 
-	44.4 % {
+	44.4% {
 		-webkit-transform: skewX(-3.125deg) skewY(-3.125deg);
 		transform: skewX(-3.125deg) skewY(-3.125deg)
 	}
 
-	55.5 % {
+	55.5% {
 		-webkit-transform: skewX(1.5625deg) skewY(1.5625deg);
 		transform: skewX(1.5625deg) skewY(1.5625deg)
 	}
 
-	66.6 % {
+	66.6% {
 		-webkit-transform: skewX(-0.78125deg) skewY(-0.78125deg);
 		transform: skewX(-0.78125deg) skewY(-0.78125deg)
 	}
 
-	77.7 % {
+	77.7% {
 		-webkit-transform: skewX(0.39063deg) skewY(0.39063deg);
 		transform: skewX(0.39063deg) skewY(0.39063deg)
 	}
 
-	88.8 % {
+	88.8% {
 		-webkit-transform: skewX(-0.19531deg) skewY(-0.19531deg);
 		transform: skewX(-0.19531deg) skewY(-0.19531deg)
 	}

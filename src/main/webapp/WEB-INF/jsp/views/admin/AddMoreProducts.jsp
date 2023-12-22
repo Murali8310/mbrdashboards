@@ -185,7 +185,7 @@ padding:0px !important;
 .title {
    /* flex: 0 0 40%;  *//* Adjust width of the title */
     font-weight: bold;
-    margin-left: 20px;
+    margin-left: 0px;
         font-size: 18px;
     color: white;
 }
@@ -198,7 +198,7 @@ padding:0px !important;
 /* Style for the highlight */
 .highlight {
     color: white !important; /* Adjust highlight color */
-        margin-left: 3px;
+
     /* Any other highlight styles */
 }
 </style>
@@ -395,7 +395,7 @@ function getProductByIndent(){
 				 productListHTML += '	style="align-items: center;">';
 				productListHTML += '	<a onclick="decrementCount(this)"';
 				productListHTML += '		class="btn btn-sm btn-decre decreme"><i';
-			    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input style="background:white" disabled type="text"';
+			    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input style="background:white" type="text"';
 				productListHTML += '		id="countInput'
 						+ i
 						+ '" name="quantity" class="form-control count-input  bold-and-large" id="count-input"';
@@ -426,6 +426,7 @@ function getProductByIndent(){
 }
 
 	function calculateTotal() {
+		alert("calculateTotal");
 		var countInputs = document.querySelectorAll('.count-input');
 		var prices = document.querySelectorAll('.price');
 		
@@ -463,6 +464,7 @@ function getProductByIndent(){
 	
 
 	function incrementCount(element) {
+		alert("incrementCount");
 		var InputArray = [];
 		var input = element.parentNode.querySelector('.count-input');
 		var productCard = input.closest('.card');
@@ -478,6 +480,16 @@ function getProductByIndent(){
 	 			productID : productID
 	 		});
 		calculateIncrementTotal(input.value,productPrice);
+		 var pricelement = document.querySelector("#totalOutput .highlight:nth-child(2)").textContent
+		   var yearlyAmount = document.getElementById('yearlyAmount').textContent
+				if(Number(pricelement.trim()) > Number(yearlyAmount.trim())){
+					Swal.fire({
+								icon : 'error',
+				        	  title: 'Indent amount is exceeded the yearly budget!',
+								focusConfirm : false,
+							})
+							return;
+				}
 		var yearlybudget = document.querySelector("#totalOutput2 .highlight:nth-child(1)");
 		var monthlyBalanceText = $("#totalOutput2 span.highlight:eq(2)").text();
 		var monthlyBalance = parseFloat(monthlyBalanceText.replace(/[^\d.]/g, ''));
@@ -485,7 +497,7 @@ function getProductByIndent(){
 		var indentBalance = parseFloat(indentBalanceText.replace(/[^\d.]/g, ''));
 		var totalAmount = document.querySelector("#totalOutput .highlight:nth-child(4)");
 		var total = monthlyBalance -( parseFloat(totalAmount.textContent) -indentBalance);
-			
+		
 		if(total<=0){
 			Swal.fire({
 				html: `
@@ -549,7 +561,7 @@ function getProductByIndent(){
 
 	
 	function calculateIncrementTotal(value,price) {
-		
+		alert("calculateIncrementTotal");
 		console.log(value,'valuevaluevaluevaluevalue');
 		console.log(price,'price');
 		
@@ -585,16 +597,18 @@ function getProductByIndent(){
 	}
 	
 	function calculateInputTotal(value,price,prev) { 
+		alert("calculateInputTotal");
+
 		var currentTotalQuantity =0;
-		var totalQuantityElement = document.querySelector("#totalOutput .highlight:nth-child(2)");
-		var totalPriceElement = document.querySelector("#totalOutput .highlight:nth-child(1)");
+		var totalQuantityElement = document.querySelector("#totalOutput .highlight:nth-child(4)");
+		var totalPriceElement = document.querySelector("#totalOutput .highlight:nth-child(2)");
 		var currentTotalQuantity = parseInt(totalQuantityElement.textContent);
 		var currentTotalPrice = parseFloat(totalPriceElement.textContent);
 		
 		$('#totalOutput').html('');
 		var totalPrice = 0;
 		var totalQuantity = 0;
-		
+		console.log('currentTotalQuantity',currentTotalQuantity,'currentTotalPrice',currentTotalPrice)
 		var quantity = parseInt(value);
 		var cuurentQTY = quantity - prev
 		var price = parseFloat(price.replace('₹ ', ''));
@@ -612,6 +626,8 @@ function getProductByIndent(){
 	}
 	
 	function calculateDecrementTotal(value,price) {
+		alert("calculateDecrementTotal");
+
 		//alert('this is updated')
 		var totalQuantityElement = document.querySelector("#totalOutput .highlight:nth-child(4)");
 		var totalPriceElement = document.querySelector("#totalOutput .highlight:nth-child(2)");
@@ -648,7 +664,8 @@ function getProductByIndent(){
 	}
 	
 	function decrementCount(element) {
-		
+		alert("decrementCount");
+
 		//alert("decrementCount");
 		
  		var InputArray = [];
@@ -656,7 +673,7 @@ function getProductByIndent(){
 		var productCard = input.closest('.card');
 		var productName = productCard.querySelector('.product').innerText;
 		var productPrice = productCard.querySelector('.price').innerText;
-		var productID = productCard.querySelector('.productID').innerText;
+		var productID = productCard.querySelector('.productID').innerText.split(':')[1].trim();
 		var currentValue = parseInt(input.value);
 		if (currentValue > 0) {
 			input.value = currentValue - 1;
@@ -695,6 +712,8 @@ function getProductByIndent(){
 	});
 	
 	function saveInputdata(element,prev) {
+		alert("saveInputdata");
+
 		console.log(prev,'pre')
 		var InputArray = [];
 		var input = element.parentNode
@@ -702,7 +721,7 @@ function getProductByIndent(){
 		var productCard = input.closest('.card');
 		var productName = productCard.querySelector('.product').innerText;
 		var productPrice = productCard.querySelector('.price').innerText;
-		var productID = productCard.querySelector('.productID').innerText;
+		var productID = productCard.querySelector('.productID').innerText.split(':')[1].trim();
 		var currentValue = parseInt(input.value);
 		if (currentValue >= 0) {
 			input.value = currentValue ;
@@ -722,7 +741,7 @@ function getProductByIndent(){
 		var monthlyBalance = parseFloat(monthlyBalanceText.replace(/[^\d.]/g, ''));
 		var indentBalance = parseFloat(indentBalanceText.replace(/[^\d.]/g, ''));
 		//var total =monthlyBalance+indentBalance;
-		var totalAmount = document.querySelector("#totalOutput .highlight:nth-child(1)");
+		var totalAmount = document.querySelector("#totalOutput .highlight:nth-child(2)");
 		var total = monthlyBalance -( parseFloat(totalAmount.textContent) -indentBalance);
 		//alert("input"+total)
 		//alert("parseFloat(totalAmount.textContent)"+parseFloat(totalAmount.textContent))
@@ -777,7 +796,7 @@ function getProductByIndent(){
 		var productCard = input.closest('.card');
 		var productName = productCard.querySelector('.product').innerText;
 		var productPrice = productCard.querySelector('.price').innerText;
-		var productID = productCard.querySelector('.productID').innerText;
+		var productID = productCard.querySelector('.productID').innerText.split(':')[1].trim();
 		var currentValue = parseInt(input.value);
 		if (currentValue >= 0) {
 			input.value = currentValue ;
@@ -814,7 +833,7 @@ function getProductByIndent(){
 				var productCard = quantityInput.closest('.card');
 				var productName = productCard.querySelector('.product').innerText;
 				var productPrice = productCard.querySelector('.price').innerText;
-				var productID = productCard.querySelector('.productID').innerText;
+				var productID = productCard.querySelector('.productID').innerText.split(':')[1].trim();
 
 				InputArray.push({
 					productName : productName,
@@ -935,8 +954,7 @@ function getProductByIndent(){
 								.querySelector('.product').innerText;
 						var productPrice = productCard
 								.querySelector('.price').innerText;
-						var productID = productCard
-								.querySelector('.productID').innerText;
+						 var productID = productCard.querySelector('.productID').innerText.split(':')[1].trim();
 
 						InputArray.push({
 							productName : productName,
@@ -1013,7 +1031,7 @@ productListHTML += 'style="height: 240.86px;" onerror="this.src=\'' + defaultIma
 productListHTML += '	style="align-items: center;">';
 	productListHTML += '	<a onclick="decrementCount(this)"';
 	productListHTML += '		class="btn btn-sm btn-decre decreme"><i';
-productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input style="background:white"	disabled type="text"';
+productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input style="background:white" type="text"';
 	productListHTML += '		id="countInput' + i
 			+ '" name="quantity" class="form-control count-input bold-and-large" id="count-input"';
 	productListHTML += '		value="' + product[7]

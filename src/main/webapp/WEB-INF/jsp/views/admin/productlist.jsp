@@ -156,9 +156,9 @@ margin-bottom: 10px;
 	color: Teal;
 }
 
-.sidebar-item {
+/* .sidebar-item {
 	margin-left: 10px;
-}
+} */
 
 @media ( min-width : 768px) {
 	.modal-xl {
@@ -341,9 +341,9 @@ padding:0px !important;
 								<button class="btn btn-success" style="width: 100%;"
 									id="submitCategoriesID">Apply</button>
 						</label></li>
-						<li class="sidebar-item"><a
+						<li class="sidebar-item"><a id='catid'
 							class="sidebar-link has-arrow glyphicon "
-							href="javascript:void(0)" aria-expanded="false"><i
+							href="javascript:void(0)" aria-expanded="false"><i style="text-align: justify;"
 								class="fa fa-list"></i> <span class="hide-menu">Category
 							</span></a>
 							<ul aria-expanded="false" class="collapse  first-level"
@@ -378,7 +378,7 @@ padding:0px !important;
 .title {
    /* flex: 0 0 40%;  *//* Adjust width of the title */
     font-weight: bold;
-    margin-left: 30px;
+    margin-left: 7px;
 }
 
 /* Style for the value */
@@ -405,16 +405,24 @@ padding:0px !important;
     margin-bottom: 20px;
         height: 27px;">
     </div>
-    <div style="margin-left:99px;float:right">
+    
+						
+					</div>
+					
+					<!-- <div class="row" style="background-color: #01AFAE; align-items: baseline;padding-top: 5px;margin-left:13px !important;width: 94%;box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    margin-bottom: 2px;">
+    
+    <div>
 							<a href="manageByAdmin"> <input type="button"
 								class="btn btn-primary" id="expiryDatebut" value="Cancel">&nbsp;
 							</a> <a class="btn btn-success" id="submitId" onclick="submit()">Submit</a>
 						</div>
 						
-					</div>
-			<div class="page-breadcrumb" style="position: fixed;z-index: 9;width: 94%;background-color:#fff;margin-left: 13px;">
+					</div> -->
+			<div class="page-breadcrumb" style="position: fixed;z-index: 9;width: 83%;background-color:#fff;margin-left: 13px;">
 				<div class="row" >
-					<div class="col-12 d-flex no-block align-items-center">
+					<div class="col-12 d-flex no-block align-items-center">	
 						<h4 class="page-title display-6"  >Product Catalogue</h4>
 						
 						<div class="ml-auto text-right">
@@ -422,6 +430,13 @@ padding:0px !important;
 						style="text-align: end; font-size: 18px;padding-left:10px; background-color: #92e3f7;"></div> -->
 							<nav aria-label="breadcrumb">
 								<ol class="breadcrumb">
+								
+								<div   style="padding-right:30px;">
+							<a href="manageByAdmin"> <input type="button"
+								class="btn btn-primary" id="expiryDatebut" value="Cancel">&nbsp;
+							</a> <a class="btn btn-success" id="submitId" onclick="submit()">Submit</a>
+						</div>
+						
 								<li id="totalOutput" class="breadcrumb-item" style="background-color: darkblue;color: white;font-weight: bolder;"></li>
 									<li class="breadcrumb-item"><a href="landPage">Home</a></li>
 									<li class="breadcrumb-item active" aria-current="page">Product
@@ -693,12 +708,22 @@ padding:0px !important;
 				if(budgt == undefined){
 					$('#totalOutput2').html("No budget is defined");
 				}else{
-			 var output = "<div class='cell'><span class='title'>Yearly Budget:</span>₹  <span class='highlight' id='yearAmount'>"
-					+ budgt[3]  + "</span> &nbsp;&nbsp;<span class='title'>Cumulative (Incl. PO, Route) Indent Value:   ₹</span></br></br>  <span class='highlight'>"
-					 + budgt[5]   + "</span>"+ "<span class='title'> Budget bal:   ₹ </span> <span class='highlight'>"
-					+ budgt[4]   + "</span>"+ " <span class='title'>Indent Amt(Current month):   ₹</span>  <span class='highlight'>" 
+			  var output = "<div class='cell'>&nbsp;&nbsp;<span class='title'>Yearly Budget:</span>₹  <span class='highlight' id='yearAmount'>"
+					+ budgt[3]  + "</span>&nbsp;&nbsp;&nbsp;<span class='title'>Cumulative (Incl. PO, Route) Indent Value:   ₹</span><span class='highlight'>"
+					 + budgt[5]   + "</span>&nbsp;&nbsp;"+ "<span class='title'> Budget bal:   ₹ </span> <span class='highlight'>"
+					+ budgt[4]   + "</span>&nbsp;&nbsp;&nbsp;"+ " <span class='title'>Indent Amt(Current month):   ₹</span>  <span class='highlight'>" 
 					+ budgt[6]   + "</span> </div> " ;
-			$('#totalOutput2').html(output); 
+			$('#totalOutput2').html(output);  
+			
+			/*  var output = "<div class='row'><div class='col-3'>Yearly Budget(INR):</div>  <div class='col-3 highlight' id='yearAmount'>"
+					+ budgt[3]  + "</div><div class='col-3'>Cumulative (Incl. PO, Route) Indent Value:   ₹</div></div>"
+					+ "<div class='row'><div class='col-3'>"
+					 + budgt[5]   + "</div>"+ "<div class='col-3'> Budget bal:   ₹ </div> <div class='col-3'>"
+					+ budgt[4]   + "</div>"+ " <div class='col-3'>Indent Amt(Current month):   ₹</div>  <div class='col-3'>" 
+					+ budgt[6]   + "</div> </div> " ;
+			$('#totalOutput2').html(output);  */
+			
+			
 			}
 			}
 		});
@@ -1354,14 +1379,21 @@ function calculateDecrementTotal(value,price) {
 
 				}
 				
+				$(document).keypress(
+						  function(event){
+						    if (event.which == '13') {
+						      event.preventDefault();
+						    }
+						});
+			
 				$(document).on('focusin', 'input', function(){
 				    console.log("Saving value " + $(this).val());
-				    $(this).data('val', $(this).val());
+				 $(this).data('val', $(this).val());
 				}).on('change','input', function(){
 				    var prev = $(this).data('val');
-				    var current = $(this).val();
+				    var current = $(this).val();				    
 				    console.log("prev " +prev);
-				    console.log("current " + current);
+				    console.log("currentchangechangechange " + current);
 				    saveInputdata(this,prev)
 				});
 				
@@ -1398,114 +1430,29 @@ function calculateDecrementTotal(value,price) {
 				}
 				
 				function saveInputdata(element,prev) {
+					//alert("saveInputdata");
 					var noBudget =$('#totalOutput2').text();
-					if(noBudget != 'No budget is defined'){
+					
+					if(noBudget != 'No budget is defined')
+					{
 						var yearlybudget = document.querySelector("#totalOutput2 .highlight:nth-child(2)");
 						if(parseInt(yearlybudget.textContent)!=0){
 							
 							var yearlybudget = document.querySelector("#totalOutput2 .highlight:nth-child(2)");
-							var monthlyBalanceText = $("#totalOutput2 span.highlight:eq(2)").text();
+						//	var monthlyBalanceText = $("#totalOutput2 span.highlight:eq(2)").text();
 							var indentBalanceText = $("#totalOutput2 span.highlight:eq(4)").text();
-							var monthlyBalance = parseFloat(monthlyBalanceText.replace(/[^\d.]/g, ''));
+							//var monthlyBalance = parseFloat(monthlyBalanceText.replace(/[^\d.]/g, ''));
 							var indentBalance = parseFloat(indentBalanceText.replace(/[^\d.]/g, ''));
 							//var total =monthlyBalance+indentBalance;
 							var totalAmount = document.querySelector("#totalOutput .highlight:nth-child(1)");
-							var total = monthlyBalance -( parseFloat(totalAmount.textContent) -indentBalance);
+							//var total = monthlyBalance -( parseFloat(totalAmount.textContent) -indentBalance);
 							
-							if(total<=0){
-								Swal.fire({
-									html: `
-								        <div style="font-size: 1.3em;">Total indent value is exceeding monthly value.</div>
-								        <div style="font-size: 1.3em;">Do you want to continue?</div>`,
-							        icon: "warning",
-							        showCancelButton: true,
-							        confirmButtonColor: "#3085d6",
-							        cancelButtonColor: "#d33",
-							        confirmButtonText: "Yes",
-							        cancelButtonText: "No",
-							      }).then((result) => {
-							    	    if (result.isConfirmed) {
-
-							    			if(parseFloat(totalAmount.textContent)<=parseFloat(yearlybudget.textContent)){
-							    				var InputArray = [];
-												var input = element.parentNode
-														.querySelector('.count-input');
-												var productCard = input.closest('.card');
-												var productName = productCard.querySelector('.product').innerText;
-												var productPrice = productCard.querySelector('.price').innerText;
-												var productID = productCard.querySelector('.productID').innerText.split(':')[1].trim();
-												var currentValue = parseInt(input.value);
-												if (currentValue >= 0) {
-													input.value = currentValue ;
-													calculateInputTotal(input.value,productPrice,prev);
-													InputArray.push({
-														productName : productName,
-														productPrice : productPrice,
-														quantity : currentValue,
-														productID : productID
-													});
-													console.log(InputArray)
-												//	calculateTotal();
-													$.ajax({
-														type : "POST",
-														url : "tempCartIndentCreation",
-														contentType : 'application/json',
-														data : JSON.stringify(InputArray),
-
-														success : function(response) {
-
-															//var data = jQuery.parseJSON(response);
-															
-															if(response == "Indent Creation SuccessFully" ||response == 'Indent update SuccessFully'){
-														        	
-														        	
-														        	}else{
-														        		$(".loading").hide();
-														        		Swal.fire({
-													   			        	
-											 	   			        	  icon: 'error',
-											 	   			        	  text: response,
-											 	   			        	  showCloseButton: false,
-											 	   			        	  focusConfirm: false,
-											 	   			        	
-											 	   			        	})
-														        	}
-															
-														},//end of success function
-														error : function(error) {
-															$(".loading").hide();
-															Swal.fire({
-														        	
-														        	  icon: 'error',
-														        	  text: error,
-														        	  showCloseButton: false,
-														        	  focusConfirm: false,
-														        	
-														        	})
-															//$(".loading").hide();
-														}
-													})
-												}
-							    			}else{
-							    				Swal.fire({
-								    				html: `
-								    			        <div style="font-size: 1.3em;">Total indent value is exceeding yearly budget.</div>
-								    			        <div style="font-size: 1.3em;">Can not proceed</div>
-								    			        `,
-								    		        icon: "error",
-								    		      }).then((result) => {
-											    	    if (result.isConfirmed) {
-											    	    	location.reload()
-											    	    }})
-								    		    
-							    			}
-							    	        console.log("User clicked Yes");
-							    	    } else if (result.dismiss === Swal.DismissReason.cancel) {
-							    	    	getAllProducts();
-											getBudgetDetails();
-							    	    }
-							    	});
-							}else{
+							
+							
+							
+							
+							
+						
 								var InputArray = [];
 								var input = element.parentNode
 										.querySelector('.count-input');
@@ -1516,7 +1463,25 @@ function calculateDecrementTotal(value,price) {
 								var currentValue = parseInt(input.value);
 								if (currentValue >= 0) {
 									input.value = currentValue ;
+									var backpricelement = document.querySelector("#totalOutput .highlight:nth-child(1)").textContent;
+									var backqty = document.querySelector("#totalOutput .highlight:nth-child(2)").textContent;
 									calculateInputTotal(input.value,productPrice,prev);
+									var pricelement = document.querySelector("#totalOutput .highlight:nth-child(1)").textContent;
+									var yearlyAmount = document.getElementById('yearAmount').textContent;
+
+									console.log('this is checkingd',pricelement,yearlyAmount)
+									if(Number(pricelement.trim()) > Number(yearlyAmount.trim())){
+										Swal.fire({
+													icon : 'error',
+									        	  title: 'Indent amount is exceeded the yearly budget!',
+													focusConfirm : false,
+												})
+												input.value=prev;
+										document.querySelector("#totalOutput .highlight:nth-child(1)").textContent = backpricelement;
+										document.querySelector("#totalOutput .highlight:nth-child(2)").textContent = backqty;
+										return;
+									}
+									
 									InputArray.push({
 										productName : productName,
 										productPrice : productPrice,
@@ -1566,16 +1531,7 @@ function calculateDecrementTotal(value,price) {
 									})
 								}
 							}
-							}else {
-							Swal.fire({
-					        	  icon: 'error',
-					        	  text: 'No yearly Budget For this Cost center',
-					        	  showCloseButton: false,
-					        	  focusConfirm: false,
-					        	
-					        	});
-							input.value=0;
-						}
+							
 				}else {
 					Swal.fire({
 			        	  icon: 'error',
@@ -1689,6 +1645,22 @@ footer ul {
         e.value = 0;
           }
     }
-  </script>
+    </script>
+
+<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", function() {
+		    setTimeout(function() {
+		        var element = document.getElementById('catid');
+		        if (element) {
+		            element.click();
+		        }
+		        console.log('it is calling in header')
+
+		    }, 10); // Adjust the time in milliseconds (e.g., 1000 for 1 second)
+		});
+
+		</script>
+   
+
 </body>
 </html>
