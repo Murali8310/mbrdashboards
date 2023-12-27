@@ -613,7 +613,6 @@ console.log('value,price,prev',value,price,prev)
 	}
 	
 	function calculateDecrementTotal(value,price) {
-		alert("calculateDecrementTotal");
 
 		//alert('this is updated')
 		var totalQuantityElement = document.querySelector("#totalOutput .highlight:nth-child(4)");
@@ -651,8 +650,6 @@ console.log('value,price,prev',value,price,prev)
 	}
 	
 	function decrementCount(element) {
-		alert("decrementCount");
-
 		//alert("decrementCount");
 		
  		var InputArray = [];

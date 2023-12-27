@@ -1429,7 +1429,6 @@ function calculateDecrementTotal(value,price) {
 				}
 				
 				function saveInputdata(element,prev) {
-					alert("saveInputdata");
 					var noBudget =$('#totalOutput2').text();
 					
 					if(noBudget != 'No budget is defined')

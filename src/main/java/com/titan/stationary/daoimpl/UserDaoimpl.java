@@ -955,14 +955,14 @@ public class UserDaoimpl implements UserDao {
 						InsertIndenttransaction.setParameter("MONTH", MonthText);
 						InsertIndenttransaction.setParameter("COST_CENTER", userId);
 						InsertIndenttransaction.setParameter("YEAR", cFY);
-						InsertIndenttransaction.setParameter("total", total);
+						InsertIndenttransaction.setParameter("total", test);
 						InsertIndenttransaction.setParameter("DEPARTMENT", userName);
 						InsertIndenttransaction.setParameter("CREATEDBY", userId);
 						InsertIndenttransaction.setParameter("ITEM", products[i].getProductName());
 						InsertIndenttransaction.setParameter("PROD_NUMBER", products[i].getProductID());
 						InsertIndenttransaction.setParameter("TOTAL_USER_QTY",
 								Integer.valueOf(products[i].getQuantity()));
-						InsertIndenttransaction.setParameter("VALUE", stringValue);
+						InsertIndenttransaction.setParameter("VALUE", totalString);
 						InsertIndenttransaction.setParameter("CLOSE_DATE", null);
 						InsertIndenttransaction.setParameter("STATUS", "CREATED");
 						response = InsertIndenttransaction.executeUpdate();
