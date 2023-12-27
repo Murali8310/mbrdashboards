@@ -350,8 +350,8 @@ margin-top: 20px !important;
 															<td>${user[10]}</td>
 															<td>${user[11]}</td>
 															<td>${user[5]}</td>
-															<td>${user[6]}</td>
-															<td>${user[7]}</td>
+															<td style="text-align:right !important">${user[6]}</td>
+															<td style="text-align:center !important">${user[7]}</td>
 															<td>${user[8]}</td>
 															<td>${user[9]}</td>
 

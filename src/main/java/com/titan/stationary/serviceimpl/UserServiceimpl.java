@@ -921,8 +921,8 @@ public class UserServiceimpl implements Userservice {
 			
 			finalcc = "<th scope='col' class=\"headerStyles\"><b>Description</b></th><th scope='col' class=\"headerStyles\"><b>Vendors</b></th>	<th scope='col' class=\"headerStyles\"><b>UOM</b></th>"
 			+finalcc+			
-			"<th scope='col' class=\"headerStyles\"><b>User Qty</b></th><th scope='col' class=\"headerStyles\"><b>MOQ Qty</b></th><th scope='col' class=\"headerStyles\"><b>MOQ Val(RS)</b></th><th scope='col' class=\"headerStyles\"><b>Total Qty</b></th>"
-			+ "	<th scope='col' class=\"headerStyles\"><b>Total Val</b></th><th scope='col' class=\"headerStyles\"><b>Unit Price(RS)</b></th><th scope='col' class=\"headerStyles\"><b>Stock At TMT (QTY)</b></th><th scope='col' class=\"headerStyles\"><b>STK Val(RS)</b></th>";
+			"<th scope='col' class=\"headerStyles\"><b>User Qty</b></th><th scope='col' class=\"headerStyles\"><b>MOQ Qty</b></th><th scope='col' class=\"headerStyles\"><b>MOQ Val(Rs)</b></th><th scope='col' class=\"headerStyles\"><b>Total Qty</b></th>"
+			+ "	<th scope='col' class=\"headerStyles\"><b>Total Val</b></th><th scope='col' class=\"headerStyles\"><b>Unit Price(Rs)</b></th><th scope='col' class=\"headerStyles\"><b>Stock At TMT (QTY)</b></th><th scope='col' class=\"headerStyles\"><b>STK Val(Rs)</b></th>";
 			System.out.println(finalcc);
 			getAllfinalcc.add(finalcc);
 			

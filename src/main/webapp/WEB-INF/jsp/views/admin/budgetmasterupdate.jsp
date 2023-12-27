@@ -214,11 +214,10 @@ label {
 
 
 							<div class="col-md-12 oneline">
-								<div class="col-md-2"></div>
-								<div style="margin-top: 10px;" class="col-md-3">
-									<label for="CCID"> Cost Center <label
+								
+								<div style="margin-top: 10px;" class="col-md-5">
+									<label for="CCID"> Cost Center </label><label
 										style="color: red;">*</label>:
-									</label>
 								</div>
 								<div class="col-md-5">
 										<select id="CCID" name="CCID" class="form-control" disabled
@@ -232,11 +231,10 @@ label {
 							</div>
 
 							<div class="col-md-12 oneline">
-								<div class="col-md-2"></div>
-								<div style="margin-top: 10px;" class="col-md-3">
-									<label for="Year"> Year <label
+								
+								<div style="margin-top: 10px;" class="col-md-5">
+									<label for="Year"> Year </label><label
 										style="color: red;">*</label>:
-									</label>
 								</div>
 								<div class="col-md-5">
 									
@@ -252,10 +250,9 @@ label {
 							</div>
 
 							<div class="col-md-12 oneline">
-								<div class="col-md-2"></div>
-								<div style="margin-top: 10px;" class="col-md-3">
-									<label for="COSTCENTERDESC"> Cost Center Description <label style="color: red;">*</label>:
-									</label>
+								
+								<div style="margin-top: 10px;" class="col-md-5">
+									<label for="COSTCENTERDESC"> Cost Center Description </label><label style="color: red;">*</label>:
 								</div>
 								<div class="col-md-5">
 								<input type="text" id="COSTCENTERDESC" name="COSTCENTERDESC" 
@@ -271,10 +268,9 @@ label {
 								</div>
 							</div>
 							<div class="col-md-12 oneline">
-								<div class="col-md-2"></div>
-								<div style="margin-top: 10px;" class="col-md-3">
-									<label for="GL"> GL <label style="color: red;">*</label>:
-									</label>
+								
+								<div style="margin-top: 10px;" class="col-md-5">
+									<label for="GL"> GL </label><label style="color: red;">*</label>:
 								</div>
 								<div class="col-md-5">
 									<input type="text" id="GL" name="GL"  oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -282,10 +278,9 @@ label {
 								</div>
 							</div>
 							<div class="col-md-12 oneline">
-								<div class="col-md-2"></div>
-								<div style="margin-top: 10px;" class="col-md-3">
-									<label for="GLDESC"> GL Description <label style="color: red;">*</label>:
-									</label>
+								
+								<div style="margin-top: 10px;" class="col-md-5">
+									<label for="GLDESC"> GL Description </label><label style="color: red;">*</label>:
 								</div>
 								<div class="col-md-5">
 									<input type="text" id="GLDESC" name="GLDESC" 
@@ -295,10 +290,9 @@ label {
 
 
 							<div class="col-md-12 oneline">
-								<div class="col-md-2"></div>
-								<div style="margin-top: 10px;" class="col-md-3">
-									<label for="LOCATION"> Location <label style="color: red;">*</label>:
-									</label>
+								
+								<div style="margin-top: 10px;" class="col-md-5">
+									<label for="LOCATION"> Location </label><label style="color: red;">*</label>:
 								</div>
 								<div class="col-md-5">
 									<input type="text" id="LOCATION" name="LOCATION"
@@ -306,10 +300,10 @@ label {
 								</div>
 							</div>
 							<div class="col-md-12 oneline">
-								<div class="col-md-2"></div>
-								<div style="margin-top: 10px;" class="col-md-3">
-									<label for="Department"> Department <label style="color: red;">*</label>:
-									</label>
+								
+								<div style="margin-top: 10px;" class="col-md-5">
+									<label for="Department"> Department</label> <label style="color: red;">*</label>:
+									
 								</div>
 								<div class="col-md-5">
 									<input type="text" id="Department" name="Department"
@@ -318,10 +312,10 @@ label {
 							</div>
 							
 							<div class="col-md-12 oneline">
-								<div class="col-md-2"></div>
-								<div style="margin-top: 10px;" class="col-md-3">
-									<label for="YEARLYBUDGET"> Yearly Budget <label style="color: red;">*</label>:
-									</label>
+								
+								<div style="margin-top: 10px;" class="col-md-5">
+									<label for="YEARLYBUDGET"> Yearly Budget</label> <label style="color: red;">*</label>:
+									
 								</div>
 								<div class="col-md-5">
 									<input type="text" id="YEARLYBUDGET" name="YEARLYBUDGET"

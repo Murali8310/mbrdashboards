@@ -189,21 +189,17 @@ vertical-align: text-bottom ; footer {
 				<!-- Start Page Content -->
 				<!-- ============================================================== -->
 				<script
-					src="https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
-				<script>
-
-</script>
+					src="https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js">
+				</script>
 					<!-- Only show the page content if the user is an Indent Manager -->
 					<div class="card">
 						<div class="card-body">
 							<h5 class="card-title"></h5>
 							<div class="">
-
 								<div id="zero_config_wrapper"
 									class="dataTables_wrapper container-fluid dt-bootstrap4">
 									<div class="row">
 										<div class="col-sm-12">
-
 										<table id="example"
 											class="table table-striped table-bordered display nowrap"
 											style="width: 100%;">
@@ -224,14 +220,16 @@ vertical-align: text-bottom ; footer {
       padding: 8px;
       font-size: 17px;
     }
+    
     table {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     border-radious:3px;
 }
+
 .headerStyles{
  background: #01AFAE !important;
  color: white !important;      
-    font-size: 17px;
+ font-size: 17px;
  
 	}
 	.tbodyCustomColor {
@@ -239,43 +237,38 @@ vertical-align: text-bottom ; footer {
     font-size: 17px !important;
 	}
   </style>	
-											<thead class="thead-light">
-												<tr>
-													<th class='headerStyles' scope="col"><b>SL.NO</b></th>
-													<th class='headerStyles' scope="col"><b>Indent Number</b></th>
-													<th class='headerStyles' scope="col"><b>Indent creation/modification Date</b></th>
-													<th class='headerStyles' scope="col"><b>Indent By</b></th>
-													<th class='headerStyles' scope="col"><b>Status</b></th>
-													<th class='headerStyles'>Actions</th>
-												</tr>
-											</thead>
-											<tbody class="customtable">
-
-
-												<c:forEach items="${IndentList}" var="indent"
-													varStatus="loop">
-													<tr>
-														<td class='tbodyCustomColor'>${loop.index+1}</td>
-														<td class='tbodyCustomColor'>${indent[0]}</td>
-														<td class='tbodyCustomColor'>${indent[1]}</td>
-														<td class='tbodyCustomColor'>${indent[2]}</td>
-														<td class='tbodyCustomColor'>${indent[3]}</td>
-														<td class='tbodyCustomColor'></td> 
-													</tr>
-
-												</c:forEach>
+					
+					<thead class="thead-light">
+						<tr>
+							<th class='headerStyles' scope="col"><b>SL.NO</b></th>
+							<th class='headerStyles' scope="col"><b>Indent Number</b></th>
+							<th class='headerStyles' scope="col"><b>Indent Date</b></th>
+							<th class='headerStyles' scope="col"><b>Indent By</b></th>
+							<th class='headerStyles' scope="col"><b>Status</b></th>
+							<th class='headerStyles' scope="col">Actions</th>
+						</tr>
+					</thead>
+					<tbody class="customtable">
+						<c:forEach items="${IndentList}" var="indent"
+							varStatus="loop">
+							<tr>
+								<td class='tbodyCustomColor'>${loop.index+1}</td>
+								<td class='tbodyCustomColor'>${indent[0]}</td>
+								<td class='tbodyCustomColor'>${indent[1]}</td>
+								<td class='tbodyCustomColor'>${indent[2]}</td>
+								<td class='tbodyCustomColor'>${indent[3]}</td>
+								<td class='tbodyCustomColor'></td> 
+							</tr>
+												
+											</c:forEach>
 											</tbody>
 										</table>
-
 									</div>
 								</div>
 							</div>
-
 							</div>
 						</div>
-
 					</div>
-
 				<c:if test="${role != 'Indent Manager'}">
 					<!-- Show an access denied message or redirect if the user is not an Indent Manager -->
 					<div class="card">
@@ -285,10 +278,8 @@ vertical-align: text-bottom ; footer {
 						</div>
 					</div>
 				</c:if>
-
 			</div>
 		</div>
-
 	</div>
 	
 	<div class="modal fade" id="myModal" role="dialog">
@@ -317,8 +308,6 @@ vertical-align: text-bottom ; footer {
 	<!-- 	<footer class="footer text-center">
 				<span>2019 &copy Titan Company</span>
 			</footer> -->
-	</div>
-	</div>
 
 	<script src="assets/libs/jquery/dist/jquery.min.js"></script>
 	<script src="assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -332,8 +321,8 @@ vertical-align: text-bottom ; footer {
 		src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
 	<script type="text/javascript"
 		src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-	<script type="text/javascript"
-		src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+	<!-- <script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script> -->
 	<script type="text/javascript"
 		src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 	<script type="text/javascript"
@@ -354,11 +343,7 @@ function detailsReport(data){
 </script>
 
 	<script>
-
-
-
-$(document).ready(function() {
-	  
+	document.addEventListener("DOMContentLoaded", function() {	
 	var table=  $('#example').DataTable( {
 		scrollX:        true,
         scrollCollapse: true,
@@ -390,16 +375,17 @@ $(document).ready(function() {
         ],
         responsive: true,
         "columns" : [{
-			"data" : "SNO"
+			"data" : "SL.NO"
 		},{
-			"data" : "Indent Document Number"
+			"data" : "Indent Number"
 		}, {
-			"data" : "Indent Document Date"
+			"data" : "Indent Date"
 		}, {
 			"data" : "Indent By"
 		},{
 			"data" : "Status"
-		} ,{"targets": -1, // The last column (Actions)
+		} ,{
+			"targets": -1, // The last column (Actions)
             "data": null,
             "render": function(data, type, row) {
                 var status = row['Status'];
@@ -418,37 +404,31 @@ $(document).ready(function() {
     ],
   
 	} );
-	
-	
     table.buttons().container().appendTo('#example_wrapper .col-md-6:eq(0)' );
-    
     
     $('#example').on('click', '.Edit-btn', function () {
     	 var table = $('#example').DataTable();
     	    var rowIdx = $(this).closest('tr').index();
     	    var rowData = table.row(rowIdx).data();
-    	    var indentDocumentNumber = rowData['Indent Document Number'];
+    	    var indentDocumentNumber = rowData['Indent Number'];
     	 
     	    sessionStorage.setItem('id', indentDocumentNumber);
         window.location.href = 'indentTransactionUpdates';
         
     });
-    
-    
+
     $('#example').on('click', '.view-btn', function () {
     	 var table = $('#example').DataTable();
     	    var rowIdx = $(this).closest('tr').index();
     	    var rowData = table.row(rowIdx).data();
-    	    var indentDocumentNumber = rowData['Indent Document Number'];
+    	    var indentDocumentNumber = rowData['Indent Number'];
     	 
     	    sessionStorage.setItem('id', indentDocumentNumber);
         window.location.href = 'indentTransactionView';
         
     });
-   
   
 });
-
 </script>
 </body>
 </html>

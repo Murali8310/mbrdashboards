@@ -334,13 +334,13 @@ table.dataTable tbody tr.selected a {
 													<th scope="col" class='headerStyles'><b>CC${costcenter}</b></th>
 													</c:forEach> 
 													<th scope="col" class='headerStyles'><b>Final Qty</b></th>
-													<th scope="col" class='headerStyles'><b>Final Val(RS)</b></th>
-													<th scope="col" class='headerStyles'><b>Unit Price(RS)</b></th>													
+													<th scope="col" class='headerStyles'><b>Final Val(Rs)</b></th>
+													<th scope="col" class='headerStyles'><b>Unit Price(Rs)</b></th>													
 													<!-- Receipt -->
 													<th scope="col" class='headerStyles'><b>Receipt Qty</b></th>
 													<th scope="col" class='headerStyles'><b>Receipt Val</b></th>
 													<th scope="col" class='headerStyles'><b>Stock At DIST.Team (QTY)</b></th>
-													<th scope="col" class='headerStyles'><b>STK Val(RS)</b></th>
+													<th scope="col" class='headerStyles'><b>STK Val(Rs)</b></th>
 													
 												</tr>
 											</thead>
@@ -358,13 +358,13 @@ table.dataTable tbody tr.selected a {
 													
 													</c:forEach>													
 														<td class='tbodyCustomColor'>${user[collectionSize + 8]}</td>
-														<td class='tbodyCustomColor'>${user[7]*user[6]}</td>
-														<td class='tbodyCustomColor'>${user[collectionSize + 3]}</td>
+														<td class='tbodyCustomColor' style="text-align:right !important">${user[7]*user[6]}</td>
+														<td class='tbodyCustomColor' style="text-align:right !important">${user[collectionSize + 3]}</td>
 														<!-- Receipt -->
 														<td class="editable-cell tbodyCustomColor">${user[collectionSize + 8]}</td>
-														<td class='tbodyCustomColor '></td>
-														<td class="editable-cell tbodyCustomColor">${user[collectionSize + 6]}</td>
-														<td class='tbodyCustomColor'></td>
+														<td class='tbodyCustomColor ' style="text-align:right !important"></td>
+														<td class="editable-cell tbodyCustomColor" style="text-align:center !important">${user[collectionSize + 6]}</td>
+														<td class='tbodyCustomColor' style="text-align:right !important"></td>
 
 													</tr>
 
@@ -382,14 +382,14 @@ table.dataTable tbody tr.selected a {
 														<th>${foot[loop2.index + 1]}</th>
 													</c:forEach> 
 														<th id="finalQty"></th>
-														<th id="finalValue"></th>
-														<th></th>
+														<th id="finalValue" style="text-align:right !important"></th>
+														<th style="text-align:center !important"></th>
 														<th id="ReciptQty"></th>
 
 														<!-- Receipt -->
-														<th id="Reciptvalue"></th>
-														<th id="stockQty"></th>
-														<th id="stockValue"></th>
+														<th id="Reciptvalue" style="text-align:right !important"></th>
+														<th id="stockQty" style="text-align:center !important"></th>
+														<th id="stockValue" style="text-align:right !important"></th>
 													</tr>
 												</c:forEach>
 											</tfoot>
@@ -804,11 +804,11 @@ console.log("murali checkking",data)
                     const costcenter = key;
                     const description = item["Description"];
                     const quantity = item[key];
-                    const unitPrice = item["Unit Price(RS)"];
+                    const unitPrice = item["Unit Price(Rs)"];
                     const MoqQty = item["MOQ Qty"];
                     const MOQValue = item["MOQ Val(RS)"];
                     const TMTQty = item["Stock At TMT (QTY)"];
-                    const TMTValue = item["STK Val(RS)"];
+                    const TMTValue = item["STK Val(Rs)"];
                     const receivedqty = item["Receipt Qty"];
                     const receivedvalue = item["Receipt Val"];
                     const userQuantity = item["User Qty"];

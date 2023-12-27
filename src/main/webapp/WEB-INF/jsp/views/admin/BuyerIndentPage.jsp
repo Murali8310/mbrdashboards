@@ -345,12 +345,12 @@ vertical-align: text-bottom ; footer {
 														<td class="editable-cell tbodyCustomColor remove">
 															${user[collectionSize + 4]}	
 														</td>
-															<td class='tbodyCustomColor'>${user[collectionSize + 3] * user[collectionSize + 4]}</td>
+															<td class='tbodyCustomColor' style="text-align:right">${user[collectionSize + 3] * user[collectionSize + 4]}</td>
 															<td class='tbodyCustomColor'></td>
-															<td class='tbodyCustomColor'></td>
-															<td class='tbodyCustomColor'>${user[collectionSize + 3]}</td>
+															<td class='tbodyCustomColor' style="text-align:right"></td>
+															<td class='tbodyCustomColor' style="text-align:center">${user[collectionSize + 3]}</td>
 															<td class='tbodyCustomColor'>${user[collectionSize + 6]}</td>
-															<td class='tbodyCustomColor'>${user[collectionSize + 7]}</td>
+															<td class='tbodyCustomColor' style="text-align:right" >${user[collectionSize + 7]}</td>
  </tr>
 													</c:forEach>
 												</tbody>
@@ -364,12 +364,12 @@ vertical-align: text-bottom ; footer {
 													</c:forEach>	
 																												<th class='tbodyCustomColor' id="footerUserQty"></th>
 																												<th class='tbodyCustomColor' id="footerMoqty"></th>
-																												<th class='tbodyCustomColor' id="footerMoqValue"></th>
+																												<th class='tbodyCustomColor' style="text-align:right" id="footerMoqValue"></th>
 																												<th class='tbodyCustomColor' id="footerTotalQty"	></th>
-																												<th class='tbodyCustomColor'  id="footerTotalValue"></th>
-																												<th class='tbodyCustomColor'></th>
+																												<th class='tbodyCustomColor' style="text-align:right"  id="footerTotalValue"></th>
+																												<th class='tbodyCustomColor' style="text-align:center"></th>
 																												<th class='tbodyCustomColor' id="footerStockQty"></th>
-																												<th class='tbodyCustomColor' id="footerStockValue"></th>
+																												<th class='tbodyCustomColor' style="text-align:right" id="footerStockValue"></th>
 														
 
 												</tr>
@@ -915,11 +915,11 @@ $(document).ready(function () {
                     const costcenter = key;
                     const description = item["Description"];
                     const quantity = item[key];
-                    const unitPrice = item["Unit Price(RS)"];
+                    const unitPrice = item["Unit Price(Rs)"];
                     const MoqQty = item["MOQ Qty"];
-                    const MOQValue = item["MOQ Val(RS)"];
+                    const MOQValue = item["MOQ Val(Rs)"];
                     const TMTQty = item["Stock At TMT (QTY)"];
-                    const TMTValue = item["STK Val(RS)"];
+                    const TMTValue = item["STK Val(Rs)"];
  
                     
                    if(parseInt(quantity)>=0){

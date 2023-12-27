@@ -230,8 +230,8 @@ vertical-align: text-bottom ; footer {
 														<td class='tbodyCustomColor' >${indent[0]}</td>
 														<td class='tbodyCustomColor'>${indent[1]}</td>
 														<td class='tbodyCustomColor'>${indent[3]}</td>
-														<td class='tbodyCustomColor'>${indent[4]}</td>
-														<td class='tbodyCustomColor'>${indent[5]}</td>
+														<td class='tbodyCustomColor' style="text-align:right !important">${indent[4]}</td>
+														<td class='tbodyCustomColor' style="text-align:center !important">${indent[5]}</td>
 														<td class='tbodyCustomColor'>${indent[6]}</td>
 														<td class='tbodyCustomColor'></td> 
 													</tr>
@@ -329,7 +329,7 @@ vertical-align: text-bottom ; footer {
      }
 
 
-$(document).ready(function() {
+	 document.addEventListener("DOMContentLoaded", function() {	
 	//location.reload();
 	var table=  $('#example').DataTable( {
 		scrollX:        true,

@@ -484,7 +484,7 @@ public class UserController {
 			CategoryList = userService.getCategoryList();
 			System.out.println("password 2 :  " + AllProducts);
 			System.out.println("CategoryList :  " + CategoryList);
-			// model.addAttribute("budegetDetails", budegetDetails);
+		//	model.addAttribute("budegetDetails", budegetDetails);
 			model.addAttribute("AllProducts", AllProducts);
 			model.addAttribute("CategoryList", CategoryList);
 
@@ -1315,13 +1315,13 @@ System.err.println("murali debugger");
 		String loginId = (String) userMap.get("login_id");
 		String userId = (String) userMap.get("user_id");
 		String userName = (String) userMap.get("storeCode");
-System.out.println("this is for checking"+products);
+		System.out.println("this is for checking"+products);
 		String IndentCreation = userService.DistributionPageSave(products, loginId, userId, userName);
 		return IndentCreation;
 	}
 	
 	
-		@RequestMapping(value = "updatepasswordn", method = RequestMethod.POST)
+	@RequestMapping(value = "updatepasswordn", method = RequestMethod.POST)
 	public ModelAndView updatepasswordn(@RequestParam String login_id, @RequestParam String oldPwd,
 			@RequestParam String newPwd,@RequestParam String email, HttpServletRequest request, RedirectAttributes redirect) throws Exception {
 			HttpSession session = request.getSession();

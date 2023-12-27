@@ -261,8 +261,8 @@ vertical-align: text-bottom ; footer {
 													    <td class="tbodyCustomColor">${list[1] }</td>
 														<td class="tbodyCustomColor">${list[0] }</td>
 														<td class="tbodyCustomColor">${list[2] }</td>
-														<td class="tbodyCustomColor">${list[3] }</td>
-														<td class="tbodyCustomColor">${list[4] }</td>
+														<td class="tbodyCustomColor" style="text-align:right !important">${list[3] }</td>
+														<td class="tbodyCustomColor" style="text-align:center !important">${list[4] }</td>
 														<td class="tbodyCustomColor">${list[5] }</td>
 														<td class="tbodyCustomColor"></td> 
 													</tr>
@@ -329,8 +329,7 @@ vertical-align: text-bottom ; footer {
 	</script>
 	
 	<script>
-$(document).ready(function() {
-	var table=  $('#example').DataTable( {
+	document.addEventListener("DOMContentLoaded", function() {	var table=  $('#example').DataTable( {
 		scrollX:        true,
         scrollCollapse: true,
         paging:        true,

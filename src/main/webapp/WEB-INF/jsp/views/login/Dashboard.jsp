@@ -235,6 +235,10 @@ inset: auto 0px 1px;
   box-shadow: 15px 15px 30px #bebebe,
              -15px -15px 30px #ffffff;
 }
+
+.apexcharts-legend.apx-legend-position-bottom.apexcharts-align-center, .apexcharts-legend.apx-legend-position-top.apexcharts-align-center {
+    justify-content: left !important;
+}
 </style>
 </head>
 

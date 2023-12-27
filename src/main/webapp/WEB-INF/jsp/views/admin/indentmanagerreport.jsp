@@ -351,8 +351,8 @@ border-color: #6c757d;
 														<td class='tbodyCustomColor'>${user[10]}</td>
 														<td class='tbodyCustomColor'>${user[11]}</td>
 														<td class='tbodyCustomColor' >${user[5]}</td>
-														<td class='tbodyCustomColor'>${user[6]}</td>
-														<td class='tbodyCustomColor'>${user[7]}</td>
+														<td class='tbodyCustomColor' style="text-align:right">${user[6]}</td>
+														<td class='tbodyCustomColor' style="text-align:center">${user[7]}</td>
 														<td class='tbodyCustomColor'>${user[8]}</td>
 														<td class='tbodyCustomColor'>${user[9]}</td>
 

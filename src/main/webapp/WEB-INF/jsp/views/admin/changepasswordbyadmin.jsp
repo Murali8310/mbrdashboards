@@ -461,9 +461,7 @@ $(document).ready(function() {
 	};
 </script>
 <script type="text/javascript">
-	$(document)
-			.ready(
-					function() {
+document.addEventListener("DOMContentLoaded", function() {
 
 						// Setup - add a text input to each footer cell
 

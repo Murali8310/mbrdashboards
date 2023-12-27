@@ -233,7 +233,7 @@ tr td:first-child:before
 													<th class="headerStyles" scope="col"><b>Cost Center Description</b></th>
 													<th class="headerStyles" scope="col"><b>Location</b></th>
 											        <th  class="headerStyles" scope="col"><b>CC Owner</b></th>
-													<th class="headerStyles" scope="col"><b>Yearly Budget(Rs.lak)</b></th>
+													<th class="headerStyles" scope="col"><b>Yearly Budget(Rs)</b></th>
 											       <th class="headerStyles" scope="col"><b>Year</b></th>
 													<th class="headerStyles">Actions</th>
 												</tr>
@@ -250,8 +250,8 @@ tr td:first-child:before
 														<td class="tbodyCustomColor">${indent[2]}</td>
 														<td class="tbodyCustomColor">${indent[5]}</td>
 														<td class="tbodyCustomColor">${indent[7]}</td>
-													    <td class="tbodyCustomColor">${indent[6]}</td>
-														<td class="tbodyCustomColor">${indent[1]}</td>
+													    <td class="tbodyCustomColor" style="text-align:right !important">${indent[6]}</td>
+														<td class="tbodyCustomColor" style="text-align:center !important">${indent[1]}</td>
 														<td class="tbodyCustomColor"></td> 
 													</tr>
             <c:set var="serialNumber" value="${serialNumber + 1}" /> <!-- Increment the serial number -->
@@ -348,7 +348,7 @@ tr td:first-child:before
      }
 
 
-$(document).ready(function() {
+	 document.addEventListener("DOMContentLoaded", function() {
 	  
 	var table=  $('#example').DataTable( {
 		scrollX:        true,

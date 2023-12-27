@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page session="true"%>
@@ -85,13 +86,11 @@ margin-bottom: 10px;
 }
 
 .highlight {
-	background-color: yellow;
-	font-weight: bold;
-	margin-right: 30px;
+
 }
 
 .highlight1 {
-}
+	}
 
 .bold-and-large {
   font-weight: 800;
@@ -132,7 +131,7 @@ padding:0px !important;
 		
 		<jsp:include page="/WEB-INF/jsp/views/header/header.jsp"></jsp:include>
 		
-		<aside class="left-sidebar" data-sidebarbg="skin5" style="position:fixed"	>
+		<aside class="left-sidebar" style="position:fixed" data-sidebarbg="skin5">
 			<!-- Sidebar scroll-->
 			<div class="scroll-sidebar">
 				<!-- Sidebar navigation-->
@@ -170,29 +169,18 @@ padding:0px !important;
 			<!-- End Sidebar scroll-->
 		</aside>
 		<div class="page-wrapper" style="background-color: #d9d9cd;overflow:scroll;">
-	<style>
 	
-	.page-title {
-    color: white !important;
-    background: #01AFAE;
-    box-shadow: 1px 1px;
-    padding: 3px;
-    border-radius: 3px;
-}
-	</style>
 			<div class="page-breadcrumb" >
 				
 				<div class="row">
 					<div class="col-12 d-flex no-block align-items-center">
-						<h4 class="page-title">Indent View</h4>
-						<div class="ml-auto text-right" style='background: #01AFAE;
-    padding: 1px 4px;
-    border-radius: 5px;'>
+						<h4 class="page-title">Indent Update</h4>
+						<div class="ml-auto text-right">
 							<nav aria-label="breadcrumb">
 								<ol class="breadcrumb">
-									<li class="breadcrumb-item" style='color:white'><a style='color:white' href="landPage">Home</a></li>
-									<li class="breadcrumb-item active" style='color:white' aria-current="page">
-										Indent View <!-- <a href="productDetails">Product Details</a> -->
+									<li class="breadcrumb-item"><a href="landPage">Home</a></li>
+									<li class="breadcrumb-item active" aria-current="page">
+										Indent Update <!-- <a href="productDetails">Product Details</a> -->
 									</li>
 								</ol>
 							</nav>
@@ -200,13 +188,12 @@ padding:0px !important;
 					</div>
 				</div>
 			</div>
-				<style>
+			<style>
 						/* Style for the cell */
 .cell {
     display: flex;
     flex-wrap: wrap;
     margin-bottom: 10px;
-    
 }
 
 /* Style for the title */
@@ -214,8 +201,6 @@ padding:0px !important;
    /* flex: 0 0 40%;  *//* Adjust width of the title */
     font-weight: bold;
     margin-left: 30px;
-        font-size: 18px;
-    color: white;
 }
 
 /* Style for the value */
@@ -225,115 +210,59 @@ padding:0px !important;
 
 /* Style for the highlight */
 .highlight {
-    color: white !important; /* Adjust highlight color */
+    color: white; /* Adjust highlight color */
         margin-left: 3px;
     /* Any other highlight styles */
 }
-.product {
-text-align: start;
-font-weight:600;
-}
-h5 label {
-font-weight:600 !important;
-
-}
 </style>
 			<div class="container-fluid2 card-total card-static">
-				<div id="totalOutput2" class="row"style="background-color: #01AFAE; align-items: baseline;padding-top: 5px;margin-left:13px !important;width: 98%;box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+				<div class="row" style="background-color: #01AFAE; align-items: baseline;padding-top: 5px;margin-left:13px !important;width: 98%;box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
     border-radius: 10px;
     margin-bottom: 2px;">
-				<div id="totalOutput2" class="row"style="background-color: #01AFAE; align-items: baseline;padding-top: 5px;margin-left:13px !important;width: 98%;box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+				<div id="totalOutput2"
+							style="text-align: start; font-size: 18px; background-color: #01AFAE;color: white;padding: 6px;
     border-radius: 10px;
-    margin-bottom: 2px;"></div>
+    margin-bottom: 20px;
+        height: 27px;"></div>
 				</div>
-					<div class="cell" style="text-align: start; font-size: 18px; background-color: #01AFAE;color: white;padding: 11px;
+					<div class="cell" style="text-align: start; font-size: 18px; background-color: #01AFAE;color: white;padding: 6px;
     border-radius: 10px;
     margin-bottom: 20px;
         height: 49px;
     width: 98%;
     margin-left: 13px;">
-						<div class="col-md-4 col-lg-4 col-12" id="IndentNumber"
+						<div id="IndentNumber"
 							style="text-align: start; font-size: 18px;"></div>
-						<div class="col-md-4 col-lg-4 col-12" id="totalOutput"
+						<div id="totalOutput"
 							style="text-align: start; font-size: 18px; "></div>
-						<div class="col-md-4 col-lg-4 col-12" style="text-align: end;">
-					<!-- 	<a href="AddMoreProducts"> <input type="button"
+						<div class="col-md-4 col-lg-4 col-12" style="text-align: end;float: right;">
+						<a href="AddMoreProducts"> <input type="button"
 								class="btn btn-primary" id="expiryDatebut" value="Add More Products">
-							</a>  -->
+							</a> 
 							<a href="IndentList"> <input type="button"
-								class="btn btn-warning" id="expiryDatebut" value="Cancel">
+								class="btn btn-warning" id="expiryDatebut" value="Back">
 							</a>
 							 <!-- <a class="btn btn-success" id="submitId" onclick="submit()">Update</a> -->
 						</div>
-				</div>
-				<div class="row el-element-overlay" id="el-element-overlay"></div>
-					<style>
-	.footer {
-		background-color: Teal;
-	padding-bottom: 1px;
-	height: 300px;
-	}
-
-	footer h6 {
-		color: white;
-		text-transform: uppercase;
-		text-align: left;
-	}
-
-	footer a {
-		text-transform: uppercase;
-		color: white;
-		text-align: left;
-	}
-
-	footer li {
-		list-style-type: none;
-		text-transform: uppercase;
-		text-align: left;
-	}
-
-	footer ul {
-		padding-left: 0px;
-	}
-
-	.footer-copyright {
-		color: #fffffff0;
-		text-align: center;
-		font-weight: 600;
-		font-size: 11px;
-	}
-
-	.footer-copyright:hover {
-		color: white;
-	}
-
-	.footer-copyright span:hover {
-		color: Teal;
-		font-weight: bolder;
-	}
-	</style>
-
-
-
-
-				<footer class="footer">
-
-					<div class="footer-copyright">
-						<p>
-							© 2019 <span>TITAN COMPANY LTD.</span> ALL RIGHTS RESERVED.
-						</p>
 					</div>
-				</footer>
-	<!--	<div style="float: right; margin-bottom: 31px;">
+				<div class="row el-element-overlay"  id="el-element-overlay"></div>
+    <footer class="footer">
+				<div class="footer-copyright">
+					<p>
+						© 2019 <span>TITAN COMPANY LTD.</span> ALL RIGHTS RESERVED.
+					</p>
+				</div>
+			</footer>
+				<!-- <div style="float: right; margin-bottom: 31px;">
 					<div class="row">
 						<div class="col-md-12 col-lg-12 col-12">
-						 <a href="AddMoreProducts"> <input type="button"
+						<a href="AddMoreProducts"> <input type="button"
 								class="btn btn-primary" id="expiryDatebut" value="Add More Products">
-							</a>  
-							<a href="IndentList"> <input type="button"
-								class="btn btn-warning" id="expiryDatebut" value="Cancelcccccc">
 							</a> 
-							 <a class="btn btn-success" id="submitId" onclick="submit()">Update</a> 
+							<a href="IndentList"> <input type="button"
+								class="btn btn-warning" id="expiryDatebut" value="Back">
+							</a> 
+							<a class="btn btn-success" id="submitId" onclick="submit()">Update</a>
 
 						</div>
 					</div>
@@ -380,7 +309,7 @@ function getProduct(id){
 				var product = response[i];
 				/* const productImage = document
 						.getElementById("productImage"); */
-				 var output = "<span class='title' style='margin-left:1px !important'>Indent Number: </span><span class='highlight1'>" +  response[0][8]
+				 var output = "<span class='title'>Indent Number:</span> <span class='highlight1'>" +  response[0][8]
 					+ "</span> ";
 			$('#IndentNumber').html(output);
 			if(product[7]!=0){
@@ -400,28 +329,32 @@ function getProduct(id){
 				productListHTML += '	<div class="el-overlay"></div>';
 				productListHTML += '</div>';
 				productListHTML += ' <div class="el-card-content " style="padding-left: 10px">';
-				productListHTML += '<h5 class="product" class="m-b-0" style="text-align: start;">'
+				productListHTML += '<h5 class="product" class="m-b-0" style="text-align: start;font-weight:600">'
 						+ product[1] + '</h5>';
 
 				productListHTML += '<div class="row">';
 				productListHTML += '<div class="col-7">';
-				productListHTML += '	<h5 class="m-b-0" style="text-align: start;">';
-				productListHTML += '		<label class="price" id="price">₹ '
+				productListHTML += '	<h5 class="m-b-0" style="text-align: start;font-weight: 600">';
+				productListHTML += '		<label class="price" style="font-weight: 600 !important" id="price">₹ '
 						+ product[4] + '</label>';
-				productListHTML += '		<label style="border:1px solid lightgrey;left:5px;">UOM : '
+				productListHTML += '		<label style="border:1px solid lightgrey;left:5px;font-weight : 600 !important">UOM : '
 						+ product[5] + '</label>';
-				productListHTML += '		<label class="productID" style="left:5px;">Product ID : '
+				productListHTML += '		<label class="productID" style="left:5px;font-weight: 600 !important">Product ID : '
 						+ product[0] + '</label>';
 				productListHTML += '	</h5>';
 				productListHTML += '</div>';
 				productListHTML += '<div class="col-5">';
 				productListHTML += '	<div class="form-group d-flex justify-content-between"';
 				 productListHTML += '	style="align-items: center;">';
-			    productListHTML += ' <input disabled type="text"';
+				productListHTML += '	<a onclick="decrementCount(this)"';
+				productListHTML += '		class="btn btn-sm btn-decre decreme"><i';
+			    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input style="background:white" disabled type="text"';
 				productListHTML += '		id="countInput'
 						+ i
 						+ '" name="quantity" class="form-control count-input bold-and-large"';
-				productListHTML += '		value="' + product[7] + '" onchange="saveInputdata(this)"> ';
+				productListHTML += '		value="' + product[7] + '" > <a';
+				productListHTML += '			onclick="incrementCount(this)" class="btn bnt-sm btn-incre "><i';
+				productListHTML += '			class="fas fa-plus-square fa-2x"></i></a>';
 				productListHTML += '	</div>';
 				productListHTML += '</div>';
 				productListHTML += '</div>';
@@ -446,6 +379,7 @@ function getProduct(id){
 
 	function calculateTotal() {
 		//alert("HI");
+		console.log()
 		var countInputs = document.querySelectorAll('.count-input');
 		var prices = document.querySelectorAll('.price');
 		$('#totalOutput').html('');
@@ -459,8 +393,8 @@ function getProduct(id){
 			totalQuantity += quantity;
 		}
 		totalPrice = totalPrice.toFixed(2);
-		var output = "<span class='title'>Indent Value: ₹</span><span>" + totalPrice
-				+ "</span><span class='title' style='margin-left: 22px;'> Indent Qty:</span> <span>" + totalQuantity
+		var output = "<span class='title' style='background: red;padding: 2px;border-radius: 3px;' >Indent Value: ₹</span><span style='background: red;padding: 2px;border-radius: 3px;' class='highlight'>" + totalPrice
+				+ "</span> <span style='background: red;padding: 2px;border-radius: 3px;' class='title'>Indent Qty:</span> <span style='background: red;padding: 2px;border-radius: 3px;' class='highlight'>" + totalQuantity
 				+ "</span>";
 		$('#totalOutput').html(output);
 
@@ -469,9 +403,45 @@ function getProduct(id){
 	
 	var IndentNumber = sessionStorage.getItem('id');
 	function incrementCount(element) {
-			var yearlybudget = document.querySelector("#totalOutput2 .highlight:nth-child(1)");
-			var totalAmount = document.querySelector("#totalOutput .highlight:nth-child(1)");
-			if((parseFloat(yearlybudget.textContent)/12)<=parseFloat(totalAmount.textContent)){
+		var InputArray = [];
+		var input = element.parentNode.querySelector('.count-input');
+		var productCard = input.closest('.card');
+		var productName = productCard.querySelector('.product').innerText;
+		var productPrice = productCard.querySelector('.price').innerText;
+		var productID = productCard.querySelector('.productID').innerText;
+		var currentValue = parseInt(input.value);
+		input.value = currentValue + 1;
+		 InputArray.push({
+				productName : productName,
+				productPrice : productPrice,
+				quantity : currentValue + 1,
+				productID : productID
+			});
+		calculateTotal();
+			var yearlybudget = document.querySelector("#totalOutput2 .highlight:nth-child(2)");
+			var totalAmount = document.querySelector("#totalOutput .highlight:nth-child(2)");
+			var monthlyBalanceText = $("#totalOutput2 span.highlight:eq(2)").text();
+			var monthlyBalance = parseFloat(monthlyBalanceText.replace(/[^\d.]/g, ''));
+			var indentBalanceText = $("#totalOutput2 span.highlight:eq(4)").text();
+			var indentBalance = parseFloat(indentBalanceText.replace(/[^\d.]/g, ''));
+			var total = monthlyBalance -( parseFloat(totalAmount.textContent) -indentBalance);
+			//alert(total)
+			var pricelement = document.querySelector("#totalOutput .highlight:nth-child(2)").textContent;
+			var yearlyAmount = document.getElementById('yearAmount').textContent;
+
+			console.log('this is checking',pricelement,yearlyAmount)
+			
+			if(Number(pricelement.trim()) > Number(yearlyAmount.trim())){
+				Swal.fire({
+							icon : 'error',
+			        	  title: 'Indent amount is exceeded the yearly budget!',
+							focusConfirm : false,
+						})
+						return;
+			}
+			
+			
+			if(total<=0){
 				
 				Swal.fire({
 					html: `
@@ -485,24 +455,10 @@ function getProduct(id){
 			        cancelButtonText: "No",
 			      }).then((result) => {
 			    	    if (result.isConfirmed) {
-			    	    	if(parseFloat(totalAmount.textContent)<=parseFloat(yearlybudget.textContent)){
-			    	    	var InputArray = [];
-			    			var input = element.parentNode.querySelector('.count-input');
-			    			var productCard = input.closest('.card');
-			    			var productName = productCard.querySelector('.product').innerText;
-			    			var productPrice = productCard.querySelector('.price').innerText;
-			    			var productID = productCard.querySelector('.productID').innerText;
-			    			var currentValue = parseInt(input.value);
-			    			input.value = currentValue + 1;
-			    			//calculateTotal();
-			    			 InputArray.push({
-			    				productName : productName,
-			    				productPrice : productPrice,
-			    				quantity : currentValue + 1,
-			    				productID : productID
-			    			});
+			    	    	
+			    			
 			    			//console.log(InputArray, 'InputArrayInputArrayInputArray')
-			    			calculateTotal();
+			    			
 
 			    			$.ajax({
 			    				type : "POST",
@@ -515,40 +471,14 @@ function getProduct(id){
 			    					getBudgetDetails();
 			    				}
 			    			}) 
-			    	    	}else {
-			    	    		Swal.fire({
-				    				html: `
-				    			        <div style="font-size: 1.3em;">Total indent value is exceeding yearly budget.</div>
-				    			        <div style="font-size: 1.3em;">Can not proceed</div>
-				    			        `,
-				    		        icon: "error",
-				    		      })
-			    	    	}
 			    	    } else if (result.dismiss === Swal.DismissReason.cancel) {
-			    	        // User clicked "No" - execute this condition
-			    	        // Place your code here for the "No" action
-			    	        console.log("User clicked No");
+			    	    	getProduct(IndentNumber);
+	    					getBudgetDetails();
 			    	    }
 			    	});
 			}else{
 				
-				var InputArray = [];
-				var input = element.parentNode.querySelector('.count-input');
-				var productCard = input.closest('.card');
-				var productName = productCard.querySelector('.product').innerText;
-				var productPrice = productCard.querySelector('.price').innerText;
-				var productID = productCard.querySelector('.productID').innerText;
-				var currentValue = parseInt(input.value);
-				input.value = currentValue + 1;
-				//calculateTotal();
-				 InputArray.push({
-					productName : productName,
-					productPrice : productPrice,
-					quantity : currentValue + 1,
-					productID : productID
-				});
-				//console.log(InputArray, 'InputArrayInputArrayInputArray')
-				calculateTotal();
+			
 
 				$.ajax({
 					type : "POST",
@@ -604,11 +534,69 @@ function getProduct(id){
 			})
 		} 
 	}
+
+	$(document).on('focusin', 'input', function(){
+	    console.log("Saving value " + $(this).val());
+	    $(this).data('val', $(this).val());
+	}).on('change','input', function(){
+	    var prev = $(this).data('val');
+	    var current = $(this).val();
+	    console.log("prev " +prev);
+	    console.log("current " + current);
+	    saveInputdata(this,prev)
+	});
 	
-	function saveInputdata(element) {
-		var yearlybudget = document.querySelector("#totalOutput2 .highlight:nth-child(1)");
+	function calculateInputTotal(value,price,prev) { 
+		var currentTotalQuantity =0;
+		var totalQuantityElement = document.querySelector("#totalOutput .highlight:nth-child(2)");
+		var totalPriceElement = document.querySelector("#totalOutput .highlight:nth-child(1)");
+		var currentTotalQuantity = parseInt(totalQuantityElement.textContent);
+		var currentTotalPrice = parseFloat(totalPriceElement.textContent);
+		
+		$('#totalOutput').html('');
+		var totalPrice = 0;
+		var totalQuantity = 0;
+		
+		var quantity = parseInt(value);
+		var cuurentQTY = quantity - prev
+		var price = parseFloat(price.replace('₹ ', ''));
+		totalPrice = price * cuurentQTY;
+		totalPrice = totalPrice.toFixed(2);
+		currentTotalPrice = currentTotalPrice.toFixed(2);
+		
+		totalPrices = +currentTotalPrice + +totalPrice  ;
+		totalQuantitys =currentTotalQuantity + cuurentQTY ;
+		console.log('this is murali calling')
+
+		var output = "Total Price: ₹<span class='highlight'>" + totalPrices.toFixed(2)
+				+ "</span> Total Qty: <span class='highlight'>" + totalQuantitys
+				+ "</span>";
+		$('#totalOutput').html(output);
+
+	}
+	
+	function saveInputdata(element,prev) {
+		var InputArray = [];
+		var input = element.parentNode
+				.querySelector('.count-input');
+		var productCard = input.closest('.card');
+		var productName = productCard.querySelector('.product').innerText;
+		var productPrice = productCard.querySelector('.price').innerText;
+		var productID = productCard.querySelector('.productID').innerText;
+		var currentValue = parseInt(input.value);
+		if (currentValue >= 0) {
+			input.value = currentValue ;
+			calculateInputTotal(input.value,productPrice,prev);
+		}
+		var yearlybudget = document.querySelector("#totalOutput2 .highlight:nth-child(2)");
+		var monthlyBalanceText = $("#totalOutput2 span.highlight:eq(2)").text();
+		var indentBalanceText = $("#totalOutput2 span.highlight:eq(4)").text();
+		var monthlyBalance = parseFloat(monthlyBalanceText.replace(/[^\d.]/g, ''));
+		var indentBalance = parseFloat(indentBalanceText.replace(/[^\d.]/g, ''));
+		//var total =monthlyBalance+indentBalance;
 		var totalAmount = document.querySelector("#totalOutput .highlight:nth-child(1)");
-		if((parseFloat(yearlybudget.textContent)/12)<=parseFloat(totalAmount.textContent)){
+		var total = monthlyBalance -( parseFloat(totalAmount.textContent) -indentBalance);
+		if(total<=0){
 			Swal.fire({
 				html: `
 			        <div style="font-size: 1.3em;">Total indent value is exceeding monthly value.</div>
@@ -621,16 +609,7 @@ function getProduct(id){
 		        cancelButtonText: "No",
 		      }).then((result) => {
 		    	    if (result.isConfirmed) {
-		    	    	var InputArray = [];
-		    			var input = element.parentNode
-		    					.querySelector('.count-input');
-		    			var productCard = input.closest('.card');
-		    			var productName = productCard.querySelector('.product').innerText;
-		    			var productPrice = productCard.querySelector('.price').innerText;
-		    			var productID = productCard.querySelector('.productID').innerText;
-		    			var currentValue = parseInt(input.value);
-		    			if (currentValue >= 0) {
-		    				input.value = currentValue ;
+		    	    	if(parseFloat(totalAmount.textContent)<=parseFloat(yearlybudget.textContent)){
 
 		    				InputArray.push({
 		    					productName : productName,
@@ -639,7 +618,6 @@ function getProduct(id){
 		    					productID : productID
 		    				});
 		    				console.log(InputArray)
-		    				calculateTotal();
 
 		    				$.ajax({
 		    					type : "POST",
@@ -652,10 +630,22 @@ function getProduct(id){
 		    						getBudgetDetails();
 		    					}
 		    				})
+		    	    	}else{
+		    				Swal.fire({
+			    				html: `
+			    			        <div style="font-size: 1.3em;">Total indent value is exceeding yearly budget.</div>
+			    			        <div style="font-size: 1.3em;">Can not proceed</div>
+			    			        `,
+			    		        icon: "error",
+			    		      }).then((result) => {
+						    	    if (result.isConfirmed) {
+						    	    	location.reload()
+						    	    }})
 		    			}
 		    	    } else if (result.dismiss === Swal.DismissReason.cancel) {
 		    	       
-		    	        console.log("User clicked No");
+		    	    	getProduct(IndentNumber);
+						getBudgetDetails();
 		    	    }
 		    	});
 		}else{
@@ -843,12 +833,12 @@ function getProduct(id){
 
 			productListHTML += '<div class="row">';
 			productListHTML += '<div class="col-7">';
-			productListHTML += '	<h5 class="m-b-0" style="text-align: start;">';
-			productListHTML += '		<label class="price" id="price">₹ '
+			productListHTML += '	<h5 class="m-b-0" style="text-align: start;font-weight: 600">';
+			productListHTML += '		<label class="price" id="price" style="font-weight:600 !important">₹ '
 					+ product[4] + '</label>';
-			productListHTML += '		<label style="border:1px solid lightgrey;left:5px;">UOM : '
+			productListHTML += '		<label style="border:1px solid lightgrey;left:5px;font-weight:600 !important">UOM : '
 					+ product[5] + '</label>';
-			productListHTML += '		<label class="productID" style="left:5px;">Product ID : '
+			productListHTML += '		<label class="productID" style="left:5px;font-weight:600 !important">Product ID : '
 					+ product[0] + '</label>';
 			productListHTML += '	</h5>';
 			productListHTML += '</div>';
@@ -857,11 +847,11 @@ function getProduct(id){
 	 productListHTML += '	style="align-items: center;">';
 			productListHTML += '	<a onclick="decrementCount(this)"';
 			productListHTML += '		class="btn btn-sm btn-decre decreme"><i';
-    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input type="text"';
+    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input style="background:white" disabled type="text"';
 			productListHTML += '		id="countInput' + i
 					+ '" name="quantity" class="form-control count-input bold-and-large"';
 			productListHTML += '		value="' + product[7]
-					+ '" onchange="saveInputdata(this)"> <a';
+					+ '" > <a';
 			productListHTML += '			onclick="incrementCount(this)" class="btn bnt-sm btn-incre "><i';
 	productListHTML += '			class="fas fa-plus-square fa-2x"></i></a>';
 			productListHTML += '	</div>';
@@ -888,15 +878,16 @@ function getBudgetDetails(){
 					//dataType : 'json',
 
 					success : function(response) {
-						//console.log( jQuery.parseJSON(response)[0] ,'response')
-						var budgt =jQuery.parseJSON(response)[0]
-					
-						var output = "<span class='title'>Yearly Budget:   ₹ </span> <span style='font-size: 18px;color: white;'>"
-							+ budgt[3]  + "</span> &nbsp; &nbsp; <span class='title'>Cumulative (Incl. PO, Route) Indent Value:   ₹ </span> <span style='font-size: 18px !important;color: white !important;'>"
-							 + budgt[5]   + "</span>"+" <span class='title'>Budget bal:   ₹ </span> <span style='font-size: 18px;color: white;'>"
-							+ budgt[4]+ "</span>"+ " <span class='title'>Indent Amt(Curr. month):   ₹ </span> <span style='font-size: 18px;color: white;'>" 
-							+ budgt[6]   + "</span><span class='title'>Final Qty ₹ </span> <span style='font-size: 18px;color: white;'>" 
-							+ budgt[8]   + "</span>  " ;
+						console.log( response);
+						var budgt =jQuery.parseJSON(response)[0];
+						console.log(budgt);
+
+						var output = "<div class='cell'>&nbsp;&nbsp;<span class='title'>Yearly Budget:   ₹ </span> <span class='highlight' id='yearAmount'>"
+							+ budgt[3]  + "</span> &nbsp;&nbsp;&nbsp;&nbsp;<span class='title'>Cumulative (Incl. PO, Route) Indent Value:   ₹</span>  <span class='highlight'>"
+							 + budgt[5]   + "</span>"+ " <span class='title'>Budget bal:   ₹</span>  <span class='highlight'>"
+							+ budgt[4]   + "</span>"+ "<span class='title'> Indent Amt(Current month):₹</span>  <span class='highlight'>" 
+							+ budgt[6]   + "</span> </div> " ;
+							
 					$('#totalOutput2').html(output); 
 					}
 				});
@@ -909,6 +900,51 @@ function getBudgetDetails(){
 	});
 
 </script>
+			<style>
+.footer {
+	background-color: Teal;
+	padding-bottom: 1px;
+	height: 300px;
+}
+
+footer h6 {
+	color: white;
+	text-transform: uppercase;
+	text-align: left;
+}
+
+footer a {
+	text-transform: uppercase;
+	color: white;
+	text-align: left;
+}
+
+footer li {
+	list-style-type: none;
+	text-transform: uppercase;
+	text-align: left;
+}
+
+footer ul {
+	padding-left: 0px;
+}
+
+.footer-copyright {
+	color: #fffffff0;
+	text-align: center;
+	font-weight: 600;
+	font-size: 11px;
+}
+
+.footer-copyright:hover {
+	color: white;
+}
+
+.footer-copyright span:hover {
+	color: Teal;
+	font-weight: bolder;
+}
+</style>
 	<div class="loading" style="display: none;">Loading…</div>
 	<!-- All Jquery -->
 	<!-- ============================================================== -->

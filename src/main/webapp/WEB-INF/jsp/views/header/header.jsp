@@ -262,18 +262,19 @@ a:hover {
 
 		</script>
 		<script type="text/javascript">
-		$.ajax({
+		 $.ajax({
  			type : 'GET',
  			url : 'getBudgetDetails',
- 			//dataType : 'json',
-
  			success : function(response) {
  				var allData =jQuery.parseJSON(response)[0];
  	        if(allData == undefined){
- 	        	document.getElementById('dashboardiD').remove();
+ 	        	var element = document.getElementById('dashboardiD');
+		        if (element) {
+		            element.remove();
+		        }	
  	        }
  			}
- 		});
+ 		}); 
 		</script>
 		
 </body>

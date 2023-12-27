@@ -336,13 +336,13 @@ table.dataTable tbody tr.selected a {
 													<th class='headerStyles' scope="col"><b>CC${costcenter}</b></th>
 													</c:forEach> 
 													<th class='headerStyles' scope="col"><b>Final Qty</b></th>
-													<th class='headerStyles' scope="col"><b>Final Val(RS)</b></th>
-													<th class='headerStyles' scope="col"><b>Unit Price(RS)</b></th>													
+													<th class='headerStyles' scope="col"><b>Final Val(Rs)</b></th>
+													<th class='headerStyles' scope="col"><b>Unit Price(Rs)</b></th>													
 													<!-- Receipt -->
 													<th class='headerStyles' scope="col"><b>Receipt Qty</b></th>
 													<th class='headerStyles' scope="col"><b>Receipt Val</b></th>
 													<th class='headerStyles' scope="col"><b>Stock At DIST.Team (QTY)</b></th>
-													<th class='headerStyles' scope="col"><b>STK Val(RS)</b></th>
+													<th class='headerStyles' scope="col"><b>STK Val(Rs)</b></th>
 													
 												</tr>
 											</thead>
@@ -360,12 +360,12 @@ table.dataTable tbody tr.selected a {
 													
 													</c:forEach>													
 														<td class='tbodyCustomColor'>${user[collectionSize + 8]}</td>
-														<td class='tbodyCustomColor'>${user[7]*user[6]}</td>
-														<td class='tbodyCustomColor'>${user[collectionSize + 3]}</td>
+														<td class='tbodyCustomColor' style="text-align:right !important">${user[7]*user[6]}</td>
+														<td class='tbodyCustomColor' style="text-align:right !important">${user[collectionSize + 3]}</td>
 														<td class="editable-cell">${user[collectionSize + 8]}</td>
-														<td class='tbodyCustomColor'></td>
-														<td class="editable-cell tbodyCustomColor">${user[collectionSize + 6]}</td>
-														<td class='tbodyCustomColor'></td>
+														<td class='tbodyCustomColor' style="text-align:right !important"></td>
+														<td class="editable-cell tbodyCustomColor" style="text-align:center !important">${user[collectionSize + 6]}</td>
+														<td class='tbodyCustomColor' style="text-align:right !important"></td>
 
 													</tr>
 
@@ -383,14 +383,14 @@ table.dataTable tbody tr.selected a {
 														<th>${foot[loop2.index + 1]}</th>
 													</c:forEach> 
 														<th class='tbodyCustomColor' id="finalQty"></th>
-														<th class='tbodyCustomColor' id="finalValue"></th>
-														<th class='tbodyCustomColor'></th>
+														<th class='tbodyCustomColor' style="text-align:right !important" id="finalValue"></th>
+														<th class='tbodyCustomColor' style="text-align:center !important"></th>
 														<th class='tbodyCustomColor' id="ReciptQty"></th>
 
 														<!-- Receipt -->
-														<th class='tbodyCustomColor' id="Reciptvalue"></th>
-														<th class='tbodyCustomColor' id="stockQty"></th>
-														<th class='tbodyCustomColor' id="stockValue"></th>
+														<th class='tbodyCustomColor' style="text-align:right !important" id="Reciptvalue"></th>
+														<th class='tbodyCustomColor' style="text-align:center !important" id="stockQty"></th>
+														<th class='tbodyCustomColor' style="text-align:right !important" id="stockValue"></th>
 													</tr>
 												</c:forEach>
 											</tfoot>
@@ -484,7 +484,7 @@ table.dataTable tbody tr.selected a {
          console.log('3',totalSum)
 	    // Redraw the table to reflect the changes
 	    table.draw();
-	    return totalSum;
+	    return totalSum.toFixed(2);
 	}
 	function updateRowSums() {
 	    var table = $('#example').DataTable();
@@ -508,7 +508,7 @@ table.dataTable tbody tr.selected a {
 	     this.cell(rowIdx, numColumns).data(sum);
 	     this.cell(rowIdx, numColumns + 1).data(sum * Number(row[numColumns + 2]));
 	     this.cell(rowIdx, numColumns + 4).data(Number(row[numColumns + 2]) * Number(row[numColumns + 3]));
-	     this.cell(rowIdx, numColumns + 6).data(Number(row[numColumns + 2]) * Number(row[numColumns + 5]));
+	     this.cell(rowIdx, numColumns + 6).data((Number(row[numColumns + 2]) * Number(row[numColumns + 5])).toFixed(2));
 	    });
 	        //This is to update the moq or userqty based total value.
 	        
@@ -805,11 +805,11 @@ console.log("murali checkking",data)
                     const costcenter = key;
                     const description = item["Description"];
                     const quantity = item[key];
-                    const unitPrice = item["Unit Price(RS)"];
+                    const unitPrice = item["Unit Price(Rs)"];
                     const MoqQty = item["MOQ Qty"];
                     const MOQValue = item["MOQ Val(RS)"];
                     const TMTQty = item["Stock At DIST.Team (QTY)"];
-                    const TMTValue = item["STK Val(RS)"];
+                    const TMTValue = item["STK Val(Rs)"];
                     const receivedqty = item["Receipt Qty"];
                     const receivedvalue = item["Receipt Val"];
                     const userQuantity = item["User Qty"];

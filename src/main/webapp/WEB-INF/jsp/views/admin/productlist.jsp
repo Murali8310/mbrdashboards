@@ -277,8 +277,8 @@ body {
 }
 
 .bold-and-large {
-  font-weight: 800;
-  font-size: 25px !important;
+  /* font-weight: 800; */
+  font-size: 20px !important;
   color: red !important;
   text-align:center;
 }
@@ -379,6 +379,7 @@ padding:0px !important;
    /* flex: 0 0 40%;  *//* Adjust width of the title */
     font-weight: bold;
     margin-left: 7px;
+    background-color: #1ea496;
 }
 
 /* Style for the value */
@@ -388,59 +389,53 @@ padding:0px !important;
 
 /* Style for the highlight */
 .highlight {
-    color: white; /* Adjust highlight color */
+font-weight: bold;
+    color: white; 
         margin-left: 3px;
-    /* Any other highlight styles */
+        background-color: #1ea496;
+   
 }
 </style>
 		<div class="page-wrapper" style="background-color: #cfcff22e;" data-sidebartype="full" class="mini-sidebar">
-			<div class="container-fluid2 card-total card-static" style="    margin-top: 20px;
-			">
-					<div class="row" style="background-color: #01AFAE; align-items: baseline;padding-top: 5px;margin-left:13px !important;width: 94%;box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-    border-radius: 10px;
-    margin-bottom: 2px;">
+			<div class="container-fluid2 card-total card-static" style="    margin-top: 20px;">
+					<div class="row" style="background-color: #4db719; align-items: baseline;
+					padding-top: 5px;margin-left:13px !important;width: 94%;box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+					    border-radius: 10px;
+					    margin-bottom: 2px;">
 						<div id="totalOutput2"
-							style="text-align: start; font-size: 18px; background-color: #01AFAE;color: white;padding: 6px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-        height: 27px;">
-    </div>
-    
-						
+							style="text-align: start; font-size: 16px; color: white; padding: 6px;
+					    border-radius: 10px;
+					    margin-bottom: 20px;
+        				height: 27px;">
+    				</div>
 					</div>
-					
 					<!-- <div class="row" style="background-color: #01AFAE; align-items: baseline;padding-top: 5px;margin-left:13px !important;width: 94%;box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-    border-radius: 10px;
-    margin-bottom: 2px;">
-    
-    <div>
+					    border-radius: 10px;
+					    margin-bottom: 2px;">
+					    <div>
 							<a href="manageByAdmin"> <input type="button"
 								class="btn btn-primary" id="expiryDatebut" value="Cancel">&nbsp;
 							</a> <a class="btn btn-success" id="submitId" onclick="submit()">Submit</a>
 						</div>
-						
 					</div> -->
 			<div class="page-breadcrumb" style="position: fixed;z-index: 9;width: 83%;background-color:#fff;margin-left: 13px;">
-				<div class="row" >
+				<div class="row">
 					<div class="col-12 d-flex no-block align-items-center">	
-						<h4 class="page-title display-6"  >Product Catalogue</h4>
-						
+						<h4 class="page-title display-6">Product Catalogue</h4>
 						<div class="ml-auto text-right">
 						<!-- <div id="totalOutput"
 						style="text-align: end; font-size: 18px;padding-left:10px; background-color: #92e3f7;"></div> -->
 							<nav aria-label="breadcrumb">
 								<ol class="breadcrumb">
-								
 								<div   style="padding-right:30px;">
 							<a href="manageByAdmin"> <input type="button"
 								class="btn btn-primary" id="expiryDatebut" value="Cancel">&nbsp;
-							</a> <a class="btn btn-success" id="submitId" onclick="submit()">Submit</a>
+							</a> 
+							<a class="btn btn-success" id="submitId" onclick="submit()">Submit</a>
 						</div>
-						
-								<li id="totalOutput" class="breadcrumb-item" style="background-color: darkblue;color: white;font-weight: bolder;"></li>
+								<li id="totalOutput" class="breadcrumb-item" style="background-color: darkblue; color: white;font-weight: bolder;"></li>
 									<li class="breadcrumb-item"><a href="landPage">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Product
-										Catalogue <!-- <a href="productDetails">Product Details</a> -->
+									<li class="breadcrumb-item active" aria-current="page">Product Catalogue 
 									</li>
 								</ol>
 							</nav>
@@ -577,29 +572,29 @@ padding:0px !important;
 						productListHTML += '<h5 class="product" class="m-b-0" style="text-align: start;font-weight: bold;">'
 								+ product[1] + '</h5>';
 
-						productListHTML += '<div class="row">';
-						productListHTML += '<div class="col-7">';
-						productListHTML += '	<h5 class="m-b-0" style="text-align: start;">';
-						productListHTML += '		<label class="price" id="price">₹ '
+						productListHTML += ' <div class="row">';
+						productListHTML += ' <div class="col-7">';
+						productListHTML += ' <h5 class="m-b-0" style="text-align: start;font-weight:bold;">';
+						productListHTML += ' UCP : <label class="price" id="price">₹ '
 								+ product[4] + '</label>';
-						productListHTML += '		<label style="border:1px solid lightgrey;left:5px;">UOM : '
+						productListHTML += ' <label>UOM : '
 								+ product[5] + '</label>';
-						productListHTML += '		<label class="productID" style="left:5px;">Product ID : '
+						productListHTML += ' <label class="productID" style="left:5px;">Product ID : '
 								+ product[0] + '</label>';
 						productListHTML += '	</h5>';
 						productListHTML += '</div>';
 						productListHTML += '<div class="col-5">';
 						productListHTML += '	<div class="form-group d-flex justify-content-between"';
-						 productListHTML += '	style="align-items: center;">';
-						productListHTML += '	<a onclick="decrementCount1(this)"';
-						productListHTML += '		class="btn btn-sm btn-decre decreme"><i';
-					    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input oninput="restrictNegative(this)" type="number"';
-						productListHTML += '		id="countInput'
+						 productListHTML += ' style="align-items: center;">';
+						productListHTML += ' <a onclick="decrementCount1(this)"';
+						productListHTML += ' class="btn btn-sm btn-decre decreme"><i';
+					    productListHTML += ' class="fas fa-minus-square fa-2x"></i></a> <input oninput="restrictNegative(this)" type="number"';
+						productListHTML += ' id="countInput'
 								+ i
 								+ '" name="quantity" class="form-control count-input bold-and-large"';
-						productListHTML += '		value="' + product[7] + '" > <a';
-						productListHTML += '			onclick="incrementCount1(this)" class="btn bnt-sm btn-incre "><i';
-						productListHTML += '			class="fas fa-plus-square fa-2x"></i></a>';
+						productListHTML += ' value="' + product[7] + '" > <a';
+						productListHTML += ' onclick="incrementCount1(this)" class="btn bnt-sm btn-incre"><i';
+						productListHTML += ' class="fas fa-plus-square fa-2x"></i></a>';
 						productListHTML += '	</div>';
 						productListHTML += '</div>';
 						productListHTML += '</div>';
@@ -651,15 +646,15 @@ padding:0px !important;
 					productListHTML += '	<div class="el-overlay"></div>';
 					productListHTML += '</div>';
 					productListHTML += ' <div class="el-card-content " style="padding-left: 10px">';
-					productListHTML += '<h5 class="product" class="m-b-0" style="text-align: start;">'
+					productListHTML += '<h5 class="product" class="m-b-0" style="text-align: start;font-weight: bold">'
 							+ product[1] + '</h5>';
 
 					productListHTML += '<div class="row">';
 					productListHTML += '<div class="col-7">';
-					productListHTML += '	<h5 class="m-b-0" style="text-align: start;">';
-					productListHTML += '		<label class="price" id="price"><span style="font-weight:bold;">₹</span> '
+					productListHTML += '	<h5 class="m-b-0" style="text-align: start;font-weight:bold;">';
+					productListHTML += '		UCP : <label class="price" id="price"><span style="font-weight:bold;">₹</span> '
 							+ product[4] + '</label>&nbsp;';
-					productListHTML += '		<label style="border:1px solid lightgrey;left:5px;"><span style="font-weight:bold;">UOM</span> : '
+					productListHTML += '		<label><span style="font-weight:bold;">UOM</span> : '
 							+ product[5] + '</label>';
 					productListHTML += '		<label class="productID" style="left:5px;"><span style="font-weight:bold;">Product ID :</span> '
 							+ product[0] + '</label>';
@@ -708,9 +703,9 @@ padding:0px !important;
 				if(budgt == undefined){
 					$('#totalOutput2').html("No budget is defined");
 				}else{
-			  var output = "<div class='cell'>&nbsp;&nbsp;<span class='title'>Yearly Budget:</span>₹  <span class='highlight' id='yearAmount'>"
-					+ budgt[3]  + "</span>&nbsp;&nbsp;&nbsp;<span class='title'>Cumulative (Incl. PO, Route) Indent Value:   ₹</span><span class='highlight'>"
-					 + budgt[5]   + "</span>&nbsp;&nbsp;"+ "<span class='title'> Budget bal:   ₹ </span> <span class='highlight'>"
+			  var output = "<div class='cell'>&nbsp;&nbsp;<span class='title'>Yearly Budget : ₹</span>  <span class='highlight' id='yearAmount'>"
+					+ budgt[3]  + "</span>&nbsp;&nbsp;&nbsp;<span class='title'>Cumulative (Incl. PO) Indent Value :   ₹</span><span class='highlight'>"
+					 + budgt[5]   + "</span>&nbsp;&nbsp;"+ "<span class='title'> Budget bal :   ₹ </span> <span class='highlight'>"
 					+ budgt[4]   + "</span>&nbsp;&nbsp;&nbsp;"+ " <span class='title'>Indent Amt(Current month):   ₹</span>  <span class='highlight'>" 
 					+ budgt[6]   + "</span> </div> " ;
 			$('#totalOutput2').html(output);  
@@ -867,7 +862,7 @@ padding:0px !important;
 		var noBudget =$('#totalOutput2').text();
 		if(noBudget != 'No budget is defined'){
 		var yearlybudget = document.querySelector("#totalOutput2 .highlight:nth-child(2)");
-	alert('yearlybudget' + yearlybudget)
+	//alert('yearlybudget' + yearlybudget)
 		if(parseInt(yearlybudget.textContent)!=0){
 			var InputArray = [];
 			var input = element.parentNode.querySelector('.count-input');
@@ -876,7 +871,8 @@ padding:0px !important;
 			var productPrice = productCard.querySelector('.price').innerText;
 			var productID = productCard.querySelector('.productID').innerText.split(':')[1].trim();
 			console.log('this is checkinge',productID)
-		rrentValue = parseInt(input.value);
+			var currentValue = parseInt(input.value);
+		
 			input.value = currentValue + 1;
 
 			InputArray.push({
@@ -1356,7 +1352,6 @@ function calculateDecrementTotal(value,price) {
 				}
 
 				function calculateTotal() {
-					//alert("HI");
 					var countInputs = document.querySelectorAll('.count-input');
 					var prices = document.querySelectorAll('.price');
 					$('#totalOutput').html('');
@@ -1364,10 +1359,14 @@ function calculateDecrementTotal(value,price) {
 					var totalQuantity = 0;
 
 					for (var i = 0; i < countInputs.length; i++) {
+						//alert(countInputs[i].value);
+						//alert(prices[i].innerText);
 						var quantity = parseInt(countInputs[i].value);
 						var price = parseFloat(prices[i].innerText.replace(
 								'₹ ', ''));
+						//alert(price);
 						totalPrice += price * quantity;
+						//alert(totalPrice);
 						totalQuantity += quantity;
 					}
 					totalPrice = totalPrice.toFixed(2);
@@ -1430,7 +1429,7 @@ function calculateDecrementTotal(value,price) {
 				}
 				
 				function saveInputdata(element,prev) {
-					//alert("saveInputdata");
+					alert("saveInputdata");
 					var noBudget =$('#totalOutput2').text();
 					
 					if(noBudget != 'No budget is defined')
@@ -1447,12 +1446,6 @@ function calculateDecrementTotal(value,price) {
 							var totalAmount = document.querySelector("#totalOutput .highlight:nth-child(1)");
 							//var total = monthlyBalance -( parseFloat(totalAmount.textContent) -indentBalance);
 							
-							
-							
-							
-							
-							
-						
 								var InputArray = [];
 								var input = element.parentNode
 										.querySelector('.count-input');

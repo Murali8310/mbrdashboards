@@ -149,6 +149,10 @@ vertical-align: text-bottom ; footer {
 .table-container tbody td.first-cell {
 	width: 350px; /* Adjust the width as needed */
 }
+
+.container-fluid {
+	       max-height: 478px;
+	}
 </style>
 
 <script
@@ -240,6 +244,27 @@ vertical-align: text-bottom ; footer {
     function myFunction () {
     	var Year=$('#yearDropdown').val();
 		var Month=$('#Month').val();
+		if(Month == ''){
+			Swal.fire({
+				
+				icon : 'error',
+				title : 'Please select the Month',
+				showCloseButton : false,
+				focusConfirm : true,
+			});
+			return;
+		} 
+		
+if(Year == ''){
+	Swal.fire({
+		
+		icon : 'error',
+		title : 'Please select the Year',
+		showCloseButton : false,
+		focusConfirm : true,
+	});
+	return;
+		} 
         location.href = 'http://localhost:8080/stationary/buyerFilterShowPage?Year='+Year+'&Month='+Month;
     }
     
@@ -469,12 +494,12 @@ vertical-align: text-bottom ; footer {
 														<td>
 															${user[collectionSize + 4]}	
 														</td>
-															<td >${user[collectionSize + 3] * user[collectionSize + 4]}</td>
-															<td></td>
-															<td></td>
-															<td>${user[collectionSize + 3]}</td>
+															<td style="text-align:right">${user[collectionSize + 3] * user[collectionSize + 4]}</td>
+															<td style="text-align:center"></td>
+															<td style="text-align:right"></td>
+															<td style="text-align:center">${user[collectionSize + 3]}</td>
 															<td>${user[collectionSize + 6]}</td>
-															<td>${user[collectionSize + 7]}</td>
+															<td style="text-align:right">${user[collectionSize + 7]}</td>
  </tr>
 													</c:forEach>
 												</tbody>
@@ -488,12 +513,12 @@ vertical-align: text-bottom ; footer {
 													</c:forEach>	
 																												<th id="footerUserQty"></th>
 																												<th id="footerMoqty"></th>
-																												<th id="footerMoqValue"></th>
-																												<th id="footerTotalQty"	></th>
-																												<th id="footerTotalValue"></th>
+																												<th id="footerMoqValue" style="text-align:right !important"></th>
+																												<th id="footerTotalQty"	style="text-align:center"></th>
+																												<th id="footerTotalValue" style="text-align:right !important"></th>
 																												<th></th>
 																												<th id="footerStockQty"></th>
-																												<th id="footerStockValue"></th>
+																												<th id="footerStockValue" style="text-align:right"></th>
 														
 
 												</tr>
@@ -898,11 +923,11 @@ $(document).ready(function () {
                     const costcenter = key;
                     const description = item["Description"];
                     const quantity = item[key];
-                    const unitPrice = item["Unit Price(RS)"];
+                    const unitPrice = item["Unit Price(Rs)"];
                     const MoqQty = item["MOQ Qty"];
-                    const MOQValue = item["MOQ Val(RS)"];
+                    const MOQValue = item["MOQ Val(Rs)"];
                     const TMTQty = item["Stock At TMT (QTY)"];
-                    const TMTValue = item["STK Val(RS)"];
+                    const TMTValue = item["STK Val(Rs)"];
  
                     
                    if(parseInt(quantity)>=0){
