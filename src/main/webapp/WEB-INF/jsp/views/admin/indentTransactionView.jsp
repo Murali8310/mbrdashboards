@@ -73,7 +73,7 @@ margin-bottom: 10px;
 }
 
 .sidebar-item {
-	margin-left: 10px;
+	margin-left: 0px;
 }
 
 .logo-text {
@@ -144,7 +144,7 @@ padding:0px !important;
 								<button class="btn btn-success" style="width: 100%;"
 									id="submitCategoriesID">Apply</button>
 						</label></li>
-						<li class="sidebar-item"><a
+						<li class="sidebar-item"><a id='catid'
 							class="sidebar-link has-arrow glyphicon "
 							href="javascript:void(0)" aria-expanded="false"><i
 								class="fa fa-list"></i> <span class="hide-menu">Category
@@ -200,7 +200,8 @@ padding:0px !important;
 .title {
    /* flex: 0 0 40%;  *//* Adjust width of the title */
     font-weight: bold;
-    margin-left: 30px;
+    margin-left: 16px;
+        background-color: #1ea496;
 }
 
 /* Style for the value */
@@ -214,18 +215,22 @@ padding:0px !important;
         margin-left: 3px;
     /* Any other highlight styles */
 }
+.paddingzero {
+     padding-right: 4px !important;
+    padding-left: 4px !important;
+}
 </style>
 			<div class="container-fluid2 card-total card-static">
-				<div class="row" style="background-color: #01AFAE; align-items: baseline;padding-top: 5px;margin-left:13px !important;width: 98%;box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+				<div class="row" style="background-color: #4db719; align-items: baseline;padding-top: 5px;margin-left:13px !important;width: 98%;box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
     border-radius: 10px;
     margin-bottom: 2px;">
 				<div id="totalOutput2"
-							style="text-align: start; font-size: 18px; background-color: #01AFAE;color: white;padding: 6px;
+							style="text-align: start; font-size: 18px;color: white;padding: 6px;
     border-radius: 10px;
     margin-bottom: 20px;
         height: 27px;"></div>
 				</div>
-					<div class="cell" style="text-align: start; font-size: 18px; background-color: #01AFAE;color: white;padding: 6px;
+					<div class="cell" style="text-align: start; font-size: 18px;color: white;padding: 6px;
     border-radius: 10px;
     margin-bottom: 20px;
         height: 49px;
@@ -309,14 +314,14 @@ function getProduct(id){
 				var product = response[i];
 				/* const productImage = document
 						.getElementById("productImage"); */
-				 var output = "<span class='title'>Indent Number:</span> <span class='highlight1'>" +  response[0][8]
+				 var output = "<span class='title' style='background: red;padding: 2px;border-radius: 3px;'>Indent Number:</span> <span class='highlight1' style='background: red;padding: 2px;border-radius: 3px;'>" +  response[0][8]
 					+ "</span> ";
 			$('#IndentNumber').html(output);
 			if(product[7]!=0){
 				const imageSource = 'product/'
 						+ product[0] + '.png';
 				  const defaultImage = 'assets/images/No_Image_Availabl.png';
-				productListHTML += '<div class="col-lg-4 col-md-6 col-12">';
+				productListHTML += '<div class="col-lg-4 col-md-6 col-12 paddingzero">';
 				productListHTML += '<div class="card">';
 				productListHTML += '<div class="el-card-item">';
 				productListHTML += '<div class="el-card-avatar el-overlay-1"';
@@ -818,7 +823,7 @@ function getProduct(id){
 			if(product[7]!=0){
 			const imageSource = 'product/' + product[0] + '.png';
 			const defaultImage = 'assets/images/No_Image_Availabl.png';
-			productListHTML += '<div class="col-lg-4 col-md-6 col-12">';
+			productListHTML += '<div class="col-lg-4 col-md-6 col-12 paddingzero">';
 			productListHTML += '<div class="card">';
 			productListHTML += '<div class="el-card-item">';
 			productListHTML += '<div class="el-card-avatar el-overlay-1"';
@@ -882,8 +887,8 @@ function getBudgetDetails(){
 						var budgt =jQuery.parseJSON(response)[0];
 						console.log(budgt);
 
-						var output = "<div class='cell'>&nbsp;&nbsp;<span class='title'>Yearly Budget:   ₹ </span> <span class='highlight' id='yearAmount'>"
-							+ budgt[3]  + "</span> &nbsp;&nbsp;&nbsp;&nbsp;<span class='title'>Cumulative (Incl. PO, Route) Indent Value:   ₹</span>  <span class='highlight'>"
+						var output = "<div class='cell'><span class='title'>Yearly Budget:₹ </span> <span class='highlight' id='yearAmount'>"
+							+ budgt[3]  + "</span><span class='title'>Cumulative (Incl. PO, Route) Indent Value:   ₹</span>  <span class='highlight'>"
 							 + budgt[5]   + "</span>"+ " <span class='title'>Budget bal:   ₹</span>  <span class='highlight'>"
 							+ budgt[4]   + "</span>"+ "<span class='title'> Indent Amt(Current month):₹</span>  <span class='highlight'>" 
 							+ budgt[6]   + "</span> </div> " ;
@@ -966,4 +971,18 @@ footer ul {
 	<script
 		src="assets/libs/magnific-popup/dist/jquery.magnific-popup.min.js"></script>
 	<script src="assets/libs/magnific-popup/meg.init.js"></script>
+	
+	<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", function() {
+		    setTimeout(function() {
+		        var element = document.getElementById('catid');
+		        if (element) {
+		            element.click();
+		        }
+		      //  console.log('it is calling in header')
+
+		    }, 10); // Adjust the time in milliseconds (e.g., 1000 for 1 second)
+		});
+
+		</script>
 </html>

@@ -957,7 +957,7 @@ $(document).ready(function () {
 				
 				Swal.fire({
 					icon : 'success',
-					title : response,
+					title : 'Indent updated successfully. </br></br> Please proceed and click <span style="color: #3d69d4;"> "Send to Vendor</span>"',
 					showCloseButton : false,
 					focusConfirm : true,
 				}).then((result) => {

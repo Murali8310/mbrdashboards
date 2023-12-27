@@ -72,7 +72,7 @@ margin-bottom: 10px;
 }
 
 .sidebar-item {
-	margin-left: 10px;
+	margin-left: 0px;
 }
 
 .logo-text {
@@ -116,6 +116,10 @@ padding:0px !important;
      margin-right: 0px !important; 
      margin-left: 0px !important;  
 }
+.paddingzero {
+     padding-right: 4px !important;
+    padding-left: 4px !important;
+}
 </style>
 
 
@@ -145,7 +149,7 @@ padding:0px !important;
 								<button class="btn btn-success" style="width: 100%;"
 									id="submitCategoriesID">Apply</button>
 						</label></li>
-						<li class="sidebar-item"><a
+						<li class="sidebar-item"><a id='catid'
 							class="sidebar-link has-arrow glyphicon "
 							href="javascript:void(0)" aria-expanded="false"><i
 								class="fa fa-list"></i> <span class="hide-menu">Category
@@ -314,7 +318,7 @@ function getProduct(id){
 				const imageSource = 'product/'
 						+ product[0] + '.png';
 				  const defaultImage = 'assets/images/No_Image_Availabl.png';
-				productListHTML += '<div class="col-lg-4 col-md-6 col-12">';
+				productListHTML += '<div class="col-lg-4 col-md-6 col-12 paddingzero">';
 				productListHTML += '<div class="card">';
 				productListHTML += '<div class="el-card-item">';
 				productListHTML += '<div class="el-card-avatar el-overlay-1"';
@@ -816,7 +820,7 @@ function getProduct(id){
 			if(product[7]!=0){
 			const imageSource = 'product/' + product[0] + '.png';
 			const defaultImage = 'assets/images/No_Image_Availabl.png';
-			productListHTML += '<div class="col-lg-4 col-md-6 col-12">';
+			productListHTML += '<div class="col-lg-4 col-md-6 col-12 paddingzero">';
 			productListHTML += '<div class="card">';
 			productListHTML += '<div class="el-card-item">';
 			productListHTML += '<div class="el-card-avatar el-overlay-1"';
@@ -965,4 +969,18 @@ footer ul {
 	<script
 		src="assets/libs/magnific-popup/dist/jquery.magnific-popup.min.js"></script>
 	<script src="assets/libs/magnific-popup/meg.init.js"></script>
+	
+	<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", function() {
+		    setTimeout(function() {
+		        var element = document.getElementById('catid');
+		        if (element) {
+		            element.click();
+		        }
+		      //  console.log('it is calling in header')
+
+		    }, 10); // Adjust the time in milliseconds (e.g., 1000 for 1 second)
+		});
+
+		</script>
 </html>
