@@ -284,7 +284,7 @@ label {
 												<tr>
 													<!-- <th scope="col"><b>SL.NO</b></th> -->
 													<!--                                                 <th scope="col" hidden><b>USER ID</b></th> -->
-													<th scope="col" class='headerStyles'><b>Cost Centre</b></th>
+													<th scope="col" class='headerStyles'><b>Cost Center</b></th>
 													<th scope="col" class='headerStyles'><b>Employee Name</b></th>
 													<th scope="col" class='headerStyles'><b>Email</b></th>
 													<th scope="col" class='headerStyles'><b>Department</b></th>

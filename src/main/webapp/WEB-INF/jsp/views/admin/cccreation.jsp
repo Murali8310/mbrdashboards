@@ -269,6 +269,7 @@ label {
 										<select id="Year" name="Year" class="form-control"
 										aria-invalid="true" required="required">
 										<option value="">Select Year</option>
+										<option value="2024">2024</option>
 										<option value="2023">2023</option>
 										<option value="2022">2022</option>
 										<option value="2021">2021</option>
@@ -547,7 +548,7 @@ label {
 					$(".loading").hide();
 					Swal.fire({
 						icon : 'success',
-						title : 'Cost center added successfully',
+						title : 'Budget master created successfully',
 						showCloseButton : false,
 						showCancelButton : false,
 						focusConfirm : false,

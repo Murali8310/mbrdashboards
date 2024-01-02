@@ -102,6 +102,7 @@ vertical-align: text-bottom ; footer {
 		display: none;
 	}
 }
+
 </style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -227,7 +228,7 @@ tr td:first-child:before
 											<thead class="thead-light">
 												<tr>
 									             <th class="headerStyles" scope="col"><b>Sl No.</b></th>
-													<th class="headerStyles" scope="col"><b>GL No.</b></th>
+													<th class="headerStyles" scope="col"><b>GL</b></th>
 													<th class="headerStyles" scope="col"><b>GL Description</b></th>
 													<th class="headerStyles" scope="col"><b>Cost Center</b></th>
 													<th class="headerStyles" scope="col"><b>Cost Center Description</b></th>
@@ -395,7 +396,7 @@ tr td:first-child:before
         "columns" : [{
 			"data" : "SL NO"
 		},{
-			"data" : "GL NO"
+			"data" : "GL"
 		}, {
 			"data" : "GL Description"
 		}, {

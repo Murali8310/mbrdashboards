@@ -4849,7 +4849,7 @@ public class UserDaoimpl implements UserDao {
 			String ccidExistanceSQL = "SELECT COUNT(*) FROM INDENT_MANAGER WHERE EmpCode=:CCID";
 			Query ccidExistanceQuery = entityManager.createNativeQuery(ccidExistanceSQL);
 			ccidExistanceQuery.setParameter("CCID", CCID);
-			int isccidExistance = (int) labelExistanceQuery.getSingleResult();
+			int isccidExistance = (int) ccidExistanceQuery.getSingleResult();
 			
 			if (isccidExistance == 0) {
 				Query insetIntoIndentManager = entityManager.createNativeQuery("INSERT INTO INDENT_MANAGER (EmpCode,\n"
