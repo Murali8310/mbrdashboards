@@ -355,7 +355,7 @@ table.dataTable tbody tr.selected a {
 														<td class='tbodyCustomColor'>${user[2]}</td>
 														<c:set var="collectionSize" value="${0}" />
 														<c:forEach items="${Collen}" var="ccen" varStatus="loop2">
-													<td class="editable-cell tbodyCustomColor">${user[loop2.index + 3]}</td>
+													<td class="tbodyCustomColor">${user[loop2.index + 3]}</td>
 													  <c:set var="collectionSize" value="${collectionSize + 1}" />
 													
 													</c:forEach>													

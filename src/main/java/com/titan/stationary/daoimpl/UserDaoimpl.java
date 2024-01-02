@@ -2487,13 +2487,13 @@ public class UserDaoimpl implements UserDao {
 				+ " FROM\n"
 				+ "				 (SELECT CCID, monthlybudget FROM BUDGET_MASTER  where YEAR=:YEAR) AS SourceTable\n"
 				+ "				 PIVOT( MAX(monthlybudget)  FOR CCID IN (" + finalcc + ")) AS PivotTable2\n"
-				+ "				 UNION ALL\n" + "				 SELECT 'Indent val. by stn portal' title," + finalcc
+				+ "				 UNION ALL\n" + "				 SELECT 'Indent Val by STN portal' title," + finalcc
 				+ " FROM\n"
 				+ "				 (SELECT CCID, isnull(sum(BUYER_QTY*UnitPrice),0) indent FROM BUDGET_MASTER bm\n"
 				+ "				 left join Indent_Transaction it on bm.CCID= it.COST_CENTER\n"
 				+ "				 and it.MONTH =  format(GETDATE(),'MMMMMMMMMMMMMMMM') and it.YEAR= format(GETDATE(),'yyyy') group by  CCID) AS SourceTable\n"
 				+ "				 PIVOT( MAX(indent)  FOR CCID IN (" + finalcc + ")) AS PivotTable3\n"
-				+ "				 UNION ALL\n" + "				 SELECT 'Indent val. by PO route' title," + finalcc
+				+ "				 UNION ALL\n" + "				 SELECT 'Indent Val by PO route' title," + finalcc
 				+ " FROM\n"
 				+ "				 (SELECT COST_CENTER,isnull( poamount,'0.00') SAPBILL FROM PO_Entry where YEAR=:YEAR  and MONTH=:MonthText) AS SourceTable\n"
 				+ "				 PIVOT( MAX(SAPBILL)  FOR COST_CENTER IN (" + finalcc + ")) AS PivotTable4\n"

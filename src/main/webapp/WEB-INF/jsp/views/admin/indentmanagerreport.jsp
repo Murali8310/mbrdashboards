@@ -332,7 +332,7 @@ border-color: #6c757d;
 													<th scope="col" class='headerStyles'><b>Buyer QTY</b></th>
 													<th scope="col" class='headerStyles'><b>Received QTY</b></th>
 													<th scope="col" class='headerStyles'><b>Document Date</b></th>
-													<th scope="col" class='headerStyles'><b>Value</b></th>
+													<th scope="col" class='headerStyles'><b>Value(RS)</b></th>
 													<th scope="col" class='headerStyles'><b>Month</b></th>
 													<th scope="col" class='headerStyles'><b>Year</b></th>
 													<th scope="col" class='headerStyles'><b>Status</b></th>

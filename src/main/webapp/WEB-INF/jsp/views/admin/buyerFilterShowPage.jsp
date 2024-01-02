@@ -473,8 +473,8 @@ vertical-align: text-bottom ; footer {
 															<td style="text-align:right !important">${user[collectionSize + 3] * user[collectionSize + 4]}</td>
 															<td style="text-align:center !important"></td>
 															<td style="text-align:right !important"></td>
-															<td style="text-align:center !important">${user[collectionSize + 3]}</td>
-															<td>${user[collectionSize + 6]}</td>
+															<td style="text-align:right !important">${user[collectionSize + 3]}</td>
+															<td style="text-align:center !important">${user[collectionSize + 6]}</td>
 															<td style="text-align:right !important">${user[collectionSize + 7]}</td>
  </tr>
 													</c:forEach>

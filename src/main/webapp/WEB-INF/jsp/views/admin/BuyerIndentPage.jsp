@@ -346,10 +346,10 @@ vertical-align: text-bottom ; footer {
 															${user[collectionSize + 4]}	
 														</td>
 															<td class='tbodyCustomColor' style="text-align:right">${user[collectionSize + 3] * user[collectionSize + 4]}</td>
-															<td class='tbodyCustomColor'></td>
+															<td style="text-align:center" class='tbodyCustomColor'></td>
 															<td class='tbodyCustomColor' style="text-align:right"></td>
-															<td class='tbodyCustomColor' style="text-align:center">${user[collectionSize + 3]}</td>
-															<td class='tbodyCustomColor'>${user[collectionSize + 6]}</td>
+															<td class='tbodyCustomColor' style="text-align:right">${user[collectionSize + 3]}</td>
+															<td class='tbodyCustomColor' style="text-align:center" >${user[collectionSize + 6]}</td>
 															<td class='tbodyCustomColor' style="text-align:right" >${user[collectionSize + 7]}</td>
  </tr>
 													</c:forEach>

@@ -206,7 +206,7 @@ margin-left: 3px;
 }
 </style>
 			<div class="container-fluid2 card-total card-static">
-			<div class="row" style="background-color: #4db719; align-items: baseline; padding-top: 5px; 
+			<div class="row" style="background-color: #4db719;align-items: baseline; padding-top: 5px; 
 					margin-left: 13px !important; width: 98%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); 
 					border-radius: 10px; margin-bottom: 2px;">
 					<div  id="totalOutput2"
@@ -217,7 +217,7 @@ margin-left: 3px;
 					</div>
 			<div class="row" style="align-items: baseline; padding-top: 5px; 
 					margin-left: 13px !important; width: 98%; 
-					border-radius: 10px; margin-bottom: 2px;">
+					border-radius: 10px; margin-bottom: 2px;color:white">
 						<div class="col-md-4 col-lg-4 col-12" id="IndentNumber" style="font-size: 18px;"></div>
 						<div class="col-md-4 col-lg-5 col-12" id="totalOutput"
 							style="font-size: 18px;font-weight: bold;"></div>
@@ -373,17 +373,17 @@ function getProductByIndent(){
 				productListHTML += '	<div class="el-overlay"></div>';
 				productListHTML += '</div>';
 				productListHTML += ' <div class="el-card-content " style="padding-left: 10px">';
-				productListHTML += '<h5 class="product" class="m-b-0" style="text-align: start;">'
+				productListHTML += '<h5 class="product" class="m-b-0" style="text-align: start;font-weight:600">'
 						+ product[1] + '</h5>';
 
 				productListHTML += '<div class="row">';
 				productListHTML += '<div class="col-7">';
-				productListHTML += '	<h5 class="m-b-0" style="text-align: start;">';
-				productListHTML += '		<label class="price" id="price">₹ '
+				productListHTML += '	<h5 class="m-b-0" style="text-align: start;font-weight:600">';
+				productListHTML += '		<label class="price" id="price" style="left:5px;font-weight : 600 !important;">₹ '
 						+ product[4] + '</label>';
-				productListHTML += '		<label style="border:1px solid lightgrey;left:5px;">UOM : '
+				productListHTML += '		<label style="left:5px;font-weight : 600 !important;">UOM : '
 						+ product[5] + '</label>';
-				productListHTML += '		<label class="productID" style="left:5px;">Product ID : '
+				productListHTML += '		<label class="productID" style="left:5px;font-weight : 600 !important;"">Product ID : '
 						+ product[0] + '</label>';
 				productListHTML += '	</h5>';
 				productListHTML += '</div>';
@@ -1001,17 +1001,17 @@ productListHTML += 'style="height: 240.86px;" onerror="this.src=\'' + defaultIma
 	productListHTML += '	<div class="el-overlay"></div>';
 	productListHTML += '</div>';
 	productListHTML += ' <div class="el-card-content " style="padding-left: 10px">';
-	productListHTML += '<h5 class="product" class="m-b-0" style="text-align: start;">'
+	productListHTML += '<h5 class="product" class="m-b-0" style="text-align: start;font-weight:600">'
 			+ product[1] + '</h5>';
 
 	productListHTML += '<div class="row">';
 	productListHTML += '<div class="col-7">';
-	productListHTML += '	<h5 class="m-b-0" style="text-align: start;">';
-	productListHTML += '		<label class="price" id="price">₹ '
+	productListHTML += '	<h5 class="m-b-0" style="text-align: start;font-weight:600">';
+	productListHTML += '		<label class="price" id="price" style="left:5px;font-weight : 600 !important;">₹ '
 			+ product[4] + '</label>';
-	productListHTML += '		<label style="border:1px solid lightgrey;left:5px;">UOM : '
+	productListHTML += '		<label style="left:5px;font-weight : 600 !important;">UOM : '
 			+ product[5] + '</label>';
-	productListHTML += '		<label class="productID" style="left:5px;">Product ID : '
+	productListHTML += '		<label class="productID" style="left:5px;font-weight : 600 !important;">Product ID : '
 			+ product[0] + '</label>';
 	productListHTML += '	</h5>';
 	productListHTML += '</div>';
