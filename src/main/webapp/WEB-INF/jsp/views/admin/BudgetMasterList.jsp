@@ -214,6 +214,7 @@ tr td:first-child:before
   counter-increment: Serial;      /* Increment the Serial counter */
   content: counter(Serial); /* Display the counter */
 }
+
 .headerStyles{
  background: #01AFAE !important;
  color: white !important;      
