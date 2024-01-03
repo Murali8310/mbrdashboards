@@ -18266,3 +18266,12 @@ width: auto; max-height: 200px; overflow: scroll}
 a {
 	text-decoration: none !important;
 }
+
+.buttons-html5 {
+       background: #01AFAE !important;
+    font-size: 16px !important;
+    color: white !important;
+    height: -3px;
+    padding: 9px !important;
+    border-radius: 8px !important;
+}

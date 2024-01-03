@@ -144,6 +144,14 @@ vertical-align: text-bottom ; footer {
     background-color: #fff;
     width: 350px; /* Adjust the width as needed */
 }
+.buttons-html5 {
+       background: #01AFAE !important;
+    font-size: 12Px !important;
+    color: white !important;
+    height: -3px;
+    padding: 9px !important;
+    border-radius: 8px !important;
+}
 
 /* Apply a class to the first cell in each row to adjust its width */
 .table-container tbody td.first-cell {
@@ -265,7 +273,7 @@ if(Year == ''){
 	});
 	return;
 		} 
-        location.href = 'http://localhost:8080/stationary/buyerFilterShowPage?Year='+Year+'&Month='+Month;
+        location.href = 'https://stationery.titan.in/stationary/buyerFilterShowPage?Year='+Year+'&Month='+Month;
     }
     
     function downloadtxt(id) {

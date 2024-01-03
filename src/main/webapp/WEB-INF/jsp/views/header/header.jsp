@@ -261,7 +261,7 @@ a:hover {
 		});
 
 		</script>
-		<script type="text/javascript">
+		 <script type="text/javascript">
 		 $.ajax({
  			type : 'GET',
  			url : 'getBudgetDetails',
@@ -275,7 +275,7 @@ a:hover {
  	        }
  			}
  		}); 
-		</script>
+		</script> 
 		
 </body>
 </html>

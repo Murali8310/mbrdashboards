@@ -2509,16 +2509,16 @@ public class UserDaoimpl implements UserDao {
 				+ "				 SELECT 'Cumulative Indent  Value (Incl. PO, Route Rs)' title, " + finalcc + "\n"
 				+ "				 FROm(SELECT CCID, (CASE WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN 0\n"
 				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.April , 0)\n"
-				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.April + bm.MaY , 0)\n"
-				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.April + bm.MaY + bm.june , 0)\n"
-				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July , 0)\n"
-				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August , 0)\n"
-				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September , 0)\n"
-				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September + bm.October , 0)\n"
-				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September + bm.October +bm.November, 0)\n"
-				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September + bm.October +bm.November+bm.December, 0)\n"
-				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September + bm.October +bm.November+bm.December+bm.January, 0)\n"
-				+ "				 ELSE ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September + bm.October +bm.November +bm.December+bm.January +bm.February, 0) END) + (isnull(sum(BUYER_QTY*UnitPrice),0)+isnull(SAPBILL,0))\n"
+				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY , 0)\n"
+				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.April,0) + ISNULL( bm.MaY,0)+ ISNULL(bm.june , 0)\n"
+				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July , 0)\n"
+				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)\n"
+				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September , 0)\n"
+				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October , 0)\n"
+				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November, 0)\n"
+				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) +ISNULL( bm.june,0) + ISNULL(bm.July ,0)+ ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November,0)+ISNULL(bm.December, 0)\n"
+				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) +ISNULL( bm.june,0) +ISNULL( bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November,0)+ISNULL(bm.December,0)+ISNULL(bm.January, 0)\n"
+				+ "				 ELSE ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November,0) +ISNULL(bm.December,0)+ISNULL(bm.January,0) +ISNULL(bm.February, 0) END) + (isnull(sum(BUYER_QTY*UnitPrice),0)+isnull(SAPBILL,0))\n"
 				+ "				 AS cumulative_budget\n"
 				+ "				 FROM BUDGET_MASTER bm LEFT JOIN Indent_Transaction it ON bm.ccid = it.cost_center and it.YEAR=:YEAR and MONTH=:MonthText\n"
 				+ "				 GrOUP BY SAPBILL, bm.ccid,bm.Year,bm.CostCenterDescription,bm.BudValueRsL,bm.April,bm.MaY,bm.june,bm.July,bm.August,bm.September,bm.October,bm.November,bm.December,January,February ) AS SourceTable\n"
@@ -2527,16 +2527,16 @@ public class UserDaoimpl implements UserDao {
 				+ "\n"
 				+ "				 FROm(SELECT CCID, CAST(REPLACE(BudValueRsL, ',', '') AS INT) - ((CASE WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN 0\n"
 				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.April , 0)\n"
-				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.April + bm.MaY , 0)\n"
-				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.April + bm.MaY + bm.june , 0)\n"
+				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.April,0) +ISNULL( bm.MaY , 0)\n"
+				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june , 0)\n"
 				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.April, 0) + ISNULL(bm.MaY, 0) +ISNULL( bm.june, 0) + ISNULL(bm.July , 0) \n"
-				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August , 0)\n"
-				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September , 0)\n"
-				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September + bm.October , 0)\n"
-				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September + bm.October +bm.November, 0)\n"
-				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September + bm.October +bm.November+bm.December, 0)\n"
-				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September + bm.October +bm.November+bm.December+bm.January, 0)\n"
-				+ "				 ELSE ISNULL(bm.April + bm.MaY + bm.june + bm.July + bm.August +bm.September + bm.October +bm.November +bm.December+bm.January +bm.February, 0) END) + (isnull(sum(TOTAL_USER_QTY*UnitPrice),0)+isnull(SAPBILL,0)))\n"
+				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)\n"
+				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September , 0)\n"
+				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October , 0)\n"
+				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November, 0)\n"
+				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November,0)+ISNULL(bm.December, 0)\n"
+				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.April,0) +ISNULL( bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November,0)+ISNULL(bm.December,0)+ISNULL(bm.January, 0)\n"
+				+ "				 ELSE ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November,0) +ISNULL(bm.December,0)+ISNULL(bm.January,0) +ISNULL(bm.February, 0) END) + (isnull(sum(TOTAL_USER_QTY*UnitPrice),0)+isnull(SAPBILL,0)))\n"
 				+ "				 AS cumulative_budget\n"
 				+ "				 FROM BUDGET_MASTER bm LEFT JOIN Indent_Transaction it ON bm.ccid = it.cost_center and it.YEAR=:YEAR and MONTH=:MonthText\n"
 				+ "				 GrOUP BY SAPBILL, bm.ccid,bm.Year,bm.CostCenterDescription,bm.BudValueRsL,bm.April,bm.MaY,bm.june,bm.July,bm.August,bm.September,bm.October,bm.November,bm.December,January,February ) AS SourceTable\n"
@@ -5309,10 +5309,15 @@ public class UserDaoimpl implements UserDao {
 	@Override
 	public String ccValidation(String CCID, String loginId) {
 		String permitNumber = "";
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat year_Date = new SimpleDateFormat("YYYY");
+		String yearfromCal = year_Date.format(cal.getTime());
+		int cFY = Integer.valueOf(yearfromCal);
 		try {
-			String labelExistanceSQL = "SELECT COUNT(*) FROM BUDGET_MASTER WHERE CCID=:CCID";
+			String labelExistanceSQL = "SELECT COUNT(*) FROM BUDGET_MASTER WHERE CCID=:CCID and year=:YEAR";
 			Query labelExistanceQuery = entityManager.createNativeQuery(labelExistanceSQL);
   			labelExistanceQuery.setParameter("CCID", CCID);
+  			labelExistanceQuery.setParameter("YEAR", cFY);
 			int isExistance = (int) labelExistanceQuery.getSingleResult();
 			if (isExistance != 0) {
 				return "CCID is already available.";

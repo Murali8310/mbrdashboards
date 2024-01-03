@@ -39,6 +39,14 @@ section label {
     align-items: center;
     height: 100vh; /* Adjust the height to your preference */
 }
+.buttons-html5 {
+    font-size: 12Px !important;
+    background: #01AFAE !important;
+    color: white !important;
+    height: -3px;
+    padding: 9px !important;
+    border-radius: 8px !important;
+}
 vertical-align: text-bottom ; footer {
 	color: Teal;
 	font-weight: bold;
@@ -98,6 +106,18 @@ vertical-align: text-bottom ; footer {
 	.breadcrumb {
 		display: none;
 	}
+}
+.exportStyles {
+
+    background: #01AFAE;
+    animation: button-particles 1s ease-in-out infinite;
+    transform: translateY(-2px);
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    animation: button-shimmer 2s infinite;
+    transition: all 0.3s ease-in-out;
+    color: white;
+    /* document.getElementsByClassName('buttons-html5')[0].classList */
 }
 
 
@@ -675,7 +695,7 @@ $(document).ready(function () {
             buttons: [
                 {
                   extend: 'excelHtml5',
-                  text: '<i class="fa fa-file-excel-o">Export</i>',
+                  text: '<i class="fa fa-file-excel-o"> Export</i>',
                   titleAttr: 'Excel',
                   title: 'Buyer List',
                   customize: function(xlsx) {

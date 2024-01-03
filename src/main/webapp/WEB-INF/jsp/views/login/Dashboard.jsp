@@ -99,11 +99,14 @@
             console.log('allData', parsedData);
             if(document.getElementById('userRole').textContent.split(':')[1].trim() == 'Indent Manager'){
             	costCenter = document.getElementById('userName').textContent.split(':')[1].trim();
+            	 var today = new Date();
+            	  var year = today.getFullYear();
             	const index = parsedData.findIndex(function(element) {
-            		  return element[0] == Number(costCenter);
+            		  return element[0] == Number(costCenter) && (element[1] === Number(year));
             		});
             	if(index != -1){
             	costCenterDetails = parsedData[index]; 
+            	console.log('costCenterDetails',costCenterDetails)
             	var options = {
             		    chart: {
             		        type: 'bar',

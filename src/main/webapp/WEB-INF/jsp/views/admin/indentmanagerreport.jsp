@@ -524,7 +524,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/additional-me
 												dom : 'Bfrtip',
 												buttons : [ {
 													extend : 'excelHtml5',
-													text : '<i class="fa fa-file-excel-o">Export</i>',
+													text : '<i class="fa fa-file-excel-o"> Export</i>',
 													titleAttr : 'Excel',
 													title : 'Indent Report'
 												} ],

@@ -31,6 +31,14 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
 	rel="stylesheet" type="text/css" />
 <style>
+.buttons-html5 {
+font-size: 12px !important;
+       background: #01AFAE !important;
+    color: white !important;
+    height: -3px;
+    padding: 9px !important;
+    border-radius: 8px !important;
+}
 section label {
 	padding-top: 10px;
 }
@@ -957,7 +965,7 @@ $(document).ready(function () {
 				
 				Swal.fire({
 					icon : 'success',
-					title : 'Indent updated successfully. </br></br> Please proceed and click <span style="color: #3d69d4;"> "Send to Vendor</span>"',
+					title : 'Indent Updated Successfully. </br></br> Please Proceed and Click <span style="color: #3d69d4;"> "Send to Vendor</span>"',
 					showCloseButton : false,
 					focusConfirm : true,
 				}).then((result) => {
