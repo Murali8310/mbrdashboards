@@ -783,7 +783,7 @@ font-weight: bold;
 			success : function(response) { 
 				//var data = jQuery.parseJSON(response);
 				
-				if(response.startsWith("Indent is created successfully")){
+				if(response.startsWith("Indent Is Created Successfully")){
 					
 			        	Swal.fire({
 			        	

@@ -177,16 +177,15 @@ a:hover {
 			<!-- ============================================================== -->
 			<!-- User profile and search -->
 			<!-- ============================================================== -->
-			<li class="nav-item dropdown"><a
+			<li class="nav-item dropdown" id="dropdownButton" aria-expanded="false"><a
 				class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic"
-				href="landPage" data-toggle="dropdown" aria-haspopup="true"
+				 data-toggle="dropdown" aria-haspopup="true"
 				aria-expanded="false"> 
-				<!--  <img src="assets/images/users/1.jpg" alt="user" class="rounded-circle" width="31"> -->
 					<img src="assets/images/img_avatar.png" width="50px" alt="user"
 					class="rounded-circle" width="31">
 			</a>
 
-				<div class="dropdown-menu dropdown-menu-right user-dd animated">
+				<div class="dropdown-menu dropdown-menu-right user-dd animated" id="dropdownContent" aria-hidden="true">
 					<!--  <a class="dropdown-item" href="javascript:void(0)"><i class="ti-user m-r-5 m-l-5"></i> My Profile</a> -->
 
 
@@ -261,7 +260,8 @@ a:hover {
 		});
 
 		</script>
-		 <script type="text/javascript">
+		  <script type="text/javascript">
+		  if(document.getElementById('userRole').textContent.split(':')[1].trim() == 'Indent Manager'){
 		 $.ajax({
  			type : 'GET',
  			url : 'getBudgetDetails',
@@ -275,6 +275,41 @@ a:hover {
  	        }
  			}
  		}); 
+		  }
+		  		  function toggleExpand() {
+			  var expandBtn = document.getElementById('expandBtn');
+			  var expandableSection = document.getElementById('expandableSection');
+
+			  var isExpanded = expandBtn.getAttribute('aria-expanded') === 'true';
+
+			  if (isExpanded) {
+			    expandBtn.setAttribute('aria-expanded', 'false');
+			    expandableSection.setAttribute('aria-hidden', 'true');
+			  } else {
+			    expandBtn.setAttribute('aria-expanded', 'true');
+			    expandableSection.setAttribute('aria-hidden', 'false');
+			  }
+			}
+		  		//  dropdownBtn is the button that toggles the dropdown
+		  		var dropdownBtn = document.getElementById('dropdownButton');
+		  		var dropdownContent = document.getElementById('dropdownContent');
+
+		  		// Function to handle clicks outside the dropdown
+		  		function handleClickOutside(event) {
+		  		  if (event.target !== dropdownBtn && !dropdownContent.contains(event.target)) {
+		  		    // Click occurred outside the dropdown
+		  		    dropdownContent.classList.remove('show');
+		  		  }
+		  		}
+
+		  		// event listener to the document for clicks
+		  		document.addEventListener('click', handleClickOutside);
+		  	// Function to handle click on the dropdown button
+		  		function handleDropdownClick(event) {
+		  		  dropdownContent.classList.toggle('show');
+		  		  event.stopPropagation(); // Prevent the click event from propagating to the document
+		  		}
+		  		dropdownBtn.addEventListener('click', handleDropdownClick);
 		</script> 
 		
 </body>

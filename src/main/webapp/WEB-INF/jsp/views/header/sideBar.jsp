@@ -149,11 +149,7 @@ margin: 5px;
 					aria-expanded="false"><i class="fa fa-file-excel"></i><span
 						class="hide-menu" style="font-family: 'Montserrat'">Reports</span></a></li>
 						
-						<li class="sidebar-item"><a
-					class="sidebar-link far " href="usermanagementupload"
-					aria-expanded="false"><i class="fa fa-upload"></i><span
-						class="hide-menu" style="font-family: 'Montserrat'">Bulk upload</span></a></li>
-						
+							
 						<!-- <li class="sidebar-item"><a
 					class="sidebar-link far" href="update"
 					aria-expanded="false"><i class="fa fa-edit"></i><span

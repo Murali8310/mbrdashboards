@@ -246,9 +246,9 @@ public class UserServiceimpl implements Userservice {
 	}
 
 	@Override
-	public List<Object> getBuyerFooterList(String Year, String Month) {
+	public List<Object> getBuyerFooterList(String Year, String Month,String yearfromCal1) {
 		List<Object> getAllUserDetails;
-		getAllUserDetails = userDao.getBuyerFooterList(Year,Month);
+		getAllUserDetails = userDao.getBuyerFooterList(Year,Month,yearfromCal1);
 		return getAllUserDetails;
 	}
 	

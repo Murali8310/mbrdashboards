@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -1037,6 +1038,11 @@ System.err.println("murali debugger");
 		String IndentCreation = userService.IndentTransactionUpdate(products, loginId, userId, userName);
 		return IndentCreation;
 	}
+	
+	 public static int getMonthNumber(String monthName) {
+	        Month month = Month.valueOf(monthName.toUpperCase());
+	        return month.getValue();
+	    }
 
 	/*
 	 * Created by : Gokul Created Date :12-07-2023 Description : Buyer Indent Page
@@ -1067,8 +1073,14 @@ System.err.println("murali debugger");
 
 		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
 		String MonthText = month.format(cal.getTime());
-		
-		
+		int cFY = Integer.valueOf(yearfromCal);
+		if (getMonthNumber(MonthText) < 4) {
+			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+		 yearfromCal = String.valueOf(cFY);
+		    System.out.println("yearfromCal"+yearfromCal);
+		}
+		String yearfromCal1 = year_Date.format(cal.getTime());
+
 		List<Object> BuyerList;
 		List<Object> FooterList;
 		List<String> finalcol = null;
@@ -1077,7 +1089,7 @@ System.err.println("murali debugger");
 		
 		List<String> collen = userService.getAllcolumnlength(yearfromCal,MonthText);
 		System.out.println("collen"+collen);
-		FooterList = userService.getBuyerFooterList(yearfromCal,MonthText);
+		FooterList = userService.getBuyerFooterList(yearfromCal,MonthText,yearfromCal1);
 		BuyerList = userService.getBuyerIndentList(yearfromCal,MonthText);
 		model.addAttribute("BuyerList", BuyerList);
 		model.addAttribute("FooterList", FooterList);
@@ -1112,7 +1124,7 @@ System.err.println("murali debugger");
 		     return null;
 	    }
 		
-		FooterList = userService.getBuyerFooterList(Year,Month);
+		FooterList = userService.getBuyerFooterList(Year,Month,null);
 		BuyerList = userService.getBuyerIndentList(Year,Month);
 		model.addAttribute("BuyerList", BuyerList);
 		model.addAttribute("FooterList", FooterList);
@@ -1250,7 +1262,12 @@ System.err.println("murali debugger");
 
 		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
 		String MonthText = month.format(cal.getTime());
-		
+		int cFY = Integer.valueOf(yearfromCal);
+		if (getMonthNumber(MonthText) < 4) {
+			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+		 yearfromCal = String.valueOf(cFY);
+		    System.out.println("yearfromCal"+yearfromCal);
+		}
 		List<Object> BuyerList;
 		List<Object> FooterList;
 		List<String> finalcol = userService.getAllheader(yearfromCal,MonthText);
@@ -1653,7 +1670,7 @@ List<Object> BuyerList;
 			return null;
 		}
 		
-		FooterList = userService.getBuyerFooterList(Year,Month);
+		FooterList = userService.getBuyerFooterList(Year,Month,null);
 		BuyerList = userService.getBuyerIndentList(Year,Month);
 		model.addAttribute("BuyerList", BuyerList);
 		model.addAttribute("FooterList", FooterList);
@@ -2272,6 +2289,7 @@ System.out.println("CCCOWNER"+CCCOWNER);
 			Calendar cal = Calendar.getInstance();
 			SimpleDateFormat year_Date = new SimpleDateFormat("YYYY");
 			String yearfromCal = year_Date.format(cal.getTime());
+			String yearfromCal1 = year_Date.format(cal.getTime());
 
 			SimpleDateFormat month_Date = new SimpleDateFormat("MM");
 			// String monthFromCal = month_Date.format(cal.getTime());
@@ -2279,7 +2297,12 @@ System.out.println("CCCOWNER"+CCCOWNER);
 
 			SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
 			String MonthText = month.format(cal.getTime());
-			
+			int cFY = Integer.valueOf(yearfromCal);
+			if (getMonthNumber(MonthText) < 4) {
+				cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+			 yearfromCal = String.valueOf(cFY);
+			    System.out.println("yearfromCal"+yearfromCal);
+			}
 			
 			List<Object> BuyerList=null;
 			List<Object> FooterList = null;
@@ -2288,13 +2311,13 @@ System.out.println("CCCOWNER"+CCCOWNER);
 			if(Year.equalsIgnoreCase("0000"))
 			{
 				collen = userService.getAllcolumnlength(yearfromCal,MonthText);
-				FooterList = userService.getBuyerFooterList(yearfromCal,MonthText);
+				FooterList = userService.getBuyerFooterList(yearfromCal,MonthText,yearfromCal1);
 				BuyerList = userService.getBuyerIndentList(yearfromCal,MonthText);
 			finalcol= userService.getAllheader(yearfromCal,MonthText);
 			}
 			else {
 				collen = userService.getAllcolumnlength(Year,Month);
-				FooterList = userService.getBuyerFooterList(Year,Month);
+				FooterList = userService.getBuyerFooterList(Year,Month,Year);
 				BuyerList = userService.getBuyerIndentList(Year,Month);
 				finalcol= userService.getAllheader(Year,Month);
 
@@ -2321,6 +2344,7 @@ System.out.println("CCCOWNER"+CCCOWNER);
 			Calendar cal = Calendar.getInstance();
 			SimpleDateFormat year_Date = new SimpleDateFormat("YYYY");
 			String yearfromCal = year_Date.format(cal.getTime());
+			String yearfromCal1 = year_Date.format(cal.getTime());
 
 			SimpleDateFormat month_Date = new SimpleDateFormat("MM");
 			// String monthFromCal = month_Date.format(cal.getTime());
@@ -2328,7 +2352,12 @@ System.out.println("CCCOWNER"+CCCOWNER);
 
 			SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
 			String MonthText = month.format(cal.getTime());
-			
+			int cFY = Integer.valueOf(yearfromCal);
+			if (getMonthNumber(MonthText) < 4) {
+				cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+			 yearfromCal = String.valueOf(cFY);
+			    System.out.println("yearfromCal"+yearfromCal);
+			}
 			
 			List<Object> BuyerList=null;
 			List<Object> FooterList = null;
@@ -2339,13 +2368,13 @@ System.out.println("CCCOWNER"+CCCOWNER);
 				finalcol= userService.getAllheader(yearfromCal,MonthText);
 				collen = userService.getAllcolumnlength(yearfromCal,MonthText);
 				BuyerList = userService.getBuyerIndentList(yearfromCal,MonthText);
-				FooterList = userService.getBuyerFooterList(yearfromCal,MonthText);
+				FooterList = userService.getBuyerFooterList(yearfromCal,MonthText,yearfromCal1);
 			}
 			else {
 				finalcol= userService.getAllheader(Year,Month);
 				collen = userService.getAllcolumnlength(Year,Month);
 				BuyerList = userService.getBuyerIndentList(Year,Month);
-				FooterList = userService.getBuyerFooterList(Year,Month);
+				FooterList = userService.getBuyerFooterList(Year,Month,Year);
 				System.out.println("finalcol"+finalcol);
 				System.out.println("collen"+collen);
 				System.out.println("BuyerList"+BuyerList);
@@ -2379,7 +2408,12 @@ System.out.println("CCCOWNER"+CCCOWNER);
 
 			SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
 			String MonthText = month.format(cal.getTime());
-		
+			int cFY = Integer.valueOf(yearfromCal);
+			if (getMonthNumber(MonthText) < 4) {
+				cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+			 yearfromCal = String.valueOf(cFY);
+			    System.out.println("yearfromCal"+yearfromCal);
+			}
 			
 			List<Object> BuyerList;
 			List<Object> FooterList;
@@ -2417,7 +2451,12 @@ System.out.println("CCCOWNER"+CCCOWNER);
 
 			SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
 			String MonthText = month.format(cal.getTime());
-		
+			int cFY = Integer.valueOf(yearfromCal);
+			if (getMonthNumber(MonthText) < 4) {
+				cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+			 yearfromCal = String.valueOf(cFY);
+			    System.out.println("yearfromCal"+yearfromCal);
+			}
 			
 			List<Object> BuyerList;
 			List<Object> FooterList;

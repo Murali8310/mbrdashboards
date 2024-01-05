@@ -18275,3 +18275,14 @@ a {
     padding: 9px !important;
     border-radius: 8px !important;
 }
+#example_filter label {
+font-size: 18px !important;
+    font-weight: bold !important;
+        color: black;
+}
+
+
+
+label {
+	font-size: 18px !important;
+}

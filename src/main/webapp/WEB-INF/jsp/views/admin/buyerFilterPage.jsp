@@ -273,7 +273,7 @@ if(Year == ''){
 	});
 	return;
 		} 
-        location.href = 'https://stationery.titan.in/stationary/buyerFilterShowPage?Year='+Year+'&Month='+Month;
+        location.href = 'http://localhost:8080/stationary/buyerFilterShowPage?Year='+Year+'&Month='+Month;
     }
     
     function downloadtxt(id) {

@@ -784,7 +784,7 @@ $(document).ready(function () {
             buttons: [
                 {
                   extend: 'excelHtml5',
-                  text: '<i class="fa fa-file-excel-o"></i>',
+                  text: '<i class="fa fa-file-excel-o"> Export</i>',
                   titleAttr: 'Excel',
                   title: 'Buyer List',
                   customize: function(xlsx) {

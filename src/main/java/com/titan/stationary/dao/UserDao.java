@@ -96,7 +96,7 @@ public interface UserDao {
 
 		List<Object> getBuyerIndentList(String Year, String Month);
 
-		List<Object> getBuyerFooterList(String Year, String Month);
+		List<Object> getBuyerFooterList(String Year, String Month, String yearfromCal1);
 
 		/**
 		 * Gokul

@@ -320,10 +320,10 @@ border-color:#01AFAE;
     	 history.go(-1);
  	};
  	
- 	$("input:text[name='login_id']").attr('placeholder','Enter your Cost Center');
+ 	$("input:text[name='login_id']").attr('placeholder','Enter Your Cost Center');
  	function textboxchange1(){
 
- 		$("input:text[name='login_id']").attr('placeholder','Enter your Cost Center');
+ 		$("input:text[name='login_id']").attr('placeholder','Enter Your Cost Center');
  		$("input:text[name='login_id']").val('');
  		
  	}

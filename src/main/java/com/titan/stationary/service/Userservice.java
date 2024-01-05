@@ -81,7 +81,7 @@ public interface Userservice {
 
 	List<Object> getBuyerIndentList(String Year, String Month);
 
-	List<Object> getBuyerFooterList(String Year, String Month);	
+	List<Object> getBuyerFooterList(String Year, String Month, String yearfromCal1);	
 	
 	List<String> GetAllProductsByIndentNumber(String loginId, String IndentNumner);
 

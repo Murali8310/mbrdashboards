@@ -548,7 +548,7 @@ label {
 					$(".loading").hide();
 					Swal.fire({
 						icon : 'success',
-						title : 'Budget master created successfully',
+						title : 'Budget Master Created Successfully',
 						showCloseButton : false,
 						showCancelButton : false,
 						focusConfirm : false,

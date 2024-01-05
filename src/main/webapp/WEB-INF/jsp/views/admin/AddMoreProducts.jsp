@@ -849,7 +849,7 @@ console.log('value,price,prev',value,price,prev)
 
 			success : function(response) {
 				console.log(response)
-				if(response='Indent Updated SuccessFully'){
+				if(response='Indent Updated Successfully'){
 				Swal.fire({
 					icon : 'success',
 					title : response,
@@ -859,6 +859,8 @@ console.log('value,price,prev',value,price,prev)
 				})
 				getBudgetDetails();
 				getProductByIndent();
+					$('input[type=checkbox]').prop('checked', false);
+					
 				}else{
 					Swal.fire({
 						icon : 'error',

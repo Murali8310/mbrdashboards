@@ -30,6 +30,11 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
 	rel="stylesheet" type="text/css" />
 <style>
+#example_filter label {
+font-size: 18px !important;
+    font-weight: bold !important;
+        color: black;
+}
 section label {
 	padding-top: 10px;
 }
@@ -247,7 +252,8 @@ margin-top: 20px !important;
 										<div class="col-sm-12">
 										<div class="filter-controls">
 											<div class="col-md-3 filter-item">
-												<label for="Month" class="month-label">Month:</label> <select id="Month"
+												<label style="font-size: 18px !important;
+    font-weight: bold !important;" for="Month" class="month-label">Month:</label> <select id="Month"
 													name="Month" class="form-control" aria-invalid="true"
 													required="required" style="width: 100%;">
 													<option value="All">All</option>
@@ -266,17 +272,23 @@ margin-top: 20px !important;
 												</select>
 											</div>
 											<div class="col-md-3 filter-item">
-												<label for="yearDropdown"class="year-label">Year:</label> <select
+												<label style="font-size: 18px !important;
+    font-weight: bold !important;" for="yearDropdown"class="year-label">Year:</label> <select
 													id="Year" class="form-control" aria-invalid="true"
 													required="required" style="width: 97%;">
-													<c:forEach items="${years}" var="year">
+													<%-- <c:forEach items="${years}" var="year">
 														<option value="${year}">${year}</option>
-													</c:forEach>
+													</c:forEach> --%>
+													<option value="2024">2024</option>
+													<option value="2023">2023</option>
+													<option value="2022">2022</option>
+													<option value="2021">2021</option>
 
 												</select>
 											</div>
 											<div class="col-md-3 filter-item">
-												<button class="btn btn-primary btn-search">Search</button>
+												<button style="font-size: 18px !important;
+    font-weight: bold !important;"s class="btn btn-primary btn-search">Search</button>
 											</div>
 										</div>
 

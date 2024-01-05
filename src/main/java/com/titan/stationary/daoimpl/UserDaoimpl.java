@@ -529,7 +529,7 @@ public class UserDaoimpl implements UserDao {
 
 		Query selectQuery = entityManager.createNativeQuery(
 				"select DISTINCT CATEGORY,CATORDERS from PRODUCT_MASTER WHERE  CATEGORY <> '' GROUP BY CATEGORY,CATORDERS ORDER BY CATORDERS ASC");
-		try {
+		try {	
 			getCategoryList = selectQuery.getResultList();
 		} catch (HibernateException e) {
 
@@ -608,6 +608,12 @@ public class UserDaoimpl implements UserDao {
 		String formattedDate = dateFormat.format(cal.getTime());
 
 		int cFY = Integer.valueOf(yearfromCal);
+		
+		if (getMonthNumber(MonthText) < 4) {
+			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+		 yearfromCal = String.valueOf(cFY);
+		    System.out.println("yearfromCal"+yearfromCal);
+		}
 		Query checkIndentEntry = entityManager.createNativeQuery(
 				"select count(DOC_NUMBER) from Indent_Transaction where year=:year and month=:month and cost_center=:cost_center");
 
@@ -774,7 +780,7 @@ public class UserDaoimpl implements UserDao {
 			}
 		}
 		if (response != 0) {
-			r = "Indent is created successfully : " + maxId;
+			r = "Indent Is Created Successfully : " + maxId;
 		} else {
 			r = "Update failed";
 		}
@@ -845,6 +851,13 @@ public class UserDaoimpl implements UserDao {
 		String yearfromCal = year_Date.format(cal.getTime());
 		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
 		String Month = month.format(cal.getTime());
+		
+		int cFY = Integer.valueOf(yearfromCal);
+		if (getMonthNumber(Month) < 4) {
+			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+		 yearfromCal = String.valueOf(cFY);
+		    System.out.println("yearfromCal"+yearfromCal);
+		}
 		List<Object> IndentList;
 		Query selectQuery = entityManager.createNativeQuery(
 				"SELECT DISTINCT DOC_NUMBER,format(DOC_DATE,'dd-MMM-yyy') DOC_DATE,im.LMSID,STATUS FROM Indent_Transaction it "
@@ -889,6 +902,11 @@ public class UserDaoimpl implements UserDao {
 		String formattedDate = dateFormat.format(cal.getTime());
 
 		int cFY = Integer.valueOf(yearfromCal);
+		if (getMonthNumber(MonthText) < 4) {
+			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+		 yearfromCal = String.valueOf(cFY);
+		    System.out.println("yearfromCal"+yearfromCal);
+		}
 
 		Query checkIndentTransaction = entityManager.createNativeQuery(
 				"select count(doc_number) from indent_Transaction where year=:year and month=:month and cost_center=:cost_center");
@@ -1106,6 +1124,13 @@ public class UserDaoimpl implements UserDao {
 		String yearfromCal = year_Date.format(cal.getTime());
 		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
 		String Month = month.format(cal.getTime());
+		
+		int cFY = Integer.valueOf(yearfromCal);
+		if (getMonthNumber(Month) < 4) {
+			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+		 yearfromCal = String.valueOf(cFY);
+		    System.out.println("yearfromCal"+yearfromCal);
+		}
 		List<String> getProductsByIndent;
 
 		Query selectQuery = entityManager
@@ -1157,7 +1182,11 @@ public class UserDaoimpl implements UserDao {
 		String formattedDate = dateFormat.format(cal.getTime());
 
 		int cFY = Integer.valueOf(yearfromCal);
-
+		if (getMonthNumber(MonthText) < 4) {
+			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+		 yearfromCal = String.valueOf(cFY);
+		    System.out.println("yearfromCal"+yearfromCal);
+		}
 		Query checkIndentEntry = entityManager.createNativeQuery(
 				"select count(DOC_NUMBER) from indent_Transaction where year=:year and month=:month and cost_center=:cost_center");
 		checkIndentEntry.setParameter("year", cFY);
@@ -1674,10 +1703,16 @@ public class UserDaoimpl implements UserDao {
 		SimpleDateFormat year_Date = new SimpleDateFormat("YYYY");
 		String yearfromCal = year_Date.format(cal.getTime());
 		List<Object> getBudgetDetails;
-
+		String currentYearForPoEntry = null;
 		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
 		String MonthText = month.format(cal.getTime());
-
+		int cFY = Integer.parseInt(yearfromCal);
+		if (getMonthNumber(MonthText) < 4) {
+			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+		 yearfromCal = String.valueOf(cFY);
+		 currentYearForPoEntry = year_Date.format(cal.getTime());
+		    System.out.println("yearfromCal"+yearfromCal);
+		}
 //		Query selectQuery = entityManager.createNativeQuery(
 //				" SELECT bm.ccid,bm.Year,bm.CostCenterDescription,bm.BudValueRsL,(bm.BudValueRsL-((\n"
 //						+ "CASE WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
@@ -1763,7 +1798,7 @@ public class UserDaoimpl implements UserDao {
 				+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)\n"
 				+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)\n"
 				+ "WHEN DATENAME(MONTH, GETDATE()) = 'march' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)+ ISNULL(bm.March , 0)\n"
-				+ "END) + isnull(sum(poe.POAmount),0)) ) as BalanceValue,\n"
+				+ "END) + isnull(sum(poe.POAmount),0) + isnull(sum(poforCurYr.POAmount),0)) ) as BalanceValue,\n"
 				+ "(((\n"
 				+ "CASE WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
 				+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) \n"
@@ -1778,7 +1813,7 @@ public class UserDaoimpl implements UserDao {
 				+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)\n"
 				+ "WHEN DATENAME(MONTH, GETDATE()) = 'march' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)+ ISNULL(bm.March , 0)\n"
 				+ "END) \n"
-				+ "+ isnull(sum(poe.POAmount),0)\n"
+				+ "+ isnull(sum(poe.POAmount),0) + isnull(sum(poforCurYr.POAmount),0)\n"
 				+ "\n"
 				+ ")) as cumulative_indent,\n"
 				+ "(CASE\n"
@@ -1815,13 +1850,17 @@ public class UserDaoimpl implements UserDao {
 				+ "    ) AS BuyerQuantity\n"
 				+ "FROM BUDGET_MASTER bm \n"
 				+ "left join PO_Entry poe on poe.COST_CENTER=bm.CCID AND POE.Year=BM.Year and poe.MONTHNUMBER > 3 \n"
-				+ "AND poe.MONTHNUMBER <= DATEPART(MM,GETDATE())  \n"
+				+ "AND poe.MONTHNUMBER <=:decemberMOnthNum  \n"
+				+ "left join PO_Entry poforCurYr on poforCurYr.COST_CENTER=bm.CCID AND poforCurYr.Year=:currentYearForPoEntry\n"
+				+ "AND poforCurYr.MONTHNUMBER <=:poforCurYr \n"
 				+ "WHERE CCID=:userId AND bm.YEAR=:year\n"
 				+ " GROUP BY bm.ccid,bm.Year,bm.CostCenterDescription,bm.BudValueRsL,bm.April,bm.MaY,bm.june,bm.July, bm.August,bm.September,\n"
 				+ "bm.October,bm.November,bm.December,January,February,March");
 		
 		selectQuery.setParameter("userId", userId);
-
+		selectQuery.setParameter("decemberMOnthNum", getMonthNumber(MonthText));
+		selectQuery.setParameter("poforCurYr", getMonthNumber(MonthText));
+		selectQuery.setParameter("currentYearForPoEntry", currentYearForPoEntry);
 		selectQuery.setParameter("year", yearfromCal);
 		selectQuery.setParameter("MonthText", MonthText);
 		;
@@ -1928,6 +1967,11 @@ public class UserDaoimpl implements UserDao {
 		String formattedDate = dateFormat.format(cal.getTime());
 
 		int cFY = Integer.valueOf(yearfromCal);
+		if (getMonthNumber(MonthText) < 4) {
+			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+		 yearfromCal = String.valueOf(cFY);
+		    System.out.println("yearfromCal"+yearfromCal);
+		}
 
 //			 Query checkIndentTransaction = entityManager.
 //					 createNativeQuery("select count(DOC_NUMBER) from indent_Transaction where year=:year and month=:month and cost_center=:cost_center");
@@ -2087,7 +2131,11 @@ public class UserDaoimpl implements UserDao {
 		String formattedDate = dateFormat.format(cal.getTime());
 
 		int cFY = Integer.valueOf(yearfromCal);
-
+		if (getMonthNumber(MonthText) < 4) {
+			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+		 yearfromCal = String.valueOf(cFY);
+		    System.out.println("yearfromCal"+yearfromCal);
+		}
 		Query gettempID = entityManager.createNativeQuery(
 				"select DISTINCT DOC_NUMBER from temp_indent_Transaction where year=:year and month=:month and cost_center=:cost_center");
 
@@ -2164,8 +2212,13 @@ public class UserDaoimpl implements UserDao {
 
 		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
 		String MonthText = month.format(cal.getTime());
-
-		String finalcc = getAllIndentedCostCenters(yearfromCal, MonthText);
+		int cFY = Integer.valueOf(yearfromCal);
+		if (getMonthNumber(MonthText) < 4) {
+			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+		 yearfromCal = String.valueOf(cFY);
+		    System.out.println("yearfromCal"+yearfromCal+MonthText);
+		}
+		String finalcc = getAllIndentedCostCenters(yearfromCal, Month);
 
 		List<Object> getAllUserDetails = null;
 		if (finalcc.length() == 2) {
@@ -2463,7 +2516,7 @@ public class UserDaoimpl implements UserDao {
 	 */
 
 	@Override
-	public List<Object> getBuyerFooterList(String Year, String Month) {
+	public List<Object> getBuyerFooterList(String Year, String Month,String yearfromCal1) {
 		List<Object> BuyerFooterList = null;
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat year_Date = new SimpleDateFormat("YYYY");
@@ -2471,8 +2524,13 @@ public class UserDaoimpl implements UserDao {
 
 		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
 		String MonthText = month.format(cal.getTime());
-
-		String finalcc = getAllIndentedCostCenters(yearfromCal, MonthText);
+		int cFY = Integer.valueOf(yearfromCal);
+		if (getMonthNumber(MonthText) < 4) {
+			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+		 yearfromCal = String.valueOf(cFY);
+		    System.out.println("yearfromCal"+yearfromCal);
+		}
+		String finalcc = getAllIndentedCostCenters(yearfromCal, Month);
 		System.out.println("BuyerListfinalcc" + finalcc.length() + finalcc);
 		if (finalcc.length() == 2) {
 			System.out.println("finalcc.length()" + finalcc.length());
@@ -2491,18 +2549,18 @@ public class UserDaoimpl implements UserDao {
 				+ " FROM\n"
 				+ "				 (SELECT CCID, isnull(sum(BUYER_QTY*UnitPrice),0) indent FROM BUDGET_MASTER bm\n"
 				+ "				 left join Indent_Transaction it on bm.CCID= it.COST_CENTER\n"
-				+ "				 and it.MONTH =  format(GETDATE(),'MMMMMMMMMMMMMMMM') and it.YEAR= format(GETDATE(),'yyyy') group by  CCID) AS SourceTable\n"
+				+ "				 and it.MONTH =:MonthText and it.YEAR=:YEAR group by  CCID) AS SourceTable\n"
 				+ "				 PIVOT( MAX(indent)  FOR CCID IN (" + finalcc + ")) AS PivotTable3\n"
 				+ "				 UNION ALL\n" + "				 SELECT 'Indent Val by PO route' title," + finalcc
 				+ " FROM\n"
-				+ "				 (SELECT COST_CENTER,isnull( poamount,'0.00') SAPBILL FROM PO_Entry where YEAR=:YEAR  and MONTH=:MonthText) AS SourceTable\n"
+				+ "				 (SELECT COST_CENTER,isnull( poamount,'0.00') SAPBILL FROM PO_Entry where YEAR=:yearfromCal1  and MONTH=:MonthText) AS SourceTable\n"
 				+ "				 PIVOT( MAX(SAPBILL)  FOR COST_CENTER IN (" + finalcc + ")) AS PivotTable4\n"
 				+ "				 UNION ALL\n" + "				 SELECT 'Total Indent Value(Rs)' title," + finalcc
 				+ " FROM\n"
 				+ "				 (SELECT CCID, (isnull(sum(BUYER_QTY*UnitPrice),0)+isnull(poe.POAmount,0)) totalIndent FROM BUDGET_MASTER bm\n"
 				+ "				 left join Indent_Transaction it on bm.CCID= it.COST_CENTER\n"
-				+ "				 left join PO_Entry poe on poe.COST_CENTER = it.COST_CENTER and it.MONTH=poe.MONTH and poe.Year=it.YEAR "
-				+ "				where it.MONTH =  format(GETDATE(),'MMMMMMMMMMMMMMMM') and it.YEAR= format(GETDATE(),'yyyy') \n"
+				+ "				 left join PO_Entry poe on poe.COST_CENTER = it.COST_CENTER and it.MONTH=poe.MONTH"
+				+ "				where it.MONTH =:MonthText and it.YEAR=:YEAR \n"
 				+ "				 group by  CCID,POAmount) AS SourceTable\n"
 				+ "				 PIVOT( MAX(totalIndent)  FOR CCID IN (" + finalcc + ")) AS PivotTable5\n"
 				+ "				 union all\n"
@@ -2544,6 +2602,8 @@ public class UserDaoimpl implements UserDao {
 
 		getresultlist.setParameter("MonthText", Month);
 		getresultlist.setParameter("YEAR", Year);
+		getresultlist.setParameter("yearfromCal1", yearfromCal1);
+
 
 		try {
 			BuyerFooterList = getresultlist.getResultList();
@@ -2580,6 +2640,11 @@ public class UserDaoimpl implements UserDao {
 		String formattedDate = dateFormat.format(cal.getTime());
 
 		int cFY = Integer.valueOf(yearfromCal);
+		if (getMonthNumber(MonthText) < 4) {
+			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+		 yearfromCal = String.valueOf(cFY);
+		    System.out.println("yearfromCal"+yearfromCal);
+		}
 		// String stringValue = products[i].getProductPrice();
 		// stringValue = stringValue.replaceAll("[₹\\s]", "");
 		int n = products.length;
@@ -3135,11 +3200,25 @@ public class UserDaoimpl implements UserDao {
 	public List<Object> getAllindentDetails() {
 
 		List<Object> getAllindentDetails;
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat year_Date = new SimpleDateFormat("YYYY");
+		String yearfromCal = year_Date.format(cal.getTime());
 
+		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
+		String MonthText = month.format(cal.getTime());
+		int cFY = Integer.valueOf(yearfromCal);
+		if (getMonthNumber(MonthText) < 4) {
+			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+		 yearfromCal = String.valueOf(cFY);
+		    System.out.println("yearfromCal"+yearfromCal);
+		}
 		Query selectQuery = entityManager.createNativeQuery(
 				"select DOC_NUMBER,COST_CENTER,ITEM,DEPARTMENT,TOTAL_USER_QTY,DOC_DATE,VALUE,MONTH,YEAR,STATUS,\n"
 						+ "BUYER_QTY,RECEIVED_TMT_QTY from Indent_Transaction where"
-						+ " month=format(GETDATE(),'MMMMMMMMMMMMMMMMM') and YEAR=format(GETDATE(),'yyyy')");
+						+ " month=:MonthText and YEAR=:yearfromCal");
+		selectQuery.setParameter("yearfromCal", yearfromCal);
+		selectQuery.setParameter("MonthText", MonthText);
+
 		try {
 			getAllindentDetails = selectQuery.getResultList();
 		} catch (HibernateException e) {
@@ -3182,7 +3261,12 @@ public class UserDaoimpl implements UserDao {
 
 		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
 		String MonthText = month.format(cal.getTime());
-
+		int cFY = Integer.valueOf(yearfromCal);
+		if (getMonthNumber(MonthText) < 4) {
+			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+		 yearfromCal = String.valueOf(cFY);
+		    System.out.println("yearfromCal"+yearfromCal);
+		}
 		List<Object> BuyerFooterList = null;
 		String finalcc = getAllIndentedCostCenters(yearfromCal, MonthText);
 
@@ -3193,8 +3277,9 @@ public class UserDaoimpl implements UserDao {
 				+ " FROM\r\n"
 				+ " (SELECT CCID, isnull(sum(TOTAL_USER_QTY*UnitPrice),0) indent FROM BUDGET_MASTER bm\r\n"
 				+ " left join Indent_Transaction it on bm.CCID= it.COST_CENTER\r\n"
-				+ " and it.MONTH =  format(GETDATE(),'MMMMMMMMMMMMMMMM') and it.YEAR= format(GETDATE(),'yyyy') and BUYER_CONFIRMATION=1 group by  CCID) AS SourceTable\r\n"
+				+ " and it.MONTH =  format(GETDATE(),'MMMMMMMMMMMMMMMM') and it.YEAR=:yearfromCal and BUYER_CONFIRMATION=1 group by  CCID) AS SourceTable\r\n"
 				+ " PIVOT( MAX(indent)  FOR CCID IN (" + finalcc + ")) AS PivotTable3 ");
+		getresultlist.setParameter("yearfromCal", yearfromCal);
 
 		try {
 			BuyerFooterList = getresultlist.getResultList();
@@ -3232,6 +3317,11 @@ public class UserDaoimpl implements UserDao {
 		String formattedDate = dateFormat.format(cal.getTime());
 
 		int cFY = Integer.valueOf(yearfromCal);
+		if (getMonthNumber(MonthText) < 4) {
+			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+		 yearfromCal = String.valueOf(cFY);
+		    System.out.println("yearfromCal"+yearfromCal);
+		}
 		int n = products.length;
 		for (int i = 0; i < n; i++) {
 			String unitPrice = products[i].getUnitPrice();
@@ -3306,7 +3396,7 @@ public class UserDaoimpl implements UserDao {
 		} // for loop finish
 		if (response != 0) {
 
-			r = "Data updated successfully";
+			r = "Data Updated Successfully";
 		} else {
 			r = "Update failed";
 		}
@@ -3327,7 +3417,12 @@ public class UserDaoimpl implements UserDao {
 
 		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
 		String MonthText = month.format(cal.getTime());
-
+		int cFY = Integer.valueOf(yearfromCal);
+		if (getMonthNumber(MonthText) < 4) {
+			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+		 yearfromCal = String.valueOf(cFY);
+		    System.out.println("yearfromCal"+yearfromCal);
+		}
 		List<Object> getAllUserDetails = null;
 		String finalcc = getAllIndentedCostCenters(yearfromCal, MonthText);
 
@@ -3346,10 +3441,11 @@ public class UserDaoimpl implements UserDao {
 				+ "		FROM (\n"
 				+ "		SELECT PROD_NAME, isnull(MAKE,'') MAKE, UOM, COST_CENTER, ISNULL(BUYER_QTY , 0) AS cost_value,ucp,MoqQty,MoqValue,BalanceTMTQTy,BalanceTMTValue,RECEIVED_TMT_QTY,RECEIVED_TMT_Value\n"
 				+ "		FROM PRODUCT_MASTER pm \n" + "		left join Indent_Transaction it on pm.PROD_NAME=it.ITEM\n"
-				+ "		WHERE COST_CENTER IS NOT NULL and month=DATENAME(MONTH, GETDATE()) and year= format(GETDATE(),'yyyy') and BUYER_CONFIRMATION=1 "
+				+ "		WHERE COST_CENTER IS NOT NULL and month=DATENAME(MONTH, GETDATE()) and year=:yearfromCal and BUYER_CONFIRMATION=1 "
 				+ "		GROUP BY PROD_NAME, MAKE, UOM, COST_CENTER,BUYER_QTY,ucp,MoqQty,MoqValue,BalanceTMTQTy,BalanceTMTValue,RECEIVED_TMT_QTY,RECEIVED_TMT_Value\n"
 				+ "		) AS src\n" + "		PIVOT (MAX(cost_value)\n" + "		FOR COST_CENTER IN (" + finalcc
 				+ ")) AS pivottable\n" + "		order by PROD_NAME desc");
+		getresultlist.setParameter("yearfromCal", yearfromCal);
 
 		try {
 			getAllUserDetails = getresultlist.getResultList();
@@ -3367,12 +3463,33 @@ public class UserDaoimpl implements UserDao {
 	public List<Object> getAllindentmanagerDetails(String loginId) {
 
 		List<Object> getAllindentmanagerDetails;
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat year_Date = new SimpleDateFormat("YYYY");
+		String yearfromCal = year_Date.format(cal.getTime());
 
+		SimpleDateFormat month_Date = new SimpleDateFormat("MM");
+		// String monthFromCal = month_Date.format(cal.getTime());
+		String monthFromCal = String.format("%02d", Integer.parseInt(month_Date.format(cal.getTime())));
+
+		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
+		String MonthText = month.format(cal.getTime());
+
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		String formattedDate = dateFormat.format(cal.getTime());
+
+		int cFY = Integer.valueOf(yearfromCal);
+		if (getMonthNumber(MonthText) < 4) {
+			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+		 yearfromCal = String.valueOf(cFY);
+		    System.out.println("yearfromCal"+yearfromCal);
+		}
 		Query selectQuery = entityManager.createNativeQuery(
 				"select DOC_NUMBER,COST_CENTER,ITEM,DEPARTMENT,TOTAL_USER_QTY,DOC_DATE,VALUE,MONTH,YEAR,STATUS,\n"
 						+ "BUYER_QTY,RECEIVED_TMT_QTY from Indent_Transaction where COST_CENTER=:COST_CENTER and \n"
-						+ "month=format(GETDATE(),'MMMMMMMMMMMMMMMMM') and YEAR=format(GETDATE(),'yyyy')");
+						+ "month=format(GETDATE(),'MMMMMMMMMMMMMMMMM') and YEAR=:yearfromCal");
 		selectQuery.setParameter("COST_CENTER", loginId);
+		selectQuery.setParameter("yearfromCal", yearfromCal);
+
 		try {
 			getAllindentmanagerDetails = selectQuery.getResultList();
 		} catch (HibernateException e) {
@@ -3574,8 +3691,14 @@ public class UserDaoimpl implements UserDao {
 	public String checkIndentForMonth(String cFY, String MonthText, String userId) {
 		Query getintentID = entityManager.createNativeQuery(
 				"select DISTINCT DOC_NUMBER from Indent_Transaction where year=:year and month=:month and cost_center=:cost_center");
-
-		getintentID.setParameter("year", cFY);
+		int cFY1 = Integer.valueOf(cFY);
+		String yearfromCal = null;
+		if (getMonthNumber(MonthText) < 4) {
+			cFY1 = cFY1 - 1; // If the month is before April, subtract 1 from the year
+		 yearfromCal  = String.valueOf(cFY1);
+		    System.out.println("yearfromCal"+yearfromCal);
+		}
+		getintentID.setParameter("year", yearfromCal);
 		getintentID.setParameter("month", MonthText);
 		getintentID.setParameter("cost_center", userId);
 		String id = "";
@@ -3587,7 +3710,7 @@ public class UserDaoimpl implements UserDao {
 //		return "For the month of " + MonthText + " an Indent has already been generated: " + id
 //				+ " for this cost center " + userId + " and please modify the indent in the indent list menu.";
 		
-	return "Indent is already generated for this cost center in Current month. Please modify the indent in the indent list.";
+	return "Indent is already generated for this cost center in current month. please modify the indent in the indent list.";
 
 	}
 
@@ -3600,6 +3723,12 @@ public class UserDaoimpl implements UserDao {
 
 		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
 		String MonthText = month.format(cal.getTime());
+		int cFY = Integer.valueOf(yearfromCal);
+		if (getMonthNumber(MonthText) < 4) {
+			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+		 yearfromCal = String.valueOf(cFY);
+		    System.out.println("yearfromCal"+yearfromCal);
+		}
 
 		try {
 
@@ -3727,7 +3856,7 @@ public class UserDaoimpl implements UserDao {
 				// Process key and value as needed
 				// System.out.println("keymurali: " + key + ", Value: " + value);
 			}
-			r = "Email sent by successfully!";
+			r = "Email Sent By Successfully!";
 
 			//String smtpHostServer = "smtp-relay.gmail.com";
 			String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
@@ -3772,7 +3901,7 @@ public class UserDaoimpl implements UserDao {
 
 		catch (Exception e) {
 			e.printStackTrace();
-			r = "Email not send contact admin!";
+			r = "Email Not Send Contact Admin!";
 		}
 		return r;
 
@@ -3815,6 +3944,13 @@ public class UserDaoimpl implements UserDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<String[]> getreportbyidadmin(String Month, String Year, String loginid) {
+		int cFY = Integer.valueOf(Year);
+		String yearfromCal = Year;
+		if (getMonthNumber(Month) < 4) {
+			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+		  yearfromCal = String.valueOf(cFY);
+		    System.out.println("yearfromCal"+yearfromCal);
+		}
 		boolean count = Validations.validation(Year);
 		if (count)
 			return new ArrayList<String[]>();
@@ -3832,7 +3968,8 @@ public class UserDaoimpl implements UserDao {
 			Query query = entityManager.createNativeQuery(sql);
 
 			query.setParameter("MONTH", Month);
-			query.setParameter("YEAR", Year);
+			query.setParameter("YEAR", yearfromCal);
+			
 			response = query.getResultList();
 		}
 		return response;
@@ -3961,14 +4098,14 @@ public class UserDaoimpl implements UserDao {
 
 			Transport.send(msg);
 			System.out.println("Email sent successfully!");
-			r = "Email sent successfully!";
+			r = "Email Sent Successfully!";
 			excelFile.delete();
 		} catch (MessagingException e) {
 			e.printStackTrace();
-			r = "Email not send contact admin!";
+			r = "Email Not Send Contact Admin!";
 		} catch (Exception e) {
 			e.printStackTrace();
-			r = "Email not send contact admin!";
+			r = "Email Not Send Contact Admin!";
 		}
 		return r;
 

@@ -252,7 +252,8 @@ border-color: #6c757d;
 									<div class="col-sm-12">
 										<div class="filter-controls">
 											<div class="col-md-3 filter-item">
-												<label for="Month" class="month-label">Month:</label> <select
+												<label style="font-size: 18px !important;
+    font-weight: bold !important;" for="Month" class="month-label">Month:</label> <select
 													id="Month" name="Month" class="form-control"
 													aria-invalid="true" required="required"
 													style="width: 100%;">
@@ -272,7 +273,8 @@ border-color: #6c757d;
 												</select>
 											</div>
 											<div class="col-md-3 filter-item">
-												<label for="yearDropdown" class="year-label">Year:</label> <select
+												<label style="font-size: 18px !important;
+    font-weight: bold !important;" for="yearDropdown" class="year-label">Year:</label> <select
 													id="Year" class="form-control" aria-invalid="true"
 													required="required" style="width: 97%;">
 													<c:forEach items="${years}" var="year">
@@ -281,7 +283,8 @@ border-color: #6c757d;
 												</select>
 											</div>
 											<div class="col-md-3 filter-item">
-												<button class="btn btn-primary btn-search">Search</button>
+												<button class="btn btn-primary btn-search" style="font-size: 18px !important;
+    font-weight: bold !important;">Search</button>
 											</div>
 										</div>
 
@@ -290,6 +293,11 @@ border-color: #6c757d;
 											style="width: 100%;">
 																																
 <style>
+#example_filter label {
+font-size: 18px !important;
+    font-weight: bold !important;
+        color: black;
+}
     table {
       border-collapse: collapse;
       width: 100%;
@@ -332,7 +340,7 @@ border-color: #6c757d;
 													<th scope="col" class='headerStyles'><b>Buyer QTY</b></th>
 													<th scope="col" class='headerStyles'><b>Received QTY</b></th>
 													<th scope="col" class='headerStyles'><b>Document Date</b></th>
-													<th scope="col" class='headerStyles'><b>Value(RS)</b></th>
+													<th scope="col" class='headerStyles'><b>Value(Rs)</b></th>
 													<th scope="col" class='headerStyles'><b>Month</b></th>
 													<th scope="col" class='headerStyles'><b>Year</b></th>
 													<th scope="col" class='headerStyles'><b>Status</b></th>

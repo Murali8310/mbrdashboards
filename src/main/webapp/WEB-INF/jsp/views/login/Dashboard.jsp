@@ -101,8 +101,19 @@
             	costCenter = document.getElementById('userName').textContent.split(':')[1].trim();
             	 var today = new Date();
             	  var year = today.getFullYear();
+            	  let currentDate = new Date();
+
+            	// Get the current month (returns a number from 0 to 11)
+            	let currentMonth = currentDate.getMonth() + 1;
+            	console.log('currentMonth',currentMonth)
+                      if(currentMonth < 4){
+                    	  year = Number(year)- 1; 
+                      } else {
+                    	  year = Number(year);
+                      }
+console.log('year',year)
             	const index = parsedData.findIndex(function(element) {
-            		  return element[0] == Number(costCenter) && (element[1] === Number(year));
+            		  return element[0] == Number(costCenter) && (element[1] === year);
             		});
             	if(index != -1){
             	costCenterDetails = parsedData[index]; 
@@ -127,7 +138,7 @@
             		    },
             		    yaxis: {
             		        title: {
-            		            text: 'Indent value(RS)',
+            		            text: 'Indent value(Rs)',
             		            style: {
             		                fontSize: '15px' // Adjust the font size for y-axis title
             		            }

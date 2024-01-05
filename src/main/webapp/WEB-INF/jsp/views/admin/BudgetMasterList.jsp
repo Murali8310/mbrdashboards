@@ -28,6 +28,12 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
 	rel="stylesheet" type="text/css" />
 <style>
+
+.remove-counter {
+    counter-increment: none !important; /* Reset or set to initial value */
+    content: none !important; /* Remove content */
+}
+
 section label {
 	padding-top: 10px;
 }
@@ -252,7 +258,7 @@ tr td:first-child:before
 														<td class="tbodyCustomColor">${indent[2]}</td>
 														<td class="tbodyCustomColor">${indent[5]}</td>
 														<td class="tbodyCustomColor">${indent[7]}</td>
-													    <td class="tbodyCustomColor" style="text-align:right !important">${indent[6]}</td>
+													    <td class="tbodyCustomColor" style="text-align:right !important">${indent[6]}.00</td>
 														<td class="tbodyCustomColor" style="text-align:center !important">${indent[1]}</td>
 														<td class="tbodyCustomColor"></td> 
 													</tr>
@@ -466,6 +472,15 @@ tr td:first-child:before
    
   
 });
+	 
+	 window.addEventListener('keyup', function() {
+		// When you want to remove the styling
+		 document.querySelectorAll('tr td:first-child:before').forEach(function(el) {
+		   el.classList.add('remove-counter');
+		 });
+
+		});
+	 
 
 </script>
 </body>

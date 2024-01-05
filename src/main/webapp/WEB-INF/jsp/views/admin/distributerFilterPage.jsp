@@ -248,7 +248,7 @@ if(Year == ''){
 	return;
 		} 
 		
-        location.href = 'https://stationery.titan.in/stationary/distributerFilterShowPage?Year='+Year+'&Month='+Month;
+        location.href = 'http://localhost:8080/stationary/distributerFilterShowPage?Year='+Year+'&Month='+Month;
     }
     
     function downloadtxt(id) {
