@@ -426,7 +426,14 @@ padding:0px !important;
 							</a> <a class="btn btn-success" id="submitId" onclick="submit()">Submit</a>
 						</div>
 					</div> -->
-			<div class="page-breadcrumb" style="position: fixed;z-index: 9;width: 83%;background-color:#fff;margin-left: 13px;">
+			<div class="page-breadcrumb" style="position: fixed;z-index: 9;width: 83%;background-color:#fff;margin-left: 13px;background-color: #4db719;
+    align-items: baseline;
+    padding-top: 5px;
+    margin-left: 13px !important;
+    width: 83%;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    margin-bottom: 2px;">
 				<div class="row" >
 					<div class="col-12 d-flex no-block align-items-center">	
 						<h4 class="page-title display-6"  >Product Catalogue</h4>
@@ -444,7 +451,7 @@ padding:0px !important;
 								<li id="totalOutput" class="breadcrumb-item" style="background-color: darkblue;color: white;font-weight: bolder;"></li>
 			-->					
 									<li class="breadcrumb-item"><a href="landPage"><i style="text-align: justify;"
-								class="fa fa-home"></i>Home</a></li>
+								class="fa fa-home"></i> Home</a></li>
 									<li class="breadcrumb-item active" aria-current="page">Product
 										Catalogue <!-- <a href="productDetails">Product Details</a> -->
 									</li>
@@ -1607,14 +1614,14 @@ footer ul {
 
 
 
-
+<!-- 
 			<footer class="footer">
 				<div class="footer-copyright">
 					<p>
 						© 2019 <span>TITAN COMPANY LTD.</span> ALL RIGHTS RESERVED.
 					</p>
 				</div>
-			</footer>
+			</footer> -->
 
 			<script type="text/javascript">
 				document.body.style.zoom = "85%";
@@ -1625,6 +1632,8 @@ footer ul {
 
 
 		</div>
+				<jsp:include page="/WEB-INF/jsp/views/header/footer.jsp"></jsp:include>
+		
 	</div>
 
 	<div class="loading" style="display: none;">Loading…</div>

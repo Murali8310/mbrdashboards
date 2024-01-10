@@ -1922,7 +1922,7 @@ public class UserDaoimpl implements UserDao {
 		Query selectQuery = entityManager.createNativeQuery(
 				"select DISTINCT pm.PRODUCT_NUMBER,pm.PROD_NAME,pm.PROD_DESC,pm.MAKE,pm.ucp,pm.uom,  tcit.COST_CENTER, "
 						+ "isnull(tcit.TOTAL_USER_QTY,0) as quantity,tcit.DOC_NUMBER from PRODUCT_MASTER pm "
-						+ "left join Indent_Transaction tcit on pm.PROD_NAME = tcit.item and COST_CENTER=:userId "
+						+ "left join TEMP_Indent_Transaction tcit on pm.PROD_NAME = tcit.item and COST_CENTER=:userId "
 						+ " where category IN( :category) " + "order by quantity desc ");
 		List<String> brandList = Arrays.asList(categoryArray);
 		selectQuery.setParameter("category", brandList);
