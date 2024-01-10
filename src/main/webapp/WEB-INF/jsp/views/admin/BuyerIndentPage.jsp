@@ -345,11 +345,11 @@ vertical-align: text-bottom ; footer {
 														<td class='tbodyCustomColor'>${user[2]}</td>
 													<c:set var="collectionSize" value="${0}" />
 													<c:forEach items="${Collen}" var="ccen" varStatus="loop2">
-													<td class="editable-cell tbodyCustomColor">${user[loop2.index + 3]}</td>
+													<td class="editable-cell tbodyCustomColor" style="text-align:center">${user[loop2.index + 3]}</td>
 													<c:set var="collectionSize" value="${collectionSize + 1}" />
 													</c:forEach> 
 													
-														<td class='tbodyCustomColor'></td>
+														<td class='tbodyCustomColor' style="text-align:center"></td>
 														<td class="editable-cell tbodyCustomColor remove">
 															${user[collectionSize + 4]}	
 														</td>
@@ -389,7 +389,7 @@ vertical-align: text-bottom ; footer {
 														<th></th>
 														<th></th>
 														<c:forEach items="${Collen}" var="ccen" varStatus="loop2">
-                                                         <th class="compare-value" data-threshold="${foot[loop2.index + 1]}">${foot[loop2.index + 1]}</th>													
+                                                         <th class="compare-value" style="text-align:right" data-threshold="${foot[loop2.index + 1]}">${foot[loop2.index + 1]}</th>													
                                                          </c:forEach>
 														<th></th>
 														<th></th>
@@ -977,6 +977,7 @@ $(document).ready(function () {
 					const myElement = document.getElementById("btn-sendtovendor");
 			    // Add the "disabled" property to the element
 			    myElement.disabled = false;
+			    location.reload();
 			}
         });
         

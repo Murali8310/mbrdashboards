@@ -399,6 +399,15 @@ label {
 			return;
 		}
 		
+		if (ProductID.length > 10) {
+			Swal.fire({
+				icon : 'warning',
+				title : ' Please enter valid product id',
+				focusConfirm : false,
+			})
+			return;
+		}
+
 		if (ProductName == "") {
 
 			Swal.fire({
@@ -467,13 +476,13 @@ label {
 			success : function(response) {
 				var data = jQuery.parseJSON(response);
 
-				if (data == "Product Created Sucessfully") {
+				if (data == "Product master Created Sucessfully") {
 
 					$(".loading").hide();
 
 					Swal.fire({
 						icon : 'success',
-						title : data,
+						title : "Product Created Sucessfully",
 						showCloseButton : false,
 						showCancelButton : false,
 						focusConfirm : false,

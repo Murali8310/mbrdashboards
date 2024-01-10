@@ -445,6 +445,17 @@ label {
 			return;
 		}
 		
+		  var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		    if (!emailPattern.test(COSTEMAIL)) {
+		      Swal.fire({
+
+					icon : 'warning',
+					title : 'Please enter a valid email address.',
+					focusConfirm : false,
+				})
+		      return;
+		    }
+		
 		if (Year == "") {
 
 			Swal.fire({

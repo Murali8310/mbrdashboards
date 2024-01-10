@@ -392,7 +392,7 @@ function getProductByIndent(){
 				productListHTML += '	style="align-items: center;">';
 				productListHTML += '	<a onclick="decrementCount(this)"';
 				productListHTML += '		class="btn btn-sm btn-decre decreme"><i';
-			    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input style="background:white" disabled  type="text"';
+			    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input style="background:white"  type="text"';
 				productListHTML += '		id="countInput'
 						+ i
 						+ '" name="quantity" class="form-control count-input  bold-and-large" id="count-input"';
@@ -476,7 +476,8 @@ function getProductByIndent(){
 		calculateIncrementTotal(input.value,productPrice);
 		 var pricelement = document.querySelector("#totalOutput .highlight:nth-child(2)").textContent
 		   var yearlyAmount = document.getElementById('yearlyAmount').textContent
-				if(Number(pricelement.trim()) > Number(yearlyAmount.trim())){
+		   var yearlyAvlAmount = document.getElementById('bal_budget').textContent
+				if(Number(pricelement.trim()) > Number(yearlyAvlAmount.trim())){
 					Swal.fire({
 								icon : 'error',
 				        	  title: 'Indent amount is exceeded the yearly budget!',
@@ -1022,7 +1023,7 @@ productListHTML += 'style="height: 240.86px;" onerror="this.src=\'' + defaultIma
 productListHTML += '	style="align-items: center;">';
 	productListHTML += '	<a onclick="decrementCount(this)"';
 	productListHTML += '		class="btn btn-sm btn-decre decreme"><i';
-productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input  style="background:white" disabled type="text"';
+productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input  style="background:white" type="text"';
 	productListHTML += '		id="countInput' + i
 			+ '" name="quantity" class="form-control count-input bold-and-large" id="count-input"';
 	productListHTML += '		value="' + product[7]
@@ -1046,7 +1047,8 @@ $('#el-element-overlay').html(productListHTML);
 
 $("#resetCategoriesID").on("click", function() {
 	$('input[type=checkbox]').prop('checked', false);
-	
+	getProductByIndent();
+	getBudgetDetails();
 });
 </script>
 	<div class="loading" style="display: none;">Loading…</div>

@@ -379,7 +379,7 @@ padding:0px !important;
    /* flex: 0 0 40%;  *//* Adjust width of the title */
     font-weight: bold;
     margin-left: 7px;
-    background-color: #1ea496;
+   /*  background-color: #1ea496; */
 }
 
 /* Style for the value */
@@ -392,14 +392,14 @@ padding:0px !important;
 font-weight: bold;
     color: white; 
         margin-left: 3px;
-        background-color: #1ea496;
+        /* background-color: #1ea496; */
    
 }
 </style>
 		<div class="page-wrapper" style="background-color: #cfcff22e;" data-sidebartype="full" class="mini-sidebar">
 			<div class="container-fluid2 card-total card-static" style="    margin-top: 20px;">
 					<div class="row" style="background-color: #4db719; align-items: baseline;
-					padding-top: 5px;margin-left:13px !important;width: 94%;box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+					padding-top: 5px;margin-left:13px !important;width: 83%;box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
 					    border-radius: 10px;
 					    margin-bottom: 2px;">
 						<div id="totalOutput2"
@@ -427,16 +427,16 @@ font-weight: bold;
 						style="text-align: end; font-size: 18px;padding-left:10px; background-color: #92e3f7;"></div> -->
 							<nav aria-label="breadcrumb">
 								<ol class="breadcrumb">
-								<div   style="padding-right:30px;">
+								<li id="totalOutput" class="breadcrumb-item" style="background-color: darkblue; color: white;font-weight: bolder;"></li>
+									<li class="breadcrumb-item"><a href="landPage">Home</a></li>
+									<li class="breadcrumb-item active" aria-current="page">Product Catalogue 
+									</li>
+										<div style="margin-left:17px;">
 							<a href="manageByAdmin"> <input type="button"
 								class="btn btn-primary" id="expiryDatebut" value="Cancel">&nbsp;
 							</a> 
 							<a class="btn btn-success" id="submitId" onclick="submit()">Submit</a>
 						</div>
-								<li id="totalOutput" class="breadcrumb-item" style="background-color: darkblue; color: white;font-weight: bolder;"></li>
-									<li class="breadcrumb-item"><a href="landPage">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Product Catalogue 
-									</li>
 								</ol>
 							</nav>
 						</div>
@@ -731,7 +731,8 @@ font-weight: bold;
 
 	$("#resetCategoriesID").on("click", function() {
 		$('input[type=checkbox]').prop('checked', false);
-		
+		getAllProducts();
+		getBudgetDetails();
 	});
 
 	function submit() {

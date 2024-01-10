@@ -482,11 +482,11 @@ vertical-align: text-bottom ; footer {
 														<td>${user[2]}</td>
 													<c:set var="collectionSize" value="${0}" />
 													<c:forEach items="${Collen}" var="ccen" varStatus="loop2">
-													<td>${user[loop2.index + 3]}</td>
+													<td style="text-align:center">${user[loop2.index + 3]}</td>
 													<c:set var="collectionSize" value="${collectionSize + 1}" />
 													</c:forEach> 
 													
-														<td></td>
+														<td style="text-align:center"></td>
 														<td>
 															${user[collectionSize + 4]}	
 														</td>
@@ -526,7 +526,7 @@ vertical-align: text-bottom ; footer {
 														<th></th>
 														<th></th>
 														<c:forEach items="${Collen}" var="ccen" varStatus="loop2">
-                                                         <th class="compare-value" data-threshold="${foot[loop2.index + 1]}">${foot[loop2.index + 1]}</th>													
+                                                         <th class="compare-value" style="text-align:right" data-threshold="${foot[loop2.index + 1]}">${foot[loop2.index + 1]}</th>													
                                                          </c:forEach>
 														<th></th>
 														<th></th>

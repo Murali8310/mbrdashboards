@@ -171,10 +171,12 @@ border-color:#01AFAE;
                     <div></div>
                     <div class="w-100 ">
                         <h1 class="display-4 text-white mb-4"  style="text-align:center;color:#fff !important;">ISCM Stationery Portal</h1>
-                        <p class="text-white lead" style="text-align:center;color:#fff  !important;">(Watches and Wearables)</p>
+                        <p class="text-white lead" style="text-align: center;
+    color: #fff !important;
+    font-weight: bold;">(Watches and Wearables)</p>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <span class="text-white" style="color:#fff !important;"> 2023-2024 Titan Company Limited</span>
+                        <span class="text-white" style="color:#fff !important;font-weight:bold;"> 2023-2024 Titan Company Limited</span>
                       
                     </div>
                 </div>
@@ -231,7 +233,7 @@ border-color:#01AFAE;
 														
 														<label class="labelcol"><input type="radio"  checked="checked"
 															 name="user_selection" onclick="textboxchange1()"
-															id="user_selection1" value="Indent Manager" >Indentor</label>
+															id="user_selection1" value="Indent Manager" >User</label>
 													</div>
 													<div class="col-md-3  col-sm-3 col-3">
 														<label class="labelcol"><input type="radio"  onclick="textboxchange2()"

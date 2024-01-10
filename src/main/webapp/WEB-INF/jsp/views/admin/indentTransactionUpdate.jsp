@@ -285,8 +285,6 @@ $(document)
 			var id = sessionStorage.getItem('id');
 			getProduct(id);
 			getBudgetDetails();
-			
-			
 			console.log(id,'id');
 			
 		});
@@ -350,7 +348,7 @@ function getProduct(id){
 				 productListHTML += '	style="align-items: center;">';
 				productListHTML += '	<a onclick="decrementCount(this)"';
 				productListHTML += '		class="btn btn-sm btn-decre decreme"><i';
-			    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input style="background:white" disabled type="text"';
+			    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input style="background:white"  type="text"';
 				productListHTML += '		id="countInput'
 						+ i
 						+ '" name="quantity" class="form-control count-input bold-and-large"';
@@ -469,12 +467,12 @@ function getProduct(id){
 			    				data : JSON.stringify(InputArray),
 
 			    				success : function(response) {
-			    					getProduct(IndentNumber);
+			    					//getProduct(IndentNumber);
 			    					getBudgetDetails();
 			    				}
 			    			}) 
 			    	    } else if (result.dismiss === Swal.DismissReason.cancel) {
-			    	    	getProduct(IndentNumber);
+			    	    	//getProduct(IndentNumber);
 	    					getBudgetDetails();
 			    	    }
 			    	});
@@ -489,7 +487,7 @@ function getProduct(id){
 					data : JSON.stringify(InputArray),
 
 					success : function(response) {
-						getProduct(IndentNumber);
+						//getProduct(IndentNumber);
 						getBudgetDetails();
 					}
 				}) 
@@ -530,7 +528,7 @@ function getProduct(id){
 				data : JSON.stringify(InputArray),
 
 				success : function(response) {
-					getProduct(IndentNumber);
+					//getProduct(IndentNumber);
 					getBudgetDetails();
 				}
 			})
@@ -550,8 +548,8 @@ function getProduct(id){
 	
 	function calculateInputTotal(value,price,prev) { 
 		var currentTotalQuantity =0;
-		var totalQuantityElement = document.querySelector("#totalOutput .highlight:nth-child(2)");
-		var totalPriceElement = document.querySelector("#totalOutput .highlight:nth-child(1)");
+		var totalQuantityElement = document.querySelector("#totalOutput .highlight:nth-child(4)");
+		var totalPriceElement = document.querySelector("#totalOutput .highlight:nth-child(2)");
 		var currentTotalQuantity = parseInt(totalQuantityElement.textContent);
 		var currentTotalPrice = parseFloat(totalPriceElement.textContent);
 		
@@ -628,7 +626,7 @@ function getProduct(id){
 		    					data : JSON.stringify(InputArray),
 
 		    					success : function(response) {
-		    						getProduct(IndentNumber);
+		    						//getProduct(IndentNumber);
 		    						getBudgetDetails();
 		    					}
 		    				})
@@ -646,7 +644,7 @@ function getProduct(id){
 		    			}
 		    	    } else if (result.dismiss === Swal.DismissReason.cancel) {
 		    	       
-		    	    	getProduct(IndentNumber);
+		    	    	//getProduct(IndentNumber);
 						getBudgetDetails();
 		    	    }
 		    	});
@@ -678,7 +676,7 @@ function getProduct(id){
 				data : JSON.stringify(InputArray),
 
 				success : function(response) {
-					getProduct(IndentNumber);
+					//getProduct(IndentNumber);
 					getBudgetDetails();
 				}
 			})
@@ -849,7 +847,7 @@ function getProduct(id){
 	 productListHTML += '	style="align-items: center;">';
 			productListHTML += '	<a onclick="decrementCount(this)"';
 			productListHTML += '		class="btn btn-sm btn-decre decreme"><i';
-    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input style="background:white" disabled type="text"';
+    productListHTML += '		class="fas fa-minus-square fa-2x"></i></a> <input style="background:white" type="text"';
 			productListHTML += '		id="countInput' + i
 					+ '" name="quantity" class="form-control count-input bold-and-large"';
 			productListHTML += '		value="' + product[7]
@@ -899,6 +897,8 @@ function getBudgetDetails(){
 
 	$("#resetCategoriesID").on("click", function() {
 		$('input[type=checkbox]').prop('checked', false);
+		var IndentNumber = sessionStorage.getItem('id');
+		getProduct(IndentNumber);
 		
 	});
 

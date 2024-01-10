@@ -506,8 +506,8 @@ table.dataTable tbody tr.selected a {
 	        	sum = Number(this.cell(rowIdx, numColumns).data());
 	        }
 	     this.cell(rowIdx, numColumns).data(sum);
-	     this.cell(rowIdx, numColumns + 1).data(sum * Number(row[numColumns + 2]));
-	     this.cell(rowIdx, numColumns + 4).data(Number(row[numColumns + 2]) * Number(row[numColumns + 3]));
+	     this.cell(rowIdx, numColumns + 1).data((sum * Number(row[numColumns + 2])).toFixed(2));
+	     this.cell(rowIdx, numColumns + 4).data((Number(row[numColumns + 2]) * Number(row[numColumns + 3])).toFixed(2));
 	     this.cell(rowIdx, numColumns + 6).data((Number(row[numColumns + 2]) * Number(row[numColumns + 5])).toFixed(2));
 	    });
 	        //This is to update the moq or userqty based total value.
