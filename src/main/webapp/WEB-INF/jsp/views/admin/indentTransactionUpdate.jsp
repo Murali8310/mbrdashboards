@@ -88,7 +88,7 @@ margin-bottom: 10px;
 font-weight: bold;
     color: white; 
         margin-left: 3px;
-        background-color: #1ea496;
+        /* background-color: #1ea496; */
 
 }
 
@@ -206,7 +206,8 @@ padding:0px !important;
    /* flex: 0 0 40%;  *//* Adjust width of the title */
     font-weight: bold;
     margin-left: 7px;
-    background-color: #1ea496;
+    color:white;
+   /*  background-color: #1ea496; */
 }
 
 /* Style for the value */
@@ -232,30 +233,38 @@ padding:0px !important;
 						height: 27px;"></div>
 				</div>
 				<div class="cell"
-					style="text-align: start; font-size: 18px;
-					color: white; padding: 6px; border-radius: 10px; margin-bottom: 20px; height: 49px; 
-					width: 98%; margin-left: 13px;">
-					<div id="IndentNumber" style="text-align: start; font-size: 18px;"></div>
-					<div id="totalOutput" style="text-align: start; font-size: 18px;"></div>
-					<div class="col-md-4 col-lg-4 col-12"
+					style="background-color: #4db719;
+    align-items: baseline;
+    padding-top: 5px;
+    margin-left: 13px !important;
+    width: 98%;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    margin-bottom: 2px;
+        height: 45px;">
+					<div id="IndentNumber" style="text-align: start; font-size: 18px;" class="col-md-4 col-lg-4 col-4"></div>
+					<div id="totalOutput" style="text-align: start; font-size: 18px;" class="col-md-4 col-lg-4 col-4"></div>
+					<div class="col-md-4 col-lg-4 col-4"
 						style="text-align: end; float: right;">
-						<a href="AddMoreProducts"> <input type="button"
-							class="btn btn-primary" id="expiryDatebut"
-							value="Add More Products">
-						</a> <a href="IndentList"> <input type="button"
-							class="btn btn-warning" id="expiryDatebut" value="Back">
-						</a>
-						<!-- <a class="btn btn-success" id="submitId" onclick="submit()">Update</a> -->
+						<button onclick="redirectToPage('AddMoreProducts')" class="btn btn-primary" style="font-size: 16px;background:#2027d6 !important;color: #fff;
+    background-color: #3021cf;
+    border-color: #d58512;"> 
+						Add More Products
+						</button>
+						 <button onclick="redirectToPage('IndentList')" class="btn btn-warning" style="font-size: 16px;color: #fff;
+    background-color: #3021cf;
+    border-color: #d58512;">Back
+						</button>
 					</div>
 				</div>
 				<div class="row el-element-overlay" id="el-element-overlay"></div>
-				<footer class="footer">
+				<!-- <footer class="footer">
 					<div class="footer-copyright">
 						<p>
-							© 2019 <span>TITAN COMPANY LTD.</span> ALL RIGHTS RESERVED.
+							© 2023 <span>TITAN COMPANY LTD.</span> ALL RIGHTS RESERVED.
 						</p>
 					</div>
-				</footer>
+				</footer> -->
 				<!-- <div style="float: right; margin-bottom: 31px;">
 					<div class="row">
 						<div class="col-md-12 col-lg-12 col-12">
@@ -273,6 +282,7 @@ padding:0px !important;
 				</div> -->
 			</div>
 		</div>
+		<jsp:include page="/WEB-INF/jsp/views/header/footer.jsp"></jsp:include>
 	</div>
 </body>
 
@@ -310,7 +320,7 @@ function getProduct(id){
 				var product = response[i];
 				/* const productImage = document
 						.getElementById("productImage"); */
-				 var output = "<span class='title' style='background: red;padding: 2px;border-radius: 3px;' >Indent Number : " +  response[0][8] + "</span>";
+				 var output = "<span class='title' style='padding: 2px;border-radius: 3px;' >Indent Number : " +  response[0][8] + "</span>";
 			$('#IndentNumber').html(output);
 			if(product[7]!=0){
 				const imageSource = 'product/'
@@ -393,8 +403,8 @@ function getProduct(id){
 			totalQuantity += quantity;
 		}
 		totalPrice = totalPrice.toFixed(2);
-		var output = "<span class='title' style='background: red;padding: 2px;border-radius: 3px;' >Indent Value: ₹</span><span style='background: red;padding: 2px;border-radius: 3px;' class='highlight'>" + totalPrice
-				+ "</span> <span style='background: red;padding: 2px;border-radius: 3px;' class='title'>Indent Qty:</span> <span style='background: red;padding: 2px;border-radius: 3px;' class='highlight'>" + totalQuantity
+		var output = "<span class='title' style='padding: 2px;border-radius: 3px;' >Indent Value: ₹</span><span style='color:white;padding: 2px;border-radius: 3px;' class='highlight'>" + totalPrice
+				+ "</span> <span style='color:white;padding: 2px;border-radius: 3px;' class='title'>Indent Qty:</span> <span style='color:white;color:white;padding: 2px;border-radius: 3px;' class='highlight'>" + totalQuantity
 				+ "</span>";
 		$('#totalOutput').html(output);
 
@@ -908,8 +918,17 @@ function getBudgetDetails(){
 	background-color: Teal;
 	padding-bottom: 1px;
 	height: 300px;
+	
 }
 
+.footer {
+    position: static; 
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: #01AFAE;
+    text-align: center;
+}
 footer h6 {
 	color: white;
 	text-transform: uppercase;
@@ -983,4 +1002,9 @@ footer ul {
 		});
 
 		</script>
+		 <script>
+        function redirectToPage(pageUrl) {
+            window.location.href = pageUrl;
+        }
+    </script>
 </html>

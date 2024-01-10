@@ -1587,13 +1587,13 @@ footer ul {
 
 
 
-			<footer class="footer">
+			<!-- <footer class="footer">
 				<div class="footer-copyright">
 					<p>
 						© 2019 <span>TITAN COMPANY LTD.</span> ALL RIGHTS RESERVED.
 					</p>
 				</div>
-			</footer>
+			</footer> -->
 
 			<script type="text/javascript">
 				document.body.style.zoom = "85%";
@@ -1604,6 +1604,7 @@ footer ul {
 
 
 		</div>
+		<jsp:include page="/WEB-INF/jsp/views/header/footer.jsp"></jsp:include>
 	</div>
 
 	<div class="loading" style="display: none;">Loading…</div>

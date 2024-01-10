@@ -190,7 +190,7 @@ padding:0px !important;
 .title {
  font-weight: bold;
     margin-left: 7px;
-    background-color: #1ea496;
+   /*  background-color: #1ea496; */
 }
 
 /* Style for the value */
@@ -215,13 +215,18 @@ margin-left: 3px;
     				</div>
 					
 					</div>
-			<div class="row" style="align-items: baseline; padding-top: 5px; 
-					margin-left: 13px !important; width: 98%; 
-					border-radius: 10px; margin-bottom: 2px;color:white">
-						<div class="col-md-4 col-lg-4 col-12" id="IndentNumber" style="font-size: 18px;"></div>
-						<div class="col-md-4 col-lg-5 col-12" id="totalOutput"
+			<div class="row" style="background-color: #4db719;
+    align-items: baseline;
+    padding-top: 5px;
+    margin-left: 13px !important;
+    width: 98%;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    margin-bottom: 2px;">
+						<div class="col-md-4 col-lg-4 col-4" id="IndentNumber" style="font-size: 18px;"></div>
+						<div class="col-md-4 col-lg-4 col-4" id="totalOutput"
 							style="font-size: 18px;font-weight: bold;"></div>
-						<div class="col-md-4 col-lg-3 col-12">						
+						<div class="col-md-4 col-lg-4 col-4">						
 							<a href="indentTransactionUpdates"> 
 							<input type="button"
 								class="btn btn-primary" id="expiryDatebut" value="Cancel">
@@ -349,7 +354,7 @@ function getProductByIndent(){
 						.getElementById("productImage");
 				
 			if(product[10]!=0){ 
-			var output = "<span class='highlight1' class='title' style='background: red;padding: 2px;border-radius: 3px;'>Indent Number: " +  response[0][8]
+			var output = "<span class='highlight1' class='title' style='padding: 2px;border-radius: 3px;'>Indent Number: " +  response[0][8]
 					+ "</span> ";
 			$('#IndentNumber').html(output);
 			}
@@ -449,8 +454,8 @@ function getProductByIndent(){
 		totalQuantitys = totalQuantity +currentTotalQuantity;
 		console.log(totalPrices,'totalPrice');
 		console.log(totalQuantitys,'totalQuantity');
-		var output = "<span style='background: red;padding: 2px;border-radius: 3px;' class='title'>Indent val: ₹</span><span style='background: red;padding: 2px;border-radius: 3px;' class='highlight'>" + totalPrices.toFixed(2)
-				+ "</span> <span style='background: red;padding: 2px;border-radius: 3px;' class='title'>No of items: </span><span style='background: red;padding: 2px;border-radius: 3px;' class='highlight'>" + totalQuantitys
+		var output = "<span style='padding: 2px;border-radius: 3px;' class='title'>Indent val: ₹</span><span style='padding: 2px;border-radius: 3px;' class='highlight'>" + totalPrices.toFixed(2)
+				+ "</span> <span style='padding: 2px;border-radius: 3px;' class='title'>No of items: </span><span style='padding: 2px;border-radius: 3px;' class='highlight'>" + totalQuantitys
 				+ "</span>";
 		$('#totalOutput').html(output);
 
@@ -583,8 +588,8 @@ function getProductByIndent(){
 		totalQuantitys =currentTotalQuantity + totalQuantity ;
 		console.log(totalPrices,'totalPrice');
 		console.log(totalQuantitys,'totalQuantity');
-		var output = "<span style='background: red;padding: 2px;border-radius: 3px;' class='title'>Total Price: ₹</span><span style='background: red;padding: 2px;border-radius: 3px;' class='highlight'>" + totalPrices.toFixed(2)
-				+ "</span> <span class='title' style='background: red;padding: 2px;border-radius: 3px;'>No of items: </span><span style='background: red;padding: 2px;border-radius: 3px;' class='highlight'>" + totalQuantitys
+		var output = "<span style='padding: 2px;border-radius: 3px;' class='title'>Total Price: ₹</span><span style='padding: 2px;border-radius: 3px;' class='highlight'>" + totalPrices.toFixed(2)
+				+ "</span> <span class='title' style='padding: 2px;border-radius: 3px;'>No of items: </span><span style='padding: 2px;border-radius: 3px;' class='highlight'>" + totalQuantitys
 				+ "</span>";
 		$('#totalOutput').html(output);
 
@@ -612,7 +617,7 @@ console.log('value,price,prev',value,price,prev)
 		totalPrices = +currentTotalPrice + +totalPrice  ;
 		totalQuantitys =currentTotalQuantity + cuurentQTY ;
 		var output = "<span style='background: red;padding: 2px;border-radius: 3px;' class='title'>Total Price: ₹</span><span class='highlight'>" + totalPrices.toFixed(2)
-				+ "</span> <span style='background: red;padding: 2px;border-radius: 3px;' class='title'>No of items :</span> <span class='highlight'>" + totalQuantitys
+				+ "</span> <span class='title' style='padding: 2px;border-radius: 3px;' class='title'>No of items :</span> <span class='highlight'>" + totalQuantitys
 				+ "</span>";
 		$('#totalOutput').html(output);
 		
@@ -901,7 +906,7 @@ console.log('value,price,prev',value,price,prev)
 							
 							var output = "<div class='cell'><span class='title'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yearly Budget: ₹</span> &nbsp; <span id='yearlyAmount' style='font-size: 18px;color: white;'>&nbsp;"
 								+ budgt[3]  + "</span>&nbsp;&nbsp; <span class='title'> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cumulative (Incl. PO) Indent Value:   ₹ </span>&nbsp; <span style='font-size: 18px;color: white;'>"
-								 + budgt[5]   + "</span>&nbsp;&nbsp;   "+ "<span class='title'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Budget bal:   ₹</span> &nbsp; <span style='font-size: 18px;color: white;'>"
+								 + budgt[5]   + "</span>&nbsp;&nbsp;   "+ "<span class='title'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Budget bal:   ₹</span> &nbsp; <span id='bal_budget' style='font-size: 18px;color: white;'>"
 								+ budgt[4]   + "</span>"
 								// &nbsp;&nbsp;  "+ " <span class='title'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Indent Amt(Current month):   ₹</span>  &nbsp;&nbsp;<span style='font-size: 18px;color: white;'>" 
 								//+ budgt[6]   + "</span>  
@@ -985,11 +990,12 @@ console.log(jQuery.parseJSON(data), 'data')
 for (var i = 0; i < jQuery.parseJSON(data).length; i++) {
 
 	var product = jQuery.parseJSON(data)[i];
+	if(product[8]== null){ 
 	console.log(jQuery.parseJSON(data)[0][8],'jQuery.parseJSON(data)[0][8]')
 	
 	//	var output = "Indent Number: <span class='highlight1'>" +  jQuery.parseJSON(data)[0][8]	+ "</span> ";
 				//	$('#IndentNumber').html(output);
-					if(product[7]==0){
+	
 	const imageSource = 'product/' + product[0] + '.png';
 	
 	const defaultImage = 'assets/images/No_Image_Availabl.png';
@@ -1038,9 +1044,8 @@ productListHTML += '			class="fas fa-plus-square fa-2x"></i></a>';
 	productListHTML += '</div>';
 	productListHTML += '</div>';
 	productListHTML += '</div>';
-
-}
 $('#el-element-overlay').html(productListHTML);
+	}
 }
 //calculateTotal();
 }
