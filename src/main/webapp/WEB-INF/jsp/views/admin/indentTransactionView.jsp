@@ -924,8 +924,8 @@ function getBudgetDetails(){
 .footer {
 	background-color: Teal;
 	padding-bottom: 1px;
-	height: 300px;
-	position: static;
+	/* height: 300px; */
+	position: fixed;
 }
 
 footer h6 {

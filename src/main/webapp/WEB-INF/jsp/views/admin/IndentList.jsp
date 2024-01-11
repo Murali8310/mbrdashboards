@@ -389,7 +389,7 @@ function detailsReport(data){
             "data": null,
             "render": function(data, type, row) {
                 var status = row['Status'];
-                if (status === 'CREATED') {
+                if (status === 'Created') {
                     return "<button class='btn btn-success Edit-btn' id='Edit'>Edit</button>";
                 } else {
                     return "<button class='btn btn-danger view-btn' id='View'>View</button>";

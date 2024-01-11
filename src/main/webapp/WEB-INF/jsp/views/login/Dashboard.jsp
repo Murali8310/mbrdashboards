@@ -266,27 +266,19 @@ inset: auto 0px 1px;
 	<div id="main-wrapper" data-sidebartype="full" class="mini-sidebar">
 		 <jsp:include page="/WEB-INF/jsp/views/header/header.jsp"></jsp:include> 
 		<jsp:include page="/WEB-INF/jsp/views/header/sideBar.jsp"></jsp:include> 
-		<div class="page-wrapper" style="margin-top:80px;">
-			<div class="row" >
-				<div class="col-sm-12">
-				<div class="col-sm-6 col-lg-6 col-md-6" style="text-align: center;font-weight: bold;">
+		<div class="page-wrapper row" style="min-height: 100vh !important;text-align: center;
+    justify-content: center;
+    align-items: center;">
+				<div class="col-sm-5 col-lg-5 col-md-5" style="text-align: center;font-weight: bold;">
 				<h4 style="font-weight:bold">Budget vs Actual</h4>
 				</div>
-				<div class="col-sm-6 col-lg-6 col-md-6" style="text-align: center;font-weight: bold;	">
+				<div class="col-sm-5 col-lg-5 col-md-5" style="text-align: center;font-weight: bold;">
                 <h4 style="font-weight:bold">Monthly Indent Used Amount Comparison</h4>
 				</div>
-				<!-- 	<span style="font-weight: bold;margin-left:266px">Budget vs Actual</span>
-					<span style="font-weight: bold;float:right;margin-right:258px">Monthly Indent Used Amount Comparison</span> -->
+				 <div class="col-sm-5 col-lg-5 col-md-5 card" style="margin-right:40px" id="chart">
 				</div>
-				 <div class="col-sm- 5 col-lg-5 col-md-5 card" id="chart"  style="margin-top: 25px;margin-left: 28px;">
-				</div>
-				 <div class="col-sm-1 col-lg-1 col-md-1"   style="margin-top: 25px;">
-				</div>
-				 <div class="col-sm-5 col-lg-5 col-md-5 card" style="margin-top: 25px;" id="chart3">
+				 <div class="col-sm-5 col-lg-5 col-md-5 card mb-4" id="chart3">
 				</div>   
-				 <div class="col-sm-1 col-lg-1 col-md-1"   style="margin-top: 25px;">
-				</div>
-			</div>
 		</div>
 
 	</div>

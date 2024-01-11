@@ -7099,7 +7099,6 @@ button.close {
 
 .carousel-item {
 	position: relative;
-	display: none;
 	-webkit-box-align: center;
 	-ms-flex-align: center;
 	align-items: center;
@@ -12288,7 +12287,7 @@ ul.list-style-none li a:hover {
 }
 
 .left-sidebar {
-	position: absolute;
+	position: fixed !important;
 	width: 250px;
 	height: 100%;
 	top: 0px;
@@ -18285,4 +18284,15 @@ font-size: 18px !important;
 
 label {
 	font-size: 18px !important;
+}
+
+
+.breadcrumb-item  a {
+	color : red !important;
+}
+.breadcrumb-item active  a {
+	color : red !important;
+}
+.breadcrumb>.active {
+    color : red !important;
 }

@@ -2593,4 +2593,59 @@ System.out.println("CCCOWNER"+CCCOWNER);
 			return jsonData;
 		}
 		
+		/*
+		 * Created by : Gokul Created Date :12-07-2023 Description : Buyer Indent Page
+		 */
+
+		@RequestMapping(value = "BuyerIndentPageUpdate", method = RequestMethod.GET)
+		public List<Object> BuyerIndentPageUpdate(HttpServletRequest request, HttpServletResponse responsel, Model model) {
+			//, 
+			//@RequestParam("Year") String Year,@RequestParam("Month") String Month, @RequestParam("filter") String filter
+			HttpSession session = request.getSession();
+			String loginId = "";
+
+			try {
+				Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+				loginId = (String) userMap.get("login_id");
+			} catch (Exception er) {
+				er.printStackTrace();
+				//return "login/login";
+			}
+
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat year_Date = new SimpleDateFormat("YYYY");
+			String yearfromCal = year_Date.format(cal.getTime());
+
+			//SimpleDateFormat month_Date = new SimpleDateFormat("MM");
+			// String monthFromCal = month_Date.format(cal.getTime());
+			//String monthFromCal = String.format("%02d", Integer.parseInt(month_Date.format(cal.getTime())));
+
+			SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
+			String MonthText = month.format(cal.getTime());
+			int cFY = Integer.valueOf(yearfromCal);
+			if (getMonthNumber(MonthText) < 4) {
+				cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+			 yearfromCal = String.valueOf(cFY);
+			    System.out.println("yearfromCal"+yearfromCal);
+			}
+			String yearfromCal1 = year_Date.format(cal.getTime());
+
+			List<Object> BuyerList;
+			List<Object> FooterList;
+			List<String> finalcol = null;
+			
+			 finalcol = userService.getAllheader(yearfromCal,MonthText);
+			
+			List<String> collen = userService.getAllcolumnlength(yearfromCal,MonthText);
+			System.out.println("collen"+collen);
+			FooterList = userService.getBuyerFooterList(yearfromCal,MonthText,yearfromCal1);
+			BuyerList = userService.getBuyerIndentList(yearfromCal,MonthText);
+			model.addAttribute("BuyerList", BuyerList);
+			model.addAttribute("FooterList", FooterList);
+			model.addAttribute("Finalcol", finalcol);
+			model.addAttribute("Collen", collen);
+
+			return FooterList;
+		}
+		
 		}

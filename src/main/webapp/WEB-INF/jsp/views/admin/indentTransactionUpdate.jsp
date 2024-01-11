@@ -179,7 +179,6 @@ padding:0px !important;
 				
 				<div class="row">
 					<div class="col-12 d-flex no-block align-items-center">
-						<h4 class="page-title">Indent Update</h4>
 						<div class="ml-auto text-right">
 							<nav aria-label="breadcrumb">
 								<ol class="breadcrumb">
@@ -917,12 +916,12 @@ function getBudgetDetails(){
 .footer {
 	background-color: Teal;
 	padding-bottom: 1px;
-	height: 300px;
+	/* height: 300px; */
 	
 }
 
 .footer {
-    position: static; 
+    position: fixed; 
     bottom: 0;
     width: 100%;
     padding: 10px;

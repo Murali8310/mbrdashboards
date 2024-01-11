@@ -362,7 +362,7 @@ vertical-align: text-bottom ; footer {
  </tr>
 													</c:forEach>
 												</tbody>
-												<tfoot>
+												<tfoot id='tfootexample'>
 													<tr>
 														<th class='tbodyCustomColor'>Total</th>
 														<th class='tbodyCustomColor'></th>
@@ -383,13 +383,13 @@ vertical-align: text-bottom ; footer {
 												</tr>
 												<c:forEach items="${FooterList}" var="foot" varStatus="loop">
 
-													<tr class="footer-row reassign-footer">
+													<tr class="footer-row reassign-footer" id='checkrowID_${loop.index}'>
 															<th ><div
 																	class="sticky-col first-col">${foot[0]}</div></th>
 														<th></th>
 														<th></th>
 														<c:forEach items="${Collen}" var="ccen" varStatus="loop2">
-                                                         <th class="compare-value" style="text-align:right" data-threshold="${foot[loop2.index + 1]}">${foot[loop2.index + 1]}</th>													
+                                                         <th class="compare-value" style="text-align:right" id='checkthID_${loop2.index}' data-threshold="${foot[loop2.index + 1]}">${foot[loop2.index + 1]}</th>													
                                                          </c:forEach>
 														<th></th>
 														<th></th>
@@ -963,7 +963,7 @@ $(document).ready(function () {
 
 			success : function(response) {
 				
-				Swal.fire({
+				 Swal.fire({
 					icon : 'success',
 					title : 'Indent Updated Successfully. </br></br> Please Proceed and Click <span style="color: #3d69d4;"> "Send to Vendor</span>"',
 					showCloseButton : false,
@@ -972,12 +972,41 @@ $(document).ready(function () {
 				    if (result.isConfirmed) {
 				       // location.reload();
 				    }
-				});
+				}); 
 			//	document.getElementById('btn-sendtovendor').style['pointer-events'] = 'cursor'
 					const myElement = document.getElementById("btn-sendtovendor");
 			    // Add the "disabled" property to the element
 			    myElement.disabled = false;
-			    location.reload();
+			    $.ajax({
+					type : "GET",
+					url : "BuyerIndentPageUpdate",
+					contentType : 'application/json',
+					data : null,
+					success : function(response) {
+						 for (var i = 0; i < response.length; i++) {
+							 var dataObj = response[i];
+							 var mainTrow = document.getElementById('checkrowID_' + i);
+							 for (var j = 0; j < dataObj.length; j++) {
+								 if(mainTrow)
+									 var thElement = mainTrow.querySelector('#checkthID_' + j);
+						            // Perform operations on thElement
+						            if (thElement) {
+						                thElement.innerHTML = dataObj[j+1];
+						                // Add more update logic as needed
+						            }
+							        // Perform operations on thElement as needed
+							    }
+						  
+						    }
+						 for (var i = 0; i < response.length; i++) {
+						        var thElement = document.getElementById('checkID_' + i);
+						        // Perform operations on thElement as needed
+						    }
+						console.log('thi is new res',response)
+					//	updateTableFooters();
+					}
+		        });
+			   // location.reload();
 			}
         });
         
@@ -1292,5 +1321,21 @@ $(document).ready(function () {
 </script>
 	<script src="dist/js/sweetalert2.min.js"></script>
 	<link rel="stylesheet" href="dist/css/sweetalert2.min.css" />
+	
+	<script>
+    $(document).ready(function () {
+        // Function to update table footers
+        function updateTableFooters() {
+            // Your logic to fetch and update footer data
+            var newFooterContent = "<tr><td>New Footer Data</td><td>More Data</td></tr>";
+
+            // Update the table footers
+            $("#example tfoot").html(newFooterContent);
+        }
+
+        // Call the function to update footers
+      //  updateTableFooters();
+    });
+</script>
 </body>
 </html>

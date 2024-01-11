@@ -860,7 +860,7 @@ public class UserDaoimpl implements UserDao {
 		}
 		List<Object> IndentList;
 		Query selectQuery = entityManager.createNativeQuery(
-				"SELECT DISTINCT DOC_NUMBER,format(DOC_DATE,'dd-MMM-yyy') DOC_DATE,im.LMSID,STATUS FROM Indent_Transaction it "
+				"SELECT DISTINCT DOC_NUMBER,format(DOC_DATE,'dd-MMM-yyy') DOC_DATE,im.LMSID,CONCAT(UPPER(SUBSTRING(STATus, 1, 1)), LOWER(SUBSTRING(STATus, 2, LEN(STATus)))) AS STATUS FROM Indent_Transaction it "
 						+ " left join INDENT_MANAGER im on it.CREATEDBY = im.LMSID where Cost_Center =:costcenter and it.month=:Month and it.year=:year");
 
 		selectQuery.setParameter("Month", Month);
