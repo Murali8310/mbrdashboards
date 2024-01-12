@@ -891,7 +891,7 @@ function getBudgetDetails(){
 						var budgt =jQuery.parseJSON(response)[0]
 					
 						var output = "<div class='cell'><span class='title'>Yearly Budget: ₹ </span> <span class='highlight' id='yearAmount'>"
-							+ budgt[3]  + "</span> &nbsp;&nbsp;&nbsp;&nbsp;<span class='title'>Cumulative (Incl. PO) Indent Value: ₹</span>  <span class='highlight'>"
+							+ budgt[3]  + "</span> &nbsp;&nbsp;&nbsp;&nbsp;<span class='title'>Cumulative Indent Value Rs.(Incl. PO, Route): </span>  <span class='highlight'>"
 							 + budgt[5]   + "</span>&nbsp;&nbsp;&nbsp;&nbsp; <span class='title'>Budget bal: ₹</span>  <span class='highlight'>"
 							+ budgt[4]   + "</span>"
 							//+ "<span class='title'> Indent Amt(Current month): ₹</span>  <span class='highlight'>" 

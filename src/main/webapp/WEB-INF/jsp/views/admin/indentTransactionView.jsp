@@ -903,7 +903,7 @@ function getBudgetDetails(){
 						console.log(budgt);
 
 						var output = "<div class='cell'><span class='title'>Yearly Budget:₹ </span> <span class='highlight' id='yearAmount'>"
-							+ budgt[3]  + "</span><span class='title'>Cumulative (Incl. PO, Route) Indent Value:   ₹</span>  <span class='highlight'>"
+							+ budgt[3]  + "</span><span class='title'>Cumulative Indent Value Rs.(Incl. PO, Route): </span>  <span class='highlight'>"
 							 + budgt[5]   + "</span>"+ " <span class='title'>Budget bal:   ₹</span>  <span class='highlight'>"
 							+ budgt[4]   + "</span>"+ "<span class='title'> Indent Amt(Current month):₹</span>  <span class='highlight'>" 
 							+ budgt[6]   + "</span> </div> " ;

@@ -730,7 +730,7 @@ padding:0px !important;
 					$('#totalOutput2').html("No budget is defined");
 				}else{
 			  var output = "<div class='cell'>&nbsp;&nbsp;<span class='title'>Yearly Budget:</span>₹  <span class='highlight' id='yearAmount'>"
-					+ budgt[3]  + "</span>&nbsp;&nbsp;&nbsp;<span class='title'>Cumulative (Incl. PO, Route) Indent Value:   ₹</span><span class='highlight'>"
+					+ budgt[3]  + "</span>&nbsp;&nbsp;&nbsp;<span class='title'>Cumulative Indent Value Rs.(Incl. PO, Route): </span><span class='highlight'>"
 					 + budgt[5]   + "</span>&nbsp;&nbsp;"+ "<span class='title'> Budget bal:   ₹ </span> <span class='highlight'>"
 					+ budgt[4]   + "</span>&nbsp;&nbsp;&nbsp;"+ " <span class='title'>Indent Amt(Current month):   ₹</span>  <span class='highlight'>" 
 					+ budgt[6]   + "</span> </div> " ;

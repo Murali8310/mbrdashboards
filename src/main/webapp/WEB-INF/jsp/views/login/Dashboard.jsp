@@ -64,7 +64,7 @@
         height: '450'
     },
     series: chartData,
-    labels: ['Cumulative (Incl. PO, Route) Indent Value (Rs)', 'Balance Budget Value (Rs)'],
+    labels: ['Cumulative Indent Value Rs.(Incl. PO, Route)', 'Balance Budget Value (Rs)'],
     legend: {
         position: 'bottom'
     },
@@ -138,7 +138,7 @@ console.log('year',year)
             		    },
             		    yaxis: {
             		        title: {
-            		            text: 'Indent value(Rs)',
+            		            text: 'Indent value (Rs)',
             		            style: {
             		                fontSize: '15px' // Adjust the font size for y-axis title
             		            }
@@ -273,9 +273,9 @@ inset: auto 0px 1px;
 				<h4 style="font-weight:bold">Budget vs Actual</h4>
 				</div>
 				<div class="col-sm-5 col-lg-5 col-md-5" style="text-align: center;font-weight: bold;">
-                <h4 style="font-weight:bold">Monthly Indent Used Amount Comparison</h4>
+                <h4 style="font-weight:bold">Budget Uitilized (Monthly)</h4>
 				</div>
-				 <div class="col-sm-5 col-lg-5 col-md-5 card" style="margin-right:40px" id="chart">
+				 <div class="col-sm-5 col-lg-5 col-md-5 card" style="margin-right:20px" id="chart">
 				</div>
 				 <div class="col-sm-5 col-lg-5 col-md-5 card mb-4" id="chart3">
 				</div>   

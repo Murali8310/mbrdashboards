@@ -912,7 +912,7 @@ console.log('value,price,prev',value,price,prev)
 							+ budgt[6]   + "</span>  "; */
 							
 							var output = "<div class='cell'><span class='title'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yearly Budget: ₹</span> &nbsp; <span id='yearlyAmount' class='highlight' style='font-size: 18px;color: white;'>&nbsp;"
-								+ budgt[3]  + "</span>&nbsp;&nbsp; <span class='title'> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cumulative (Incl. PO) Indent Value:   ₹ </span>&nbsp; <span class='highlight' style='font-size: 18px;color: white;'>"
+								+ budgt[3]  + "</span>&nbsp;&nbsp; <span class='title'> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cumulative Indent Value Rs.(Incl. PO, Route): </span>&nbsp; <span class='highlight' style='font-size: 18px;color: white;'>"
 								 + budgt[5]   + "</span>&nbsp;&nbsp;   "+ "<span class='title'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Budget bal:   ₹</span> &nbsp; <span class='highlight' id='bal_budget' style='font-size: 18px;color: white;'>"
 								+ budgt[4]   + "</span>"
 								// &nbsp;&nbsp;  "+ " <span class='title'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Indent Amt(Current month):   ₹</span>  &nbsp;&nbsp;<span style='font-size: 18px;color: white;'>" 
