@@ -131,9 +131,9 @@ padding:0px !important;
 					<ul id="sidebarnav" class="p-t-30">
 						<li class="sidebar-item"><label
 							class="sidebar-link hide-menu">
-								<button class="btn btn-danger" style="width: 100%;"
+								<button class="btn-new-styles" style="width: 100%;"
 									id="resetCategoriesID">Reset</button> &nbsp;&nbsp;
-								<button class="btn btn-success" style="width: 100%;"
+								<button class="btn-new-styles" style="width: 100%;"
 									id="submitCategoriesID">Apply</button>
 						</label></li>
 						<li class="sidebar-item"><a id='catid'
@@ -911,9 +911,9 @@ console.log('value,price,prev',value,price,prev)
 							+ budgt[5]   + "</span>  "+ "</span> Indended Amount:   ₹<span class='highlight'>"
 							+ budgt[6]   + "</span>  "; */
 							
-							var output = "<div class='cell'><span class='title'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yearly Budget: ₹</span> &nbsp; <span id='yearlyAmount' class='highlight' style='font-size: 18px;color: white;'>&nbsp;"
-								+ budgt[3]  + "</span>&nbsp;&nbsp; <span class='title'> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cumulative Indent Value Rs.(Incl. PO, Route): </span>&nbsp; <span class='highlight' style='font-size: 18px;color: white;'>"
-								 + budgt[5]   + "</span>&nbsp;&nbsp;   "+ "<span class='title'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Budget bal:   ₹</span> &nbsp; <span class='highlight' id='bal_budget' style='font-size: 18px;color: white;'>"
+							var output = "<div class='cell'><span class='title'>&nbsp;&nbsp;Yearly Budget: ₹</span> &nbsp; <span id='yearlyAmount' class='highlight' style='font-size: 18px;color: white;'>&nbsp;"
+								+ budgt[3]  + "</span>&nbsp;&nbsp; <span class='title' style='margin-left:184px'> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cumulative Indent Value Rs.(Incl. PO, Route): </span>&nbsp; <span class='highlight' style='font-size: 18px;color: white;'>"
+								 + budgt[5]   + "</span>&nbsp;&nbsp;   "+ "<span class='title' style='margin-left:100px'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Budget bal:   ₹</span> &nbsp; <span class='highlight' id='bal_budget' style='font-size: 18px;color: white;'>"
 								+ budgt[4]   + "</span>"
 								// &nbsp;&nbsp;  "+ " <span class='title'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Indent Amt(Current month):   ₹</span>  &nbsp;&nbsp;<span style='font-size: 18px;color: white;'>" 
 								//+ budgt[6]   + "</span>  

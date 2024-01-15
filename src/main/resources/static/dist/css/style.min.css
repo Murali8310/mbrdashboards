@@ -7098,6 +7098,7 @@ button.close {
 }
 
 .carousel-item {
+	display: none;
 	position: relative;
 	-webkit-box-align: center;
 	-ms-flex-align: center;
@@ -18295,4 +18296,25 @@ label {
 }
 .breadcrumb>.active {
     color : red !important;
+}
+.btn-danger {
+    color: #fff;
+    background-color: #e2312b;
+    border-color: #d43f3a;
+    font-size: 18px !important;
+}
+.btn-success {
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+    font-size: 18px !important;
+}
+
+.btn-new-styles {
+    font-size: 16px;
+    background: #2027d6 !important;
+    color: #fff;
+    background-color: #3021cf;
+    border-color: #d58512;
+    height:30px;	
 }

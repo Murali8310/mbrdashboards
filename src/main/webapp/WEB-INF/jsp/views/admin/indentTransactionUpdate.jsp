@@ -144,9 +144,9 @@ padding:0px !important;
 					<ul id="sidebarnav" class="p-t-30">
 						<li class="sidebar-item"><label
 							class="sidebar-link hide-menu">
-								<button class="btn btn-danger" style="width: 100%;"
+								<button class="btn-new-styles" style="width: 100%;"
 									id="resetCategoriesID">Reset</button> &nbsp;&nbsp;
-								<button class="btn btn-success" style="width: 100%;"
+								<button class="btn-new-styles" style="width: 100%;"
 									id="submitCategoriesID">Apply</button>
 						</label></li>
 						<li class="sidebar-item"><a id='catid'
@@ -891,8 +891,8 @@ function getBudgetDetails(){
 						var budgt =jQuery.parseJSON(response)[0]
 					
 						var output = "<div class='cell'><span class='title'>Yearly Budget: ₹ </span> <span class='highlight' id='yearAmount'>"
-							+ budgt[3]  + "</span> &nbsp;&nbsp;&nbsp;&nbsp;<span class='title'>Cumulative Indent Value Rs.(Incl. PO, Route): </span>  <span class='highlight'>"
-							 + budgt[5]   + "</span>&nbsp;&nbsp;&nbsp;&nbsp; <span class='title'>Budget bal: ₹</span>  <span class='highlight'>"
+							+ budgt[3]  + "</span> &nbsp;&nbsp;&nbsp;&nbsp;<span class='title' style='margin-left: 217px;'>Cumulative Indent Value Rs.(Incl. PO, Route): </span>  <span class='highlight'>"
+							 + budgt[5]   + "</span>&nbsp;&nbsp;&nbsp;&nbsp; <span class='title' style='margin-left: 111px;'>Budget bal: ₹</span>  <span class='highlight'>"
 							+ budgt[4]   + "</span>"
 							//+ "<span class='title'> Indent Amt(Current month): ₹</span>  <span class='highlight'>" 
 							//+ budgt[6]   + "</span> 

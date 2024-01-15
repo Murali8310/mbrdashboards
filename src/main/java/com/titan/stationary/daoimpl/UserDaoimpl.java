@@ -1035,8 +1035,7 @@ public class UserDaoimpl implements UserDao {
 			String id = (String) getintentID.getSingleResult();
 			// return "Already Indent number generated " + id + " for this cost center " +
 			// userId + " kindly update ";
-			return "For the month : " + MonthText + " already Indent is generated : " + id + " for this cost center "
-					+ userId + ".";
+			return "Indent is already generated for this cost center in current month. please modify the indent in the indent list.";
 
 		}
 		Query DeleteEmptyProducts = entityManager

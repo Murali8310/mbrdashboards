@@ -102,6 +102,15 @@ vertical-align: text-bottom ; footer {
 		display: none;
 	}
 }
+body
+{
+    counter-reset: Serial;           /* Set the Serial counter to 0 */
+}
+tr td:first-child:before
+{
+  counter-increment: Serial;      /* Increment the Serial counter */
+  content: counter(Serial); /* Display the counter */
+}
 </style>
 
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
@@ -212,6 +221,7 @@ vertical-align: text-bottom ; footer {
   </style>
 											<thead class="thead-light">
 												<tr>
+												<th class="headerStyles" scope="col"><b>Sl No.</b></th>
 													<th class='headerStyles' scope="col"><b>Product ID</b></th>
 													<th class='headerStyles' scope="col"><b>Product Name</b></th>
 													<th class='headerStyles' scope="col"><b>Make</b></th>
@@ -227,6 +237,7 @@ vertical-align: text-bottom ; footer {
 												<c:forEach items="${ProductListt}" var="indent"
 													varStatus="loop">
 													<tr>
+													<td class='tbodyCustomColor'></td>
 														<td class='tbodyCustomColor' >${indent[0]}</td>
 														<td class='tbodyCustomColor'>${indent[1]}</td>
 														<td class='tbodyCustomColor'>${indent[3]}</td>
@@ -355,6 +366,9 @@ vertical-align: text-bottom ; footer {
         ],
         responsive: true,
         "columns" : [{
+			"data" : "SL NO"
+		},
+        	{
 			"data" : "Product ID"
 		},{
 			"data" : "Product Name"

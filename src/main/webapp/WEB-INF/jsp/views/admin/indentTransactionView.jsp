@@ -139,9 +139,9 @@ padding:0px !important;
 					<ul id="sidebarnav" class="p-t-30">
 						<li class="sidebar-item"><label
 							class="sidebar-link hide-menu">
-								<button class="btn btn-danger" style="width: 100%;"
+								<button class="btn-new-styles" style="width: 100%;"
 									id="resetCategoriesID">Reset</button> &nbsp;&nbsp;
-								<button class="btn btn-success" style="width: 100%;"
+								<button class="btn-new-styles" style="width: 100%;"
 									id="submitCategoriesID">Apply</button>
 						</label></li>
 						<li class="sidebar-item"><a id='catid'

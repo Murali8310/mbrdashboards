@@ -300,7 +300,7 @@ h1 {
 									</h1>
 								</div>
 								<div class="box tile-color text-center">
-									<h6 class="text-white display-5">Indent Filter List</h6>
+									<h6 class="text-white display-5">Indent History</h6>
 								</div>
 							</a>
 						</div>
@@ -364,7 +364,7 @@ h1 {
 									</h1>
 								</div>
 								<div class="box tile-color text-center">
-									<h6 class="text-white display-5">Distributer Receipt Filter Page</h6>
+									<h6 class="text-white display-5">Distributer Receipt History</h6>
 								</div>
 							</a>
 						</div>

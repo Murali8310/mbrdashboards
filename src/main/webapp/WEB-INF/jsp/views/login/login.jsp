@@ -235,16 +235,17 @@ border-color:#01AFAE;
 															 name="user_selection" onclick="textboxchange1()"
 															id="user_selection1" value="Indent Manager" >User</label>
 													</div>
-													<div class="col-md-3  col-sm-3 col-3">
+													<div class="col-md-4 col-sm-4 col-4">
 														<label class="labelcol"><input type="radio"  onclick="textboxchange2()"
 															name="user_selection" id="user_selection2" value="Buyer">
 															Buyer </label>
 													</div>
-													<div class="col-md-5  col-sm-5 col-5">
+													<div class="col-md-4 col-sm-4 col-4">
 													
-														<label class="labelcol"><input type="radio"  onclick="textboxchange3()"
+														<label class="labelcol">
+														<input type="radio"  onclick="textboxchange3()"
 															name="user_selection" id="user_selection3"
-															value="Tray Manager">Distribution Team </label>
+															value="Tray Manager"><span>Distribution <span style="margin-left: 27px;">Team</span></span></label>
 													</div>
 													</div>
                              <div  class="input-group mb-3 sm" id="sm">
