@@ -1922,7 +1922,11 @@ public class UserDaoimpl implements UserDao {
 				"select DISTINCT pm.PRODUCT_NUMBER,pm.PROD_NAME,pm.PROD_DESC,pm.MAKE,pm.ucp,pm.uom,  tcit.COST_CENTER, "
 						+ "isnull(tcit.TOTAL_USER_QTY,0) as quantity,tcit.DOC_NUMBER from PRODUCT_MASTER pm "
 						+ "left join TEMP_Indent_Transaction tcit on pm.PROD_NAME = tcit.item and COST_CENTER=:userId "
-						+ " where category IN( :category) " + "order by quantity desc ");
+						+ " where category IN( :category) AND NOT EXISTS (\n"
+						+ "        SELECT 1\n"
+						+ "        FROM Indent_Transaction tit\n"
+						+ "        WHERE pm.PROD_NAME = tit.item and COST_CENTER = :userId\n"
+						+ "    )  " + "order by quantity desc ");
 		List<String> brandList = Arrays.asList(categoryArray);
 		selectQuery.setParameter("category", brandList);
 		selectQuery.setParameter("userId", userId);
