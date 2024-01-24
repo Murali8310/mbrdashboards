@@ -350,7 +350,7 @@ h1 {
 									</h1>
 								</div>
 								<div class="box tile-color text-center">
-									<h6 class="text-white display-5">Distributer Receipt Page</h6>
+									<h6 class="text-white display-5">Distributor Receipt Page</h6>
 								</div>
 							</a>
 						</div>
@@ -364,7 +364,7 @@ h1 {
 									</h1>
 								</div>
 								<div class="box tile-color text-center">
-									<h6 class="text-white display-5">Distributer Receipt History</h6>
+									<h6 class="text-white display-5">Distributor Receipt History</h6>
 								</div>
 							</a>
 						</div>

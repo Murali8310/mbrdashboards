@@ -187,13 +187,13 @@ table.dataTable tbody tr.selected a {
 			<div class="page-breadcrumb">
 				<div class="row">
 					<div class="col-12 d-flex no-block align-items-center">
-						<h5 class="page-title display-6">Distributer Receipt Filter Page</h5> 
+						<h5 class="page-title display-6">Distributor Receipt Filter Page</h5> 
 						<div class="ml-auto text-right">
 							<nav aria-label="breadcrumb">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="landPage">Home</a></li>
 									<li class="breadcrumb-item"><a href="manageByAdmin">Management</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Distributer Receipt Filter Page</li>
+									<li class="breadcrumb-item active" aria-current="page">Distributor Receipt Filter Page</li>
 								</ol>
 							</nav>
 						</div>

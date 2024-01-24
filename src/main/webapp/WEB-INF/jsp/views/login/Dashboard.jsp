@@ -71,7 +71,8 @@
     dataLabels: {
         style: {
             fontSize: '12px !important', // You can adjust the font size if needed
-            padding: '10px !important' // Adjust the padding value as per your requirement
+            padding: '10px !important',
+            colors: ['black'] // Adjust the padding value as per your requirement
         }
     }
 };
@@ -142,6 +143,13 @@ console.log('year',year)
             		            style: {
             		                fontSize: '15px' // Adjust the font size for y-axis title
             		            }
+            		        }
+            		    },
+            		    dataLabels: {
+            		        style: {
+            		            fontSize: '12px !important', // You can adjust the font size if needed
+            		            padding: '10px !important',
+            		            colors: ['black'] // Adjust the padding value as per your requirement
             		        }
             		    }
             		};

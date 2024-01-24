@@ -18297,7 +18297,7 @@ label {
 .breadcrumb>.active {
     color : red !important;
 }
-.btn-danger {
+/* .btn-danger {
     color: #fff;
     background-color: #e2312b;
     border-color: #d43f3a;
@@ -18308,7 +18308,7 @@ label {
     background-color: #5cb85c;
     border-color: #4cae4c;
     font-size: 18px !important;
-}
+} */
 
 .btn-new-styles {
     font-size: 16px;

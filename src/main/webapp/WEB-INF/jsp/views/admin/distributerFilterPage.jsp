@@ -187,13 +187,13 @@ table.dataTable tbody tr.selected a {
 			<div class="page-breadcrumb">
 				<div class="row">
 					<div class="col-12 d-flex no-block align-items-center">
-						<h5 class="page-title display-6">Distributer Receipt Filter Page</h5> 
+						<h5 class="page-title display-6">Distributor Receipt Filter Page</h5> 
 						<div class="ml-auto text-right">
 							<nav aria-label="breadcrumb">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="landPage">Home</a></li>
 									<li class="breadcrumb-item"><a href="manageByAdmin">Management</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Distributer Receipt Filter Page</li>
+									<li class="breadcrumb-item active" aria-current="page">Distributor Receipt Filter Page</li>
 								</ol>
 							</nav>
 						</div>
@@ -383,17 +383,17 @@ location.href = ipadd.split('stationary')[0]+'stationary/distributerFilterShowPa
 														<td class='tbodyCustomColor'>${user[2]}</td>
 														<c:set var="collectionSize" value="${0}" />
 														<c:forEach items="${Collen}" var="ccen" varStatus="loop2">
-													<td class="editable-cell tbodyCustomColor">${user[loop2.index + 3]}</td>
+													<td class="tbodyCustomColor" style="text-align:center !important">${user[loop2.index + 3]}</td>
 													  <c:set var="collectionSize" value="${collectionSize + 1}" />
 													
 													</c:forEach>													
-														<td class='tbodyCustomColor'>${user[collectionSize + 8]}</td>
+														<td class='tbodyCustomColor' style="text-align:center !important">${user[collectionSize + 8]}</td>
 														<td class='tbodyCustomColor' style="text-align:right !important">${user[7]*user[6]}</td>
 														<td class='tbodyCustomColor' style="text-align:right !important">${user[collectionSize + 3]}</td>
 														<!-- Receipt -->
-														<td class="editable-cell tbodyCustomColor">${user[collectionSize + 8]}</td>
+														<td class="tbodyCustomColor">${user[collectionSize + 8]}</td>
 														<td class='tbodyCustomColor' style="text-align:right !important"></td>
-														<td class="editable-cell tbodyCustomColor" style="text-align:center !important">${user[collectionSize + 6]}</td>
+														<td class="tbodyCustomColor" style="text-align:center !important">${user[collectionSize + 6]}</td>
 														<td class='tbodyCustomColor' style="text-align:right !important"></td>
 
 													</tr>
@@ -414,7 +414,7 @@ location.href = ipadd.split('stationary')[0]+'stationary/distributerFilterShowPa
 														<th class='tbodyCustomColor' id="finalQty"></th>
 														<th class='tbodyCustomColor' id="finalValue"></th>
 														<th class='tbodyCustomColor' style="text-align:center !important"></th>
-														<th class='tbodyCustomColor' id="ReciptQty"></th>
+														<th class='tbodyCustomColor' style="text-align:center !important" id="ReciptQty"></th>
 
 														<!-- Receipt -->
 														<th class='tbodyCustomColor' style="text-align:right !important" id="Reciptvalue"></th>
@@ -513,7 +513,7 @@ location.href = ipadd.split('stationary')[0]+'stationary/distributerFilterShowPa
          console.log('3',totalSum)
 	    // Redraw the table to reflect the changes
 	    table.draw();
-	    return totalSum;
+	    return totalSum.toFixed(2);
 	}
 	function updateRowSums() {
 	    var table = $('#example').DataTable();
@@ -535,9 +535,9 @@ location.href = ipadd.split('stationary')[0]+'stationary/distributerFilterShowPa
 	        	sum = Number(this.cell(rowIdx, numColumns).data());
 	        }
 	     this.cell(rowIdx, numColumns).data(sum);
-	     this.cell(rowIdx, numColumns + 1).data(sum * Number(row[numColumns + 2]));
-	     this.cell(rowIdx, numColumns + 4).data(Number(row[numColumns + 2]) * Number(row[numColumns + 3]));
-	     this.cell(rowIdx, numColumns + 6).data(Number(row[numColumns + 2]) * Number(row[numColumns + 5]));
+	     this.cell(rowIdx, numColumns + 1).data((sum * Number(row[numColumns + 2])).toFixed(2));
+	     this.cell(rowIdx, numColumns + 4).data((Number(row[numColumns + 2]) * Number(row[numColumns + 3]).toFixed(2)));
+	     this.cell(rowIdx, numColumns + 6).data((Number(row[numColumns + 2]) * Number(row[numColumns + 5]).toFixed(2)));
 	    });
 	        //This is to update the moq or userqty based total value.
 	        

@@ -336,9 +336,9 @@ padding:0px !important;
 					<ul id="sidebarnav" class="p-t-30">
 						<li class="sidebar-item"><label
 							class="sidebar-link hide-menu">
-								<button class="btn btn-danger" style="width: 100%;"
+								<button class="btn-new-styles" style="width: 100%;"
 									id="resetCategoriesID">Reset</button> &nbsp;&nbsp;
-								<button class="btn btn-success" style="width: 100%;"
+								<button class="btn-new-styles" style="width: 100%;"
 									id="submitCategoriesID">Apply</button>
 						</label></li>
 						<li class="sidebar-item"><a id='catid'
@@ -432,10 +432,16 @@ font-weight: bold;
 									<li class="breadcrumb-item active" aria-current="page">Product Catalogue 
 									</li>
 										<div style="margin-left:17px;">
-							<a href="manageByAdmin"> <input type="button"
+							<a href="manageByAdmin"> <input type="button" style="font-size: 16px;
+    color: #fff;
+    background-color: #3021cf;
+    border-color: #d58512;"
 								class="btn btn-primary" id="expiryDatebut" value="Cancel">&nbsp;
 							</a> 
-							<a class="btn btn-success" id="submitId" onclick="submit()">Submit</a>
+							<a class="btn btn-success" style="font-size: 16px;
+    color: #fff;
+    background-color: #3021cf;
+    border-color: #d58512;" id="submitId" onclick="submit()">Submit</a>
 						</div>
 								</ol>
 							</nav>
@@ -731,6 +737,7 @@ font-weight: bold;
 
 	$("#resetCategoriesID").on("click", function() {
 		$('input[type=checkbox]').prop('checked', false);
+		updateResetButton();
 		getAllProducts();
 		getBudgetDetails();
 	});
@@ -774,6 +781,15 @@ font-weight: bold;
 					})
 					return;
 		}
+		
+		if(InputArray.length <= 0){
+			Swal.fire({
+				icon : 'error',
+        	  title: 'Please select atleast one product!',
+				focusConfirm : false,
+			})
+			return;
+		}
 
 		$.ajax({
 			type : "POST",
@@ -784,7 +800,7 @@ font-weight: bold;
 			success : function(response) { 
 				//var data = jQuery.parseJSON(response);
 				
-				if(response.startsWith("Indent Is Created Successfully")){
+				if(response.startsWith("Indent Created Successfully")){
 					
 			        	Swal.fire({
 			        	
@@ -1430,6 +1446,7 @@ function calculateDecrementTotal(value,price) {
 				}
 				
 				function saveInputdata(element,prev) {
+					updateResetButton();
 					var noBudget =$('#totalOutput2').text();
 					
 					if(noBudget != 'No budget is defined')
@@ -1651,7 +1668,35 @@ footer ul {
 		        console.log('it is calling in header')
 
 		    }, 10); // Adjust the time in milliseconds (e.g., 1000 for 1 second)
+		    updateResetButton();
 		});
+		
+		  // Function to enable or disable the reset button based on array length
+        function updateResetButton() {
+        	var newcategoryArray = [];
+
+    		$("input[name=Category]:checked").each(function() {
+    			var selectedCategory = $(this).val();
+    			newcategoryArray.push(selectedCategory);
+    		});
+          var submitCategoriesIDElement = document.getElementById("submitCategoriesID");
+          var resetCategoriesIDElement = document.getElementById("resetCategoriesID");
+
+          // Check if the array length is greater than 0
+          if (newcategoryArray.length > 0) {
+            // Enable the reset button
+            submitCategoriesIDElement.removeAttribute("disabled");
+            resetCategoriesIDElement.removeAttribute("disabled");
+            submitCategoriesIDElement.style.cursor = 'pointer';
+            resetCategoriesIDElement.style.cursor = 'pointer';
+          } else {
+            // Disable the reset button
+            submitCategoriesIDElement.setAttribute("disabled", "true");
+            resetCategoriesIDElement.setAttribute("disabled", "true");
+            submitCategoriesIDElement.style.cursor = 'not-allowed';
+            resetCategoriesIDElement.style.cursor = 'not-allowed';
+          }
+        }
 
 		</script>
    

@@ -559,7 +559,7 @@ label {
 					$(".loading").hide();
 					Swal.fire({
 						icon : 'success',
-						title : 'Budget Master Created Successfully',
+						title : 'Data Created Successfully',
 						showCloseButton : false,
 						showCancelButton : false,
 						focusConfirm : false,

@@ -134,7 +134,7 @@ padding:0px !important;
 								<button class="btn-new-styles" style="width: 100%;"
 									id="resetCategoriesID">Reset</button> &nbsp;&nbsp;
 								<button class="btn-new-styles" style="width: 100%;"
-									id="submitCategoriesID">Apply</button>
+									id="submitCategoriesID" disabled>Apply</button>
 						</label></li>
 						<li class="sidebar-item"><a id='catid'
 							class="sidebar-link has-arrow glyphicon "
@@ -714,6 +714,8 @@ console.log('value,price,prev',value,price,prev)
 	});
 	
 	function saveInputdata(element,prev) {
+		updateResetButton();
+		
 		console.log(element,'element',prev,'prev')
 		var InputArray = [];
 		var input = element.parentNode
@@ -1058,6 +1060,7 @@ $('#el-element-overlay').html(productListHTML);
 
 $("#resetCategoriesID").on("click", function() {
 	$('input[type=checkbox]').prop('checked', false);
+	updateResetButton();
 	getProductByIndent();
 	getBudgetDetails();
 });
@@ -1094,12 +1097,40 @@ $("#resetCategoriesID").on("click", function() {
 		      //  console.log('it is calling in header')
 
 		    }, 10); // Adjust the time in milliseconds (e.g., 1000 for 1 second)
+		    updateResetButton();
 		});
 
 		</script>
 		 <script>
         function redirectToPage(pageUrl) {
             window.location.href = pageUrl;
+        }
+        
+        // Function to enable or disable the reset button based on array length
+        function updateResetButton() {
+        	var newcategoryArray = [];
+
+    		$("input[name=Category]:checked").each(function() {
+    			var selectedCategory = $(this).val();
+    			newcategoryArray.push(selectedCategory);
+    		});
+          var submitCategoriesIDElement = document.getElementById("submitCategoriesID");
+          var resetCategoriesIDElement = document.getElementById("resetCategoriesID");
+
+          // Check if the array length is greater than 0
+          if (newcategoryArray.length > 0) {
+            // Enable the reset button
+            submitCategoriesIDElement.removeAttribute("disabled");
+            resetCategoriesIDElement.removeAttribute("disabled");
+            submitCategoriesIDElement.style.cursor = 'pointer';
+            resetCategoriesIDElement.style.cursor = 'pointer';
+          } else {
+            // Disable the reset button
+            submitCategoriesIDElement.setAttribute("disabled", "true");
+            resetCategoriesIDElement.setAttribute("disabled", "true");
+            submitCategoriesIDElement.style.cursor = 'not-allowed';
+            resetCategoriesIDElement.style.cursor = 'not-allowed';
+          }
         }
     </script>
 </html>

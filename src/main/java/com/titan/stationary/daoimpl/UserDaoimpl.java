@@ -780,7 +780,7 @@ public class UserDaoimpl implements UserDao {
 			}
 		}
 		if (response != 0) {
-			r = "Indent Is Created Successfully : " + maxId;
+			r = "Indent Created Successfully : " + maxId;
 		} else {
 			r = "Update failed";
 		}
@@ -1035,7 +1035,7 @@ public class UserDaoimpl implements UserDao {
 			String id = (String) getintentID.getSingleResult();
 			// return "Already Indent number generated " + id + " for this cost center " +
 			// userId + " kindly update ";
-			return "Indent is already generated for this cost center in current month. please modify the indent in the indent list.";
+			return "Indent already generated for this cost center in current month. please modify the indent in the indent list.";
 
 		}
 		Query DeleteEmptyProducts = entityManager

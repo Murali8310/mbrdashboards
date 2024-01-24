@@ -325,7 +325,7 @@ label {
 								</div>
 							</div>
 						
-							<div class="col-md-12 oneline">
+							<div class="col-md-12 oneline" style='margin-top:10px;'>
 								<div class="col-md-4"></div>
 								<div class="col-md-4 text-center">
 									<!-- Add "text-center" class to center the button -->
@@ -596,6 +596,25 @@ tr:nth-child(even) {
 
 tr:nth-child(odd) {
 	background-color: #eee;
+}
+.form-control {
+margin:3px;
+    display: block;
+    width: 100%;
+    height: 41px !important;
+    padding: 6px 12px;
+    font-size: 18px !important;
+    line-height: 1.42857143;
+    color: black !important;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
 </style>
 <div class="modal" id="myModal" role="dialog">
