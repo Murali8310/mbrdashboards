@@ -119,15 +119,24 @@ margin: 5px;
 						class="hide-menu" style="font-family: 'Montserrat'">Update</span></a></li>  -->
 						
 			</c:if>
+			
+			<%
+		 Object accessRoleobj = session.getAttribute("accessRole");
+			String accessRole = (String)accessRoleobj ;
+		
+			 %> 
 				<c:if test="${role =='Buyer'}">
 				<li class="sidebar-item"><a
 					class="sidebar-link far " href="manageByAdmin"
 					aria-expanded="false"><i  class="fa fa-users fa-5x"></i><span
 						class="hide-menu" style="font-family: 'Montserrat'">Management</span></a></li>
+						<c:if test="${accessRole =='1'}">
 				 <li class="sidebar-item"><a
 					class="sidebar-link far " href="usermanagementupload"
 					aria-expanded="false"><i class="fa fa-upload"></i><span
 						class="hide-menu" style="font-family: 'Montserrat'">Bulk upload</span></a></li>
+						</c:if>
+						
 				<li class="sidebar-item"><a
 					class="sidebar-link far" href="adminreports"
 					aria-expanded="false"><i class="fa fa-file-excel"></i><span

@@ -232,6 +232,7 @@ public class UserController {
 			session.setAttribute("login_id", userMap.get("login_id"));
 			session.setAttribute("role", userMap.get("role"));
 			session.setAttribute("storeCode", userMap.get("storeCode"));
+			session.setAttribute("accessRole", userMap.get("accessRole"));
 			// session.setAttribute("StoressSM", userMap.get("StoressSM"));
 			// session.setAttribute("region", userMap.get("region"));
 
@@ -1594,6 +1595,7 @@ System.err.println("murali debugger");
 			           
 			            return "Invalid file type. Only .png and files are allowed"; 
 			        }
+				  
 //			    String uploadDirectory = "D:/apache-tomcat-9.0.78/webapps/stationary/WEB-INF/classes/static/product";
 				String uploadDirectory = "D:/ECLIPSEWORK/stationary/src/main/resources/static/product";
 	            File file = new File(uploadDirectory, fileName);

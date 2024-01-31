@@ -232,7 +232,7 @@ public class UserDaoimpl implements UserDao {
 			if (!isAuthenticated) {
 				userVal.put("message", "Username/Password is not correct");
 			} else {
-				String getUsersDetails = "SELECT User_id,User_Name,email_id,login_id"
+				String getUsersDetails = "SELECT User_id,User_Name,email_id,login_id,userAccess"
 						+ " FROM ER_User_Master WHERE login_id=:login_id ";
 				Query getUsersDetailsQuery = entityManager.createNativeQuery(getUsersDetails);
 				getUsersDetailsQuery.setParameter("login_id", loginId);
@@ -245,6 +245,7 @@ public class UserDaoimpl implements UserDao {
 						userVal.put("user_Name", obj[1].toString());
 						userVal.put("email_id", obj[2].toString());
 						userVal.put("login_id", obj[3].toString());
+						userVal.put("accessRole", obj[4].toString());
 						userVal.put("role", "Buyer");
 
 						loginFlag = 0;
@@ -859,10 +860,35 @@ public class UserDaoimpl implements UserDao {
 		    System.out.println("yearfromCal"+yearfromCal);
 		}
 		List<Object> IndentList;
-		Query selectQuery = entityManager.createNativeQuery(
-				"SELECT DISTINCT DOC_NUMBER,format(DOC_DATE,'dd-MMM-yyy') DOC_DATE,im.LMSID,CONCAT(UPPER(SUBSTRING(STATus, 1, 1)), LOWER(SUBSTRING(STATus, 2, LEN(STATus)))) AS STATUS FROM Indent_Transaction it "
-						+ " left join INDENT_MANAGER im on it.CREATEDBY = im.LMSID where Cost_Center =:costcenter and it.month=:Month and it.year=:year");
+		//Query selectQuery = entityManager.createNativeQuery(
+			//	"SELECT DISTINCT DOC_NUMBER,format(DOC_DATE,'dd-MMM-yyy') DOC_DATE,im.LMSID,CONCAT(UPPER(SUBSTRING(STATus, 1, 1)), LOWER(SUBSTRING(STATus, 2, LEN(STATus)))) AS STATUS FROM Indent_Transaction it "
+				//		+ " left join INDENT_MANAGER im on it.CREATEDBY = im.LMSID where Cost_Center =:costcenter and it.month=:Month and it.year=:year");
+		
+//		Query selectQuery = entityManager.createNativeQuery(
+//				"SELECT DISTINCT DOC_NUMBER,format(DOC_DATE,'dd-MMM-yyy') DOC_DATE,im.LMSID,CONCAT(UPPER(SUBSTRING(STATus, 1, 1)), LOWER(SUBSTRING(STATus, 2, LEN(STATus)))) AS STATUS FROM Indent_Transaction it "
+//						+ " left join INDENT_MANAGER im on it.CREATEDBY = im.LMSID where Cost_Center =:costcenter and it.month=:Month and it.year=:year");
 
+		
+		Query selectQuery = entityManager.createNativeQuery(
+				"SELECT\n"
+				+ "		DOC_NUMBER,SUM(TOTAL_USER_QTY * UnitPrice) AS IndentAmount,\n"
+				+ "		 FORMAT(DOC_DATE, 'dd-MMM-yyyy') AS DOC_DATE,\n"
+				+ "		    im.LMSID,\n"
+				+ "		    CONCAT(UPPER(SUBSTRING(STATus, 1, 1)), LOWER(SUBSTRING(STATus, 2, LEN(STATus)))) AS STATUS\n"
+				+ "		FROM\n"
+				+ "		    Indent_Transaction it\n"
+				+ "		    LEFT JOIN INDENT_MANAGER im ON it.CREATEDBY = im.LMSID\n"
+				+ "		WHERE\n"
+				+ "		    Cost_Center = :costcenter\n"
+				+ "		    AND it.month = :Month\n"
+				+ "		    AND it.year = :year\n"
+				+ "		GROUP BY\n"
+				+ "		    DOC_NUMBER,\n"
+				+ "		    FORMAT(DOC_DATE, 'dd-MMM-yyyy'),\n"
+				+ "		    im.LMSID,\n"
+				+ "		    CONCAT(UPPER(SUBSTRING(STATus, 1, 1)), LOWER(SUBSTRING(STATus, 2, LEN(STATus))))");
+
+		
 		selectQuery.setParameter("Month", Month);
 		;
 		selectQuery.setParameter("year", yearfromCal);
@@ -4692,6 +4718,7 @@ public class UserDaoimpl implements UserDao {
 
 	@Override
 	public List<String> get7thworkingDay() {
+		System.out.println("murali7");
 		List<String> BuyerFooterList;
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat year_Date = new SimpleDateFormat("YYYY");
@@ -5378,13 +5405,57 @@ public class UserDaoimpl implements UserDao {
 				return messBuilder.append(
 						"GLDescription " + poEntryBean.getMonth() + " column has invalid character.");
 			}
-
+			
+			boolean empCodeExists = validateDuplication(poEntryBean.getMonth(), poEntryBean.getYear(), poEntryBean.getCCID());
+	        if (empCodeExists) {
+	            return messBuilder.append(poEntryBean.getCCID() + "is already created for the month"+ poEntryBean.getMonth() + " and for the year"+poEntryBean.getYear()+"<br>");
+	        }
+	        boolean isCCICExistsInBudgetmaster = isCCICExistsInBudgetmaster( poEntryBean.getCCID());
+	        if (!isCCICExistsInBudgetmaster) {
+	            return messBuilder.append("The Cost Center "+poEntryBean.getCCID() + " is not Created");
+	        }
 		}
 		messBuilder.append(insertPoEntryData(PoEntryBeanList, loginId));
 
 		return messBuilder;
 	}
 	
+	/***
+	 * This method is used to check the duplicate enntries in excel sheet.
+	 * @param month
+	 * @param year
+	 * @param CCid
+	 * @return
+	 */
+	private boolean validateDuplication(String month,String year, String CCid) {
+	    String empCodeExistenceSQL = "select COUNT(*) from PO_Entry where Year=:year and COST_CENTER=:ccid and MONTH=:month";
+	    Query empCodeExistenceQuery = entityManager.createNativeQuery(empCodeExistenceSQL);
+	    empCodeExistenceQuery.setParameter("year",year );
+	    empCodeExistenceQuery.setParameter("ccid", CCid);
+	    empCodeExistenceQuery.setParameter("month", month);
+	    int empCodeCount = ((Number) empCodeExistenceQuery.getSingleResult()).intValue();
+	    return empCodeCount > 0;
+	}
+	
+	/**
+	 * THis method is used to check the whether cost center is valid or not.
+	 * @param CCid
+	 * @return
+	 */
+	private boolean isCCICExistsInBudgetmaster(String CCid) {
+	    try {
+	        String emailExistenceSQL = "select COUNT(*) from BUDGET_MASTER where CCID=:ccid";
+	        Query emailExistenceQuery = entityManager.createNativeQuery(emailExistenceSQL);
+	        emailExistenceQuery.setParameter("ccid", CCid);
+
+ 
+	        int count = ((Number) emailExistenceQuery.getSingleResult()).intValue();
+	        return count > 0;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
 	
 	/**
 	 * Used by excel PoEntry upload
@@ -5406,18 +5477,20 @@ public class UserDaoimpl implements UserDao {
 				// System.out.println("array" + animal1);
 				System.out.println("arrayeeee" + poEntryMaster.getYear() + poEntryMaster.getMonth() + poEntryMaster.getCCID());
 				Query insertPoEntry = entityManager.createNativeQuery(
-						"Insert Into PO_Entry (Year,cost_Center,Month,poamount,CreatedBy,CreatedOn)\n"
-						+ "VALUES(:Year,:CCID,:MONTH,:POAMOUNT,:CreatedBy,:CreatedOn)");
+						"Insert Into PO_Entry (Year,cost_Center,Month,poamount,CreatedBy,CreatedOn,monthnumber)\n"
+						+ "VALUES(:Year,:CCID,:MONTH,:POAMOUNT,:CreatedBy,:CreatedOn,:monthNumner)");
 				insertPoEntry.setParameter("CCID", poEntryMaster.getCCID());
 				insertPoEntry.setParameter("Year", poEntryMaster.getYear());
 				insertPoEntry.setParameter("POAMOUNT", poEntryMaster.getPOAmount());
 				insertPoEntry.setParameter("MONTH", poEntryMaster.getMonth());
 				insertPoEntry.setParameter("CreatedBy", loginId);
 				insertPoEntry.setParameter("CreatedOn", new Date());
+				insertPoEntry.setParameter("monthNumner", getMonthNumber(poEntryMaster.getMonth()));
 				int intresponse = insertPoEntry.executeUpdate();
 				if (intresponse != 0) {
 					System.out.println("indent updated successfully");
 					System.out.println("<<<<<<<<<<< WP created successfully>>>>>>>>>>>");
+					response = "uploaded successfully";
 				}
 			}
 		} catch (Exception e) {

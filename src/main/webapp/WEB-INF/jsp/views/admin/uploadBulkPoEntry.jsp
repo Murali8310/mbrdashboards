@@ -443,14 +443,14 @@ var file = $('#file').val();
 		        contentType: false,
 		        success: function (data) {
 		       
-	        	if(data == 'Sucessfully created'){
+	        	if(data == 'uploaded successfully'){
 	        		  $("#example-form")[0].reset();
 	  	            $(".loading").hide();    
 	  	            $('.filename').html("");    
 		        	Swal.fire({
 		    			icon : 'success',
 		    			title : 'PO Entry ',
-		    			html: 'Sucessfully created. <br/>Upload completed',
+		    			html: 'Upload completed',
 		    			
 		    			focusConfirm : false,
 		    		})
@@ -459,9 +459,9 @@ var file = $('#file').val();
 	        	}else {
 
 					Swal.fire({
-						icon : 'success',
+						icon : 'error',
 		    			title : 'PO Entry',
-						html: data+' <br/>Upload completed',
+						html: data+ ' <br/>Upload was unsuccessful',
 						
 						focusConfirm : false,
 					})

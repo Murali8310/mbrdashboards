@@ -242,6 +242,7 @@ vertical-align: text-bottom ; footer {
 						<tr>
 							<th class='headerStyles' scope="col"><b>SL.NO</b></th>
 							<th class='headerStyles' scope="col"><b>Indent Number</b></th>
+							<th class='headerStyles' scope="col"><b>Indent Amount</b></th>
 							<th class='headerStyles' scope="col"><b>Indent Date</b></th>
 							<th class='headerStyles' scope="col"><b>Indent By</b></th>
 							<th class='headerStyles' scope="col"><b>Status</b></th>
@@ -257,6 +258,7 @@ vertical-align: text-bottom ; footer {
 								<td class='tbodyCustomColor'>${indent[1]}</td>
 								<td class='tbodyCustomColor'>${indent[2]}</td>
 								<td class='tbodyCustomColor'>${indent[3]}</td>
+								<td class='tbodyCustomColor'>${indent[4]}</td>
 								<td class='tbodyCustomColor'></td> 
 							</tr>
 												
@@ -378,6 +380,8 @@ function detailsReport(data){
 			"data" : "SL.NO"
 		},{
 			"data" : "Indent Number"
+		},{
+			"data" : "Indent Amount"
 		}, {
 			"data" : "Indent Date"
 		}, {

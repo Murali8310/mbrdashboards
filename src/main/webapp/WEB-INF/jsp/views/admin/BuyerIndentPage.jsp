@@ -1125,9 +1125,13 @@ $(document).ready(function () {
     				success : function(response) {
     					document.getElementById('sending-spin-icon').style.visibility = 'hidden';
     		    	         document.getElementById("sending-text").textContent = "Send to Vendor";
+    		    	         var message;
+    		    	         if(response.trim() === 'Email Sent By Successfully!'){
+    		    	        	 message = 'Email Sent Successfully!';
+    		    	         }
     					Swal.fire({
     						icon : 'success',
-    						title : response,
+    						title : message,
     						showCloseButton : false,
     						focusConfirm : true,
     					});

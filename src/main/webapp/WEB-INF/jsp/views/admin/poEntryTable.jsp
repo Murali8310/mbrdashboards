@@ -203,9 +203,17 @@ vertical-align: text-bottom ; footer {
 							<div class="">
 								<div id="zero_config_wrapper"
 									class="dataTables_wrapper container-fluid dt-bootstrap4">
+									 <%
+		 Object accessRoleobj = session.getAttribute("accessRole");
+			String accessRole = (String)accessRoleobj ;
+		
+			 %> 
+			 	<c:if test="${accessRole =='1'}">
 									<div style="text-align:end;margin-bottom:4px;">
 									<button onclick="redirectToPoEntryCreation()" class="btn btn-primary">Add New PO Entry</button>
 										</div>
+										</c:if>
+										
 									<div class="row">
 										<div class="col-sm-12">
   										<table id="example"

@@ -202,6 +202,13 @@ h1 {
 						</div>
 					</div> 
 					
+					
+					 <%
+		 Object accessRoleobj = session.getAttribute("accessRole");
+			String accessRole = (String)accessRoleobj ;
+		
+			 %> 
+			 	<c:if test="${accessRole =='1'}">
 					<div class="col-md-6 col-lg-4 col-xlg-3">
 						<div class="card card-hover">
 							<a href="changepasswordbyadmin" id="anchorbutton">
@@ -217,9 +224,10 @@ h1 {
 							</a>
 						</div>
 					</div> 
-					</div>
+					</c:if>
 					
-					<div class="row rows">
+					
+					
 					<!-- <div class="col-md-6 col-lg-4 col-xlg-3">
 						<div class="card card-hover">
 							<a href="budgetmaster" id="anchorbutton">
@@ -263,6 +271,7 @@ h1 {
 							</a>
 						</div>
 					</div>
+					<c:if test="${accessRole =='1'}">
 					<div class="col-md-6 col-lg-4 col-xlg-3">
 						<div class="card card-hover">
 							<a href="poEntry" id="budjetElement">
@@ -277,6 +286,7 @@ h1 {
 							</a>
 						</div>
 					</div>
+					</c:if>
 					<div class="col-md-6 col-lg-4 col-xlg-3">
 						<div class="card card-hover">
 							<a href="poEntryTable" id="budjetElement">
@@ -320,6 +330,9 @@ h1 {
 						</div>
 					</div>
 					</div>
+			
+			
+			</div>
 				</c:if>
 	
 			
