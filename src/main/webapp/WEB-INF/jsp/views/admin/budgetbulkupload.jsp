@@ -444,16 +444,15 @@ var file = $('#file').val();
 		        contentType: false,
 		        success: function (data) {
 		       
-	        	if(data == 'Sucessfully created'){
+	        	if(data == 'Uploaded successfully'){
 	        		
 	        		  $("#example-form")[0].reset();
 	  	            $(".loading").hide();    
 	  	            $('.filename').html("");    
 		        	Swal.fire({
-		    			icon : 'warning',
-		    			title : 'Budget Master',
-		    			html: 'Sucessfully created. <br/>Upload completed',
-		    			
+		    			icon : 'success',
+		    			title : 'Cost center & Budget Master',
+		    			html: 'Cost center and Budget Master uploaded Sucessfully.',
 		    			focusConfirm : false,
 		    		})
 		    		return;
@@ -461,9 +460,9 @@ var file = $('#file').val();
 	        	}else {
 
 					Swal.fire({
-						icon : 'warning',
-		    			title : 'Budget Master',
-						html: data+' <br/>Upload completed',
+						icon : 'error',
+		    			title : 'Cost center & Budget Master',
+						html: data+' <br/>Upload was unsuccessful',
 						
 						focusConfirm : false,
 					})

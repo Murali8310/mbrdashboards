@@ -2992,7 +2992,11 @@ public class UserDaoimpl implements UserDao {
 			if (specalChar) {
 				return messBuilder
 						.append("Cost centre " + Budgetmasterbean.getCCID() + "  column has invalid character.");
-			}
+			} 
+	//			else if (Budgetmasterbean.getCCID().isEmpty()) {
+//				return messBuilder
+//						.append("cost center field is manadatory.");
+//			}
 			specalChar = Validations.validation(Budgetmasterbean.getYear());
 			if (specalChar) {
 				return messBuilder.append("Year " + Budgetmasterbean.getYear() + "  column has invalid character.");
@@ -3033,6 +3037,10 @@ public class UserDaoimpl implements UserDao {
 				return messBuilder
 						.append("BudValueRsL " + Budgetmasterbean.getBudValueRsL() + " column has invalid character.");
 			}
+			if (specalChar) {
+				return messBuilder
+						.append("Email " + Budgetmasterbean.getEmail() + " column has invalid character.");
+			}
 
 		}
 		messBuilder.append(insertbudgetData(abmDetailList, loginId));
@@ -3057,6 +3065,78 @@ public class UserDaoimpl implements UserDao {
 				// String animals_list[] = animals.split(",");
 				// String animal1 = animals_list[0];
 				// System.out.println("array" + animal1);
+				
+				
+				boolean isCCidExists = checkccidExists(abmUserMaster.getCCID(), abmUserMaster.getYear());
+		        if (isCCidExists) {
+		        	response = "Cost Cenete ID " + abmUserMaster.getCCID() + " already exists.";
+		            return response;
+		        }
+				
+				 String ccid = abmUserMaster.getCCID();
+				    // Check if storeCode is empty, and skip the iteration if true
+				    if (ccid == null || ccid.isEmpty()) {
+				    	response = "Uploaded successfully";
+				    	continue;
+				    }
+				    /**
+					 * Here we are validating whether the cost center is already available in indent manager or not.
+					 */
+					
+					String ccidExistanceSQL = "SELECT COUNT(*) FROM INDENT_MANAGER WHERE EmpCode=:CCID";
+					Query ccidExistanceQuery = entityManager.createNativeQuery(ccidExistanceSQL);
+					ccidExistanceQuery.setParameter("CCID", abmUserMaster.getCCID());
+					int isccidExistance = (int) ccidExistanceQuery.getSingleResult();
+					
+					if (isccidExistance == 0) {
+						Query insetIntoIndentManager = entityManager.createNativeQuery("INSERT INTO INDENT_MANAGER (EmpCode,\n"
+								+ "    Password,\n"
+								+ "    EmpName,\n"
+								+ "    StoreCode,\n"
+								+ "    MobileNumber,\n"
+								+ "    DateOfJoin,\n"
+								+ "    dateofleaving,\n"
+								+ "    isactive,\n"
+								+ "    changedBy,\n"
+								+ "    Changedon,\n"
+								+ "    CreatedBY,\n"
+								+ "    CreatedOn,\n"
+								+ "    LMSID,\n"
+								+ "    Email,\n"
+								+ "    abm,\n"
+								+ "    region\n"
+								+ ")\n"
+								+ "VALUES (\n"
+								+ "    :EmpCode,\n"
+								+ "    :Password,\n"
+								+ "    :EmpName,\n"
+								+ "    :StoreCode,\n"
+								+ "    :MobileNumber,\n"
+								+ "    NULL,\n"
+								+ "    NULL,\n"
+								+ "    1, \n"
+								+ "    :CreatedBy,\n"
+								+ "    NULL,\n"
+								+ "    :CreatedBy,\n"
+								+ "    :CreatedOn,\n"
+								+ "    :CCID,\n"
+								+ "    :CostEmail,\n"
+								+ "    NULL,\n"
+								+ "    :region\n"
+								+ ")");
+						insetIntoIndentManager.setParameter("CCID", abmUserMaster.getCCID());
+						insetIntoIndentManager.setParameter("EmpCode", abmUserMaster.getCCID());
+						insetIntoIndentManager.setParameter("Password", "GH7Yz0xddaPTsXa01bcc4w==");
+						insetIntoIndentManager.setParameter("EmpName",abmUserMaster.getCostOwner());
+						insetIntoIndentManager.setParameter("StoreCode",abmUserMaster.getDepartment());
+						insetIntoIndentManager.setParameter("MobileNumber",null);
+						//insetIntoIndentManager.setParameter("MobileNumber",null);
+						insetIntoIndentManager.setParameter("CreatedBy", loginId);
+						insetIntoIndentManager.setParameter("CreatedOn", new Date());
+						insetIntoIndentManager.setParameter("CostEmail", abmUserMaster.getEmail());
+						insetIntoIndentManager.setParameter("region", "Indent Manager");
+						insetIntoIndentManager.executeUpdate();
+					}
 				System.out.println("array" + abmUserMaster.getYear() + abmUserMaster.getGL() + abmUserMaster.getCCID());
 				Query insertabmuser = entityManager.createNativeQuery(
 						"Insert Into BUDGET_MASTER (CCID,Year,CostCenterDescription,GL,GLDescription,Location,CostOwner,"
@@ -3081,9 +3161,7 @@ public class UserDaoimpl implements UserDao {
 
 				int intresponse = insertabmuser.executeUpdate();
 				if (intresponse != 0) {
-					System.out.println("Failed to update password");
-					System.out.println("<<<<<<<<<<< WP created successfully>>>>>>>>>>>");
-
+					response = "Uploaded successfully";
 				}
 			}
 		} catch (Exception e) {
@@ -3093,6 +3171,21 @@ public class UserDaoimpl implements UserDao {
 		}
 		return response;
 	}
+	
+	/**
+	 * This method is used to verify the duplicates available in budget master.
+	 * @param empCode
+	 * @return
+	 */
+	private boolean checkccidExists(String ccid,String year) {
+	    String empCodeExistenceSQL = "SELECT COUNT(*) FROM budget_master WHERE ccid =:ccid and  year =:year";
+	    Query empCodeExistenceQuery = entityManager.createNativeQuery(empCodeExistenceSQL);
+	    empCodeExistenceQuery.setParameter("ccid", ccid);
+	    empCodeExistenceQuery.setParameter("year", year);
+	    int empCodeCount = ((Number) empCodeExistenceQuery.getSingleResult()).intValue();
+	    return empCodeCount > 0;
+	}
+	
 
 	@Override
 	public StringBuilder insertExcelholidayMaster(List<HolidayMasterBean> abmDetailList, String loginId) {
@@ -3105,44 +3198,35 @@ public class UserDaoimpl implements UserDao {
 			boolean specalChar = Validations.validation(HolidayMasterBean.getHoliday_date());
 			if (specalChar) {
 				return messBuilder.append(
-						"Cost centre " + HolidayMasterBean.getHoliday_date() + "  column has invalid character.");
+						"holiday date" + HolidayMasterBean.getHoliday_date() + "  column has invalid character.");
 			}
 			specalChar = Validations.validation(HolidayMasterBean.getHoliday_day());
 			if (specalChar) {
 				return messBuilder
-						.append("Year " + HolidayMasterBean.getHoliday_day() + "  column has invalid character.");
+						.append("holiday " + HolidayMasterBean.getHoliday_day() + "  column has invalid character.");
 			}
 			specalChar = Validations.validation(HolidayMasterBean.getOccasion());
 			if (specalChar) {
 				return messBuilder.append(
-						"CostCenterDescription " + HolidayMasterBean.getOccasion() + " column has invalid character.");
+						"Occasion " + HolidayMasterBean.getOccasion() + " column has invalid character.");
 			}
 			specalChar = Validations.validation(HolidayMasterBean.getOccasion());
-
-			if (specalChar) {
-				return messBuilder.append("GL " + HolidayMasterBean.getOccasion() + " column has invalid character.");
-			}
-			specalChar = Validations.validation(HolidayMasterBean.getOccasion());
-			if (specalChar) {
-				return messBuilder
-						.append("GLDescription " + HolidayMasterBean.getOccasion() + " column has invalid character.");
-			}
 
 			specalChar = Validations.validation(HolidayMasterBean.getActivestatus());
 			if (specalChar) {
 				return messBuilder
-						.append("Location " + HolidayMasterBean.getActivestatus() + " column has invalid character.");
+						.append("Active Status " + HolidayMasterBean.getActivestatus() + " column has invalid character.");
 			}
-			specalChar = Validations.validation(HolidayMasterBean.getCostcentre());
-			if (specalChar) {
-				return messBuilder
-						.append("CostOwner " + HolidayMasterBean.getCostcentre() + " column has invalid character.");
-			}
+//			specalChar = Validations.validation(HolidayMasterBean.getCostcentre());
+//			if (specalChar) {
+//				return messBuilder
+//						.append("Costcenter " + HolidayMasterBean.getCostcentre() + " column has invalid character.");
+//			}
 
 			specalChar = Validations.validation(HolidayMasterBean.getYear());
 			if (specalChar) {
 				return messBuilder
-						.append("Department " + HolidayMasterBean.getYear() + " column has invalid character.");
+						.append("Year " + HolidayMasterBean.getYear() + " column has invalid character.");
 			}
 			/*
 			 * specalChar = Validations.validation(HolidayMasterBean.getBudValueRsL()); if
@@ -3185,17 +3269,24 @@ public class UserDaoimpl implements UserDao {
 					System.out.println("array" + abmUserMaster.getHoliday_date() + abmUserMaster.getHoliday_day()
 							+ abmUserMaster.getOccasion());
 
+								boolean isHolidayduplicated = checkholidayDateDuplication(formattedHolidayDate);
+
+							        if (isHolidayduplicated) {
+							        	response = formattedHolidayDate +" already exists.";
+							            return response;
+							        }
 					Query insertabmuser = entityManager.createNativeQuery(
 							"Insert Into Holiday_Master (Holiday_date,Holiday_day,Occasion,Activestatus,Costcentre,Year,"
-									+ "CreatedBy,CreatedOn,ModifiedBy,ModifiedOn)"
+									+ "CreatedBy,CreatedOn,ModifiedBy,ModifiedOn,holidaymonth)"
 									+ " VALUES(:Holiday_date,:Holiday_day,:Occasion,:Activestatus,:Costcentre,:Year,"
-									+ ":CreatedBy,:CreatedOn,:ModifiedBy,:ModifiedOn)");
+									+ ":CreatedBy,:CreatedOn,:ModifiedBy,:ModifiedOn,:holidaymonth)");
 					insertabmuser.setParameter("Holiday_date", formattedHolidayDate);
 					insertabmuser.setParameter("Holiday_day", abmUserMaster.getHoliday_day());
 					insertabmuser.setParameter("Occasion", abmUserMaster.getOccasion());
 					insertabmuser.setParameter("Activestatus", abmUserMaster.getActivestatus());
 					insertabmuser.setParameter("Costcentre", abmUserMaster.getCostcentre());
 					insertabmuser.setParameter("Year", abmUserMaster.getYear());
+					insertabmuser.setParameter("holidaymonth", abmUserMaster.getMonth());
 					insertabmuser.setParameter("CreatedBy", loginId);
 					insertabmuser.setParameter("CreatedOn", new Date());
 					insertabmuser.setParameter("ModifiedBy", loginId);
@@ -3203,8 +3294,7 @@ public class UserDaoimpl implements UserDao {
 
 					int intresponse = insertabmuser.executeUpdate();
 					if (intresponse != 0) {
-						System.out.println("Failed to update password");
-						System.out.println("<<<<<<<<<<< WP created successfully>>>>>>>>>>>");
+						response = "uploaded successfully";
 					}
 				} catch (ParseException e) {
 					// Handle the case where the date string is not a valid date
@@ -3224,6 +3314,21 @@ public class UserDaoimpl implements UserDao {
 		return response;
 	}
 
+	
+	/**
+	 * This method is used to validate the duplicate dates.
+	 * @param empCode
+	 * @return
+	 */
+	private boolean checkholidayDateDuplication(String formattedDate) {
+	    String empCodeExistenceSQL = "SELECT COUNT(*) FROM holiday_master WHERE holiday_date =:formattedDate";
+	    Query empCodeExistenceQuery = entityManager.createNativeQuery(empCodeExistenceSQL);
+	    empCodeExistenceQuery.setParameter("formattedDate", formattedDate);
+	    int empCodeCount = ((Number) empCodeExistenceQuery.getSingleResult()).intValue();
+	    return empCodeCount > 0;
+
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Object> getAllindentDetails() {
@@ -5287,23 +5392,44 @@ public class UserDaoimpl implements UserDao {
 			specalChar = Validations.validation(productMasterbean.getPrice());
 			if (specalChar) {
 				return messBuilder
-						.append("GLDescription " + productMasterbean.getPrice() + " column has invalid character.");
+						.append("price " + productMasterbean.getPrice() + " column has invalid character.");
 			}
 
 			specalChar = Validations.validation(productMasterbean.getUOM());
 			if (specalChar) {
-				return messBuilder.append("Location " + productMasterbean.getUOM() + " column has invalid character.");
+				return messBuilder.append("UOM " + productMasterbean.getUOM() + " column has invalid character.");
 			}
 			specalChar = Validations.validation(productMasterbean.getCategory());
 			if (specalChar) {
 				return messBuilder
-						.append("CostOwner " + productMasterbean.getCategory() + " column has invalid character.");
+						.append("Category " + productMasterbean.getCategory() + " column has invalid character.");
 			}
 
+			boolean isproductDuplicated = validateDuplicationforProduct(productMasterbean.getProductid());
+	        if (isproductDuplicated) {
+	            return messBuilder.append(productMasterbean.getProductid() + " is already available");
+	        }
+			
 		}
 		messBuilder.append(insertProductMasterData(abmDetailList, loginId));
 
 		return messBuilder;
+	}
+	
+	
+	/***
+	 * This method is used to check the duplicate enntries in excel sheet.
+	 * @param month
+	 * @param year
+	 * @param CCid
+	 * @return
+	 */
+	private boolean validateDuplicationforProduct(String product_number) {
+	    String empCodeExistenceSQL = "select COUNT(*) from PRODUCT_MASTER where product_number =:product_number";
+	    Query empCodeExistenceQuery = entityManager.createNativeQuery(empCodeExistenceSQL);
+	    empCodeExistenceQuery.setParameter("product_number",product_number );
+	    int empCodeCount = ((Number) empCodeExistenceQuery.getSingleResult()).intValue();
+	    return empCodeCount > 0;
 	}
 
 	private String insertProductMasterData(List<productMasterbean> abmDetailList, String loginId) {
@@ -5312,13 +5438,29 @@ public class UserDaoimpl implements UserDao {
 
 			for (int j = 0; j < abmDetailList.size(); j++) {
 				productMasterbean abmUserMaster = abmDetailList.get(j);
+				
+
+				String getcateId = "SELECT CATORDERS FROM PRODUCT_MASTER WHERE CATEGORY=:Category";
+				Query cateId = entityManager.createNativeQuery(getcateId);
+				cateId.setParameter("Category", abmUserMaster.getCategory());
+				int catID = 0;
+				try {
+					catID = (int) cateId.getSingleResult();
+				} catch (Exception e) {
+					if (catID == 0) {
+						String maxid = "select max(CATORDERS)+1 from PRODUCT_MASTER";
+						Query ID = entityManager.createNativeQuery(maxid);
+						catID = (int) ID.getSingleResult();
+					}
+
+				}
 
 				Query productmaster = entityManager.createNativeQuery("INSERT INTO PRODUCT_MASTER\n"
 						+ "(PRODUCT_NUMBER,PROD_NAME,PROD_DESC,MAKE,UCP,UOM,ISACTIVE,SELFLIFE\n"
 						+ ",CATEGORY,PRICE_DATE,ISMOQ,IS_IMAGE,MODIFIED_DATETIME,MODIFIED_BY\n"
 						+ ",CREATED_BY,CREATED_DATETIME,TO_PRICE_DATE,emailID,CATORDERS)"
 						+ " VALUES(:ProductID,:ProductName,:ProductName,:vendor,:Price,:UOM,"
-						+ ":IsActive,NULL,:Category,NULL,0,0,NULL,NULL,:CreatedBy,:CreatedOn,NULL,:emailID,0)");
+						+ ":IsActive,NULL,:Category,NULL,0,0,NULL,NULL,:CreatedBy,:CreatedOn,NULL,:emailID,:catID)");
 
 				productmaster.setParameter("ProductID", abmUserMaster.getProductid());
 
@@ -5331,6 +5473,8 @@ public class UserDaoimpl implements UserDao {
 				productmaster.setParameter("CreatedBy", loginId);
 				productmaster.setParameter("CreatedOn", new Date());
 				productmaster.setParameter("emailID", abmUserMaster.getVendorEmailId());
+				productmaster.setParameter("catID", catID);
+
 				int intresponse = 0;
 				if (abmUserMaster.getProductid() != "" && abmUserMaster.getProductname() != ""
 						&& abmUserMaster.getPrice() != "") {

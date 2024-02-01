@@ -13,8 +13,15 @@ public class HolidayMasterBean {
 	private String Activestatus;
 	private String Costcentre;
 	private String Year;
+	private String Month;
 	public String getYear() {
 		return Year;
+	}
+	public String getMonth() {
+		return Month;
+	}
+	public void setMonth(String month) {
+		Month = month;
 	}
 	public void setYear(String year) {
 		Year = year;

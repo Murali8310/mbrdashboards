@@ -18,6 +18,7 @@ public class Budgetmasterbean {
 	private String Department;
 	
 	private String BudValueRsL;
+	private String Email;	
 
 	@Override
 	public String toString() {
@@ -29,8 +30,15 @@ public class Budgetmasterbean {
 		return CCID;
 	}
 
+	public String getEmail() {
+		return Email;
+	}
+
 	public void setCCID(String cCID) {
 		CCID = cCID;
+	}
+	public void setEmail(String email) {
+		Email = email;
 	}
 
 	public String getYear() {

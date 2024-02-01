@@ -481,16 +481,15 @@ var file = $('#file').val();
 		        contentType: false,
 		        success: function (data) {
 		       
-	        	if(data == 'Sucessfully created'){
+	        	if(data == 'uploaded successfully'){
 	        		
 	        		  $("#example-form")[0].reset();
 	  	            $(".loading").hide();    
 	  	            $('.filename').html("");    
 		        	Swal.fire({
-		    			icon : 'warning',
-		    			title : 'hoilday Master',
-		    			html: 'Sucessfully created. <br/>Upload completed',
-		    			
+		    			icon : 'success',
+		    			title : 'Hoilday Master',
+		    			html: '<br/>Uploaded Successfully',
 		    			focusConfirm : false,
 		    		})
 		    		return;
@@ -498,9 +497,9 @@ var file = $('#file').val();
 	        	}else {
 
 					Swal.fire({
-						icon : 'warning',
+						icon : 'error',
 		    			title : 'hoilday Master',
-						html: data+' <br/>Upload completed',
+						html: data+' <br/>Upload was unsuccessful.',
 						
 						focusConfirm : false,
 					})

@@ -441,7 +441,7 @@ var file = $('#file').val();
 	  	            $(".loading").hide();    
 	  	            $('.filename').html("");    
 		        	Swal.fire({
-		    			icon : 'warning',
+		    			icon : 'success',
 		    			title : 'Product Master Upload',
 		    			html: data,
 		    			
@@ -452,9 +452,9 @@ var file = $('#file').val();
 	        	}else {
 
 					Swal.fire({
-						icon : 'warning',
-		    			title : 'Budget Master',
-						html: 'Error',
+						icon : 'error',
+		    			title : 'Product Master Upload',
+						html: data,
 						
 						focusConfirm : false,
 					})
