@@ -322,7 +322,12 @@ vertical-align: text-bottom ; footer {
 	}
 	.tbodyCustomColor {
 	    color: black !important;
-    font-size: 17px !important;
+        font-size: 17px !important;
+	}
+	
+	#footerUserQty {
+	 color: black !important;
+        font-size: 17px !important;
 	}
 </style>
 
@@ -384,12 +389,12 @@ vertical-align: text-bottom ; footer {
 												<c:forEach items="${FooterList}" var="foot" varStatus="loop">
 
 													<tr class="footer-row reassign-footer" id='checkrowID_${loop.index}'>
-															<th ><div
+															<th class='tbodyCustomColor'><div
 																	class="sticky-col first-col">${foot[0]}</div></th>
-														<th></th>
-														<th></th>
+														<th class='tbodyCustomColor'></th>
+														<th class='tbodyCustomColor'></th>
 														<c:forEach items="${Collen}" var="ccen" varStatus="loop2">
-                                                         <th class="compare-value" style="text-align:right" id='checkthID_${loop2.index}' data-threshold="${foot[loop2.index + 1]}">${foot[loop2.index + 1]}</th>													
+                                                         <th class="compare-value tbodyCustomColor" style="text-align:right" id='checkthID_${loop2.index}' data-threshold="${foot[loop2.index + 1]}">${foot[loop2.index + 1]}</th>													
                                                          </c:forEach>
 														<th></th>
 														<th></th>

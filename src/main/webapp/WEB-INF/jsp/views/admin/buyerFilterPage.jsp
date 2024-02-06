@@ -534,12 +534,12 @@ if(Year == ''){
 												<c:forEach items="${FooterList}" var="foot" varStatus="loop">
 
 													<tr class="footer-row reassign-footer">
-															<th ><div
+															<th class="tbodyCustomColor" ><div
 																	class="sticky-col first-col">${foot[0]}</div></th>
-														<th></th>
-														<th></th>
+														<th class="tbodyCustomColor"></th>
+														<th class="tbodyCustomColor"></th>
 														<c:forEach items="${Collen}" var="ccen" varStatus="loop2">
-                                                         <th class="compare-value" style="text-align:right" data-threshold="${foot[loop2.index + 1]}">${foot[loop2.index + 1]}</th>													
+                                                         <th class="compare-value tbodyCustomColor" style="text-align:right" data-threshold="${foot[loop2.index + 1]}">${foot[loop2.index + 1]}</th>													
                                                          </c:forEach>
 														<th></th>
 														<th></th>
