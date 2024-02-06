@@ -190,7 +190,6 @@ padding:0px !important;
 /* Style for the title */
 .title {
  font-weight: bold;
-    margin-left: 7px;
     color : white;
    /*  background-color: #1ea496; */
 }
@@ -208,26 +207,24 @@ margin-left: 3px;
 }
 </style>
 			<div class="container-fluid2 card-total card-static">
-			<div class="row" style="background-color: #4db719;align-items: baseline; padding-top: 5px; 
-					margin-left: 13px !important; width: 98%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); 
-					border-radius: 10px; margin-bottom: 2px;">
-					<div  id="totalOutput2"
-						style="text-align: start; font-size: 18px;color: white; padding: 6px; border-radius: 10px; margin-bottom: 20px; 
-						height: 20px;">
-    				</div>
-					
-					</div>
-			<div class="row" style="background-color: #4db719;
-    align-items: baseline;
-    padding-top: 5px;
-    margin-left: 13px !important;
-    width: 98%;
+			<div class="row" id="totalOutput2" style="margin-right: 8px !important;
+    margin-left: 8px !important;
+    background-color: #4db719;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
     border-radius: 10px;
-    margin-bottom: 2px;
-        height: 45px;">
-						<div class="col-md-4 col-lg-4 col-4" id="IndentNumber" style="font-size: 18px;"></div>
-						<div class="col-md-4 col-lg-4 col-4" id="totalOutput"
+    padding: 8px;
+    font-size: 16px;">
+					</div>
+			<div class="row" style="margin-right: 8px !important;
+    margin-left: 8px !important;
+    background-color: #4db719;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 3px;
+    font-size: 16px;
+    margin-top: 6px;">
+						<div class="col-4" id="IndentNumber" style="font-size: 18px;"></div>
+						<div class="col-4" id="totalOutput"
 							style="font-size: 18px;font-weight: bold;"></div>
 						<div class="col-md-4 col-lg-4 col-4" style="text-align: end;
     float: right;">						 
@@ -240,13 +237,20 @@ margin-left: 3px;
 						</button>
 						</div>
 					</div>
-				<div class="row el-element-overlay" id="el-element-overlay"></div>
+				<div class="row el-element-overlay" style='margin-top: 6px;max-height: 84vh !important;min-height: 84vh !important;overflow: scroll !important;' id="el-element-overlay"></div>
 			
 			<style>
 .footer {
 	background-color: Teal;
 	padding-bottom: 1px;
-	height: 300px;
+}
+.footer {
+    position: fixed; 
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: #01AFAE;
+    text-align: center;
 }
 
 footer h6 {
@@ -913,12 +917,10 @@ console.log('value,price,prev',value,price,prev)
 							+ budgt[5]   + "</span>  "+ "</span> Indended Amount:   ₹<span class='highlight'>"
 							+ budgt[6]   + "</span>  "; */
 							
-							var output = "<div class='cell'><span class='title'>&nbsp;&nbsp;Yearly Budget: ₹</span> &nbsp; <span id='yearlyAmount' class='highlight' style='font-size: 18px;color: white;'>&nbsp;"
-								+ budgt[3]  + "</span>&nbsp;&nbsp; <span class='title' style='margin-left:184px'> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cumulative Indent Value Rs.(Incl. PO, Route): </span>&nbsp; <span class='highlight' style='font-size: 18px;color: white;'>"
-								 + budgt[5]   + "</span>&nbsp;&nbsp;   "+ "<span class='title' style='margin-left:100px'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Budget bal:   ₹</span> &nbsp; <span class='highlight' id='bal_budget' style='font-size: 18px;color: white;'>"
+							var output = "<div class='col-4'><span class='title'>Yearly Budget: ₹</span><span id='yearlyAmount' class='highlight' style='font-size: 18px;color: white;'>&nbsp;"
+								+ budgt[3]  + "</span></div><div class='col-4'><span class='title'>Cumulative Indent Value Rs.(Incl. PO, Route): </span><span class='highlight' style='font-size: 18px;color: white;'>"
+								 + budgt[5]   + "</span></div><div class='col-4'>"+ "<span class='title'>Budget bal:   ₹</span><span class='highlight' id='bal_budget' style='font-size: 18px;color: white;'>"
 								+ budgt[4]   + "</span>"
-								// &nbsp;&nbsp;  "+ " <span class='title'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Indent Amt(Current month):   ₹</span>  &nbsp;&nbsp;<span style='font-size: 18px;color: white;'>" 
-								//+ budgt[6]   + "</span>  
 								+"</div> " ;
 								
 					$('#totalOutput2').html(output); 

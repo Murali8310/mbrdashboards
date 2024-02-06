@@ -490,7 +490,7 @@ if(Year == ''){
 												<c:forEach items="${BuyerList}" var="user" varStatus="loop">
 													<tr>
 													
-													<td class="first-cell" style="position:sticky;width:350px !important;">${user[0]}</td>
+													<td class="first-cell">${user[0]}</td>
 														<td>${user[1]}</td>
 														<td>${user[2]}</td>
 													<c:set var="collectionSize" value="${0}" />

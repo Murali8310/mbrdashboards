@@ -1596,8 +1596,8 @@ System.err.println("murali debugger");
 			            return "Invalid file type. Only .png and files are allowed"; 
 			        }
 				  
-//			    String uploadDirectory = "D:/apache-tomcat-9.0.78/webapps/stationary/WEB-INF/classes/static/product";
-				String uploadDirectory = "D:/ECLIPSEWORK/stationary/src/main/resources/static/product";
+			    String uploadDirectory = "D:/apache-tomcat-9.0.78/webapps/stationary/WEB-INF/classes/static/product";
+//				String uploadDirectory = "D:/ECLIPSEWORK/stationary/src/main/resources/static/product";
 	            File file = new File(uploadDirectory, fileName);
 	            try (InputStream fileContent = filePart.getInputStream()) {
 	            	Map<String, Object> userMap = (Map) session.getAttribute("userMap");

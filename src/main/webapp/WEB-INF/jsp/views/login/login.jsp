@@ -144,6 +144,21 @@ border-color:#01AFAE;
 background-color:#01AFAE;
 border-color:#01AFAE;
 }
+   @media (max-width: 768px) {
+            #hideinmobileView {
+                display: none; /* Hide the div on mobile view */
+            }
+            
+            .wrapper {
+    /* background-image: url(assets/images/background.jpg); */
+    height: 100%;
+    background-position: center;
+    background-repeat: repeat;
+    background-size: contain;
+    background-color: white !important;
+    opacity: 80%;
+}
+ }
 </style>
 
 </head>
@@ -166,7 +181,7 @@ border-color:#01AFAE;
 		<!-- Login box.scss -->
 		<!-- ============================================================= -->
 		<div class="auth-wrapper d-flex no-block justify-content-end align-items-centre">
-             <div class="col p-0 auth-full-height">
+             <div class="col p-0 auth-full-height" id='hideinmobileView'>
                 <div class="d-flex justify-content-between flex-column h-100 px-5 py-3">
                     <div></div>
                     <div class="w-100 ">

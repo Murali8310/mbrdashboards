@@ -20,6 +20,12 @@
 <link href=" dist/css/style.min.css" rel="stylesheet">
 
 <style>
+
+ @media (max-width: 768px) {
+.navbar-nav {
+    margin: 1px !important;
+}
+      }
 .resp-iframe {
 	position: fixed;
 	top: 0;

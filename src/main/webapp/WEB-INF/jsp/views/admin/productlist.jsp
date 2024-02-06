@@ -103,7 +103,7 @@ margin-bottom: 10px;
 	background: #ffffff;
 	position: relative;
 	margin-left: 250px;
-	margin-top: 60px !important;
+	margin-top: 70px !important;
 }
 
 .table td, .table th {
@@ -140,7 +140,9 @@ margin-bottom: 10px;
 }
 
 .container-fluid {
-	margin-bottom: 30px;
+    min-height: auto !important;
+    overflow: scroll !important;
+    max-height: 84vh !important;
 }
 
 .page-wrapper>.container-fluid {
@@ -376,10 +378,9 @@ padding:0px !important;
 
 /* Style for the title */
 .title {
-   /* flex: 0 0 40%;  *//* Adjust width of the title */
     font-weight: bold;
-    margin-left: 7px;
-   /*  background-color: #1ea496; */
+   font-weight: bold;
+    color: white;
 }
 
 /* Style for the value */
@@ -390,75 +391,56 @@ padding:0px !important;
 /* Style for the highlight */
 .highlight {
 font-weight: bold;
-    color: white; 
-        margin-left: 3px;
-        /* background-color: #1ea496; */
-   
+    color: white;    
+}
+
+li {
+    font-size: 18px;
 }
 </style>
 		<div class="page-wrapper" style="background-color: #cfcff22e;" data-sidebartype="full" class="mini-sidebar">
-			<div class="container-fluid2 card-total card-static" style="    margin-top: 20px;">
-					<div class="row" style="background-color: #4db719; align-items: baseline;
-					padding-top: 5px;margin-left:13px !important;width: 83%;box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-					    border-radius: 10px;
-					    margin-bottom: 2px;">
-						<div id="totalOutput2"
-							style="text-align: start; font-size: 16px; color: white; padding: 6px;
-					    border-radius: 10px;
-					    margin-bottom: 20px;
-        				height: 27px;">
-    				</div>
+		<div class="row" id="totalOutput2" style="margin-right: 8px !important;
+    margin-left: 8px !important;background-color: #4db719;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); 
+    border-radius: 10px;
+    padding: 8px;
+    font-size: 16px;">
 					</div>
-					<!-- <div class="row" style="background-color: #01AFAE; align-items: baseline;padding-top: 5px;margin-left:13px !important;width: 94%;box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-					    border-radius: 10px;
-					    margin-bottom: 2px;">
-					    <div>
-							<a href="manageByAdmin"> <input type="button"
-								class="btn btn-primary" id="expiryDatebut" value="Cancel">&nbsp;
-							</a> <a class="btn btn-success" id="submitId" onclick="submit()">Submit</a>
-						</div>
-					</div> -->
-			<div class="page-breadcrumb" style="position: fixed;z-index: 9;width: 83%;background-color:#fff;margin-left: 13px;">
-				<div class="row">
-					<div class="col-12 d-flex no-block align-items-center">	
+			<div class="row" style="    border-radius: 9px;
+    margin-left: 8px !important;
+    margin-right: 8px !important;
+    margin-top: 8px !important;
+    background:#01AFAE;">
+    <div class='col-3'>
 						<h4 class="page-title display-6">Product Catalogue</h4>
-						<div class="ml-auto text-right">
-						<!-- <div id="totalOutput"
-						style="text-align: end; font-size: 18px;padding-left:10px; background-color: #92e3f7;"></div> -->
-							<nav aria-label="breadcrumb">
-								<ol class="breadcrumb">
+    </div>
+     <div class='col-7'>
+								<nav aria-label="breadcrumb">
+								<ol class="breadcrumb" style='justify-content: center;background:#01AFAE;margin-bottom: 12px;'>
 								<li id="totalOutput" class="breadcrumb-item" style="background-color: darkblue; color: white;font-weight: bolder;"></li>
 									<li class="breadcrumb-item"><a href="landPage">Home</a></li>
 									<li class="breadcrumb-item active" aria-current="page">Product Catalogue 
 									</li>
-										<div style="margin-left:17px;">
-							<a href="manageByAdmin"> <input type="button" style="font-size: 16px;
+								</ol>
+							</nav>
+    </div>
+    <div class='col-2'>
+							<a href="manageByAdmin" style='float: right;
+    margin-left: 8px;'> <input type="button" style="font-size: 16px;
     color: #fff;
     background-color: #3021cf;
-    border-color: #d58512;"
+    border-color: #d58512;margin-top:10px;"
 								class="btn btn-primary" id="expiryDatebut" value="Cancel">&nbsp;
 							</a> 
 							<a class="btn btn-success" style="font-size: 16px;
     color: #fff;
     background-color: #3021cf;
-    border-color: #d58512;" id="submitId" onclick="submit()">Submit</a>
+    border-color: #d58512;float:right;margin-top:10px;" id="submitId" onclick="submit()">Submit</a>
 						</div>
-								</ol>
-							</nav>
-						</div>
-					</div>
-				</div>
-			</div>
 			</div>
 			
-			<!-- 	<div id="variantCountDetails" style="margin: 5px 0px 5px 20px;"><span style="color:Teal">Showing <b> 1-12</b> of <b>62480</b> Watches </span></div>
-			<div id="errorMessage" style="margin: 5px 0px 5px 20px;"></div> -->
-
-			
-				<div class="container-fluid">
- 
-				<div class="row el-element-overlay" id="el-element-overlay" style="margin-top: 90px"></div>
-
+			<div class="container-fluid">
+				<div class="row el-element-overlay" id="el-element-overlay"></div>
 			</div>
 
 			<script>
@@ -709,11 +691,11 @@ font-weight: bold;
 				if(budgt == undefined){
 					$('#totalOutput2').html("No budget is defined");
 				}else{
-			  var output = "<div class='cell'>&nbsp;&nbsp;<span class='title'>Yearly Budget : ₹</span>  <span class='highlight' id='yearAmount'>"
-					+ budgt[3]  + "</span>&nbsp;&nbsp;&nbsp;<span class='title' style='margin-left: 80px;'>Cumulative Indent Value Rs.(Incl. PO, Route): </span><span class='highlight'>"
-					 + budgt[5]   + "</span>&nbsp;&nbsp;"+ "<span class='title' style='margin-left: 69px;'> Budget bal :   ₹ </span> <span class='highlight'>"
-					+ budgt[4]   + "</span>&nbsp;&nbsp;&nbsp;"+ " <span class='title' style='margin-left: 46px;'>Indent Amt(Current month):   ₹</span>  <span class='highlight'>" 
-					+ budgt[6]   + "</span> </div> " ;
+			  var output = "<div class='col-2'> <span class='title'>Yearly Budget : ₹</span>  <span class='highlight' id='yearAmount'>"
+					+ budgt[3]  + "</span></div><div class='col-4'><span class='title'>Cumulative Indent Value Rs.(Incl. PO, Route): </span><span class='highlight'>"
+					 + budgt[5]   + "</span></div><div class='col-3'>"+ "<span class='title'> Budget bal :   ₹ </span> <span class='highlight'>"
+					+ budgt[4]   + "</span></div>"+ "<div class='col-3'> <span class='title'>Indent Amt(Current month):   ₹</span>  <span class='highlight'>" 
+					+ budgt[6]   + "</span></div>" ;
 			$('#totalOutput2').html(output);  
 			
 			/*  var output = "<div class='row'><div class='col-3'>Yearly Budget(INR):</div>  <div class='col-3 highlight' id='yearAmount'>"

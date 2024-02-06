@@ -90,6 +90,10 @@ margin-bottom: 10px;
 }
 
 .highlight1 {
+    padding: 2px;
+    border-radius: 3px;
+    color: white;
+    font-weight: bold;
 	}
 
 .bold-and-large {
@@ -200,7 +204,6 @@ padding:0px !important;
 .title {
    /* flex: 0 0 40%;  *//* Adjust width of the title */
     font-weight: bold;
-    margin-left: 16px;
     color:white;
        /*  background-color: #1ea496; */
 }
@@ -213,7 +216,6 @@ padding:0px !important;
 /* Style for the highlight */
 .highlight {
     color: white; /* Adjust highlight color */
-        margin-left: 3px;
             font-weight: bold;
     /* Any other highlight styles */
 }
@@ -223,35 +225,29 @@ padding:0px !important;
 }
 </style>
 			<div class="container-fluid2 card-total card-static">
-				<div class="row" style="background-color: #4db719; align-items: baseline;padding-top: 5px;margin-left:13px !important;width: 98%;box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-    border-radius: 10px;
-    margin-bottom: 2px;">
-				<div id="totalOutput2"
-							style="text-align: start; font-size: 18px;color: white;padding: 6px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-        height: 27px;"></div>
-				</div>
-					<div class="cell" style="text-align: start; font-size: 18px;color: white;padding: 6px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-        height: 41px;
-    width: 98%;
-    margin-left: 13px;
+				<div class="row" id="totalOutput2" 
+	style="margin-right: 8px !important;
+    margin-left: 8px !important;
     background-color: #4db719;
-    align-items: baseline;
-    padding-top: 5px;
-    margin-left: 13px !important;
-    width: 98%;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
     border-radius: 10px;
-    margin-bottom: 2px;">
-						<div id="IndentNumber" class="col-md-4 col-lg-4 col-4"
+    padding: 8px;
+    font-size: 16px;">
+				</div>
+					<div class="row" style="margin-right: 8px !important;
+    margin-left: 8px !important;
+    background-color: #4db719;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 6px;
+    font-size: 16px;
+    margin-top: 6px;">
+						<div id="IndentNumber" class="col-4"
 							style="text-align: start; font-size: 18px;"></div>
-						<div id="totalOutput" class="col-md-4 col-lg-4 col-4"
+						<div id="totalOutput" class="col-4"
 							style="text-align: start; font-size: 18px; "></div>
-						<div class="col-md-4 col-lg-4 col-4"
-						style="text-align: end; float: right;">
+						<div class="col-4"
+						style="text-align: end; float: right;display:none">
 						<button onclick="redirectToPage('AddMoreProducts')" class="btn btn-primary" style="font-size: 16px;background:#2027d6 !important;color: #fff;
     background-color: #3021cf;
     border-color: #d58512;"> 
@@ -263,7 +259,7 @@ padding:0px !important;
 						</button>
 					</div>
 					</div>
-				<div class="row el-element-overlay"  id="el-element-overlay"></div>
+				<div class="row el-element-overlay"  id="el-element-overlay" style='margin-top: 6px;max-height: 84vh !important;min-height: 84vh !important;overflow: scroll !important;'></div>
     <!-- <footer class="footer">
 				<div class="footer-copyright">
 					<p>
@@ -903,10 +899,10 @@ function getBudgetDetails(){
 						var budgt =jQuery.parseJSON(response)[0];
 						console.log(budgt);
 
-						var output = "<div class='cell'><span class='title'>Yearly Budget:₹ </span> <span class='highlight' id='yearAmount'>"
-							+ budgt[3]  + "</span><span class='title'>Cumulative Indent Value Rs.(Incl. PO, Route): </span>  <span class='highlight'>"
-							 + budgt[5]   + "</span>"+ " <span class='title'>Budget bal:   ₹</span>  <span class='highlight'>"
-							+ budgt[4]   + "</span>"+ "<span class='title'> Indent Amt(Current month):₹</span>  <span class='highlight'>" 
+						var output = "<div class='col-2'><span class='title'>Yearly Budget:₹ </span> <span class='highlight' id='yearAmount'>"
+							+ budgt[3]  + "</span></div><div class='col-5'><span class='title'>Cumulative Indent Value Rs.(Incl. PO, Route): </span>  <span class='highlight'>"
+							 + budgt[5]   + "</span>"+ "</div><div class='col-2'> <span class='title'>Budget bal:   ₹</span>  <span class='highlight'>"
+							+ budgt[4]   + "</span>"+ "</div><div class='col-3'><span class='title'> Indent Amt(Current month):₹</span>  <span class='highlight'>" 
 							+ budgt[6]   + "</span> </div> " ;
 							
 					$('#totalOutput2').html(output); 

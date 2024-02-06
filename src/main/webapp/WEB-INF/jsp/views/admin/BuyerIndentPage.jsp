@@ -340,7 +340,7 @@ vertical-align: text-bottom ; footer {
 												<c:forEach items="${BuyerList}" var="user" varStatus="loop">
 													<tr>
 													
-													<td class="first-cell tbodyCustomColor" style="position:sticky;width:350px !important;">${user[0]}</td>
+													<td class="first-cell tbodyCustomColor">${user[0]}</td>
 														<td class='tbodyCustomColor'>${user[1]}</td>
 														<td class='tbodyCustomColor'>${user[2]}</td>
 													<c:set var="collectionSize" value="${0}" />

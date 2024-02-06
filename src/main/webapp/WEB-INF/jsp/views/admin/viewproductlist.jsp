@@ -398,76 +398,41 @@ padding:0px !important;
 }
 </style>
 		<div class="page-wrapper" style="background-color: #cfcff22e;" data-sidebartype="full" class="mini-sidebar">
-			<div class="container-fluid2 card-total card-static" style="margin-top: 20px;">
-			
-					<!-- <div class="row" style="background-color: #01AFAE; align-items: baseline;
-					padding-top: 5px; margin-left:13px !important; width: 94%;
-					box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-				    border-radius: 10px;
-				    margin-bottom: 2px;"> -->
-				    
-						<!-- <div id="totalOutput2"
-							style="text-align: start; font-size: 18px; background-color: #01AFAE;color: white;padding: 6px;
-				    border-radius: 10px;
-				    margin-bottom: 20px;
-				        height: 27px;">
-				    </div> -->
-    
-						
-					<!-- </div> -->
-					
-					<!-- <div class="row" style="background-color: #01AFAE; align-items: baseline;padding-top: 5px;margin-left:13px !important;width: 94%;box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-    border-radius: 10px;
-    margin-bottom: 2px;">
-    
-    <div>
-							<a href="manageByAdmin"> <input type="button"
-								class="btn btn-primary" id="expiryDatebut" value="Cancel">&nbsp;
-							</a> <a class="btn btn-success" id="submitId" onclick="submit()">Submit</a>
-						</div>
-					</div> -->
-			<div class="page-breadcrumb" style="position: fixed;z-index: 9;width: 83%;background-color:#fff;margin-left: 13px;background-color: #4db719;
-    align-items: baseline;
-    padding-top: 5px;
-    margin-left: 13px !important;
-    width: 83%;
+				<div class="row" 
+    style='margin-right: 8px !important;
+    margin-left: 8px !important;
+    background-color: #4db719;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
     border-radius: 10px;
-    margin-bottom: 2px;">
-				<div class="row" >
-					<div class="col-12 d-flex no-block align-items-center">	
+    padding: 8px;
+    font-size: 16px;
+    margin-top: 71px;'>
+    <div class="col-4">
 						<h4 class="page-title display-6"  >Product Catalogue</h4>
-						
-						<div class="ml-auto text-right">
-							<nav aria-label="breadcrumb">
-								<ol class="breadcrumb">
-								
-							<!-- 	<div   style="padding-right:30px;">
-							<a href="manageByAdmin"> <input type="button"
-								class="btn btn-primary" id="expiryDatebut" value="Cancel">&nbsp;
-							</a> <a class="btn btn-success" id="submitId" onclick="submit()">Submit</a>
-						</div> 
-						
-								<li id="totalOutput" class="breadcrumb-item" style="background-color: darkblue;color: white;font-weight: bolder;"></li>
-			-->					
+    </div>
+    <div class="col-8">
+							<nav aria-label="breadcrumb" style='float: right;margin-top: 10px;'>
+								<ol class="breadcrumb" style='
+    padding: 0px 15px;
+    margin-bottom: 0px !important;
+    list-style: none;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+'>			
 									<li class="breadcrumb-item"><a href="landPage"><i style="text-align: justify;"
 								class="fa fa-home"></i> Home</a></li>
 									<li class="breadcrumb-item active" aria-current="page">Product
-										Catalogue <!-- <a href="productDetails">Product Details</a> -->
+										Catalogue
 									</li>
 								</ol>
 							</nav>
-						</div>
-					</div>
+    </div>
 				</div>
-			</div>
-			</div>
-			
-			
-				<div class="container-fluid">
- 
-				<div class="row el-element-overlay" id="el-element-overlay" style="margin-top: 90px"></div>
-
+				<div class="container-fluid" style='margin-top: 6px;
+    max-height: 84vh !important;
+    min-height: 84vh !important;
+    overflow: scroll !important;'>
+				<div class="row el-element-overlay" id="el-element-overlay"></div>
 			</div>
 
 			<script>

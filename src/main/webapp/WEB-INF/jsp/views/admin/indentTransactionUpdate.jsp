@@ -173,7 +173,7 @@ padding:0px !important;
 			</div>
 			<!-- End Sidebar scroll-->
 		</aside>
-		<div class="page-wrapper" style="background-color: #d9d9cd;overflow:scroll;">
+		<div class="page-wrapper" style="background-color: #d9d9cd;">
 	
 			<div class="page-breadcrumb" >
 				
@@ -222,27 +222,26 @@ padding:0px !important;
 }
 </style>
 			<div class="container-fluid2 card-total card-static">
-				<div class="row"
-					style="background-color: #4db719; align-items: baseline; padding-top: 5px; 
-					margin-left: 13px !important; width: 98%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); 
-					border-radius: 10px; margin-bottom: 2px;">
-					<div id="totalOutput2"
-						style="text-align: start; font-size: 18px;
-						color: white; padding: 6px; border-radius: 10px; margin-bottom: 20px; 
-						height: 27px;"></div>
-				</div>
-				<div class="cell"
-					style="background-color: #4db719;
-    align-items: baseline;
-    padding-top: 5px;
-    margin-left: 13px !important;
-    width: 98%;
+				<div class="row" id="totalOutput2"
+					style="margin-right: 8px !important;
+    margin-left: 8px !important;
+    background-color: #4db719;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
     border-radius: 10px;
-    margin-bottom: 2px;
-        height: 45px;">
-					<div id="IndentNumber" style="text-align: start; font-size: 18px;" class="col-md-4 col-lg-4 col-4"></div>
-					<div id="totalOutput" style="text-align: start; font-size: 18px;" class="col-md-4 col-lg-4 col-4"></div>
+    padding: 8px;
+    font-size: 16px;">
+				</div>
+				<div class="row"
+					style="margin-right: 8px !important;
+    margin-left: 8px !important;
+    background-color: #4db719;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 1px;
+    font-size: 16px;
+    margin-top: 3px;">
+					<div id="IndentNumber" style="text-align: start; font-size: 18px;" class="col-4"></div>
+					<div id="totalOutput" style="text-align: start; font-size: 18px;" class="col-4"></div>
 					<div class="col-md-4 col-lg-4 col-4"
 						style="text-align: end; float: right;">
 						<button onclick="redirectToPage('AddMoreProducts')" class="btn btn-primary" style="font-size: 16px;background:#2027d6 !important;color: #fff;
@@ -256,7 +255,11 @@ padding:0px !important;
 						</button>
 					</div>
 				</div>
-				<div class="row el-element-overlay" id="el-element-overlay"></div>
+				<div class="row el-element-overlay" style='min-height: auto !important;
+    overflow: scroll !important;
+    max-height: 84vh !important;
+    margin-top: 5px;
+    min-height: 82vh !important;' id="el-element-overlay"></div>
 				<!-- <footer class="footer">
 					<div class="footer-copyright">
 						<p>
@@ -891,13 +894,11 @@ function getBudgetDetails(){
 						//console.log( jQuery.parseJSON(response)[0] ,'response')
 						var budgt =jQuery.parseJSON(response)[0]
 					
-						var output = "<div class='cell'><span class='title'>Yearly Budget: ₹ </span> <span class='highlight' id='yearAmount'>"
-							+ budgt[3]  + "</span> &nbsp;&nbsp;&nbsp;&nbsp;<span class='title' style='margin-left: 150px;'>Cumulative Indent Value Rs.(Incl. PO, Route): </span>  <span class='highlight'>"
-							 + budgt[5]   + "</span>&nbsp;&nbsp;&nbsp;&nbsp; <span class='title' style='margin-left: 111px;'>Budget bal: ₹</span>  <span class='highlight'>"
+						var output = "<div class='col-4'><span class='title'>Yearly Budget: ₹ </span> <span class='highlight' id='yearAmount'>"
+							+ budgt[3]  + "</span> </div><div class='col-4'><span class='title'>Cumulative Indent Value Rs.(Incl. PO, Route): </span>  <span class='highlight'>"
+							 + budgt[5]   + "</span></div><div class='col-4'><span class='title'>Budget bal: ₹</span>  <span class='highlight'>"
 							+ budgt[4]   + "</span>"
-							//+ "<span class='title'> Indent Amt(Current month): ₹</span>  <span class='highlight'>" 
-							//+ budgt[6]   + "</span> 
-							+"</div> " ;
+								+"</div> " ;
 							
 					$('#totalOutput2').html(output); 
 					}
