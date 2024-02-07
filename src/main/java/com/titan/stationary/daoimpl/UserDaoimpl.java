@@ -101,9 +101,169 @@ public class UserDaoimpl implements UserDao {
 
 	}
 
+//	@Override
+//	public Map<String, Object> findloginuser(UserLoginBean userLogin, String passwords) {
+//
+//		int loginFlag = 1;
+//		Map<String, Object> userVal = new LinkedHashMap<String, Object>();
+//		System.out.println("userselection" + userLogin.getUser_selection());
+//		String loginId = userLogin.getLogin_id().toString();
+//		boolean isAuthenticated = false;
+//		if (userLogin.getLogin_id().toString().trim().endsWith("ccc")) {
+//			int len = userLogin.getLogin_id().toString().trim().length();
+//			loginId = userLogin.getLogin_id().toString().trim().substring(0, len - 3);
+//		}
+//
+//		if (userLogin.getUser_selection().equalsIgnoreCase("Tray Manager")) {
+//			if (userLogin.getLogin_id().toString().trim().endsWith("ccc")) {
+//				isAuthenticated = true;
+//			} else {
+//				String usernameDB = "";
+//				// String Username = "";
+//				String getEmpCode = "SELECT top 1 EmpCode FROM Abm_master where empcode=:empcode"; // Doubt
+//				Query getempcoded = entityManager.createNativeQuery(getEmpCode);
+//				getempcoded.setParameter("empcode", userLogin.getLogin_id().toString().trim());
+//				try {
+//					usernameDB = (String) getempcoded.getSingleResult();
+//					// if (userLogin.getPassword().equalsIgnoreCase(passworddec)) {
+//					if (loginId.equalsIgnoreCase(usernameDB)) {
+//						isAuthenticated = authenticationService.authenticateWithLdap(loginId, passwords);
+//					}
+//				} catch (NoResultException no) {
+//					userVal.put("message", "User is not available in portal, Pls contact to Portal admin.");
+//				}
+//			}
+//			if (!isAuthenticated) {
+//				userVal.put("message", "Username/Password is not correct");
+//			} else {
+//				try {
+//
+//					String getUsersDetails = "SELECT EmpCode,Name,Designation,City,MobileNumber,Emailid"
+//							+ " FROM ABM_MASTER WHERE EmpCode=:login_id ";
+//
+//					Query getUsersDetailsQuery = entityManager.createNativeQuery(getUsersDetails);
+//					getUsersDetailsQuery.setParameter("login_id", loginId);
+//					List<Object[]> usersDetailsList = getUsersDetailsQuery.getResultList();
+//					if (usersDetailsList.size() > 0) {
+//						for (Iterator iterator = usersDetailsList.iterator(); iterator.hasNext();) {
+//							Object[] obj = (Object[]) iterator.next();
+//							userVal.put("message", "SUCCESS");
+//							userVal.put("login_id", obj[0].toString());
+//							userVal.put("user_Name", obj[1].toString());
+//							userVal.put("Designation", obj[2].toString());
+//							userVal.put("mobilenumber", obj[3].toString());
+//							userVal.put("email_id", obj[5].toString());
+//							// userVal.put("Stores", obj[6].toString());
+//							userVal.put("role", userLogin.getUser_selection());
+//							System.out.println("check" + userLogin.getPassword());
+//							loginFlag = 0;
+//						}
+//					} else {
+//						userVal.put("message", "User is not available in portal, Pls contact to Portal admin.");
+//					}
+//				} catch (Exception c) {
+//					c.printStackTrace();
+//				}
+//			}
+//		} else if (userLogin.getUser_selection().equalsIgnoreCase("Indent Manager")) { // indent user
+//
+//			if (userLogin.getLogin_id().toString().trim().endsWith("ccc")) {
+//				isAuthenticated = true;
+//			} else {
+//				String passwordfromDB = "";
+//				String passworddec = "";
+//				String getPasswordQuery = "SELECT top 1 PASSWORD FROM INDENT_MANAGER where lmsid=:lmsid"; // Doubt
+//				Query getPassword = entityManager.createNativeQuery(getPasswordQuery);
+//				getPassword.setParameter("lmsid", userLogin.getLogin_id().toString().trim()); // login thru cost center
+//
+//				try {
+//					passwordfromDB = (String) getPassword.getSingleResult();
+//					PasswordUtils passwordUtils = new PasswordUtils();
+//					passworddec = passwordUtils.decrypt(passwordfromDB);
+//					System.out.println("passwordfromDB : " + passworddec);
+//					// if (userLogin.getPassword().equalsIgnoreCase(passworddec)) {
+//					if (passwords.equalsIgnoreCase(passworddec)) {
+//						/*
+//						 * String getUsersDetails = "SELECT [email],[EmpName] ,[STORECODE]" +
+//						 * " ,[CompanyEmployee]  ,[Password],[IsActive]" +
+//						 * "  FROM [INDENT_MANAGER] WHERE email=:login_id ";
+//						 */
+//						String getUsersDetails = "SELECT [lmsid], lmsid as [EmpName] ,[STORECODE]"
+//								+ ",[IsActive],region" + " from [INDENT_MANAGER] where lmsid=:lmsid ";
+//						Query getUsersDetailsQuery = entityManager.createNativeQuery(getUsersDetails);
+//						getUsersDetailsQuery.setParameter("lmsid", userLogin.getLogin_id().toString().trim());
+//						List<Object[]> usersDetailsList = getUsersDetailsQuery.getResultList();
+//						for (Iterator iterator = usersDetailsList.iterator(); iterator.hasNext();) {
+//							Object[] obj = (Object[]) iterator.next();// [1078437, MAHENDER NEGI, TKBN, false, true,
+//																		// null]
+//							userVal.put("message", "SUCCESS");
+//							userVal.put("user_id", obj[0].toString());
+//							userVal.put("user_Name", obj[1].toString());
+//							userVal.put("storeCode", obj[2].toString());
+//							// userVal.put("CompanyEmployee", obj[3].toString());
+//							// userVal.put("CompanyEmployee", obj[3].toString());
+//							userVal.put("login_id", obj[0].toString());
+//							userVal.put("role", userLogin.getUser_selection());
+//							loginFlag = 0;
+//						}
+//						isAuthenticated = true;
+//					} else {
+//						loginFlag = 0;
+//						userVal.put("message", "Password is wrong.");
+//						isAuthenticated = false;
+//					}
+//
+//				} catch (NoResultException no) {
+//					no.printStackTrace();
+//					userVal.put("message", "Enter valid User ID.");
+//					return userVal;
+//
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//
+//			}
+//		} else if (userLogin.getUser_selection().equalsIgnoreCase("Buyer")) {
+//			if (userLogin.getLogin_id().toString().trim().endsWith("ccc")) {
+//				isAuthenticated = true;
+//			} else {
+//				isAuthenticated = authenticationService.authenticateWithLdap(loginId, passwords);
+//			}
+//			if (!isAuthenticated) {
+//				userVal.put("message", "Username/Password is not correct");
+//			} else {
+//				String getUsersDetails = "SELECT User_id,User_Name,email_id,login_id,userAccess"
+//						+ " FROM ER_User_Master WHERE login_id=:login_id ";
+//				Query getUsersDetailsQuery = entityManager.createNativeQuery(getUsersDetails);
+//				getUsersDetailsQuery.setParameter("login_id", loginId);
+//				List<Object[]> usersDetailsList = getUsersDetailsQuery.getResultList();
+//				if (usersDetailsList.size() > 0) {
+//					for (Iterator iterator = usersDetailsList.iterator(); iterator.hasNext();) {
+//						Object[] obj = (Object[]) iterator.next();
+//						userVal.put("message", "SUCCESS");
+//						userVal.put("user_id", obj[0].toString());
+//						userVal.put("user_Name", obj[1].toString());
+//						userVal.put("email_id", obj[2].toString());
+//						userVal.put("login_id", obj[3].toString());
+//						userVal.put("accessRole", obj[4].toString());
+//						userVal.put("role", "Buyer");
+//
+//						loginFlag = 0;
+//					}
+//				} else {
+//					userVal.put("message", "Admin detail is not available in portal, Pls contact to Portal admin.");
+//				}
+//			}
+//		}
+//		return userVal;
+//	}
+	
+	
+	
+	
 	@Override
 	public Map<String, Object> findloginuser(UserLoginBean userLogin, String passwords) {
-
+ 
 		int loginFlag = 1;
 		Map<String, Object> userVal = new LinkedHashMap<String, Object>();
 		System.out.println("userselection" + userLogin.getUser_selection());
@@ -113,22 +273,23 @@ public class UserDaoimpl implements UserDao {
 			int len = userLogin.getLogin_id().toString().trim().length();
 			loginId = userLogin.getLogin_id().toString().trim().substring(0, len - 3);
 		}
-
+ 
 		if (userLogin.getUser_selection().equalsIgnoreCase("Tray Manager")) {
 			if (userLogin.getLogin_id().toString().trim().endsWith("ccc")) {
 				isAuthenticated = true;
 			} else {
-				String usernameDB = "";
+				 String userEmail = "";
+				//String usernameDB = "";
 				// String Username = "";
-				String getEmpCode = "SELECT top 1 EmpCode FROM Abm_master where empcode=:empcode"; // Doubt
+				String getEmpCode = "SELECT top 1 Emailid FROM Abm_master where empcode=:empcode"; // Doubt
 				Query getempcoded = entityManager.createNativeQuery(getEmpCode);
 				getempcoded.setParameter("empcode", userLogin.getLogin_id().toString().trim());
 				try {
-					usernameDB = (String) getempcoded.getSingleResult();
+					userEmail = (String) getempcoded.getSingleResult();
 					// if (userLogin.getPassword().equalsIgnoreCase(passworddec)) {
-					if (loginId.equalsIgnoreCase(usernameDB)) {
-						isAuthenticated = authenticationService.authenticateWithLdap(loginId, passwords);
-					}
+					//if (loginId.equalsIgnoreCase(usernameDB)) {
+						isAuthenticated = authenticationService.authenticateWithLdap(userEmail, passwords);
+					//}
 				} catch (NoResultException no) {
 					userVal.put("message", "User is not available in portal, Pls contact to Portal admin.");
 				}
@@ -137,10 +298,10 @@ public class UserDaoimpl implements UserDao {
 				userVal.put("message", "Username/Password is not correct");
 			} else {
 				try {
-
+ 
 					String getUsersDetails = "SELECT EmpCode,Name,Designation,City,MobileNumber,Emailid"
 							+ " FROM ABM_MASTER WHERE EmpCode=:login_id ";
-
+ 
 					Query getUsersDetailsQuery = entityManager.createNativeQuery(getUsersDetails);
 					getUsersDetailsQuery.setParameter("login_id", loginId);
 					List<Object[]> usersDetailsList = getUsersDetailsQuery.getResultList();
@@ -166,7 +327,7 @@ public class UserDaoimpl implements UserDao {
 				}
 			}
 		} else if (userLogin.getUser_selection().equalsIgnoreCase("Indent Manager")) { // indent user
-
+ 
 			if (userLogin.getLogin_id().toString().trim().endsWith("ccc")) {
 				isAuthenticated = true;
 			} else {
@@ -175,7 +336,7 @@ public class UserDaoimpl implements UserDao {
 				String getPasswordQuery = "SELECT top 1 PASSWORD FROM INDENT_MANAGER where lmsid=:lmsid"; // Doubt
 				Query getPassword = entityManager.createNativeQuery(getPasswordQuery);
 				getPassword.setParameter("lmsid", userLogin.getLogin_id().toString().trim()); // login thru cost center
-
+ 
 				try {
 					passwordfromDB = (String) getPassword.getSingleResult();
 					PasswordUtils passwordUtils = new PasswordUtils();
@@ -212,27 +373,41 @@ public class UserDaoimpl implements UserDao {
 						userVal.put("message", "Password is wrong.");
 						isAuthenticated = false;
 					}
-
+ 
 				} catch (NoResultException no) {
 					no.printStackTrace();
 					userVal.put("message", "Enter valid User ID.");
 					return userVal;
-
+ 
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-
+ 
 			}
 		} else if (userLogin.getUser_selection().equalsIgnoreCase("Buyer")) {
 			if (userLogin.getLogin_id().toString().trim().endsWith("ccc")) {
 				isAuthenticated = true;
 			} else {
-				isAuthenticated = authenticationService.authenticateWithLdap(loginId, passwords);
+				 String userEmail = "";
+				//String usernameDB = "";
+				// String Username = "";
+				String getEmpCode = "SELECT top 1 email_id FROM ER_User_Master where login_id=:login_id"; // Doubt
+				Query getempcoded = entityManager.createNativeQuery(getEmpCode);
+				getempcoded.setParameter("login_id", userLogin.getLogin_id().toString().trim());
+				try {
+					userEmail = (String) getempcoded.getSingleResult();
+					// if (userLogin.getPassword().equalsIgnoreCase(passworddec)) {
+					//if (loginId.equalsIgnoreCase(usernameDB)) {
+						isAuthenticated = authenticationService.authenticateWithLdap(userEmail, passwords);
+					//}
+				} catch (NoResultException no) {
+					userVal.put("message", "User is not available in portal, Pls contact to Portal admin.");
+				}
 			}
 			if (!isAuthenticated) {
 				userVal.put("message", "Username/Password is not correct");
 			} else {
-				String getUsersDetails = "SELECT User_id,User_Name,email_id,login_id,userAccess"
+				String getUsersDetails = "SELECT User_id,User_Name,email_id,login_id"
 						+ " FROM ER_User_Master WHERE login_id=:login_id ";
 				Query getUsersDetailsQuery = entityManager.createNativeQuery(getUsersDetails);
 				getUsersDetailsQuery.setParameter("login_id", loginId);
@@ -245,9 +420,8 @@ public class UserDaoimpl implements UserDao {
 						userVal.put("user_Name", obj[1].toString());
 						userVal.put("email_id", obj[2].toString());
 						userVal.put("login_id", obj[3].toString());
-						userVal.put("accessRole", obj[4].toString());
 						userVal.put("role", "Buyer");
-
+ 
 						loginFlag = 0;
 					}
 				} else {

@@ -382,7 +382,7 @@ table.dataTable tbody tr.selected a {
 														<c:forEach items="${Collen}" var="ccen" varStatus="loop2">
 														<th>${foot[loop2.index + 1]}</th>
 													</c:forEach> 
-														<th class='tbodyCustomColor' id="finalQty"></th>
+														<th class='tbodyCustomColor' style="text-align:left !important" id="finalQty"></th>
 														<th class='tbodyCustomColor' style="text-align:right !important" id="finalValue"></th>
 														<th class='tbodyCustomColor' style="text-align:center !important"></th>
 														<th class='tbodyCustomColor' id="ReciptQty"></th>
@@ -529,11 +529,11 @@ table.dataTable tbody tr.selected a {
 	        
 	    // Redraw the table to reflect the changes
 	    table.draw();
-	 $('#finalQty').text(updateColumnData(numColumns));
+	 $('#finalQty').text(Math.floor(updateColumnData(numColumns)));
 	  $('#finalValue').text(updateColumnData(numColumns + 1));
-	  $('#ReciptQty').text(updateColumnData(numColumns + 3));
+	  $('#ReciptQty').text(Math.floor(updateColumnData(numColumns + 3)));
 	   $('#Reciptvalue').text(updateColumnData(numColumns + 4));
-	   $('#stockQty').text(updateColumnData(numColumns + 5));
+	   $('#stockQty').text(Math.floor(updateColumnData(numColumns + 5)));
 	   $('#stockValue').text(updateColumnData(numColumns + 6));
 	   //$('#footerStockValue').text(updateColumnData(numColumns + 8));
 	}

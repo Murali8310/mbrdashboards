@@ -51,19 +51,54 @@ public class AuthenticationService implements AuthenticationProvider {
 		return authentication.equals(UsernamePasswordAuthenticationToken.class);
 	}
 
+//	public boolean authenticateWithLdap(String username, String password) {
+//		String ldapUserName = username + "@titan.com";
+//		String url = "ldap://172.25.7.23:389";
+//
+////		String url = "ldap://172.25.7.23:636";
+//
+//		Hashtable env = new Hashtable();
+//		env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+//		env.put(Context.PROVIDER_URL, url);
+//		env.put(Context.SECURITY_AUTHENTICATION, "simple");
+//		env.put(Context.SECURITY_PRINCIPAL, ldapUserName);
+//		env.put(Context.SECURITY_CREDENTIALS, password);
+//
+//		try {
+//			DirContext ctx = new InitialDirContext(env);
+//			if (ctx != null) {
+//				return true;
+//			} else {
+//				return false;
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return false;
+//		}
+//
+//	}
+//
+//}
+	
 	public boolean authenticateWithLdap(String username, String password) {
-		String ldapUserName = username + "@titan.com";
-		String url = "ldap://172.25.7.23:389";
 
+		 
+		//String ldapUserName = "masinenikrishnasai@titan.co.in";
+		String ldapUserName = username;
+		// String ldapUserName = username + "@titan.com";
+		// String url = "ldap://172.25.7.23:389";
+ 
 //		String url = "ldap://172.25.7.23:636";
-
+ 
+		String url = "ldaps://TCLBLRCORPDC04.titan.com:636";
+ 
 		Hashtable env = new Hashtable();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
 		env.put(Context.PROVIDER_URL, url);
 		env.put(Context.SECURITY_AUTHENTICATION, "simple");
 		env.put(Context.SECURITY_PRINCIPAL, ldapUserName);
 		env.put(Context.SECURITY_CREDENTIALS, password);
-
+ 
 		try {
 			DirContext ctx = new InitialDirContext(env);
 			if (ctx != null) {
@@ -75,7 +110,7 @@ public class AuthenticationService implements AuthenticationProvider {
 			e.printStackTrace();
 			return false;
 		}
-
+ 
 	}
-
+ 
 }

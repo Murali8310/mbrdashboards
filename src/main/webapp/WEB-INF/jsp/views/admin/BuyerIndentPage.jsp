@@ -372,16 +372,16 @@ vertical-align: text-bottom ; footer {
 														<th class='tbodyCustomColor'>Total</th>
 														<th class='tbodyCustomColor'></th>
 														<th class='tbodyCustomColor'></th>
-													<c:forEach items="${Collen}" var="ccen" varStatus="loop2">
-															<th class='tbodyCustomColor'></th>
-													</c:forEach>	
-																												<th class='tbodyCustomColor' id="footerUserQty"></th>
+												<c:forEach items="${Collen}" var="ccen" varStatus="loop2">
+                                                          <th id="uniqueId_${loop2.index}" class='tbodyCustomColor'></th>
+                                                 </c:forEach>	
+																												<th class='tbodyCustomColor' id="footerUserQty" style="text-align:center"></th>
 																												<th class='tbodyCustomColor' id="footerMoqty"></th>
 																												<th class='tbodyCustomColor' style="text-align:right" id="footerMoqValue"></th>
-																												<th class='tbodyCustomColor' id="footerTotalQty"	></th>
+																												<th class='tbodyCustomColor' id="footerTotalQty"	style="text-align:center"></th>
 																												<th class='tbodyCustomColor' style="text-align:right"  id="footerTotalValue"></th>
 																												<th class='tbodyCustomColor' style="text-align:center"></th>
-																												<th class='tbodyCustomColor' id="footerStockQty"></th>
+																												<th class='tbodyCustomColor' id="footerStockQty" style="text-align:center"></th>
 																												<th class='tbodyCustomColor' style="text-align:right" id="footerStockValue"></th>
 														
 
@@ -487,7 +487,7 @@ vertical-align: text-bottom ; footer {
 	    var table = $('#example').DataTable();
 	       // var tableSize = table.rows().count();
 	    var tableLengthElement = document.getElementById("example");
-            // Get the number of rows in the table
+        // Get the number of rows in the table
 	   // var tableLength = tableLengthElement.rows.length;
 	    var numColumns = table.columns().header().length;
 	        numColumns = numColumns - 8;
@@ -495,7 +495,7 @@ vertical-align: text-bottom ; footer {
 	        var row = this.data();
 	        let sum = 0;
 	        for (var colIndex = 3; colIndex < numColumns; colIndex++) {
-			      console.log('dd',row[colIndex],colIndex)
+			  console.log('dd',row[colIndex],colIndex)
 		      sum = sum + Number(row[colIndex]); // Convert to numbers
 		    }
 	        console.log('this is console',sum)
@@ -506,12 +506,12 @@ vertical-align: text-bottom ; footer {
 	       this.cell(rowIdx, numColumns + 7).data((row[numColumns+6] *row[numColumns+5]).toFixed(2));	
 	        });
 	    table.draw();
-	   $('#footerUserQty').text(updateColumnData(numColumns));
-	  $('#footerMoqty').text(updateColumnData(numColumns + 1));
+	   $('#footerUserQty').text( Math.floor(updateColumnData(numColumns)));
+	  $('#footerMoqty').text( Math.floor(updateColumnData(numColumns + 1)));
 	  $('#footerMoqValue').text(updateColumnData(numColumns + 2));
-	  $('#footerTotalQty').text(updateColumnData(numColumns + 3));
+	  $('#footerTotalQty').text( Math.floor(updateColumnData(numColumns + 3)));
 	  $('#footerTotalValue').text(updateColumnData(numColumns + 4));
-	  $('#footerStockQty').text(updateColumnData(numColumns + 6));
+	  $('#footerStockQty').text( Math.floor(updateColumnData(numColumns + 6)));
 	  $('#footerStockValue').text(updateColumnData(numColumns + 7)); 
 	}
 

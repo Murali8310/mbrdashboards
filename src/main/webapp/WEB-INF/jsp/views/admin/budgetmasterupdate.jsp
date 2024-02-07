@@ -255,7 +255,7 @@ label {
 									<label for="COSTCENTERDESC"> Cost Center Description </label><label style="color: red;">*</label>:
 								</div>
 								<div class="col-md-5">
-								<input type="text" id="COSTCENTERDESC" name="COSTCENTERDESC" 
+								<input disabled type="text" id="COSTCENTERDESC" name="COSTCENTERDESC" 
 										class="form-control" aria-invalid="true" required="required">
 									<%-- <select id="COSTCENTERDESC" name="COSTCENTERDESC" class="form-control"
 										aria-invalid="true" required="required">
@@ -273,7 +273,7 @@ label {
 									<label for="GL"> GL </label><label style="color: red;">*</label>:
 								</div>
 								<div class="col-md-5">
-									<input type="text" id="GL" name="GL"  oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+									<input disabled type="text" id="GL" name="GL"  oninput="this.value = this.value.replace(/[^0-9]/g, '')"
 										class="form-control" aria-invalid="true" required="required">
 								</div>
 							</div>
@@ -283,7 +283,7 @@ label {
 									<label for="GLDESC"> GL Description </label><label style="color: red;">*</label>:
 								</div>
 								<div class="col-md-5">
-									<input type="text" id="GLDESC" name="GLDESC" 
+									<input disabled type="text" id="GLDESC" name="GLDESC" 
 	class="form-control" aria-invalid="true" required="required">
 								</div>
 							</div>
@@ -295,27 +295,23 @@ label {
 									<label for="LOCATION"> Location </label><label style="color: red;">*</label>:
 								</div>
 								<div class="col-md-5">
-									<input type="text" id="LOCATION" name="LOCATION"
+									<input disabled type="text" id="LOCATION" name="LOCATION"
 										class="form-control" aria-invalid="true" required="required">
 								</div>
 							</div>
 							<div class="col-md-12 oneline">
-								
 								<div style="margin-top: 10px;" class="col-md-5">
 									<label for="Department"> Department</label> <label style="color: red;">*</label>:
 									
 								</div>
 								<div class="col-md-5">
-									<input type="text" id="Department" name="Department"
+									<input disabled type="text" id="Department" name="Department"
 										class="form-control" aria-invalid="true" required="required">
 								</div>
 							</div>
-							
 							<div class="col-md-12 oneline">
-								
 								<div style="margin-top: 10px;" class="col-md-5">
 									<label for="YEARLYBUDGET"> Yearly Budget</label> <label style="color: red;">*</label>:
-									
 								</div>
 								<div class="col-md-5">
 									<input type="text" id="YEARLYBUDGET" name="YEARLYBUDGET"
