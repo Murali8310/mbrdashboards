@@ -518,8 +518,8 @@ if(Year == ''){
 														<th></th>
 														<th></th>
 													<c:forEach items="${Collen}" var="ccen" varStatus="loop2">
-															<th></th>
-													</c:forEach>	
+                                                          <th style="text-align:center" id="uniqueId_${loop2.index}" class='tbodyCustomColor'></th>
+                                                 </c:forEach>		
 																												<th id="footerUserQty"></th>
 																												<th id="footerMoqty"></th>
 																												<th id="footerMoqValue" style="text-align:right !important"></th>
@@ -642,6 +642,9 @@ if(Year == ''){
 	        for (var colIndex = 3; colIndex < numColumns; colIndex++) {
 			      console.log('dd',row[colIndex],colIndex)
 		      sum = sum + Number(row[colIndex]); // Convert to numbers
+			      var uniqueId = '#uniqueId_'+(colIndex- 3);
+				  $(uniqueId).text( Math.floor(updateColumnData(colIndex)));
+				
 		    }
 	        console.log('this is console',sum)
 	       this.cell(rowIdx, numColumns).data(sum);

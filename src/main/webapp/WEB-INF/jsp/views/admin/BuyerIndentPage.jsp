@@ -373,7 +373,7 @@ vertical-align: text-bottom ; footer {
 														<th class='tbodyCustomColor'></th>
 														<th class='tbodyCustomColor'></th>
 												<c:forEach items="${Collen}" var="ccen" varStatus="loop2">
-                                                          <th id="uniqueId_${loop2.index}" class='tbodyCustomColor'></th>
+                                                          <th style="text-align:center" id="uniqueId_${loop2.index}" class='tbodyCustomColor'></th>
                                                  </c:forEach>	
 																												<th class='tbodyCustomColor' id="footerUserQty" style="text-align:center"></th>
 																												<th class='tbodyCustomColor' id="footerMoqty"></th>
@@ -496,7 +496,10 @@ vertical-align: text-bottom ; footer {
 	        let sum = 0;
 	        for (var colIndex = 3; colIndex < numColumns; colIndex++) {
 			  console.log('dd',row[colIndex],colIndex)
-		      sum = sum + Number(row[colIndex]); // Convert to numbers
+		      sum = sum + Number(row[colIndex]); 
+			  var uniqueId = '#uniqueId_'+(colIndex- 3);
+			  $(uniqueId).text( Math.floor(updateColumnData(colIndex)));
+			  // Convert to numbers
 		    }
 	        console.log('this is console',sum)
 	       this.cell(rowIdx, numColumns).data(sum);
@@ -506,6 +509,7 @@ vertical-align: text-bottom ; footer {
 	       this.cell(rowIdx, numColumns + 7).data((row[numColumns+6] *row[numColumns+5]).toFixed(2));	
 	        });
 	    table.draw();
+	    
 	   $('#footerUserQty').text( Math.floor(updateColumnData(numColumns)));
 	  $('#footerMoqty').text( Math.floor(updateColumnData(numColumns + 1)));
 	  $('#footerMoqValue').text(updateColumnData(numColumns + 2));
