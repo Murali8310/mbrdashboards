@@ -407,7 +407,7 @@ public class UserDaoimpl implements UserDao {
 			if (!isAuthenticated) {
 				userVal.put("message", "Username/Password is not correct");
 			} else {
-				String getUsersDetails = "SELECT User_id,User_Name,email_id,login_id"
+				String getUsersDetails = "SELECT User_id,User_Name,email_id,login_id,userAccess"
 						+ " FROM ER_User_Master WHERE login_id=:login_id ";
 				Query getUsersDetailsQuery = entityManager.createNativeQuery(getUsersDetails);
 				getUsersDetailsQuery.setParameter("login_id", loginId);
@@ -421,6 +421,7 @@ public class UserDaoimpl implements UserDao {
 						userVal.put("email_id", obj[2].toString());
 						userVal.put("login_id", obj[3].toString());
 						userVal.put("role", "Buyer");
+						userVal.put("accessRole", obj[4].toString());
  
 						loginFlag = 0;
 					}
@@ -4022,7 +4023,7 @@ public class UserDaoimpl implements UserDao {
 
 	}
 
-	public String sendToVendor(Map<String, Object> payload) {
+	public String sendToVendor(Map<String, Object> payload,String loginId) {
 		String r = "";
 
 		Calendar cal = Calendar.getInstance();
@@ -4031,143 +4032,210 @@ public class UserDaoimpl implements UserDao {
 
 		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
 		String MonthText = month.format(cal.getTime());
+		List<Object> BuyerList;
 		int cFY = Integer.valueOf(yearfromCal);
 		if (getMonthNumber(MonthText) < 4) {
 			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
 		 yearfromCal = String.valueOf(cFY);
 		    System.out.println("yearfromCal"+yearfromCal);
 		}
+		
+		Query getCClist = entityManager.createNativeQuery("select email_id from ER_User_Master where login_id  =:loginId UNION SELECT email_id FROM ER_User_Master WHERE userAccess = 1");
+		Query getName = entityManager.createNativeQuery("select User_Name from ER_User_Master where login_id  =:loginId");
+		getCClist.setParameter("loginId", loginId);
+		getName.setParameter("loginId", loginId);
+		String buyerName = (String) getName.getSingleResult();
+		List<String> getBuyerName = getName.getResultList();
+		List<String> CCList = getCClist.getResultList();
+		CCList.add("tgo@titan.co.in");
+
 
 		try {
+			String finalcc = getAllIndentedCostCenters(yearfromCal, MonthText);
+			finalcc = finalcc.replace("[", "").replace("]", "");
+			
+			
+			
+			Object[] keys = payload.keySet().toArray();
+	        Object[] values = payload.values().toArray();
+	        
+	        if (keys.length > 1 && values.length > 1) {
+	            String secondKey = keys[2].toString();
+	            Object vendorsListObject = values[2];
+	            if (vendorsListObject instanceof List) {
+	                // Cast `vendorsListObject` to a list of maps (assuming each vendor is represented by a map)
+	                List<Map<String, Object>> vendorsList = (List<Map<String, Object>>) vendorsListObject;
 
-			Query getemailID = entityManager.createNativeQuery(
-					"select pm.PRODUCT_NUMBER ,item, sum(TOTAL_USER_QTY), emailID, MAKE from Indent_Transaction  IDT inner join  PRODUCT_MASTER PM on pm.PROD_DESC=idt.ITEM\n"
-							+ "where YEAR=:YEAR and MONTH=:MonthText \n"
-							+ "group by item, pm.PRODUCT_NUMBER,emailID, make order by MAKE\n" + "");
-			getemailID.setParameter("MonthText", MonthText);
-			getemailID.setParameter("YEAR", yearfromCal);
-			List<Object[]> emailIDPoduct = (List<Object[]>) getemailID.getResultList();
+	                // Iterate over the list of vendors
+	                for (Map<String, Object> vendor : vendorsList) {
+	                    String vendorName = (String) vendor.get("vendorName");
+	            		Query getVendorMailID = entityManager.createNativeQuery("select distinct emailID from PRODUCT_MASTER where MAKE =:vendorName");
+	            		getVendorMailID.setParameter("vendorName", vendorName);
+	            		String vendorMailId = (String) getVendorMailID.getSingleResult();
 
-			Map<String, List<Object>> indentData = new HashMap<>();
+	              
+	                    List<ArrayList<Object>> vendorData = (List<ArrayList<Object>>) vendor.get("data");
+	                    String[] costCentersArray = finalcc.split(",");
+	                    
+	                    
+	        			// Create headers array including "Sl No", "Material description", "UOM", individual cost centers, and "Total Qty"
+	        			List<String> headersList = new ArrayList<>();
+	        			headersList.add("Sl No");
+	        			headersList.add("Material description");
+	        			headersList.add("UOM");
+	        			headersList.addAll(Arrays.asList(costCentersArray)); // Add individual cost centers
+	        			headersList.add("Total Qty");
 
-			for (Object[] result : emailIDPoduct) {
+	        			// Convert the list to an array
+	        			Object[] headers = headersList.toArray();
+	        			Map<String, List<Object>> indentData = new HashMap<>();
 
-				List<Object> resultdata = new ArrayList<>();
-				resultdata.add(result[0]);
-				resultdata.add(result[1]);
-				resultdata.add(result[2]);
-				// resultdata.add(result[4]);
+	        				Workbook workbook = new XSSFWorkbook();
+	        				Sheet sheet = workbook.createSheet("DataTable");
+	        				
+	        				// Insert headers into the sheet
+	        				
+	        				Row headerRow = sheet.createRow(0);
+	        				for (int i = 0; i < headers.length; i++) {
+	        				    Cell cell = headerRow.createCell(i);
+	        				    cell.setCellValue(String.valueOf(headers[i]));
+	        				}
+	        				// Insert data into the sheet
+	        				int rowNum = 1; // Start from the second row (index 1) after headers
+	        				
+	        				
+	        				
+	        				// Assuming vendorData is a List<Object[]> containing data for each vendor
+	        				// Assuming rowDataList is a List<Object[]> containing the data to be inserted into the sheet
+	        				int serialNumber = 1; // Initialize serial number
 
-				String key = result[3].toString();
+	        				// Initialize an array to store the sum of each numeric column
+	        				double[] columnSum = new double[vendorData.get(0).size()];
 
-				if (indentData.containsKey(key)) {
-					// Key already exists, retrieve the existing list and add the current resultdata
-					List<Object> existingList = indentData.get(key);
-					existingList.addAll(resultdata);
-				} else {
-					// Key doesn't exist, create a new entry in the map
-					indentData.put(key, resultdata);
-				}
-			}
+	        				// Iterate over each row in vendorData
+	        				for (List<Object> rowData : vendorData) {
+	        				    Row row = sheet.createRow(rowNum++);
+	        				    int cellNum = 0; // Reset cell number for each row
+	        				    Cell cell = row.createCell(cellNum++); // First cell for serial number
+	        				    cell.setCellValue(serialNumber++); // Insert serial number
+	        				    
+	        				    // Iterate over each cell in the rowData
+	        				    for (Object cellData : rowData) {
+	        				        cell = row.createCell(cellNum++);
+	        				        if (cellData instanceof String) {
+	        				            String cellString = (String) cellData;
+	        				            try {
+	        				                double value = Double.parseDouble(cellString);
+	        				                cell.setCellValue(value);
+	        				                // Accumulate the sum for double values
+	        				                columnSum[cellNum - 2] += value; // Subtract 2 to adjust for the serial number column
+	        				            } catch (NumberFormatException e) {
+	        				                // Handle non-numeric string values
+	        				                cell.setCellValue(cellString); // Set string value directly
+	        				            }
+	        				        } else if (cellData instanceof Double) {
+	        				            double value = (Double) cellData;
+	        				            cell.setCellValue(value);
+	        				            // Accumulate the sum for double values
+	        				            columnSum[cellNum - 2] += value; // Subtract 2 to adjust for the serial number column
+	        				        } else if (cellData instanceof Integer) {
+	        				            int value = (Integer) cellData;
+	        				            cell.setCellValue(value);
+	        				            // Accumulate the sum for integer values
+	        				            columnSum[cellNum - 2] += value; // Subtract 2 to adjust for the serial number column
+	        				        } else {
+	        				            // Handle empty or non-numeric cells
+	        				            cell.setCellValue(""); // Empty cell value
+	        				        }
+	        				    }
+	        				}
 
-			for (Map.Entry<String, List<Object>> entry : indentData.entrySet()) {
-				String key = entry.getKey();
-				List<Object> value = entry.getValue();
+	        				// Create the last row for the sums
+	        				Row sumRow = sheet.createRow(rowNum++);
+	        				sumRow.createCell(0);
+    				        Cell sumCell = sumRow.createCell(0);
+	        				 sumCell.setCellValue(""); 
 
-				Workbook workbook = new XSSFWorkbook();
-				Sheet sheet = workbook.createSheet("DataTable");
-				// Row headerRow = sheet.createRow(0);
+	        				for (int i = 0; i < columnSum.length; i++) {
+	        				    if (i == 0) {
+	        				        // Skip setting value in the first cell (for the label)
+	        				        sumRow.createCell(i);
+	        				        Cell sumCell1 = sumRow.createCell(i + 1);
+	        				        sumCell1.setCellValue("ToTal Qty"); 
+	        				    } else {
+	        				        Cell sumCell1 = sumRow.createCell(i +1);
+	        				        if (Double.compare(columnSum[i], 0.0) != 0.0) {
+	        				        	sumCell1.setCellValue(columnSum[i]); // Insert sum for the corresponding column
+	        				        } else {
+	        				        	sumCell1.setCellValue("");
+	        				        }
+//	        				        sumCell1.setCellValue(columnSum[i]); // Insert sum for the corresponding column
+	        				    }
+	        				}
 
-				// Add headers to the header row
 
-				/*
-				 * int counter = 0; int counter2 = 0;
-				 * 
-				 * for (Object element : value) { // Create a new Row every 3 iterations Row
-				 * dataRow = sheet.createRow(1); Cell cell = dataRow.createCell(counter2);
-				 * cell.setCellValue( element.toString()); System.out.println("  Element: " +
-				 * counter2); counter2++; }
-				 */
+	        				File excelFile = File.createTempFile("Indent_Number", ".xlsx");
+	        				FileOutputStream fileOut = new FileOutputStream(excelFile);
+	        				workbook.write(fileOut);
+	        				fileOut.close();
+	        				String filePath = excelFile.getAbsolutePath();
+	        				System.out.println("File Path: " + filePath);
+	        				
+	        				
+	        				String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
+	        				Properties props = System.getProperties();
+	        				props.put("mail.smtp.host", smtpHostServer);
+	        				props.put("mail.smtp.port", "25");
+	        				Session session = Session.getInstance(props, null);
+	        				System.out.println(session);
+	        				MimeMessage msg = new MimeMessage(session);
+	        				msg.setFrom(
+	        						new InternetAddress("noreply_stationary@titan.co.in", "No Reply-stationary Employee Portal"));
+	        				//msg.setReplyTo(InternetAddress.parse(key, false));
+	        				msg.setSubject("Purchase order for Stationery items – Watch Div.");
 
-				int counter2 = 0;
-				Row headerRow = sheet.createRow(0); // Assuming the header row is at index 0
+	        				MimeMultipart multipart = new MimeMultipart();
 
-				String[] headers = { "Product ID", "Description", "Quantity" };
-				for (int i = 0; i < headers.length; i++) {
-					Cell cell = headerRow.createCell(i);
-					cell.setCellValue(headers[i]);
-				}
+	        				MimeBodyPart textPart = new MimeBodyPart();
+	        				textPart.setText("Dear Sir / Madam,\n\n" + "Pl. find attached the consolidated list of stationery items for the current month.\n"
+	        						+ "\nRequest you to arrange all the stationery items and deliver the same in individual packings (cost center-wise) as per the attached list. Do mention the Purchase order number in the invoices.\n\n"
+	        						+ "Double check the brand and qty. before delivery for on-time inward and payment.\n\n"
+	        						+ "Inward will happen only if complete items are received at our facility in the same brands and qty. which are ordered. Request to check and validate the same before effecting delivery.\n\n\n"
+	        						+ "Regards,\n\n" + buyerName + "\n" + "Sourcing Dept.\n" + "Watches and Wearables Div\n"+"Titan Company Ltd.\n");
+	        				multipart.addBodyPart(textPart);
 
-				Row dataRow = null;
+	        				System.out.println("Email Body:\n");
+	        				MimeBodyPart excelAttachment = new MimeBodyPart();
+	        				DataSource source = new FileDataSource(excelFile.getAbsolutePath());
+	        				excelAttachment.setDataHandler(new DataHandler(source));
+	        				excelAttachment.setFileName(excelFile.getName());
+	        				multipart.addBodyPart(excelAttachment);
+	        				msg.setContent(multipart);
+	        				msg.setSentDate(new Date());
+	        				  // Adding multiple recipients
+//	        	            for (String email : emailList) {
+	        	                msg.addRecipient(Message.RecipientType.TO, new InternetAddress(vendorMailId));
+	        	                String emailBody = msg.getContent().toString();
+//	        	            }
+	        	            for (String ccMail : CCList) {
+	        	                msg.addRecipient(Message.RecipientType.CC, new InternetAddress(ccMail));
+	        	            }
+	        	          
+	        				Transport.send(msg);
 
-				for (Object element : value) {
-					// Create a new Row every 3 iterations starting from index 1
-					if (counter2 % 3 == 0) {
-						dataRow = sheet.createRow(counter2 / 3 + 1); // Adjust row index based on your requirements
-					}
-
-					Cell cell = dataRow.createCell(counter2 % 3);
-					cell.setCellValue(element.toString());
-					System.out.println("Element: " + counter2);
-
-					counter2++;
-				}
-
-				File excelFile = File.createTempFile("Indent_Number", ".xlsx");
-				FileOutputStream fileOut = new FileOutputStream(excelFile);
-				workbook.write(fileOut);
-				fileOut.close();
-				String filePath = excelFile.getAbsolutePath();
-				System.out.println("File Path: " + filePath);
-
-				// System.out.println("keyfor email" + key);
-				// System.out.println("keyfor value" + value);
-
-				// mail related changes
-
-				//String smtpHostServer = "smtp-relay.gmail.com";
-				String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
-				Properties props = System.getProperties();
-				props.put("mail.smtp.host", smtpHostServer);
-				props.put("mail.smtp.port", "25");
-				Session session = Session.getInstance(props, null);
-				System.out.println(session);
-				MimeMessage msg = new MimeMessage(session);
-				msg.setFrom(
-						new InternetAddress("noreply_stationary@titan.co.in", "No Reply-stationary Employee Portal"));
-				msg.setReplyTo(InternetAddress.parse(key, false));
-				msg.setSubject("Indent Details from Buyer: text/HTML");
-
-				MimeMultipart multipart = new MimeMultipart();
-
-				MimeBodyPart textPart = new MimeBodyPart();
-				textPart.setText("Dear Vendor,\n\n" + "Greetings!\n"
-						+ "Find buyer indent value information in the portal.\n"
-						+ "\nIMPORTANT: Please do not reply to this message or mail address.\n\n"
-						+ "DISCLAIMER: This communication is confidential and privileged and is directed to and for the use of the addressee only. The recipient if not the addressee should not use this message if erroneously received, and access and use of this e-mail in any manner by anyone other than the addressee is unauthorized. The recipient acknowledges that Titan Company Pvt Ltd may be unable to exercise control or ensure or guarantee the integrity of the text of the email message and the text is not warranted as to completeness and accuracy. Before opening and accessing the attachment, if any, please check and scan for a virus.\n\n\n"
-						+ "Thanks & Regards,\n" + "Admin\n" + "Stationary Portal.");
-				multipart.addBodyPart(textPart);
-
-				System.out.println("Email Body:\n");
-				MimeBodyPart excelAttachment = new MimeBodyPart();
-				DataSource source = new FileDataSource(excelFile.getAbsolutePath());
-				excelAttachment.setDataHandler(new DataHandler(source));
-				excelAttachment.setFileName(excelFile.getName());
-				multipart.addBodyPart(excelAttachment);
-
-				msg.setContent(multipart);
-				msg.setSentDate(new Date());
-
-				msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(key, false));
-				Transport.send(msg);
+	                }
+	            }
+	        }
+			
+			
 
 				// Process key and value as needed
 				// System.out.println("keymurali: " + key + ", Value: " + value);
-			}
-			r = "Email Sent By Successfully!";
+//			}
+			r = "Email Sent Successfully!";
 
 			//String smtpHostServer = "smtp-relay.gmail.com";
-			String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
+			//String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
 
 			/*
 			 * Properties props = System.getProperties(); props.put("mail.smtp.host",
@@ -4304,114 +4372,203 @@ public class UserDaoimpl implements UserDao {
 	 * 28-08-2023 Send the mail to Store after Receive quantity from distribution
 	 * team
 	 */
-	public String sendToStore(String email, String email_id, Map<String, Object> payload) {
+	public String sendToStore(String loginId, String email_id, Map<String, Object> payload) {
 		String r = "";
+
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat year_Date = new SimpleDateFormat("YYYY");
+		String yearfromCal = year_Date.format(cal.getTime());
+
+		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
+		String MonthText = month.format(cal.getTime());
+		List<Object> BuyerList;
+		int cFY = Integer.valueOf(yearfromCal);
+		if (getMonthNumber(MonthText) < 4) {
+			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+		 yearfromCal = String.valueOf(cFY);
+		    System.out.println("yearfromCal"+yearfromCal);
+		}
+		
+		Query getCClist = entityManager.createNativeQuery("select Emailid from ABM_MASTER where EmpCode=:loginId");
+		Query getName = entityManager.createNativeQuery("select Name from ABM_MASTER where EmpCode=:loginId");
+		getCClist.setParameter("loginId", loginId);
+		getName.setParameter("loginId", loginId);
+		String buyerName = (String) getName.getSingleResult();
+		List<String> getBuyerName = getName.getResultList();
+		List<String> CCList = getCClist.getResultList();
+		CCList.add("tgo@titan.co.in");
+		CCList.add("boopathik@titan.co.in");
+		
+
 		try {
+			String finalcc = getAllIndentedCostCenters(yearfromCal, MonthText);
+			finalcc = finalcc.replace("[", "").replace("]", "");
+			
+			Object[] keys = payload.keySet().toArray();
+	        Object[] values = payload.values().toArray();
+	        
+	        if (keys.length > 1 && values.length > 1) {
+	            String secondKey = keys[2].toString();
+	            Object vendorsListObject = values[2];
+	            if (vendorsListObject instanceof List) {
+	                // Cast `vendorsListObject` to a list of maps (assuming each vendor is represented by a map)
+//	                List<Map<String, Object>> vendorsList = (List<Map<String, Object>>) vendorsListObject;
+	                
+	        			// Create headers array including "Sl No", "Material description", "UOM", individual cost centers, and "Total Qty"
+	        			List<String> headersList = new ArrayList<>();
+	        			headersList.add("Sl No");
+	        			headersList.add("Material description");
+	        			headersList.add("UOM");
+	        			headersList.add("Total Qty");
 
-			Query getemailID = entityManager.createNativeQuery(
-					"select  Email from INDENT_MANAGER where Email='masinenikrishnasai@titan.co.in' ");
-			String emailIDPoduct = (String) getemailID.getSingleResult();
-			// List<String> emailIDPoduct = (List<String>) getemailID.getResultList();
+	        			// Convert the list to an array
+	        			Object[] headers = headersList.toArray();
+	        			Map<String, List<Object>> indentData = new HashMap<>();
 
-			Map<String, Object> jsonData = new HashMap<>();
-			jsonData.put("header", payload.get("header"));
-			jsonData.put("data", payload.get("data"));
-			Workbook workbook = new XSSFWorkbook();
-			Sheet sheet = workbook.createSheet("DataTable");
+	        				Workbook workbook = new XSSFWorkbook();
+	        				Sheet sheet = workbook.createSheet("DataTable");
+	        				
+	        				// Insert headers into the sheet
+	        				
+	        				Row headerRow = sheet.createRow(0);
+	        				for (int i = 0; i < headers.length; i++) {
+	        				    Cell cell = headerRow.createCell(i);
+	        				    cell.setCellValue(String.valueOf(headers[i]));
+	        				}
+	        				// Insert data into the sheet
+	        				int rowNum = 1; // Start from the second row (index 1) after headers
+	        				
+	        				
+	        				
+	        				// Assuming vendorData is a List<Object[]> containing data for each vendor
+	        				// Assuming rowDataList is a List<Object[]> containing the data to be inserted into the sheet
+	        				int serialNumber = 1; // Initialize serial number
+	        				List<List<Object>> vendorsList = (List<List<Object>>) vendorsListObject;
 
-			// Set header and populate data
-			List<String> header = (List<String>) jsonData.get("header");
-			List<List<String>> data = (List<List<String>>) jsonData.get("data");
+	        				// Initialize an array to store the sum of each numeric column
+	        				double[] columnSum = new double[vendorsList.get(0).size()];
 
-			// Create header row
-			Row headerRow = sheet.createRow(0);
-			for (int col = 0; col < header.size(); col++) {
-				Cell cell = headerRow.createCell(col);
-				cell.setCellValue(header.get(col));
-			}
 
-			// Populate data rows
-			for (int row = 0; row < data.size(); row++) {
-				Row dataRow = sheet.createRow(row + 1);
-				for (int col = 0; col < data.get(row).size(); col++) {
-					Cell cell = dataRow.createCell(col);
-					cell.setCellValue(data.get(row).get(col));
-				}
-			}
+	        				for (List<Object> rowData : vendorsList) {
+	        				    Row row = sheet.createRow(rowNum++);
+	        				    int cellNum = 0; // Reset cell number for each row
+	        				    Cell cell = row.createCell(cellNum++); // First cell for serial number
+	        				    cell.setCellValue(serialNumber++); // Insert serial number
 
-			File excelFile = File.createTempFile("Indent_Number", ".xlsx");
-			FileOutputStream fileOut = new FileOutputStream(excelFile);
-			workbook.write(fileOut);
-			fileOut.close();
+	        				    // Iterate over each cell in the rowData
+	        				    for (Object cellData : rowData) {
+	        				        cell = row.createCell(cellNum++);
+	        				        if (cellData instanceof String) {
+	        				            String cellString = (String) cellData;
+	        				            try {
+	        				                double value = Double.parseDouble(cellString);
+	        				                cell.setCellValue(value);
+	        				                // Accumulate the sum for double values
+	        				                columnSum[cellNum - 2] += value; // Subtract 2 to adjust for the serial number column
+	        				            } catch (NumberFormatException e) {
+	        				                // Handle non-numeric string values
+	        				                cell.setCellValue(cellString); // Set string value directly
+	        				            }
+	        				        } else if (cellData instanceof Double) {
+	        				            double value = (Double) cellData;
+	        				            cell.setCellValue(value);
+	        				            // Accumulate the sum for double values
+	        				            columnSum[cellNum - 2] += value; // Subtract 2 to adjust for the serial number column
+	        				        } else if (cellData instanceof Integer) {
+	        				            int value = (Integer) cellData;
+	        				            cell.setCellValue(value);
+	        				            // Accumulate the sum for integer values
+	        				            columnSum[cellNum - 2] += value; // Subtract 2 to adjust for the serial number column
+	        				        } else {
+	        				            // Handle empty or non-numeric cells
+	        				            cell.setCellValue(""); // Empty cell value
+	        				        }
+	        				    }
+	        				}
+	        				
+	        				// Create the last row for the sums
+	        				Row sumRow = sheet.createRow(rowNum++);
+	        				sumRow.createCell(0);
+    				        Cell sumCell = sumRow.createCell(0);
+	        				 sumCell.setCellValue(""); 
 
-			//String smtpHostServer = "smtp-relay.gmail.com";
-			String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
+	        				for (int i = 0; i < columnSum.length; i++) {
+	        				    if (i == 0) {
+	        				        // Skip setting value in the first cell (for the label)
+	        				        sumRow.createCell(i);
+	        				        Cell sumCell1 = sumRow.createCell(i + 1);
+	        				        sumCell1.setCellValue("Total Qty"); 
+	        				    } else {
+	        				        Cell sumCell1 = sumRow.createCell(i +1);
+	        				        if (Double.compare(columnSum[i], 0.0) != 0.0) {
+	        				        	sumCell1.setCellValue(columnSum[i]); // Insert sum for the corresponding column
+	        				        } else {
+	        				        	sumCell1.setCellValue("");
+	        				        }
+//	        				        sumCell1.setCellValue(columnSum[i]); // Insert sum for the corresponding column
+	        				    }
+	        				}
 
-			Properties props = System.getProperties();
-			props.put("mail.smtp.host", smtpHostServer);
-			props.put("mail.smtp.port", "25");
-			Session session = Session.getInstance(props, null);
-			System.out.println(session);
-			MimeMessage msg = new MimeMessage(session);
 
-			msg.setFrom(new InternetAddress("noreply_stationary@titan.co.in", "No Reply-stationary Employee Portal"));
-			// msg.setFrom(new InternetAddress("nirajprasad@titan.co.in", "No
-			// Reply-stationary
-			// Employee Portal"));
 
-			msg.setReplyTo(InternetAddress.parse(emailIDPoduct, false));
-			msg.setSubject("Indent Details from Distribution Team: text/HTML");
-			MimeMultipart multipart = new MimeMultipart();
+	        				File excelFile = File.createTempFile("Indent_Number", ".xlsx");
+	        				FileOutputStream fileOut = new FileOutputStream(excelFile);
+	        				workbook.write(fileOut);
+	        				fileOut.close();
+	        				String filePath = excelFile.getAbsolutePath();
+	        				System.out.println("File Path: " + filePath);
+	        				
+	        				
+	        				String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
+	        				Properties props = System.getProperties();
+	        				props.put("mail.smtp.host", smtpHostServer);
+	        				props.put("mail.smtp.port", "25");
+	        				Session session = Session.getInstance(props, null);
+	        				System.out.println(session);
+	        				MimeMessage msg = new MimeMessage(session);
+	        				msg.setFrom(
+	        						new InternetAddress("noreply_stationary@titan.co.in", "No Reply-stationary Employee Portal"));
+	        				//msg.setReplyTo(InternetAddress.parse(key, false));
+	        				msg.setSubject(": Receipt and certification of Stationery items for inwarding.");
 
-			// Text content
-			MimeBodyPart textPart = new MimeBodyPart();
-			textPart.setText("Dear Store Team and User,\n\n" + "Greetings!\n"
-					+ "Find Distribution indent value information in the portal.\n"
-					+ "\nIMPORTANT: Please do not reply to this message or mail address.\n\n"
-					+ "DISCLAIMER: This communication is confidential and privileged and is directed to and for the use of the addressee only. The recipient if not the addressee should not use this message if erroneously received, and access and use of this e-mail in any manner by anyone other than the addressee is unauthorized. The recipient acknowledges that Titan Company Pvt Ltd may be unable to exercise control or ensure or guarantee the integrity of the text of the email message and the text is not warranted as to completeness and accuracy. Before opening and accessing the attachment, if any, please check and scan for a virus.\n\n\n"
-					+ "Thanks & Regards,\n" + "Admin\n" + "Stationery Portal.");
-			multipart.addBodyPart(textPart);
+	        				MimeMultipart multipart = new MimeMultipart();
 
-			// Excel attachment
-			MimeBodyPart excelAttachment = new MimeBodyPart();
-			DataSource source = new FileDataSource(excelFile.getAbsolutePath());
-			excelAttachment.setDataHandler(new DataHandler(source));
-			excelAttachment.setFileName(excelFile.getName());
-			multipart.addBodyPart(excelAttachment);
+	        				MimeBodyPart textPart = new MimeBodyPart();
+	        				textPart.setText("Dear Sir / Madam,\n\n" + "Pl. find attached the list of stationery items received and accepted at our end for the current month.\n"
+	        						+ "\nRequest to inward the same and confirm back to us for distributing the stationeries to the respective depts.\n\n"
+	        						+ "Original invoice document will reach you at the earliest.\n\n"
+	        						+ "Inward will happen only if complete items are received at our facility in the same brands and qty. which are ordered. Request to check and validate the same before effecting delivery.\n\n\n"
+	        						+ "Regards,\n\n" + "Distribution team (Tray Mgmt Team).\n");
+	        				multipart.addBodyPart(textPart);
 
-			// Set the content of the message
-			msg.setContent(multipart);
-			// msg.setContent("Dear Vendor, \n\n" + "Greetings!\n"
-			// + "Find buyer indent value informations in portal"
-			//
-			// + "\n\nIMPORTANT: Please do not reply to this message or mail address.\n\n"
-			// + "DISCLAIMER: This communication is confidential and privileged and is
-			// directed to and for the use of the addressee only. The recipient if not the
-			// addressee should \n"
-			// + "not use this message if erroneously received, and access and use of this
-			// e-mail in any manner by anyone other than the addressee is unauthorized. The
-			// recipient \n"
-			// + "acknowledges that Titan Company Pvt Ltd may be unable to exercise control
-			// or ensure or guarantee the integrity of the text of the email message and the
-			// text is not"
-			// + "warranted as to completeness and accuracy. Before opening and accessing
-			// the attachment, if any, please check and scan for virus.\n\n\n"
-			// + "Thanks & Regards, \n" + "Admin \nstationary Portal.", "text/plain");
+	        				System.out.println("Email Body:\n");
+	        				MimeBodyPart excelAttachment = new MimeBodyPart();
+	        				DataSource source = new FileDataSource(excelFile.getAbsolutePath());
+	        				excelAttachment.setDataHandler(new DataHandler(source));
+	        				excelAttachment.setFileName(excelFile.getName());
+	        				multipart.addBodyPart(excelAttachment);
+	        				msg.setContent(multipart);
+	        				msg.setSentDate(new Date());
+	        				  // Adding multiple recipients
+//	        	            for (String email : emailList) {
+	        	                msg.addRecipient(Message.RecipientType.TO, new InternetAddress("packingmatl@titan.co.in","stores@titan.co.in"));
+	        	                String emailBody = msg.getContent().toString();
+//	        	            }
+	        	            for (String ccMail : CCList) {
+	        	                msg.addRecipient(Message.RecipientType.CC, new InternetAddress(ccMail));
+	        	            }
+	        	          
+	        				Transport.send(msg);
 
-			msg.setSentDate(new Date());
-
-			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailIDPoduct, false));
-			// msg.setRecipients(Message.RecipientType.CC,InternetAddress.parse(email_id,
-			// false));
-
-			Transport.send(msg);
-			System.out.println("Email sent successfully!");
+//	                }
+	            }
+	        }
+			
 			r = "Email Sent Successfully!";
-			excelFile.delete();
-		} catch (MessagingException e) {
-			e.printStackTrace();
-			r = "Email Not Send Contact Admin!";
-		} catch (Exception e) {
+
+		}
+
+		catch (Exception e) {
 			e.printStackTrace();
 			r = "Email Not Send Contact Admin!";
 		}
@@ -5887,6 +6044,59 @@ Calendar cal = Calendar.getInstance();
 			getDesignationDetails = null;
 		}
 		return getDesignationDetails;
+	}
+	
+	@Override
+	public List<Object> getBuyerIndentListForvendor(String Year, String Month) {
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat year_Date = new SimpleDateFormat("YYYY");
+		String yearfromCal = year_Date.format(cal.getTime());
+
+		SimpleDateFormat month_Date = new SimpleDateFormat("MM");
+		// String monthFromCal = month_Date.format(cal.getTime());
+		String monthFromCal = String.format("%02d", Integer.parseInt(month_Date.format(cal.getTime())));
+
+		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
+		String MonthText = month.format(cal.getTime());
+		int cFY = Integer.valueOf(yearfromCal);
+		if (getMonthNumber(MonthText) < 4) {
+			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+		 yearfromCal = String.valueOf(cFY);
+		    System.out.println("yearfromCal"+yearfromCal+MonthText);
+		}
+		String finalcc = getAllIndentedCostCenters(yearfromCal, Month);
+
+		List<Object> getAllUserDetails = null;
+		if (finalcc.length() == 2) {
+			return getAllUserDetails;
+		}
+		Query getresultlist = entityManager.createNativeQuery(
+				"sELECT \n"
+				+ " ROW_NUMBER() OVER (ORDER BY PROD_NAME DESC) AS 'Sl No',\n"
+				+ "PROD_NAME as 'Material description', UOM,"+ finalcc +",TOTAL_USER_QTY as 'TOTAL QTY'\n"
+				+ "		FROM (\n"
+				+ "		SELECT PROD_NAME, UOM, COST_CENTER, ISNULL(BUYER_QTY , 0) AS cost_value,ucp,TOTAL_USER_QTY\n"
+				+ "		FROM PRODUCT_MASTER pm \n"
+				+ "		left join Indent_Transaction it on pm.PROD_NAME=it.ITEM\n"
+				+ "		WHERE COST_CENTER IS NOT NULL and month=:Month and year=:Year\n"
+				+ "		GROUP BY PROD_NAME, UOM, COST_CENTER,BUYER_QTY,ucp,TOTAL_USER_QTY\n"
+				+ "		) AS src\n"
+				+ "		PIVOT (MAX(cost_value)\n"
+				+ "		FOR COST_CENTER IN ("+ finalcc+")) AS pivottable\n"
+				+ "		order by PROD_NAME desc");
+
+		getresultlist.setParameter("Month", Month);
+		getresultlist.setParameter("Year", Year);
+
+		try {
+			getAllUserDetails = getresultlist.getResultList();
+
+		} catch (HibernateException e) {
+
+			e.printStackTrace();
+			getAllUserDetails = null;
+		}
+		return getAllUserDetails;
 	}
 
 }

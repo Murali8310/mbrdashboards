@@ -155,7 +155,7 @@ public interface UserDao {
 	//String getIndentManagerEmailFromDatabase(String email);
 	
 
-	public String sendToVendor(Map<String, Object> payload);
+	public String sendToVendor(Map<String, Object> payload,String loginID);
 
 
 	String IndentQtyChange(Product[] products, String loginID, String userId, String userName);
@@ -256,6 +256,9 @@ public interface UserDao {
 
 
 	List<Object> getAllBudgetCCIDDe();
+
+
+	List<Object> getBuyerIndentListForvendor(String Year, String Month);
 
 
 	

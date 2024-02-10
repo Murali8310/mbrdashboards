@@ -208,7 +208,7 @@ vertical-align: text-bottom ; footer {
 			String accessRole = (String)accessRoleobj ;
 		
 			 %> 
-			 	<c:if test="${accessRole =='1'}">
+			 	<c:if test="${accessRole == '1'}">
 									<div style="text-align:end;margin-bottom:4px;">
 									<button onclick="redirectToPoEntryCreation()" class="btn btn-primary">Add New PO Entry</button>
 										</div>

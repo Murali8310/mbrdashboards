@@ -1076,6 +1076,32 @@ $(document).ready(function () {
       function setInputWidth(input, width) {
     	    input.css('width', width);
     	}
+      
+   // Function to separate the array based on a condition
+      function separateByCondition(array, conditionField, conditionValue) {
+        return array.reduce((acc, obj) => {
+          const key = obj[conditionField];
+          if (key === conditionValue) {
+            if (!acc[key]) {
+              acc[key] = [];
+            }
+            acc[key].push(obj);
+          }
+          return acc;
+        }, {});
+      }
+   
+   // Function to remove unwanted fields
+      function removeUnwantedFields(array, fieldsToRemove) {
+        return array.map(obj => {
+          // Using object destructuring and rest parameter to remove unwanted fields
+          const { ...rest } = obj;
+          for (let field of fieldsToRemove) {
+            delete rest[field];
+          }
+          return rest;
+        });
+      }
 
     	function getTextWidth(text) {
     	  var element = $('<span>').text(text).css('display', 'none');
@@ -1118,10 +1144,28 @@ $(document).ready(function () {
 
     	        // Now, the footerData array contains the data from all footer rows
     	        console.log(footerData,'foot');
+    	        
+    	     // Extract unique names using Set
+    	        const uniqueNamesSet = new Set(data.map(obj => obj[1]));
+
+    	        // Convert Set to Array
+    	        const uniqueNamesArray = Array.from(uniqueNamesSet);
+    	        
+    	        const AllVendorData = [];
+    	        for (let i = 0; i < uniqueNamesArray.length; i++) {
+    	          const vendorName = uniqueNamesArray[i]
+    	          if (vendorName) {
+    	        	  const eachVendorData = separateByCondition(data, 1, vendorName);
+    	        	  const newData = removeColumnsFromData(eachVendorData[vendorName], [1,header.length -6,header.length -7,header.length -8,header.length -1, header.length -2,header.length -3 , header.length-4]);
+        	          AllVendorData.push({data :newData,vendorName :vendorName});
+    	          }
+    	        }
+    	        
 
     	        var payload = {
     	            header:['Product Id','Description','Total Qty'],
-    	            data: removeColumnsFromData(data, [76, 77, 80, 82, 83])
+    	            data: removeColumnsFromData(data, [76, 77, 80, 82, 83]),
+    	            AllVendorData : AllVendorData
     	        };
     			//console.log(JSON.stringify(payload),'data');
     			 document.getElementById('sending-spin-icon').style.visibility = 'visible';
@@ -1135,15 +1179,24 @@ $(document).ready(function () {
     					document.getElementById('sending-spin-icon').style.visibility = 'hidden';
     		    	         document.getElementById("sending-text").textContent = "Send to Vendor";
     		    	         var message;
-    		    	         if(response.trim() === 'Email Sent By Successfully!'){
+    		    	         if(response.trim() === 'Email Sent Successfully!'){
     		    	        	 message = 'Email Sent Successfully!';
+    		    	        	 Swal.fire({
+    		    						icon : 'success',
+    		    						title : message,
+    		    						showCloseButton : false,
+    		    						focusConfirm : true,
+    		    					});
+    		    	         } else {
+    		    	        	 message = 'Email Not Sent Please Contact Admin!';
+    		    	        	 Swal.fire({
+    		    						icon : 'error',
+    		    						title : message,
+    		    						showCloseButton : false,
+    		    						focusConfirm : true,
+    		    					});
     		    	         }
-    					Swal.fire({
-    						icon : 'success',
-    						title : message,
-    						showCloseButton : false,
-    						focusConfirm : true,
-    					});
+    					
     					//location.href="BuyerIndentPage";
     				}
     		    }); 

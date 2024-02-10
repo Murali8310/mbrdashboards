@@ -121,7 +121,7 @@ public interface Userservice {
 	
 	String checkIndentForMonth(String cFY, String MonthText, String userId);
 	
-	public String sendToVendor(Map<String, Object> payload);
+	public String sendToVendor(Map<String, Object> payload,String loginId);
 	
 	List<String[]> getreportbyid(String Month,String Year,String loginid);
 	List<String[]> getreportbyidadmin(String Month,String Year,String loginid);

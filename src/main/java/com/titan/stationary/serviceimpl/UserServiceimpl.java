@@ -623,9 +623,9 @@ public class UserServiceimpl implements Userservice {
 	}
 
 	@Override
-	public String sendToVendor(Map<String, Object> payload) {
+	public String sendToVendor(Map<String, Object> payload,String loginId) {
 		// TODO Auto-generated method stub
-		return userDao.sendToVendor(payload);
+		return userDao.sendToVendor(payload,loginId);
 	}
 	@Override
 	public List<String[]> getreportbyid(String Month,String Year,String loginid) {

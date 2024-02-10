@@ -1475,10 +1475,14 @@ System.err.println("murali debugger");
 		public String sendToVendor( @RequestBody String products,HttpServletRequest request, RedirectAttributes redirect) throws Exception {
 				HttpSession session = request.getSession();
 				String count="";
+				String loginId = "";
 			try {System.out.println("header : " + products);
+			Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+			loginId = (String) userMap.get("login_id");
+		
 				 ObjectMapper objectMapper = new ObjectMapper();
 		            Map<String, Object> payload = objectMapper.readValue(products, Map.class);
-		            count = userService.sendToVendor(payload);
+		            count = userService.sendToVendor(payload,loginId);
 					
 				}
 			 catch (Exception e) {
@@ -1547,12 +1551,15 @@ System.err.println("murali debugger");
 		public String sendToStore( @RequestBody String products,HttpServletRequest request, RedirectAttributes redirect) throws Exception {
 				HttpSession session = request.getSession();
 				String count="";
+				String loginId="";
+
 			try {System.out.println("header : " + products);
 				 ObjectMapper objectMapper = new ObjectMapper();
 		            Map<String, Object> payload = objectMapper.readValue(products, Map.class);
 
-		         
-					 count = userService.sendToStore("masinenikrishnasai@titan.co.in","masinenikrishnasai@titan.co.in",payload);
+		            Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+					loginId = (String) userMap.get("login_id");
+					 count = userService.sendToStore(loginId,"masinenikrishnasai@titan.co.in",payload);
 					
 				}
 			 catch (Exception e) {
@@ -1595,7 +1602,7 @@ System.err.println("murali debugger");
 			           
 			            return "Invalid file type. Only .png and files are allowed"; 
 			        }
-				  
+
 			    String uploadDirectory = "D:/apache-tomcat-9.0.78/webapps/stationary/WEB-INF/classes/static/product";
 //				String uploadDirectory = "D:/ECLIPSEWORK/stationary/src/main/resources/static/product";
 	            File file = new File(uploadDirectory, fileName);

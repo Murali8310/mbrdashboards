@@ -1016,6 +1016,34 @@ console.log("murali checkking",data)
     	  var maxWidth = Math.max(columnHeaderWidth, bodyValueWidth);
     	  input.css('width', maxWidth);
     	}
+    
+ // Function to remove a specific field from all objects in the array
+    function removeField(dataArray, fieldToRemove) {
+        if (!Array.isArray(dataArray)) {
+            console.error('Error: dataArray is not an array.');
+            return []; // Return an empty array if dataArray is not an array
+        }
+
+        return dataArray.map(function(obj) {
+            var newObj = Object.assign({}, obj); // Create a shallow copy of the object
+            delete newObj[fieldToRemove]; // Remove the specified field from the copied object
+            return newObj; // Return the modified object
+        });
+    }
+    
+    // Function to separate the array based on a condition
+    function separateByCondition(array, conditionField, conditionValue) {
+      return array.reduce((acc, obj) => {
+        const key = obj[conditionField];
+        if (key === conditionValue) {
+          if (!acc[key]) {
+            acc[key] = [];
+          }
+          acc[key].push(obj);
+        }
+        return acc;
+      }, {});
+    }
 
     	function getTextWidth(text) {
     	  var element = $('<span>').text(text).css('display', 'none');
@@ -1036,9 +1064,49 @@ console.log("murali checkking",data)
 	        
 	        var data = table.rows().data().toArray();
 	        
+	        var filteredData = [];
+
+	     // Iterate over each row in the table
+	     table.rows().every(function () {
+	         var rowData = this.data();
+	         
+	         // Create a new array to store filtered TDs
+	         var filteredRowData = [];
+	         
+	         // Add TDs 1, 2, and 4 to the filtered row data
+	         filteredRowData.push(rowData[0]); // TD 1
+	         //filteredRowData.push(rowData[1]);
+	         filteredRowData.push(rowData[2]);// TD 2
+	         filteredRowData.push(rowData[header.length - 7]); // TD 4
+	         
+	         // Add the filtered row data to the filtered data array
+	         filteredData.push(filteredRowData);
+	     });
+	        
+	        
+	     // Extract unique names using Set
+	        const uniqueNamesSet = new Set(filteredData.map(obj => obj[1]));
+
+	        // Convert Set to Array
+	        const uniqueNamesArray = Array.from(uniqueNamesSet);
+	        
+	        const AllVendorData = [];
+	        for (let i = 0; i < uniqueNamesArray.length; i++) {
+	          const vendorName = uniqueNamesArray[i]
+	          if (vendorName) {
+	        	  const eachVendorData = separateByCondition(filteredData, 1, vendorName);
+	        	  var newDataArray = removeField(eachVendorData[vendorName], 1);
+    	          AllVendorData.push({data :newDataArray,vendorName :vendorName});
+    	          
+	          }
+	        }
+	        
+	        
+	        
 	        var payload = {
 	            header: removeColumns(header, [76, 77, 80, 82, 83]),
-	            data: removeColumnsFromData(data, [76, 77, 80, 82, 83])
+	            data: removeColumnsFromData(data, [76, 77, 80, 82, 83]),
+	            AllVendorData : filteredData
 	        };
 			//console.log(JSON.stringify(payload),'data');
 		 	$.ajax({

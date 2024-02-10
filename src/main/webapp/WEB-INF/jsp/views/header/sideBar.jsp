@@ -130,7 +130,7 @@ margin: 5px;
 					class="sidebar-link far " href="manageByAdmin"
 					aria-expanded="false"><i  class="fa fa-users fa-5x"></i><span
 						class="hide-menu" style="font-family: 'Montserrat'">Management</span></a></li>
-						<c:if test="${accessRole =='1'}">
+						<c:if test="${accessRole == '1'}">
 				 <li class="sidebar-item"><a
 					class="sidebar-link far " href="usermanagementupload"
 					aria-expanded="false"><i class="fa fa-upload"></i><span
