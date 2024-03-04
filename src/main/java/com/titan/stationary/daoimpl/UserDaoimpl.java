@@ -279,6 +279,11 @@ public class UserDaoimpl implements UserDao {
 				isAuthenticated = true;
 			} else {
 				 String userEmail = "";
+				 
+				 if (passwords == null || passwords.isEmpty()) {
+			            userVal.put("message", "Please enter the password.");
+			            return userVal;
+			     }
 				//String usernameDB = "";
 				// String Username = "";
 				String getEmpCode = "SELECT top 1 Emailid FROM Abm_master where empcode=:empcode"; // Doubt
@@ -333,6 +338,11 @@ public class UserDaoimpl implements UserDao {
 			} else {
 				String passwordfromDB = "";
 				String passworddec = "";
+				
+				if (passwords == null || passwords.isEmpty()) {
+		            userVal.put("message", "Please enter the password.");
+		            return userVal;
+		     }
 				String getPasswordQuery = "SELECT top 1 PASSWORD FROM INDENT_MANAGER where lmsid=:lmsid"; // Doubt
 				Query getPassword = entityManager.createNativeQuery(getPasswordQuery);
 				getPassword.setParameter("lmsid", userLogin.getLogin_id().toString().trim()); // login thru cost center
@@ -391,7 +401,12 @@ public class UserDaoimpl implements UserDao {
 				 String userEmail = "";
 				//String usernameDB = "";
 				// String Username = "";
-				String getEmpCode = "SELECT top 1 email_id FROM ER_User_Master where login_id=:login_id"; // Doubt
+				 
+				 if (passwords == null || passwords.isEmpty()) {
+			            userVal.put("message", "Please enter the password.");
+			            return userVal;
+			     }
+				String getEmpCode = "SELECT top 1 email_id FROM ER_User_Master where Status = 1 and login_id=:login_id"; // Doubt
 				Query getempcoded = entityManager.createNativeQuery(getEmpCode);
 				getempcoded.setParameter("login_id", userLogin.getLogin_id().toString().trim());
 				try {
@@ -4047,7 +4062,7 @@ public class UserDaoimpl implements UserDao {
 		String buyerName = (String) getName.getSingleResult();
 		List<String> getBuyerName = getName.getResultList();
 		List<String> CCList = getCClist.getResultList();
-		CCList.add("tgo@titan.co.in");
+		//CCList.add("tgo@titan.co.in");
 
 
 		try {
@@ -4161,7 +4176,7 @@ public class UserDaoimpl implements UserDao {
 	        				        // Skip setting value in the first cell (for the label)
 	        				        sumRow.createCell(i);
 	        				        Cell sumCell1 = sumRow.createCell(i + 1);
-	        				        sumCell1.setCellValue("ToTal Qty"); 
+	        				        sumCell1.setCellValue("Total Qty"); 
 	        				    } else {
 	        				        Cell sumCell1 = sumRow.createCell(i +1);
 	        				        if (Double.compare(columnSum[i], 0.0) != 0.0) {
@@ -4396,8 +4411,8 @@ public class UserDaoimpl implements UserDao {
 		String buyerName = (String) getName.getSingleResult();
 		List<String> getBuyerName = getName.getResultList();
 		List<String> CCList = getCClist.getResultList();
-		CCList.add("tgo@titan.co.in");
-		CCList.add("boopathik@titan.co.in");
+		//CCList.add("tgo@titan.co.in");
+		//CCList.add("boopathik@titan.co.in");
 		
 
 		try {
@@ -4551,7 +4566,7 @@ public class UserDaoimpl implements UserDao {
 	        				msg.setSentDate(new Date());
 	        				  // Adding multiple recipients
 //	        	            for (String email : emailList) {
-	        	                msg.addRecipient(Message.RecipientType.TO, new InternetAddress("packingmatl@titan.co.in","stores@titan.co.in"));
+	        	                msg.addRecipient(Message.RecipientType.TO, new InternetAddress("rekha@titan.co.in"));
 	        	                String emailBody = msg.getContent().toString();
 //	        	            }
 	        	            for (String ccMail : CCList) {
@@ -4846,70 +4861,110 @@ public class UserDaoimpl implements UserDao {
 	}
 
 	public void sevenDayMailTrigger() {
-		String sqlquery = "sELECT PROD_NAME, MAKE, UOM, [1100],[1101],[1102],[1103],[1200],[1201],[1202],[1203],[1204],[1205],[1206],[1207],\n"
-				+ "		[1209],[1230],[1231],[1232],[1233],[1234],[1235],[1300],[1301],[1302],[1303],[1305],[1313],[1320],[1321],[1322],[1323],[1330],\n"
-				+ "		[1331],[1332],[1333],[1334],[1335],[1337],[1338],[1340],[1380],[1400],[1401],[1402],[1406],[1500],[1501],[1502],[1503],[1504],\n"
-				+ "		[1506],[1515],[1520],[1521],[1522],[1523],[1524],[1525],[1528],[1529],[1540],[1542],[1544],[1545],[1546],[1547],[1549],[1551],\n"
-				+ "		[1552],[1554],[1555],[1557],[1558],[1559],[7646],ucp \n" + "		FROM (\n"
-				+ "		SELECT PROD_NAME, isnull(MAKE,'') MAKE, UOM, COST_CENTER, ISNULL(BUYER_QTY , 0) AS cost_value,ucp,MoqQty,MoqValue,BalanceTMTQTy,BalanceTMTValue\n"
-				+ "		FROM PRODUCT_MASTER pm \n" + "		left join Indent_Transaction it on pm.PROD_NAME=it.ITEM\n"
-				+ "		WHERE COST_CENTER IS NOT NULL and month=DATENAME(MONTH, GETDATE()) and year= format(GETDATE(),'yyyy')\n"
-				+ "		GROUP BY PROD_NAME, MAKE, UOM, COST_CENTER,BUYER_QTY,ucp\n" + "		) AS src\n"
-				+ "		PIVOT (MAX(cost_value)\n"
-				+ "		FOR COST_CENTER IN ([1100],[1101],[1102],[1103],[1200],[1201],[1202],[1203],[1204],[1205],[1206],[1207],\n"
-				+ "		[1209],[1230],[1231],[1232],[1233],[1234],[1235],[1300],[1301],[1302],[1303],[1305],[1313],[1320],[1321],[1322],[1323],[1330],\n"
-				+ "		[1331],[1332],[1333],[1334],[1335],[1337],[1338],[1340],[1380],[1400],[1401],[1402],[1406],[1500],[1501],[1502],[1503],[1504],\n"
-				+ "		[1506],[1515],[1520],[1521],[1522],[1523],[1524],[1525],[1528],[1529],[1540],[1542],[1544],[1545],[1546],[1547],[1549],[1551],\n"
-				+ "		[1552],[1554],[1555],[1557],[1558],[1559],[7646])) AS pivottable\n"
-				+ "		order by PROD_NAME desc";
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat year_Date = new SimpleDateFormat("YYYY");
+		String yearfromCal = year_Date.format(cal.getTime());
+
+		//SimpleDateFormat month_Date = new SimpleDateFormat("MM");
+		// String monthFromCal = month_Date.format(cal.getTime());
+		//String monthFromCal = String.format("%02d", Integer.parseInt(month_Date.format(cal.getTime())));
+
+		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
+		String MonthText = month.format(cal.getTime());
+		int cFY = Integer.valueOf(yearfromCal);
+		if (getMonthNumber(MonthText) < 4) {
+			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
+		 yearfromCal = String.valueOf(cFY);
+		    System.out.println("yearfromCal"+yearfromCal);
+		}
+		
+		List<String> allheadrers2 = getAllHeadersList(yearfromCal, MonthText);
+
+		String yearfromCal1 = year_Date.format(cal.getTime());
+		List<String> allheadrers = new ArrayList<>(); // Initialize the list
+
+		allheadrers.add("Description");
+		allheadrers.add("Vendors");
+		allheadrers.add("UOM");
+		allheadrers.addAll(allheadrers2);
+		allheadrers.add("User Qty");
+		allheadrers.add("MOQ Qty");
+		allheadrers.add("MOQ Val(Rs)");
+		allheadrers.add("Total Qty");
+		allheadrers.add("Total Val(Rs)");
+		allheadrers.add("Unit Price(Rs)");
+		allheadrers.add("Stock At TMT (QTY)");
+		allheadrers.add("STK Val(Rs)");
+		
 
 		try {
 			Query getemailID = entityManager.createNativeQuery("select DISTINCT emailID from PRODUCT_MASTER ");
 			List<String> emailIDPoduct = (List<String>) getemailID.getResultList();
 
-			List<Object[]> indentList = getBuyerIndentList1(); // List of arrays, each array represents a row
-			List<Object[]> footerList = getBuyerFooterList1();
+			List<Object> BuyerList = getBuyerIndentList(yearfromCal, MonthText); // List of arrays, each array represents a row
+			List<Object> footerList = getBuyerFooterList(yearfromCal, MonthText,yearfromCal1);
 			// Each list represents a row
-			List<String> columnName = extractColumnNames(sqlquery);
+			
+			
 			Workbook workbook = new XSSFWorkbook();
 			Sheet sheet = workbook.createSheet("Buyer");
 			Row headerRow = sheet.createRow(0);
 
-			for (int colIdx = 0; colIdx < columnName.size(); colIdx++) {
+			for (int colIdx = 0; colIdx < allheadrers.size(); colIdx++) {
 				Cell cell = headerRow.createCell(colIdx);
-				cell.setCellValue(columnName.get(colIdx));
+				cell.setCellValue(allheadrers.get(colIdx));
 			}
 
-			for (int rowIdx = 0; rowIdx < indentList.size(); rowIdx++) {
-				Object[] rowData = indentList.get(rowIdx);
-				Row dataRow = sheet.createRow(rowIdx + 1);
+			 int rowIndex = 1; // Start from the second row
+	            for (Object obj : BuyerList) {
+	                Row row = sheet.createRow(rowIndex++);
+	                Object[] rowData = (Object[]) obj;
+	                for (int j = 0; j < rowData.length; j++) {
+	                    Cell cell = row.createCell(j);
+	                    // Replace null values with 0
+	                    String cellValue = rowData[j] != null ? String.valueOf(rowData[j]) : "0";
+	                    cell.setCellValue(cellValue);
+	                }
+	            }
 
-				for (int colIdx = 0; colIdx < rowData.length; colIdx++) {
-					Cell cell = dataRow.createCell(colIdx);
-					Object cellValue = rowData[colIdx];
-					if (cellValue != null) {
-						cell.setCellValue(cellValue.toString());
-					}
-				}
-			}
-			for (int rowIdx = 0; rowIdx < footerList.size(); rowIdx++) {
-				Object[] rowData = footerList.get(rowIdx);
-				Row dataRow = sheet.createRow(rowIdx + 1 + indentList.size()); // Offset rows for footerList
+	            // Insert an empty row between buyer data and footer
+	            sheet.createRow(rowIndex++);
 
-				int offset = indentList.get(0).length; // Offset columns for footerList
-				for (int colIdx = 0; colIdx < rowData.length; colIdx++) {
-					Cell cell = dataRow.createCell(colIdx);
-					Object cellValue = rowData[colIdx];
-					if (cellValue != null) {
-						cell.setCellValue(cellValue.toString());
-					}
-				}
-			}
+	         // Insert footer data
+	            for (Object obj : footerList) {
+	                Row row = sheet.createRow(rowIndex++);
+	                Object[] rowData = (Object[]) obj;
+	                
+	                // Create a new array with increased size
+	                Object[] modifiedRowData = new Object[rowData.length + 2];
+	                
+	                // Copy values from original rowData to modifiedRowData
+	                System.arraycopy(rowData, 0, modifiedRowData, 0, 1); // Copy the first value
+	                
+	                // Insert two empty strings
+	                modifiedRowData[1] = ""; // Empty string
+	                modifiedRowData[2] = ""; // Empty string
+	                
+	                // Copy the rest of the values
+	                System.arraycopy(rowData, 1, modifiedRowData, 3, rowData.length - 1);
 
-			File excelFile = File.createTempFile("Indent_Number", ".xlsx");
+	                // Populate the cells
+	                for (int j = 0; j < modifiedRowData.length; j++) {
+	                    Cell cell = row.createCell(j);
+	                    // Replace null values with 0
+	                    String cellValue = modifiedRowData[j] != null ? String.valueOf(modifiedRowData[j]) : "0";
+	                    cell.setCellValue(cellValue);
+	                }
+	            }
+
+			File excelFile = File.createTempFile("all indenter data", ".xlsx");
 			FileOutputStream fileOut = new FileOutputStream(excelFile);
 			workbook.write(fileOut);
 			fileOut.close();
+			
+			String filePath = excelFile.getAbsolutePath();
+			System.out.println("File Path: " + filePath);
+			
 
 			//String smtpHostServer = "smtp-relay.gmail.com";
 			String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
@@ -4929,11 +4984,11 @@ public class UserDaoimpl implements UserDao {
 
 				// Text content
 				MimeBodyPart textPart = new MimeBodyPart();
-				textPart.setText("Dear Vendor,\n\n" + "Greetings!\n"
-						+ "Find buyer indent value information in the portal.\n"
+				textPart.setText("Dear Buyer,\n\n" + "Greetings!\n"
+						+ "Please Find the indent value information in the portal.\n"
 						+ "\nIMPORTANT: Please do not reply to this message or mail address.\n\n"
 						+ "DISCLAIMER: This communication is confidential and privileged and is directed to and for the use of the addressee only. The recipient if not the addressee should not use this message if erroneously received, and access and use of this e-mail in any manner by anyone other than the addressee is unauthorized. The recipient acknowledges that Titan Company Pvt Ltd may be unable to exercise control or ensure or guarantee the integrity of the text of the email message and the text is not warranted as to completeness and accuracy. Before opening and accessing the attachment, if any, please check and scan for a virus.\n\n\n"
-						+ "Thanks & Regards,\n" + "Admin\n" + "Stationary Portal.");
+						+ "Thanks & Regards,\n" + "Murali B R\n" + "Stationary Portal.");
 				multipart.addBodyPart(textPart);
 				MimeBodyPart excelAttachment = new MimeBodyPart();
 				DataSource source = new FileDataSource(excelFile.getAbsolutePath());
@@ -4942,8 +4997,8 @@ public class UserDaoimpl implements UserDao {
 				multipart.addBodyPart(excelAttachment);
 				msg.setContent(multipart);
 				msg.setSentDate(new Date());
-
-				msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail, false));
+				 msg.addRecipient(Message.RecipientType.TO, new InternetAddress("muralicr@titan.co.in"));
+//				msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail, false));
 				Transport.send(msg);
 			}
 			System.out.println("Email sent successfully!");
@@ -6097,6 +6152,56 @@ Calendar cal = Calendar.getInstance();
 			getAllUserDetails = null;
 		}
 		return getAllUserDetails;
+	}
+	
+	
+	@Override
+	public List<String> getAllHeadersList(String Year, String Month) {
+
+		List<String> getAllUserDetails;
+		String finalcc;
+		Query getresultlist = entityManager.createNativeQuery(
+				"select distinct COST_CENTER from Indent_Transaction where MONTH=:Month and YEAR=:Year");
+		getresultlist.setParameter("Month", Month);
+		getresultlist.setParameter("Year", Year);
+		try {
+			getAllUserDetails = getresultlist.getResultList();
+
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			getAllUserDetails = null;
+		}
+		return getAllUserDetails;
+	}
+	
+	
+	/**
+	 * Gokul Get budget details
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Object> getholidaymasterData(String userId) {
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat year_Date = new SimpleDateFormat("YYYY");
+		String yearfromCal = year_Date.format(cal.getTime());
+		List<Object> getBudgetDetails;
+		String currentYearForPoEntry = null;
+		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
+		String MonthText = month.format(cal.getTime());
+		int cFY = Integer.parseInt(yearfromCal);
+		
+		Query selectQuery = entityManager.createNativeQuery("select holiday_date,Holiday_day from Holiday_Master where Year =:Year and Holidaymonth =:monthNumner");
+		selectQuery.setParameter("monthNumner", getMonthNumber(MonthText));
+		selectQuery.setParameter("Year", cFY);
+		
+		try {
+			getBudgetDetails = selectQuery.getResultList();
+		} catch (HibernateException e) {
+
+			e.printStackTrace();
+			getBudgetDetails = null;
+		}
+		return getBudgetDetails;
 	}
 
 }

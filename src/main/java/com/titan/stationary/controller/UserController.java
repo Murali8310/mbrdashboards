@@ -214,7 +214,7 @@ public class UserController {
 		Map<String, Object> userMap = null;
 
 		userMap = (Map<String, Object>) userService.findloginuser(userLoginBean, passwords);
-
+		
 		userLoginBean.setLogin_id(userLoginBean.getLogin_id());
 
 		if (userLoginBean.getLogin_id() == null) {
@@ -253,6 +253,21 @@ public class UserController {
 		try {
 			Map<String, Object> userMap = (Map) session.getAttribute("userMap");
 			String loginId = (String) userMap.get("login_id");
+			 LocalDateTime now = LocalDateTime.now();
+			 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			 String formattedDateTime = now.format(formatter);
+			 String getIndentorloginStatus = null;
+			List<String> seventhDay = userService.get7thworkingDay();
+			System.out.println("seventhDay : "+seventhDay.get(0) );
+			System.out.println("Current time is ::: " + formattedDateTime);
+			if (seventhDay != null && !seventhDay.isEmpty() && seventhDay.get(0).equals(formattedDateTime)) {
+				//userService.sevenDayMailTrigger();
+	            System.out.println("Proceeding further...");
+	            getIndentorloginStatus = "blockLogin";
+	        } else {
+	        	 getIndentorloginStatus = "allowLogin";
+	        }
+			model.addAttribute("getIndentorloginStatus", getIndentorloginStatus);
 		} catch (Exception er) {
 			er.printStackTrace();
 			return new ModelAndView("login/login");
@@ -1812,6 +1827,7 @@ List<Object> BuyerList;
 				userService.sevenDayMailTrigger();
 	            System.out.println("Proceeding further...");
 	        } else {
+	        	//userService.sevenDayMailTrigger();
 	            System.out.println("seventhDay and formattedDateTime do not match.");
 	        }
 			 
@@ -2362,7 +2378,7 @@ System.out.println("CCCOWNER"+CCCOWNER);
 
 			SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
 			String MonthText = month.format(cal.getTime());
-			int cFY = Integer.valueOf(yearfromCal);
+			int cFY = Integer.valueOf(Year);
 			if (getMonthNumber(MonthText) < 4) {
 				cFY = cFY - 1; // If the month is before April, subtract 1 from the year
 			 yearfromCal = String.valueOf(cFY);
@@ -2381,10 +2397,10 @@ System.out.println("CCCOWNER"+CCCOWNER);
 				FooterList = userService.getBuyerFooterList(yearfromCal,MonthText,yearfromCal1);
 			}
 			else {
-				finalcol= userService.getAllheader(Year,Month);
-				collen = userService.getAllcolumnlength(Year,Month);
-				BuyerList = userService.getBuyerIndentList(Year,Month);
-				FooterList = userService.getBuyerFooterList(Year,Month,Year);
+				finalcol= userService.getAllheader(yearfromCal,Month);
+				collen = userService.getAllcolumnlength(yearfromCal,Month);
+				BuyerList = userService.getBuyerIndentList(yearfromCal,Month);
+				FooterList = userService.getBuyerFooterList(yearfromCal,Month,Year);
 				System.out.println("finalcol"+finalcol);
 				System.out.println("collen"+collen);
 				System.out.println("BuyerList"+BuyerList);
@@ -2656,6 +2672,33 @@ System.out.println("CCCOWNER"+CCCOWNER);
 			model.addAttribute("Collen", collen);
 
 			return FooterList;
+		}
+		
+		/*
+		 * murali chari.
+		 * 
+		 * for indent update product catelogue fetch
+		 */
+
+		@RequestMapping(value = "getholidaymasterData", method = RequestMethod.GET)
+		public String getHolidaymasterData(HttpServletRequest request, HttpServletResponse responsel) {
+			HttpSession session = request.getSession();
+			String loginId = "";
+			try {
+				Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+				loginId = (String) userMap.get("login_id");
+			} catch (Exception er) {
+				er.printStackTrace();
+				return "Access denied";
+			}
+			List<Object> getHolidaymasterData = userService.getholidaymasterData(loginId);
+			
+			// List<Object[]> stores = userService.getAllstores();
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			String mapJsonObject = gson.toJson(getHolidaymasterData);
+			// System.out.print("234" + mapJsonObject);
+			return mapJsonObject;
+
 		}
 		
 		}

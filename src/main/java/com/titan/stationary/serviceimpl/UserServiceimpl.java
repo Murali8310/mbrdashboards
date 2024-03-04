@@ -209,7 +209,12 @@ public class UserServiceimpl implements Userservice {
 		BudgetDetails = userDao.getBudgetDetails(loginId);
 		return BudgetDetails;
 	}
-	
+	@Override
+	public List<Object> getholidaymasterData(String loginId) {
+		List<Object> getholidaymasterData;
+		getholidaymasterData = userDao.getholidaymasterData(loginId);
+		return getholidaymasterData;
+	}
 	
 	@Override
 	public List<String> getProductByCategoryIndentUpdate(String category,String userId) {

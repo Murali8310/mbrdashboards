@@ -70,6 +70,7 @@ public interface Userservice {
 	List<String> GetAddMoreProducts(String loginId);
 
 	List<Object> getBudgetDetails(String loginId);
+	List<Object> getholidaymasterData(String loginId);
 
 	List<String> getProductByCategoryIndentUpdate(String category, String userId);
 

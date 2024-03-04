@@ -18326,3 +18326,20 @@ label {
 .sidebar-nav ul .sidebar-item.selected>.sidebar-link {
     background: #ffcfbf !important;
 }
+
+
+#main-wrapper.mini-sidebar .left-sidebar {
+    width: 65px;
+}
+
+@media (min-width: 768px) {
+    #main-wrapper.mini-sidebar .sidebar-nav .has-arrow:after,
+    #main-wrapper.mini-sidebar .sidebar-nav .hide-menu {
+        display: none !important;
+    }
+    
+    #main-wrapper.mini-sidebar .sidebar-nav:hover .has-arrow:after,
+    #main-wrapper.mini-sidebar .sidebar-nav:hover .hide-menu {
+        display: block !important;
+    }
+}

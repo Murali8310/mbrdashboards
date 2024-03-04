@@ -32,7 +32,7 @@ background-image: url(assets/images/Backgroundimg.jpg;);
 </style>
 </head>
 
-<body>
+<body >
 	<!-- ============================================================== -->
 	<!-- Preloader - style you can find in spinners.css -->
 	<!-- ============================================================== -->
@@ -152,8 +152,55 @@ h1 {
 							</nav>
 						</div>
 					</div>
+					
+						<div  class='col-12 d-flex' style="justify-content: center;">
+    
+    <h4 class='blink blinktext no-block align-items-center' id="indentordistributerStatus">
+    
+    </h4>
+		
+					</div>
+					
 				</div>
 			</div>
+			
+			
+			
+			
+			
+			<style>
+			
+			.blinktext {
+	background-color: #4db719;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 19px;
+    font-weight: 600;
+    color: red;
+    text-align: center;
+        justify-content: center;
+			}
+			
+			
+			@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.blindk {
+  animation: blink 20s infinite;
+}
+			
+			</style>
+			
+			
+			
+			
+			
+			
+			
 			<!-- ============================================================== -->
 			<!-- End Bread crumb and right sidebar toggle -->
 			<!-- ============================================================== -->
@@ -337,7 +384,7 @@ h1 {
 	
 			
 				<c:if test="${role =='Tray Manager'}">
-				<div class="row rows">
+				<div class="row rows" id='distibuterStatus'>
 				
 				<div class="col-md-6 col-lg-4 col-xlg-3">
 						<div class="card card-hover">
@@ -387,7 +434,7 @@ h1 {
 				</c:if>
 				
 					<c:if test="${role =='Indent Manager'}">
-				<div class="row rows">
+				<div class="row rows" id='indentorStatus'>
 					
 
 					<div class="col-md-6 col-lg-4 col-xlg-3">
@@ -488,7 +535,133 @@ h1 {
         // Call the function to start the animation when the page loads
         window.onload = function() {
             moveError();
+            const loginstatus = getPortalBlockingStatus();
         };
+        
+        
+     // JavaScript to animate the error text
+        function loginStatusForIndentor() {
+            var error = document.getElementById("loginStatus");
+            var position = 10; // Start position off the screen
+            var screenWidth = window.innerWidth;
+
+            // Move the error text from left to right
+            var animation = setInterval(frame, 60);
+            function frame() {
+                if (position >= screenWidth) {
+                    position = -50; // Reset position off the screen
+                } else {
+                    position++;
+                    error.style.left = position + 'px';
+                }
+            }
+        }
+        function getPortalBlockingStatus (){
+        	
+        	
+        	 $.ajax({
+ 	 			type : 'GET',
+ 	 			url : 'getholidaymasterData',
+ 	 			//dataType : 'json',
+ 	 			success : function(response) {
+ 	 				
+ 	 				var holidaymasterCurrentmonthdata =jQuery.parseJSON(response);
+ 	 				const holidaymasterholidaylist = [];
+ 	 				 for (let holidaymasterIndex = 0; holidaymasterIndex <= holidaymasterCurrentmonthdata.length; holidaymasterIndex++) {
+ 	 	            	const eachdata = holidaymasterCurrentmonthdata[holidaymasterIndex];
+ 	 	                  if (eachdata && eachdata[0]) {
+ 	 	                	const currentDate = new Date(eachdata[0]);
+ 	 	 	 				 const formattedDate = formatDate(currentDate);
+ 	 	 	 				holidaymasterholidaylist.push(formattedDate);
+ 	 	                }
+ 	 	            }
+ 	 				 
+ 	 	            const dateData = generateCurrentMonthData();
+ 	 				 let finalData = [];
+ 	 				 for (let index = 0; index <dateData.days.length; index++) {
+ 	 	            	const eachdata = dateData.days[index];
+ 	 	 				const isholidayindexpresent = holidaymasterholidaylist.indexOf(eachdata.date);
+ 	 	                  if ((eachdata && eachdata.name !== 'Sun') && (isholidayindexpresent === -1)) {
+ 	 	                	  finalData.push(eachdata);
+ 	 	                }
+ 	 	            }
+ 	 				  	 				
+ 	 				 const get7thDay = finalData[7];
+ 	 				 
+ 	 				const slicedData = finalData.slice(0, 7);
+
+ 	 	            const currentDate = new Date();
+ 	 	            let currentDayNumber = formatDate(currentDate);
+ 	 	          currentDayNumber = Number(currentDayNumber.split('/')[0])
+ 	 	            let loginStatus = '';
+ 	 	       
+ 	 	        
+ 	 	            if(currentDayNumber <= (get7thDay && get7thDay.day)){
+ 	 	            	loginStatus = 'IndentorAllowed'; 	 	            	
+ 	 	            	if(document.getElementById('userRole').textContent.split(':')[1].trim() == 'Tray Manager'){
+ 	 	 	 	 	        document.getElementById('indentordistributerStatus').textContent = 'Distribuer poral blocked during the 7 working days.'; 
+ 	 	 	 	 	   document.getElementById('distibuterStatus').style['pointer-events']='none';
+ 	 	            	}
+ 	 	            	if(document.getElementById('userRole').textContent.split(':')[1].trim() == 'Indent Manager'){
+ 		 	            	document.getElementById('indentordistributerStatus').style['display']='none';
+ 		 	            	}
+ 	 	            } else{
+ 	 	            	
+ 	 	            	if(document.getElementById('userRole').textContent.split(':')[1].trim() == 'Indent Manager'){
+ 	 	 	 	        document.getElementById('indentordistributerStatus').textContent = 'The Current month Indentation is Closed.Please check Next Month for Indent creation.'; 	 	            		
+ 	 	            	document.getElementById('indentorStatus').style['pointer-events']='none';
+ 	 	            	}
+ 	 	            	loginStatus = 'IndentorBlocked';
+ 	 	            	//document.getElementById('indentorStatus').style['pointer-events']='none';
+ 	 	            }
+ 	 	          if(document.getElementById('userRole').textContent.split(':')[1].trim() == 'Buyer'){
+	 	            	document.getElementById('indentordistributerStatus').style['display']='none';
+	 	            	}
+ 	 	            
+ 	 			}
+ 	 			});
+            
+        }
+        
+       
+        //This method is used to update the current status of the indentor 
+        //login and if current date is corssing the 7 working days we are blocking the access.
+   function generateCurrentMonthData() {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1; // Months are zero-based, so add 1 to get the current month
+    const daysInMonth = new Date(currentYear, currentMonth, 0).getDate(); // Get the number of days in the current month
+    const monthData = { year: currentYear, month: currentMonth, days: [] };
+
+    // Loop through days of the current month
+    for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(currentYear, currentMonth - 1, day); // Months are zero-based, so subtract 1
+        const dayOfWeek = date.toLocaleString('en-us', { weekday: 'short' }); // Get the day of the week
+
+        const date2 = new Date(date);
+        const formattedDate = formatDate(date2);
+        monthData.days.push({
+            date: formattedDate, // Format date as YYYY-MM-DD
+            day: day,
+            name: dayOfWeek
+        });
+    }
+
+    return monthData;
+}
+        
+   function formatDate(date) {
+	    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+	    return date.toLocaleDateString('en-GB', options);
+	}
+
+   
+   
+   
+
+
+
+
     </script>
 </body>
 </html>

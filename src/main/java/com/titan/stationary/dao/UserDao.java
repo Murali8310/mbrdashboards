@@ -77,7 +77,8 @@ public interface UserDao {
 		 * Get budeget details
 		 */
 		List<Object> getBudgetDetails(String userId);
-
+		List<Object> getholidaymasterData(String userId);
+		
 		/**
 		 * Gokul
 		 * Get Products by category indent update
@@ -259,6 +260,9 @@ public interface UserDao {
 
 
 	List<Object> getBuyerIndentListForvendor(String Year, String Month);
+
+
+	List<String> getAllHeadersList(String Year, String Month);
 
 
 	
