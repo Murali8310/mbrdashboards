@@ -171,7 +171,6 @@ h1 {
 			<style>
 			
 			.blinktext {
-	background-color: #4db719;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
     border-radius: 10px;
     padding: 12px;
@@ -596,24 +595,35 @@ h1 {
  	 	            let loginStatus = '';
  	 	       
  	 	        
- 	 	            if(currentDayNumber <= (get7thDay && get7thDay.day)){
+ 	 	            if(currentDayNumber < (get7thDay && get7thDay.day)){
  	 	            	loginStatus = 'IndentorAllowed'; 	 	            	
- 	 	            	if(document.getElementById('userRole').textContent.split(':')[1].trim() == 'Tray Manager'){
- 	 	 	 	 	        document.getElementById('indentordistributerStatus').textContent = 'Distribuer poral blocked during the 7 working days.'; 
- 	 	 	 	 	   document.getElementById('distibuterStatus').style['pointer-events']='none';
- 	 	            	}
  	 	            	if(document.getElementById('userRole').textContent.split(':')[1].trim() == 'Indent Manager'){
  		 	            	document.getElementById('indentordistributerStatus').style['display']='none';
  		 	            	}
- 	 	            } else{
  	 	            	
- 	 	            	if(document.getElementById('userRole').textContent.split(':')[1].trim() == 'Indent Manager'){
- 	 	 	 	        document.getElementById('indentordistributerStatus').textContent = 'The Current month Indentation is Closed.Please check Next Month for Indent creation.'; 	 	            		
- 	 	            	document.getElementById('indentorStatus').style['pointer-events']='none';
- 	 	            	}
- 	 	            	loginStatus = 'IndentorBlocked';
- 	 	            	//document.getElementById('indentorStatus').style['pointer-events']='none';
- 	 	            }
+ 	 	            	if(document.getElementById('userRole').textContent.split(':')[1].trim() == 'Tray Manager'){
+ 		 	            	document.getElementById('indentordistributerStatus').style['display']='none';
+ 		 	            	}
+ 	 	            } else {
+	 	 	            	if(document.getElementById('userRole').textContent.split(':')[1].trim() == 'Indent Manager'){
+	 	 	 	 	        document.getElementById('indentordistributerStatus').textContent = 'The current month indent process is closed. Please come back next month to raise the indent.'; 	 	            		
+	 	 	            	document.getElementById('indentorStatus').style['pointer-events']='none';
+	 	 	            	}
+	 	 	            	loginStatus = 'IndentorBlocked';
+	 	 	            	//document.getElementById('indentorStatus').style['pointer-events']='none';
+	 	 	            } 
+ 	 	            
+ 	 	          if(currentDayNumber >= (get7thDay && get7thDay.day) && currentDayNumber < 21){
+ 	 	        	if(document.getElementById('userRole').textContent.split(':')[1].trim() == 'Tray Manager'){
+	 	 	 	 	        document.getElementById('indentordistributerStatus').textContent = 'The portal has been blocked during indentation period.'; 
+	 	 	 	 	   document.getElementById('distibuterStatus').style['pointer-events']='none';
+	 	            	} 
+ 	 	            } else if(document.getElementById('userRole').textContent.split(':')[1].trim() == 'Tray Manager'){
+	 	            	document.getElementById('indentordistributerStatus').style['display']='none';
+ 	            	}
+	        	  
+ 	 	            
+ 	 	            
  	 	          if(document.getElementById('userRole').textContent.split(':')[1].trim() == 'Buyer'){
 	 	            	document.getElementById('indentordistributerStatus').style['display']='none';
 	 	            	}

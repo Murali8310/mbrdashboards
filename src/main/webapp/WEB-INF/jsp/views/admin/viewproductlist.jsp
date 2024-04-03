@@ -419,8 +419,8 @@ padding:0px !important;
     background-color: #f5f5f5;
     border-radius: 4px;
 '>			
-									<li class="breadcrumb-item"><a href="landPage"><i style="text-align: justify;"
-								class="fa fa-home"></i> Home</a></li>
+									<li class="breadcrumb-item"><a href="manageByAdmin"><i style="text-align: justify;"
+								class="fa fa-home"></i> Back</a></li>
 									<li class="breadcrumb-item active" aria-current="page">Product
 										Catalogue
 									</li>

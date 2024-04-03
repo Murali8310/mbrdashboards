@@ -269,8 +269,14 @@ label {
 									</label>
 								</div>
 								<div class="col-md-5">
+								<c:if test="${accessRole == '1'}">
+								<input type="text" id="EmailID" name="EmailID" 
+										class="form-control" aria-invalid="true" required="required">
+								</c:if>
+								<c:if test="${accessRole == '0'}">
 									<input type="text" id="EmailID" name="EmailID" readonly
 										class="form-control" aria-invalid="true" required="required">
+										</c:if>
 								</div>
 							</div>
 							<div class="col-md-12 oneline">
@@ -316,6 +322,14 @@ label {
 								</div>
 							</div>
 						
+						
+													<div class="">
+<%
+		 Object accessRoleobj = session.getAttribute("accessRole");
+			String accessRole = (String)accessRoleobj ;
+		
+			 %> 
+			 <c:if test="${accessRole == '1'}">
 							<div class="col-md-12 oneline">
 								<div class="col-md-4"></div>
 								<div class="col-md-4 text-center">
@@ -328,6 +342,7 @@ label {
 								</div>
 								<div class="col-md-4"></div>
 							</div>
+							</c:if>
 					</div>
 					
 				</div>

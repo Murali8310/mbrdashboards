@@ -168,7 +168,7 @@ padding:0px !important;
 						<div class="ml-auto text-right">
 							<nav aria-label="breadcrumb">
 								<ol class="breadcrumb">
-									<li class="breadcrumb-item"><a href="landPage">Home</a></li>
+									<li class="breadcrumb-item"><a href="#" onclick="goBack(event)">Back</a></li>
 									<li class="breadcrumb-item active" aria-current="page">
 										Add More Products <!-- <a href="productDetails">Product Details</a> -->
 									</li>
@@ -1133,6 +1133,14 @@ $("#resetCategoriesID").on("click", function() {
             submitCategoriesIDElement.style.cursor = 'not-allowed';
             resetCategoriesIDElement.style.cursor = 'not-allowed';
           }
+        }
+    </script>
+    
+    
+    <script>
+        function goBack(event) {
+            event.preventDefault(); // Prevent the default action of the anchor tag
+            window.history.back();
         }
     </script>
 </html>

@@ -176,13 +176,19 @@ tr td:first-child:before
 						<div class="card-body">
 							<h5 class="card-title"></h5>
 							<div class="">
-
+<%
+		 Object accessRoleobj = session.getAttribute("accessRole");
+			String accessRole = (String)accessRoleobj ;
+		
+			 %> 
 								<div id="zero_config_wrapper"
 									class="dataTables_wrapper container-fluid dt-bootstrap4">
 									<div class="row">
 										<div class="col-sm-12">
+										<c:if test="${accessRole == '1'}">
 										<div style="text-align:end;margin-bottom:4px;"><button onclick="redirectToProductMasterCreation()" class='btn btn-primary'>Add Product</button>
 										</div>
+										</c:if>
   										<table id="example"
 											class="table table-striped table-bordered display nowrap"
 											style="width: 100%;">

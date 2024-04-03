@@ -1422,6 +1422,48 @@ function handleBlur(currentRow){
 </script>
 	<script src="dist/js/sweetalert2.min.js"></script>
 	<link rel="stylesheet" href="dist/css/sweetalert2.min.css" />
+	
+	<script>
+$(document).ready(function() {
+    var table = $('#example').DataTable();
+
+    $('#example').on('keydown', '.editable-cell', function(event) {
+        // Check if the arrow keys are pressed
+        if (event.key === 'ArrowDown' || event.key === 'ArrowRight' || event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
+            // Find the next or previous cell based on the arrow key pressed
+            var nextCell;
+            var currentIndex = $(this).closest('td').index();
+            var currentRow = $(this).closest('tr');
+
+            if (event.key === 'ArrowDown') {
+                nextCell = currentRow.next('tr').find('td:eq(' + currentIndex + ')');
+            } else if (event.key === 'ArrowUp') {
+                nextCell = currentRow.prev('tr').find('td:eq(' + currentIndex + ')');
+            } else if (event.key === 'ArrowRight') {
+                nextCell = $(this).closest('td').next('td');
+            } else if (event.key === 'ArrowLeft') {
+                nextCell = $(this).closest('td').prev('td');
+            }
+
+            // If next cell exists, trigger a click event on it
+            if (nextCell && nextCell.length) {
+                setTimeout(function() {
+                    nextCell.click();
+                    document.body.click();
+                }, 100);
+            } else {
+                // If no next cell, trigger a click event on the current cell
+                setTimeout(function() {
+                    $(this).click();
+                }.bind(this), 100);
+            }
+
+            // Prevent default behavior of arrow keys
+            event.preventDefault();
+        }
+    });
+});
+</script>
 
 </body>
 </html>

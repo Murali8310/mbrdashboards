@@ -338,6 +338,7 @@ font-size: 18px !important;
 													<th scope="col" class='headerStyles'><b>Department</b></th>
 													<th scope="col" class='headerStyles'><b>QTY</b></th>
 													<th scope="col" class='headerStyles'><b>Buyer QTY</b></th>
+													<th scope="col" class='headerStyles'><b>Unit Price</b></th>
 													<th scope="col" class='headerStyles'><b>Received QTY</b></th>
 													<th scope="col" class='headerStyles'><b>Document Date</b></th>
 													<th scope="col" class='headerStyles'><b>Value(Rs)</b></th>
@@ -357,6 +358,7 @@ font-size: 18px !important;
 														<td class='tbodyCustomColor'>${user[3]}</td>
 														<td class='tbodyCustomColor'>${user[4]}</td>
 														<td class='tbodyCustomColor'>${user[10]}</td>
+														<td class='tbodyCustomColor'>${user[12]}</td>
 														<td class='tbodyCustomColor'>${user[11]}</td>
 														<td class='tbodyCustomColor' >${user[5]}</td>
 														<td class='tbodyCustomColor' style="text-align:right">${user[6]}</td>
@@ -368,6 +370,27 @@ font-size: 18px !important;
 
 												</c:forEach>
 											</tbody>
+											<tfoot id='tfootexample'>
+													<tr>
+														<th class='tbodyCustomColor'>Total</th>
+														<th class='tbodyCustomColor'></th>
+														<th class='tbodyCustomColor'></th>
+																												<th class='tbodyCustomColor' id="footerUserQty" style="text-align:center"></th>
+																												<th class='tbodyCustomColor' id="totalQty" style="text-align:left !important"></th>
+																												<th class='tbodyCustomColor' style="text-align:left !important" id="totalBuyerQty"></th>
+																												<th class='tbodyCustomColor' id="unitPrice"	style="text-align:left !important"></th>
+																												<th class='tbodyCustomColor' style="text-align:right"  id="footerTotalValue"></th>
+																												<th class='tbodyCustomColor' style="text-align:center"></th>
+																												<th class='tbodyCustomColor' id="unitValue" style="text-align:right !important"></th>
+																												<th class='tbodyCustomColor' style="text-align:right" id="footerStockValue"></th>
+																												<th class='tbodyCustomColor' style="text-align:right" id="footerStockValue"></th>
+																												<th class='tbodyCustomColor' style="text-align:right" id="footerStockValue"></th>
+														
+
+												</tr>
+
+													
+											</tfoot>
 										</table>
 
 									</div>
@@ -770,7 +793,52 @@ src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/additional-me
 														});
 											});
 						});
+		
+		
+		function updateColumnData(columnIndex) {
+			let totalSum = 0;
+		     var table = $('#example').DataTable();
+		    table.column(columnIndex).data().each(function (value, index) {
+		    	if(typeof value == 'string'){
+		    	value = value.replaceAll(',','').trim();
+		    	console.log('murali total cal',Number(value));
+		    	}
+		    	totalSum = totalSum + Number(value);	        	
+		    });  
+		    // Redraw the table to reflect the changes
+		    table.draw();
+		    return totalSum.toFixed(2);
+		}
 	</script>
+	
+	<script>
+$(document).ready(function() {
+    // Initialize DataTable
+    var table = $('#example').DataTable();
+
+    // Function to update column data
+    function updateColumnData(columnIndex) {
+        let totalSum = 0;
+        table.column(columnIndex).data().each(function(value, index) {
+            if (typeof value == 'string') {
+                value = value.replaceAll(',', '').trim();
+                console.log('murali total cal', Number(value));
+            }
+            totalSum = totalSum + Number(value);
+        });
+        // Redraw the table to reflect the changes
+        table.draw();
+        return totalSum.toFixed(2);
+    }
+
+    // Update footer with the result of updateColumnData
+    $('#totalQty').text(Math.floor(updateColumnData(4)));
+    $('#totalBuyerQty').text(Math.floor(updateColumnData(5)));
+    $('#unitPrice').text(Math.floor(updateColumnData(6)));
+    $('#unitValue').text(Math.floor(updateColumnData(9)));
+
+});
+</script>
 
 
 </body>

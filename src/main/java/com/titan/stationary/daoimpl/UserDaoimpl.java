@@ -50,10 +50,17 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
@@ -2043,6 +2050,7 @@ public class UserDaoimpl implements UserDao {
 				+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.December, 0)\n"
 				+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.January, 0)\n"
 				+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.February, 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'march' THEN ISNULL(bm.March, 0)\n"
 				+ "END) AS currentIndentValue,\n"
 				+ "(BudValueRsL/12)-((CASE\n"
 				+ "WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
@@ -2056,6 +2064,7 @@ public class UserDaoimpl implements UserDao {
 				+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.December, 0)\n"
 				+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.January, 0)\n"
 				+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.February, 0)\n"
+				+ "WHEN DATENAME(MONTH, GETDATE()) = 'march' THEN ISNULL(bm.March, 0)\n"
 				+ "END) + isnull(sum(poe.POAmount),0))  AS Month_Balance,\n"
 				+ "(\n"
 				+ "        SELECT SUM(BUYER_QTY) \n"
@@ -2443,38 +2452,56 @@ public class UserDaoimpl implements UserDao {
 		if (finalcc.length() == 2) {
 			return getAllUserDetails;
 		}
+		
+		String costCenterParams = finalcc; // Example
+		String[] costCenters = costCenterParams.split(",");
+		StringBuilder stringBuilder = new StringBuilder();
+
+		for (String costCenter : costCenters) {
+		    stringBuilder.append("MAX(").append(costCenter.trim()).append(") AS ").append(costCenter.trim()).append(", ");
+		}
+
+		// Remove the trailing comma and space
+		String result = stringBuilder.substring(0, stringBuilder.length() - 2);
+		System.out.println(result);
+		
 		Query getresultlist = entityManager.createNativeQuery(
-//					"sELECT PROD_NAME, MAKE, UOM, [1100],[1101],[1102],[1103],[1200],[1201],[1202],[1203],[1204],[1205],[1206],[1207],\n"
-//					+ "		[1209],[1230],[1231],[1232],[1233],[1234],[1235],[1300],[1301],[1302],[1303],[1305],[1313],[1320],[1321],[1322],[1323],[1330],\n"
-//					+ "		[1331],[1332],[1333],[1334],[1335],[1337],[1338],[1340],[1380],[1400],[1401],[1402],[1406],[1500],[1501],[1502],[1503],[1504],\n"
-//					+ "		[1506],[1515],[1520],[1521],[1522],[1523],[1524],[1525],[1528],[1529],[1540],[1542],[1544],[1545],[1546],[1547],[1549],[1551],\n"
-//					+ "		[1552],[1554],[1555],[1557],[1558],[1559],[7646],ucp,MoqQty,MoqValue,BalanceTMTQTy,BalanceTMTValue \n"
-//					+ "		FROM (\n"
-//					+ "		SELECT PROD_NAME, isnull(MAKE,'') MAKE, UOM, COST_CENTER, ISNULL(BUYER_QTY , 0) AS cost_value,ucp,MoqQty,MoqValue,BalanceTMTQTy,BalanceTMTValue\n"
-//					+ "		FROM PRODUCT_MASTER pm \n"
-//					+ "		left join Indent_Transaction it on pm.PROD_NAME=it.ITEM\n"
-//					+ "		WHERE COST_CENTER IS NOT NULL and month=DATENAME(MONTH, GETDATE()) and year= format(GETDATE(),'yyyy')\n"
-//					+ "		GROUP BY PROD_NAME, MAKE, UOM, COST_CENTER,BUYER_QTY,ucp,MoqQty,MoqValue,BalanceTMTQTy,BalanceTMTValue\n"
-//					+ "		) AS src\n"
-//					+ "		PIVOT (MAX(cost_value)\n"
-//					+ "		FOR COST_CENTER IN ([1100],[1101],[1102],[1103],[1200],[1201],[1202],[1203],[1204],[1205],[1206],[1207],\n"
-//					+ "		[1209],[1230],[1231],[1232],[1233],[1234],[1235],[1300],[1301],[1302],[1303],[1305],[1313],[1320],[1321],[1322],[1323],[1330],\n"
-//					+ "		[1331],[1332],[1333],[1334],[1335],[1337],[1338],[1340],[1380],[1400],[1401],[1402],[1406],[1500],[1501],[1502],[1503],[1504],\n"
-//					+ "		[1506],[1515],[1520],[1521],[1522],[1523],[1524],[1525],[1528],[1529],[1540],[1542],[1544],[1545],[1546],[1547],[1549],[1551],\n"
-//					+ "		[1552],[1554],[1555],[1557],[1558],[1559],[7646])) AS pivottable\n"
-//					+ "		order by PROD_NAME desc");
+				"SELECT " +
+                "PROD_NAME, " +
+                "MAX(MAKE) AS MAKE, " +
+                "MAX(UOM) AS UOM, " +
+                result + ", " +
+                "MAX(ucp) AS ucp, " +
+                "MAX(MoqQty) AS MoqQty, " +
+                "MAX(MoqValue) AS MoqValue, " +
+                "MAX(BalanceTMTQTy) AS BalanceTMTQTy, " +
+                "MAX(BalanceTMTValue) AS BalanceTMTValue " +
+           "FROM (" +
+                "SELECT " +
+                    "PROD_NAME, " +
+                    "ISNULL(MAKE, '') AS MAKE, " +
+                    "UOM, " +
+                    "COST_CENTER, " +
+                    "ISNULL(BUYER_QTY, 0) AS cost_value, " +
+                    "ucp, " +
+                    "MoqQty, " +
+                    "MoqValue, " +
+                    "BalanceTMTQTy, " +
+                    "BalanceTMTValue " +
+                "FROM PRODUCT_MASTER pm " +
+                "LEFT JOIN Indent_Transaction it ON pm.PROD_NAME = it.ITEM " +
+                "WHERE COST_CENTER IS NOT NULL " +
+                      "AND month = :Month " +
+                      "AND year = :Year " +
+            ") AS src " +
+           "PIVOT (" +
+                "MAX(cost_value) " +
+                "FOR COST_CENTER IN (" + costCenterParams + ") " +
+           ") AS pivottable " +
+           "GROUP BY PROD_NAME " +
+           "ORDER BY PROD_NAME DESC;");
 
-				"sELECT PROD_NAME, MAKE, UOM," + finalcc + ",ucp,MoqQty,MoqValue,BalanceTMTQTy,BalanceTMTValue \n"
-						+ "		FROM (\n"
-						+ "		SELECT PROD_NAME, isnull(MAKE,'') MAKE, UOM, COST_CENTER, ISNULL(BUYER_QTY , 0) AS cost_value,ucp,MoqQty,MoqValue,BalanceTMTQTy,BalanceTMTValue\n"
-						+ "		FROM PRODUCT_MASTER pm \n"
-						+ "		left join Indent_Transaction it on pm.PROD_NAME=it.ITEM\n"
-						+ "		WHERE COST_CENTER IS NOT NULL and month=:Month and year=:Year\n"
-						+ "		GROUP BY PROD_NAME, MAKE, UOM, COST_CENTER,BUYER_QTY,ucp,MoqQty,MoqValue,BalanceTMTQTy,BalanceTMTValue\n"
-						+ "		) AS src\n" + "		PIVOT (MAX(cost_value)\n" + "		FOR COST_CENTER IN (" + finalcc
-						+ ")) AS pivottable\n" + "		order by PROD_NAME desc");
-
-		getresultlist.setParameter("Month", Month);
+       getresultlist.setParameter("Month", Month);
 		getresultlist.setParameter("Year", Year);
 
 		try {
@@ -3754,6 +3781,19 @@ public class UserDaoimpl implements UserDao {
 			return getAllUserDetails;
 		}
 
+		
+		String costCenterParams = finalcc; // Example
+		String[] costCenters = costCenterParams.split(",");
+		StringBuilder stringBuilder = new StringBuilder();
+
+		for (String costCenter : costCenters) {
+		    stringBuilder.append("MAX(").append(costCenter.trim()).append(") AS ").append(costCenter.trim()).append(", ");
+		}
+
+		// Remove the trailing comma and space
+		String result = stringBuilder.substring(0, stringBuilder.length() - 2);
+		System.out.println(result);
+		
 		/*
 		 * Query getCostCenter = entityManager.
 		 * createNativeQuery("select STUFF((SELECT DISTINCT ',[' + COST_CENTER + ']' " +
@@ -3770,7 +3810,7 @@ public class UserDaoimpl implements UserDao {
 				+ "		) AS src\n" + "		PIVOT (MAX(cost_value)\n" + "		FOR COST_CENTER IN (" + finalcc
 				+ ")) AS pivottable\n" + "		order by PROD_NAME desc");
 		getresultlist.setParameter("yearfromCal", yearfromCal);
-
+		
 		try {
 			getAllUserDetails = getresultlist.getResultList();
 
@@ -3809,7 +3849,7 @@ public class UserDaoimpl implements UserDao {
 		}
 		Query selectQuery = entityManager.createNativeQuery(
 				"select DOC_NUMBER,COST_CENTER,ITEM,DEPARTMENT,TOTAL_USER_QTY,DOC_DATE,VALUE,MONTH,YEAR,STATUS,\n"
-						+ "BUYER_QTY,RECEIVED_TMT_QTY from Indent_Transaction where COST_CENTER=:COST_CENTER and \n"
+						+ "BUYER_QTY,RECEIVED_TMT_QTY,UnitPrice from Indent_Transaction where COST_CENTER=:COST_CENTER and \n"
 						+ "month=format(GETDATE(),'MMMMMMMMMMMMMMMMM') and YEAR=:yearfromCal");
 		selectQuery.setParameter("COST_CENTER", loginId);
 		selectQuery.setParameter("yearfromCal", yearfromCal);
@@ -4016,7 +4056,7 @@ public class UserDaoimpl implements UserDao {
 		Query getintentID = entityManager.createNativeQuery(
 				"select DISTINCT DOC_NUMBER from Indent_Transaction where year=:year and month=:month and cost_center=:cost_center");
 		int cFY1 = Integer.valueOf(cFY);
-		String yearfromCal = null;
+		String yearfromCal = cFY;
 		if (getMonthNumber(MonthText) < 4) {
 			cFY1 = cFY1 - 1; // If the month is before April, subtract 1 from the year
 		 yearfromCal  = String.valueOf(cFY1);
@@ -4108,15 +4148,59 @@ public class UserDaoimpl implements UserDao {
 	        				Workbook workbook = new XSSFWorkbook();
 	        				Sheet sheet = workbook.createSheet("DataTable");
 	        				
-	        				// Insert headers into the sheet
+	        				  // Create a cell style for headers
+	        		        CellStyle headerStyle = workbook.createCellStyle();
+	        		        Font headerFont = workbook.createFont();
+	        		        headerFont.setBold(true);
+	        		        headerFont.setColor(IndexedColors.WHITE.getIndex()); // Set text color to white
+	        		        headerStyle.setFont(headerFont);
+	        		        headerStyle.setAlignment(HorizontalAlignment.CENTER);
+	        		        headerStyle.setFillForegroundColor(IndexedColors.BLUE_GREY.getIndex()); // Set background color
+	        		        headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
 	        				
-	        				Row headerRow = sheet.createRow(0);
+	        		     // Get the current date
+	        		        Date currentDate = new Date();
+
+	        		        // Create a SimpleDateFormat object with the desired date format
+	        		        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+
+	        		        // Format the current date using the SimpleDateFormat object
+	        		        String formattedDate = sdf.format(currentDate);
+
+	        		        
+	        		        
+	        		     // Insert headers into the sheet
+	        		        Row headerRow1 = sheet.createRow(0);
+
+	        		        // Add "STATIONERY REQUIREMENTS 27-03-2024" spanning two cells
+	        		        Cell firstCell = headerRow1.createCell(0);
+	        		        firstCell.setCellValue("STATIONERY REQUIREMENTS " + formattedDate);
+	        		        firstCell.setCellStyle(headerStyle); // Apply header style
+	        		        
+	        		        // Merge the cells
+	        		        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, headers.length - 1));
+
+	        		        // Adjust column width
+	        		        sheet.autoSizeColumn(0); // Auto-size first column width
+	        		        sheet.autoSizeColumn(1); // Auto-size second column width
+
+	        		        
+	        				Row headerRow = sheet.createRow(2);
+	        				
 	        				for (int i = 0; i < headers.length; i++) {
 	        				    Cell cell = headerRow.createCell(i);
 	        				    cell.setCellValue(String.valueOf(headers[i]));
+	        				    cell.setCellStyle(headerStyle); // Apply header style
+	        		            sheet.autoSizeColumn(i); // Auto-size column width
 	        				}
+	        					
+	        				  // Auto-size columns
+	        		        for (int i = 0; i < headers.length; i++) {
+	        		            sheet.autoSizeColumn(i);
+	        		        }
 	        				// Insert data into the sheet
-	        				int rowNum = 1; // Start from the second row (index 1) after headers
+	        				int rowNum = 3; // Start from the second row (index 1) after headers
 	        				
 	        				
 	        				
@@ -4133,7 +4217,7 @@ public class UserDaoimpl implements UserDao {
 	        				    int cellNum = 0; // Reset cell number for each row
 	        				    Cell cell = row.createCell(cellNum++); // First cell for serial number
 	        				    cell.setCellValue(serialNumber++); // Insert serial number
-	        				    
+	        				    sheet.autoSizeColumn(cellNum);
 	        				    // Iterate over each cell in the rowData
 	        				    for (Object cellData : rowData) {
 	        				        cell = row.createCell(cellNum++);
@@ -4187,9 +4271,30 @@ public class UserDaoimpl implements UserDao {
 //	        				        sumCell1.setCellValue(columnSum[i]); // Insert sum for the corresponding column
 	        				    }
 	        				}
+	        				
+	        				  // Apply border style only to content
+	        		        CellStyle contentStyle = workbook.createCellStyle();
+	        		        contentStyle.setBorderTop(BorderStyle.THIN);
+	        		        contentStyle.setBorderBottom(BorderStyle.THIN);
+	        		        contentStyle.setBorderLeft(BorderStyle.THIN);
+	        		        contentStyle.setBorderRight(BorderStyle.THIN);
+	        		        for (Row row : sheet) {
+	        		            for (Cell cell : row) {
+	        		                if (cell.getRowIndex() > 0) {
+	        		                    cell.setCellStyle(contentStyle);
+	        		                }
+	        		            }
+	        		        }
 
 
-	        				File excelFile = File.createTempFile("Indent_Number", ".xlsx");
+		        		     // Create a SimpleDateFormat object with the desired date format
+		        		        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+
+		        		        // Format the current date using the SimpleDateFormat object
+		        		        String formattedDate1 = sdf1.format(currentDate);
+
+
+		        		    File excelFile = File.createTempFile("Stationery_Recipt_"+ formattedDate1, ".xlsx");
 	        				FileOutputStream fileOut = new FileOutputStream(excelFile);
 	        				workbook.write(fileOut);
 	        				fileOut.close();
@@ -4403,8 +4508,8 @@ public class UserDaoimpl implements UserDao {
 		 yearfromCal = String.valueOf(cFY);
 		    System.out.println("yearfromCal"+yearfromCal);
 		}
-		
-		Query getCClist = entityManager.createNativeQuery("select Emailid from ABM_MASTER where EmpCode=:loginId");
+
+		Query getCClist = entityManager.createNativeQuery("select Emailid from ABM_MASTER where EmpCode=:loginId UNION SELECT email_id FROM ER_User_Master WHERE userAccess = 1");
 		Query getName = entityManager.createNativeQuery("select Name from ABM_MASTER where EmpCode=:loginId");
 		getCClist.setParameter("loginId", loginId);
 		getName.setParameter("loginId", loginId);
@@ -4443,15 +4548,63 @@ public class UserDaoimpl implements UserDao {
 	        				Workbook workbook = new XSSFWorkbook();
 	        				Sheet sheet = workbook.createSheet("DataTable");
 	        				
+	        				
+	        				
+	        				
+
+	        				  // Create a cell style for headers
+	        		        CellStyle headerStyle = workbook.createCellStyle();
+	        		        Font headerFont = workbook.createFont();
+	        		        headerFont.setBold(true);
+	        		        headerFont.setColor(IndexedColors.WHITE.getIndex()); // Set text color to white
+	        		        headerStyle.setFont(headerFont);
+	        		        headerStyle.setAlignment(HorizontalAlignment.CENTER);
+	        		        headerStyle.setFillForegroundColor(IndexedColors.BLUE_GREY.getIndex()); // Set background color
+	        		        headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+	        				
+	        		     // Get the current date
+	        		        Date currentDate = new Date();
+
+	        		        // Create a SimpleDateFormat object with the desired date format
+	        		        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+
+	        		        // Format the current date using the SimpleDateFormat object
+	        		        String formattedDate = sdf.format(currentDate);
+
+	        		        
+	        		        
+	        		     // Insert headers into the sheet
+	        		        Row headerRow1 = sheet.createRow(0);
+
+	        		        // Add "STATIONERY REQUIREMENTS 27-03-2024" spanning two cells
+	        		        Cell firstCell = headerRow1.createCell(0);
+	        		        firstCell.setCellValue("STATIONERY REQUIREMENTS " + formattedDate);
+	        		        firstCell.setCellStyle(headerStyle); // Apply header style
+	        		        
+	        		        // Merge the cells
+	        		        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, headers.length - 1));
+
+	        		        // Adjust column width
+	        		        sheet.autoSizeColumn(0); // Auto-size first column width
+	        		        sheet.autoSizeColumn(1); // Auto-size second column width
+
+	        		        
 	        				// Insert headers into the sheet
 	        				
-	        				Row headerRow = sheet.createRow(0);
+	        				Row headerRow = sheet.createRow(2);
 	        				for (int i = 0; i < headers.length; i++) {
 	        				    Cell cell = headerRow.createCell(i);
 	        				    cell.setCellValue(String.valueOf(headers[i]));
 	        				}
+	        				
+	        				  // Auto-size columns
+	        		        for (int i = 0; i < headers.length; i++) {
+	        		            sheet.autoSizeColumn(i);
+	        		        }
+	        		        
 	        				// Insert data into the sheet
-	        				int rowNum = 1; // Start from the second row (index 1) after headers
+	        				int rowNum = 3; // Start from the second row (index 1) after headers
 	        				
 	        				
 	        				
@@ -4469,7 +4622,7 @@ public class UserDaoimpl implements UserDao {
 	        				    int cellNum = 0; // Reset cell number for each row
 	        				    Cell cell = row.createCell(cellNum++); // First cell for serial number
 	        				    cell.setCellValue(serialNumber++); // Insert serial number
-
+	        				    sheet.autoSizeColumn(cellNum);
 	        				    // Iterate over each cell in the rowData
 	        				    for (Object cellData : rowData) {
 	        				        cell = row.createCell(cellNum++);
@@ -4524,9 +4677,30 @@ public class UserDaoimpl implements UserDao {
 	        				    }
 	        				}
 
+	        				
+	        				  // Apply border style only to content
+	        		        CellStyle contentStyle = workbook.createCellStyle();
+	        		        contentStyle.setBorderTop(BorderStyle.THIN);
+	        		        contentStyle.setBorderBottom(BorderStyle.THIN);
+	        		        contentStyle.setBorderLeft(BorderStyle.THIN);
+	        		        contentStyle.setBorderRight(BorderStyle.THIN);
+	        		        for (Row row : sheet) {
+	        		            for (Cell cell : row) {
+	        		                if (cell.getRowIndex() > 0) {
+	        		                    cell.setCellStyle(contentStyle);
+	        		                }
+	        		            }
+	        		        }
+
+	        		        
+	        		     // Create a SimpleDateFormat object with the desired date format
+	        		        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+
+	        		        // Format the current date using the SimpleDateFormat object
+	        		        String formattedDate1 = sdf1.format(currentDate);
 
 
-	        				File excelFile = File.createTempFile("Indent_Number", ".xlsx");
+	        				File excelFile = File.createTempFile("Stationery_Recipt_"+ formattedDate1, ".xlsx");
 	        				FileOutputStream fileOut = new FileOutputStream(excelFile);
 	        				workbook.write(fileOut);
 	        				fileOut.close();

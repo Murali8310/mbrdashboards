@@ -418,7 +418,7 @@ li {
 								<nav aria-label="breadcrumb">
 								<ol class="breadcrumb" style='justify-content: center;background:#01AFAE;margin-bottom: 12px;'>
 								<li id="totalOutput" class="breadcrumb-item" style="background-color: darkblue; color: white;font-weight: bolder;"></li>
-									<li class="breadcrumb-item"><a href="landPage">Home</a></li>
+									<li class="breadcrumb-item"><a onclick="goBack()">Back</a></li>
 									<li class="breadcrumb-item active" aria-current="page">Product Catalogue 
 									</li>
 								</ol>
@@ -1681,7 +1681,11 @@ footer ul {
         }
 
 		</script>
-   
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 
 </body>
 </html>

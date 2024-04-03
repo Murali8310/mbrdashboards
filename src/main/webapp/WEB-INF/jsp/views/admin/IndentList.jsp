@@ -137,7 +137,7 @@ vertical-align: text-bottom ; footer {
 						<div class="ml-auto text-right">
 							<nav aria-label="breadcrumb">
 								<ol class="breadcrumb">
-									<li class="breadcrumb-item"><a href="landPage">Home</a></li>
+									<li class="breadcrumb-item"><a href="manageByAdmin">Back</a></li>
 									<li class="breadcrumb-item"><a href="manageByAdmin">Management</a></li>
 									<li class="breadcrumb-item active" aria-current="page">Indent
 										List</li>
