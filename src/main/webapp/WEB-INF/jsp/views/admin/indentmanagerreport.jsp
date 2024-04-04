@@ -338,7 +338,7 @@ font-size: 18px !important;
 													<th scope="col" class='headerStyles'><b>Department</b></th>
 													<th scope="col" class='headerStyles'><b>QTY</b></th>
 													<th scope="col" class='headerStyles'><b>Buyer QTY</b></th>
-													<th scope="col" class='headerStyles'><b>Unit Price</b></th>
+													<th scope="col" class='headerStyles'><b>Unit Price(Rs)</b></th>
 													<th scope="col" class='headerStyles'><b>Received QTY</b></th>
 													<th scope="col" class='headerStyles'><b>Document Date</b></th>
 													<th scope="col" class='headerStyles'><b>Value(Rs)</b></th>
@@ -668,7 +668,10 @@ src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/additional-me
 										table.clear().draw();
 										table.rows.add(data).draw();
 										// alert("No data available for the selected month.");
-
+ $('#totalQty').text(Math.floor(updateColumnData(4)));
+    $('#totalBuyerQty').text(Math.floor(updateColumnData(5)));
+    $('#unitPrice').text(updateColumnData(6));
+    $('#unitValue').text(updateColumnData(9));
 										var message = response.message;
 										//alert(message); 
 
@@ -813,6 +816,39 @@ src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/additional-me
 	
 	<script>
 $(document).ready(function() {
+	var Month = $('#Month').val();
+	var Year = $('#Year').val();
+
+	
+	$.ajax({
+		type : "GET",
+		url : "getreportbyid",
+		data : {
+			Month : Month,
+			Year : Year
+		},
+		success : function(response) {
+			table.clear().draw();
+			data = jQuery.parseJSON(response);
+			table.clear().draw();
+			table.rows.add(data).draw();
+			// alert("No data available for the selected month.");
+ // Update footer with the result of updateColumnData
+    $('#totalQty').text(Math.floor(updateColumnData(4)));
+    $('#totalBuyerQty').text(Math.floor(updateColumnData(5)));
+    $('#unitPrice').text(updateColumnData(6));
+    $('#unitValue').text(updateColumnData(9));
+			var message = response.message;
+			//alert(message); 
+
+		},
+		error : function(xhr, status, error) {
+
+			console.error(error);
+		}
+	});
+	
+	
     // Initialize DataTable
     var table = $('#example').DataTable();
 
@@ -834,8 +870,8 @@ $(document).ready(function() {
     // Update footer with the result of updateColumnData
     $('#totalQty').text(Math.floor(updateColumnData(4)));
     $('#totalBuyerQty').text(Math.floor(updateColumnData(5)));
-    $('#unitPrice').text(Math.floor(updateColumnData(6)));
-    $('#unitValue').text(Math.floor(updateColumnData(9)));
+    $('#unitPrice').text(updateColumnData(6));
+    $('#unitValue').text(updateColumnData(9));
 
 });
 </script>

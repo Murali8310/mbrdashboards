@@ -1178,8 +1178,8 @@ System.err.println("murali debugger");
 		}
 
 		List<Object> getdesignationreport;
-		getdesignationreport = userService.getAllindentDetails();
-		model.addAttribute("userDetails", getdesignationreport);
+//		getdesignationreport = userService.getAllindentDetails();
+//		model.addAttribute("userDetails", getdesignationreport);
 		  
 	    List<String> years = userService.getYears();
 	    
@@ -1448,7 +1448,7 @@ System.err.println("murali debugger");
 
 		    List<Object> getdesignationreport;
 		    getdesignationreport = userService.getAllindentmanagerDetails(loginId);
-		    model.addAttribute("reportdetails", getdesignationreport);
+//		    model.addAttribute("reportdetails", getdesignationreport);
 
 		   
 		    List<String> years = userService.getYears();

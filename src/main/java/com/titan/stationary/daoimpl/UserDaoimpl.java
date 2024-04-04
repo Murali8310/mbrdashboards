@@ -4415,14 +4415,16 @@ public class UserDaoimpl implements UserDao {
 		String sql = "";
 		List<String[]> response;
 		if (Month.equalsIgnoreCase("All")) {
-			sql = "select DOC_NUMBER,COST_CENTER,ITEM,DEPARTMENT,TOTAL_USER_QTY,BUYER_QTY,RECEIVED_TMT_QTY,DOC_DATE,VALUE,MONTH,YEAR,STATUS from Indent_Transaction where YEAR =:YEAR and COST_CENTER=:COST_CENTER ";
+			sql = "select DOC_NUMBER,COST_CENTER,ITEM,DEPARTMENT,TOTAL_USER_QTY,BUYER_QTY,UnitPrice,RECEIVED_TMT_QTY,DOC_DATE,VALUE,MONTH,YEAR,STATUS from Indent_Transaction where \n"
+					+ "COST_CENTER=:COST_CENTER and YEAR=:YEAR";
 			Query query = entityManager.createNativeQuery(sql);
 
 			query.setParameter("YEAR", Year);
 			query.setParameter("COST_CENTER", loginid);
 			response = query.getResultList();
 		} else {
-			sql = "select DOC_NUMBER,COST_CENTER,ITEM,DEPARTMENT,TOTAL_USER_QTY,BUYER_QTY,RECEIVED_TMT_QTY,DOC_DATE,VALUE,MONTH,YEAR,STATUS from Indent_Transaction where YEAR =:YEAR and COST_CENTER=:COST_CENTER and MONTH = :MONTH ";
+			sql = "select DOC_NUMBER,COST_CENTER,ITEM,DEPARTMENT,TOTAL_USER_QTY,BUYER_QTY,UnitPrice,RECEIVED_TMT_QTY,DOC_DATE,VALUE,MONTH,YEAR,STATUS from Indent_Transaction where \n"
+					+ "month=:MONTH and YEAR=:YEAR and COST_CENTER=:COST_CENTER";
 			Query query = entityManager.createNativeQuery(sql);
 
 			query.setParameter("MONTH", Month);
@@ -4442,24 +4444,24 @@ public class UserDaoimpl implements UserDao {
 	public List<String[]> getreportbyidadmin(String Month, String Year, String loginid) {
 		int cFY = Integer.valueOf(Year);
 		String yearfromCal = Year;
-		if (getMonthNumber(Month) < 4) {
-			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
-		  yearfromCal = String.valueOf(cFY);
-		    System.out.println("yearfromCal"+yearfromCal);
-		}
+		/*
+		 * if (getMonthNumber(Month) < 4) { cFY = cFY - 1; // If the month is before
+		 * April, subtract 1 from the year yearfromCal = String.valueOf(cFY);
+		 * System.out.println("yearfromCal"+yearfromCal); }
+		 */
 		boolean count = Validations.validation(Year);
 		if (count)
 			return new ArrayList<String[]>();
 		String sql = "";
 		List<String[]> response;
 		if (Month.equalsIgnoreCase("All")) {
-			sql = "select DOC_NUMBER,COST_CENTER,ITEM,DEPARTMENT,TOTAL_USER_QTY,BUYER_QTY,RECEIVED_TMT_QTY,DOC_DATE,VALUE,MONTH,YEAR,STATUS from Indent_Transaction where YEAR =:YEAR";
+			sql = "select DOC_NUMBER,COST_CENTER,ITEM,DEPARTMENT,TOTAL_USER_QTY,BUYER_QTY,unitprice,RECEIVED_TMT_QTY,DOC_DATE,VALUE,MONTH,YEAR,STATUS from Indent_Transaction where YEAR =:YEAR";
 
 			Query query = entityManager.createNativeQuery(sql);
 			query.setParameter("YEAR", Year);
 			response = query.getResultList();
 		} else {
-			sql = "select DOC_NUMBER,COST_CENTER,ITEM,DEPARTMENT,TOTAL_USER_QTY,BUYER_QTY,RECEIVED_TMT_QTY,DOC_DATE,VALUE,MONTH,YEAR,STATUS from Indent_Transaction where MONTH =:MONTH and YEAR =:YEAR";
+			sql = "select DOC_NUMBER,COST_CENTER,ITEM,DEPARTMENT,TOTAL_USER_QTY,BUYER_QTY,unitprice,RECEIVED_TMT_QTY,DOC_DATE,VALUE,MONTH,YEAR,STATUS from Indent_Transaction where MONTH =:MONTH and YEAR =:YEAR";
 
 			Query query = entityManager.createNativeQuery(sql);
 

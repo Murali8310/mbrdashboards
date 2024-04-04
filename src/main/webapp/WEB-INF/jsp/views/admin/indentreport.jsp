@@ -339,6 +339,7 @@ margin-top: 20px !important;
 														<th scope="col" class='headerStyles'><b>Department</b></th>
 														<th scope="col" class='headerStyles'><b>QTY</b></th>
 														<th scope="col" class='headerStyles'><b>Buyer QTY</b></th>
+														<th scope="col" class='headerStyles'><b>Unit Price(Rs)</b></th>
 														<th scope="col" class='headerStyles'><b>Received QTY</b></th>
 														<th scope="col" class='headerStyles'><b>Document Date</b></th>
 														<th scope="col" class='headerStyles'><b>Value</b></th>
@@ -360,6 +361,7 @@ margin-top: 20px !important;
 															<td>${user[3]}</td>
 															<td>${user[4]}</td>
 															<td>${user[10]}</td>
+															<td>${user[12]}</td>
 															<td>${user[11]}</td>
 															<td>${user[5]}</td>
 															<td style="text-align:right !important">${user[6]}</td>
@@ -371,6 +373,27 @@ margin-top: 20px !important;
 
 													</c:forEach>
 												</tbody>
+												<tfoot id='tfootexample'>
+													<tr>
+														<th class='tbodyCustomColor'>Total</th>
+														<th class='tbodyCustomColor'></th>
+														<th class='tbodyCustomColor'></th>
+																												<th class='tbodyCustomColor' id="footerUserQty" style="text-align:center"></th>
+																												<th class='tbodyCustomColor' id="totalQty" style="text-align:left !important"></th>
+																												<th class='tbodyCustomColor' style="text-align:left !important" id="totalBuyerQty"></th>
+																												<th class='tbodyCustomColor' id="unitPrice"	style="text-align:left !important"></th>
+																												<th class='tbodyCustomColor' style="text-align:right"  id="footerTotalValue"></th>
+																												<th class='tbodyCustomColor' style="text-align:center"></th>
+																												<th class='tbodyCustomColor' id="unitValue" style="text-align:right !important"></th>
+																												<th class='tbodyCustomColor' style="text-align:right" id="footerStockValue"></th>
+																												<th class='tbodyCustomColor' style="text-align:right" id="footerStockValue"></th>
+																												<th class='tbodyCustomColor' style="text-align:right" id="footerStockValue"></th>
+														
+
+												</tr>
+
+													
+											</tfoot>
 											</table>
 
 										</div>
@@ -625,7 +648,11 @@ $(document).ready(function () {
 				table.rows.add(data).draw();
 				// alert("No data available for the selected month.");
 
-
+$('#totalQty').text(Math.floor(updateColumnData(4)));
+    $('#totalBuyerQty').text(Math.floor(updateColumnData(5)));
+    $('#unitPrice').text(updateColumnData(6));
+    $('#unitValue').text(updateColumnData(9));
+	
 				var message = response.message;
 				//alert(message); 
 
@@ -751,9 +778,83 @@ $(document).ready(function () {
 			});
 });
 
-
+function updateColumnData(columnIndex) {
+	let totalSum = 0;
+     var table = $('#example').DataTable();
+    table.column(columnIndex).data().each(function (value, index) {
+    	if(typeof value == 'string'){
+    	value = value.replaceAll(',','').trim();
+    	console.log('murali total cal',Number(value));
+    	}
+    	totalSum = totalSum + Number(value);	        	
+    });  
+    // Redraw the table to reflect the changes
+    table.draw();
+    return totalSum.toFixed(2);
+}
 </script>
 
+<script>
+$(document).ready(function() {
+var Month = $('#Month').val();
+var Year = $('#Year').val();
+
+
+$.ajax({
+type : "GET",
+url : "getreportbyidadmin",
+data : {
+	Month : Month,
+	Year : Year
+},
+success : function(response) {
+	table.clear().draw();
+	data = jQuery.parseJSON(response);
+	table.clear().draw();
+	table.rows.add(data).draw();
+	// alert("No data available for the selected month.");
+// Update footer with the result of updateColumnData
+$('#totalQty').text(Math.floor(updateColumnData(4)));
+$('#totalBuyerQty').text(Math.floor(updateColumnData(5)));
+$('#unitPrice').text(updateColumnData(6));
+$('#unitValue').text(updateColumnData(9));
+	var message = response.message;
+	//alert(message); 
+
+},
+error : function(xhr, status, error) {
+
+	console.error(error);
+}
+});
+
+
+// Initialize DataTable
+var table = $('#example').DataTable();
+
+// Function to update column data
+function updateColumnData(columnIndex) {
+let totalSum = 0;
+table.column(columnIndex).data().each(function(value, index) {
+    if (typeof value == 'string') {
+        value = value.replaceAll(',', '').trim();
+        console.log('murali total cal', Number(value));
+    }
+    totalSum = totalSum + Number(value);
+});
+// Redraw the table to reflect the changes
+table.draw();
+return totalSum.toFixed(2);
+}
+
+// Update footer with the result of updateColumnData
+$('#totalQty').text(Math.floor(updateColumnData(4)));
+$('#totalBuyerQty').text(Math.floor(updateColumnData(5)));
+$('#unitPrice').text(updateColumnData(6));
+$('#unitValue').text(updateColumnData(9));
+
+});
+</script>
 
 </body>
 </html>

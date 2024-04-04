@@ -250,7 +250,6 @@ inset: auto 0px 1px;
     right: 5px;
 }
 .card {
-  width: 190px;
   height: 254px;
   border-radius: 10px;
   background: #e0e0e0;
@@ -283,9 +282,9 @@ inset: auto 0px 1px;
 				<div class="col-sm-5 col-lg-5 col-md-5" style="text-align: center;font-weight: bold;">
                 <h4 style="font-weight:bold">Budget Uitilized (Monthly)</h4>
 				</div>
-				 <div class="col-sm-5 col-lg-5 col-md-5 card" style="margin-right:20px" id="chart">
+				 <div class="col-sm-12 col-lg-5 col-md-5 card" style="margin-right:20px" id="chart">
 				</div>
-				 <div class="col-sm-5 col-lg-5 col-md-5 card mb-4" id="chart3">
+				 <div class="col-sm-12 col-lg-5 col-md-5 card mb-4" id="chart3">
 				</div>   
 		</div>
 
