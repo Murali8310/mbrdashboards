@@ -4163,7 +4163,7 @@ public class UserDaoimpl implements UserDao {
 	        		        Date currentDate = new Date();
 
 	        		        // Create a SimpleDateFormat object with the desired date format
-	        		        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+	        		        SimpleDateFormat sdf = new SimpleDateFormat("MMMM_yyyy");
 
 	        		        // Format the current date using the SimpleDateFormat object
 	        		        String formattedDate = sdf.format(currentDate);
@@ -4175,7 +4175,7 @@ public class UserDaoimpl implements UserDao {
 
 	        		        // Add "STATIONERY REQUIREMENTS 27-03-2024" spanning two cells
 	        		        Cell firstCell = headerRow1.createCell(0);
-	        		        firstCell.setCellValue("STATIONERY REQUIREMENTS " + formattedDate);
+	        		        firstCell.setCellValue("Stationery_Requirements_" + formattedDate);
 	        		        firstCell.setCellStyle(headerStyle); // Apply header style
 	        		        
 	        		        // Merge the cells
@@ -4288,13 +4288,13 @@ public class UserDaoimpl implements UserDao {
 
 
 		        		     // Create a SimpleDateFormat object with the desired date format
-		        		        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+		        		        SimpleDateFormat sdf1 = new SimpleDateFormat("MMMM_yyyy");
 
 		        		        // Format the current date using the SimpleDateFormat object
 		        		        String formattedDate1 = sdf1.format(currentDate);
 
 
-		        		    File excelFile = File.createTempFile("Stationery_Recipt_"+ formattedDate1, ".xlsx");
+		        		    File excelFile = File.createTempFile("Stationery_Requirements_"+ formattedDate1, ".xlsx");
 	        				FileOutputStream fileOut = new FileOutputStream(excelFile);
 	        				workbook.write(fileOut);
 	        				fileOut.close();
@@ -4312,7 +4312,7 @@ public class UserDaoimpl implements UserDao {
 	        				msg.setFrom(
 	        						new InternetAddress("noreply_stationary@titan.co.in", "No Reply-stationary Employee Portal"));
 	        				//msg.setReplyTo(InternetAddress.parse(key, false));
-	        				msg.setSubject("Purchase order for Stationery items – Watch Div.");
+	        				msg.setSubject("Stationery_Requirements_"+ formattedDate1);
 
 	        				MimeMultipart multipart = new MimeMultipart();
 
