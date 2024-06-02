@@ -112,7 +112,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ModelAndView newLogin(HttpServletRequest request, HttpServletResponse response, Model model) {
+	public ModelAndView d(HttpServletRequest request, HttpServletResponse response, Model model) {
 		String randomKey = UUID.randomUUID().toString();
 		// String uniqueKey = "1234567891234567";
 		
@@ -216,7 +216,15 @@ public class UserController {
 		userMap = (Map<String, Object>) userService.findloginuser(userLoginBean, passwords);
 		
 		userLoginBean.setLogin_id(userLoginBean.getLogin_id());
+		List<Object> getAccessStatus = userService.portalBlcokingMechanism(null);
 
+		
+		 Object blockAccessStatus = null;
+		    
+		    // Check if the list is not empty and get the first value
+		    if (getAccessStatus != null && !getAccessStatus.isEmpty()) {
+		        blockAccessStatus = getAccessStatus.get(0);
+		    }
 		if (userLoginBean.getLogin_id() == null) {
 			System.out.println("userLoginBean.getLogin_id()"+userLoginBean.getLogin_id());
 			return "login";
@@ -233,6 +241,7 @@ public class UserController {
 			session.setAttribute("role", userMap.get("role"));
 			session.setAttribute("storeCode", userMap.get("storeCode"));
 			session.setAttribute("accessRole", userMap.get("accessRole"));
+		    session.setAttribute("blockaccess", blockAccessStatus);
 			// session.setAttribute("StoressSM", userMap.get("StoressSM"));
 			// session.setAttribute("region", userMap.get("region"));
 
@@ -2692,6 +2701,33 @@ System.out.println("CCCOWNER"+CCCOWNER);
 				return "Access denied";
 			}
 			List<Object> getHolidaymasterData = userService.getholidaymasterData(loginId);
+			
+			// List<Object[]> stores = userService.getAllstores();
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			String mapJsonObject = gson.toJson(getHolidaymasterData);
+			// System.out.print("234" + mapJsonObject);
+			return mapJsonObject;
+
+		}
+		
+		/*
+		 * murali chari.
+		 * 
+		 * for indent update product catelogue fetch
+		 */
+
+		@RequestMapping(value = "portalBlcokingMechanism", method = RequestMethod.GET)
+		public String portalBlcokingMechanism(HttpServletRequest request, HttpServletResponse responsel) {
+			HttpSession session = request.getSession();
+			String loginId = "";
+			try {
+				Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+				loginId = (String) userMap.get("login_id");
+			} catch (Exception er) {
+				er.printStackTrace();
+				return "Access denied";
+			}
+			List<Object> getHolidaymasterData = userService.portalBlcokingMechanism(loginId);
 			
 			// List<Object[]> stores = userService.getAllstores();
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();

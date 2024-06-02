@@ -1068,5 +1068,12 @@ public class UserServiceimpl implements Userservice {
 		getDesignationDetails = userDao.getAllBudgetCCIDDe();
 		return getDesignationDetails;
 	}
+	
+	@Override
+	public List<Object> portalBlcokingMechanism(String loginId) {
+		List<Object> getholidaymasterData;
+		getholidaymasterData = userDao.portalBlcokingMechanism(loginId);
+		return getholidaymasterData;
+	}
 
 }

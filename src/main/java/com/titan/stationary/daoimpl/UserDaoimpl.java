@@ -455,6 +455,7 @@ public class UserDaoimpl implements UserDao {
 		return userVal;
 	}
 
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Object> usersearch(String firstname) {
@@ -2822,8 +2823,22 @@ public class UserDaoimpl implements UserDao {
 				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November, 0)\n"
 				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) +ISNULL( bm.june,0) + ISNULL(bm.July ,0)+ ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November,0)+ISNULL(bm.December, 0)\n"
 				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) +ISNULL( bm.june,0) +ISNULL( bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November,0)+ISNULL(bm.December,0)+ISNULL(bm.January, 0)\n"
-				+ "				 ELSE ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November,0) +ISNULL(bm.December,0)+ISNULL(bm.January,0) +ISNULL(bm.February, 0) END) + (isnull(sum(BUYER_QTY*UnitPrice),0)+isnull(SAPBILL,0))\n"
-				+ "				 AS cumulative_budget\n"
+				+ "				 ELSE ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November,0) +ISNULL(bm.December,0)+ISNULL(bm.January,0) +ISNULL(bm.February, 0) END) + (isnull(sum(BUYER_QTY*UnitPrice),0)+isnull(SAPBILL,0)"
+				+ "+  ISNULL((\n"
+				+ "            CASE \n"
+				+ "                WHEN "+getMonthNumber(MonthText)+" > 3 AND "+getMonthNumber(MonthText)+" < 12 THEN \n"
+				+ "                    (SELECT SUM(po.poamount)\n"
+				+ "                     FROM PO_Entry po\n"
+				+ "                     WHERE po.COST_CENTER = bm.ccid AND po.MONTHNUMBER > 3 AND po.MONTHNUMBER <= "+getMonthNumber(MonthText)+")\n"
+				+ "                WHEN "+getMonthNumber(MonthText)+" <= 3 THEN \n"
+				+ "                    (SELECT SUM(po.poamount)\n"
+				+ "                     FROM PO_Entry po\n"
+				+ "                     WHERE po.COST_CENTER = bm.ccid AND \n"
+				+ "                           ((po.MONTHNUMBER > 3 AND po.MONTHNUMBER <= 12 AND po.YEAR = bm.YEAR - 1) OR \n"
+				+ "                            (po.MONTHNUMBER <= "+getMonthNumber(MonthText)+" AND po.YEAR = bm.YEAR)))\n"
+				+ "                ELSE 0\n"
+				+ "            END\n"
+				+ "        ), 0)) AS cumulative_budget"
 				+ "				 FROM BUDGET_MASTER bm LEFT JOIN Indent_Transaction it ON bm.ccid = it.cost_center and it.YEAR=:YEAR and MONTH=:MonthText\n"
 				+ "				 GrOUP BY SAPBILL, bm.ccid,bm.Year,bm.CostCenterDescription,bm.BudValueRsL,bm.April,bm.MaY,bm.june,bm.July,bm.August,bm.September,bm.October,bm.November,bm.December,January,February ) AS SourceTable\n"
 				+ "				 PIVOT( MAX(cumulative_budget) FOR CCID IN (" + finalcc + ")) AS PivotTable6\n"
@@ -2840,7 +2855,21 @@ public class UserDaoimpl implements UserDao {
 				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November, 0)\n"
 				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November,0)+ISNULL(bm.December, 0)\n"
 				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.April,0) +ISNULL( bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November,0)+ISNULL(bm.December,0)+ISNULL(bm.January, 0)\n"
-				+ "				 ELSE ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November,0) +ISNULL(bm.December,0)+ISNULL(bm.January,0) +ISNULL(bm.February, 0) END) + (isnull(sum(BUYER_QTY*UnitPrice),0)+isnull(SAPBILL,0)))\n"
+				+ "				 ELSE ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November,0) +ISNULL(bm.December,0)+ISNULL(bm.January,0) +ISNULL(bm.February, 0) END) + (isnull(sum(BUYER_QTY*UnitPrice),0)+isnull(SAPBILL,0)+ISNULL((\n"
+				+ "            CASE \n"
+				+ "                WHEN "+getMonthNumber(MonthText)+" > 3 AND "+getMonthNumber(MonthText)+" < 12 THEN \n"
+				+ "                    (SELECT SUM(po.poamount)\n"
+				+ "                     FROM PO_Entry po\n"
+				+ "                     WHERE po.COST_CENTER = bm.ccid AND po.MONTHNUMBER > 3 AND po.MONTHNUMBER <= "+getMonthNumber(MonthText)+")\n"
+				+ "                WHEN "+getMonthNumber(MonthText)+" <= 3 THEN \n"
+				+ "                    (SELECT SUM(po.poamount)\n"
+				+ "                     FROM PO_Entry po\n"
+				+ "                     WHERE po.COST_CENTER = bm.ccid AND \n"
+				+ "                           ((po.MONTHNUMBER > 3 AND po.MONTHNUMBER <= 12 AND po.YEAR = bm.YEAR - 1) OR \n"
+				+ "                            (po.MONTHNUMBER <= "+getMonthNumber(MonthText)+" AND po.YEAR = bm.YEAR)))\n"
+				+ "                ELSE 0\n"
+				+ "            END\n"
+				+ "        ), 0)))\n"
 				+ "				 AS cumulative_budget\n"
 				+ "				 FROM BUDGET_MASTER bm LEFT JOIN Indent_Transaction it ON bm.ccid = it.cost_center and it.YEAR=:YEAR and MONTH=:MonthText\n"
 				+ "				 GrOUP BY SAPBILL, bm.ccid,bm.Year,bm.CostCenterDescription,bm.BudValueRsL,bm.April,bm.MaY,bm.june,bm.July,bm.August,bm.September,bm.October,bm.November,bm.December,January,February ) AS SourceTable\n"
@@ -6380,4 +6409,31 @@ Calendar cal = Calendar.getInstance();
 		return getBudgetDetails;
 	}
 
+	/**
+	 * murali Get budget details
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Object> portalBlcokingMechanism(String userId) {
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat year_Date = new SimpleDateFormat("YYYY");
+		String yearfromCal = year_Date.format(cal.getTime());
+		List<Object> getBudgetDetails;
+		String currentYearForPoEntry = null;
+		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
+		String MonthText = month.format(cal.getTime());
+		int cFY = Integer.parseInt(yearfromCal);
+		
+		Query selectQuery = entityManager.createNativeQuery("\n"
+				+ " SELECT value\n"
+				+ "FROM ISCM_ACCESS  where allow = 'portalBlcokingMechanism';");
+			try {
+			getBudgetDetails = selectQuery.getResultList();
+		} catch (HibernateException e) {
+
+			e.printStackTrace();
+			getBudgetDetails = null;
+		}
+		return getBudgetDetails;
+	}
 }

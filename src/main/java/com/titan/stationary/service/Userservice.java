@@ -217,7 +217,8 @@ public interface Userservice {
 
 
 	List<Object> getAllBudgetCCIDDe();
-
+	
+	List<Object> portalBlcokingMechanism(String loginId);
 
 
 }

@@ -264,7 +264,7 @@ public interface UserDao {
 
 	List<String> getAllHeadersList(String Year, String Month);
 
-
+	List<Object> portalBlcokingMechanism(String userId);
 	
 
 

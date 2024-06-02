@@ -593,9 +593,10 @@ h1 {
  	 	            let currentDayNumber = formatDate(currentDate);
  	 	          currentDayNumber = Number(currentDayNumber.split('/')[0])
  	 	            let loginStatus = '';
- 	 	       
+ 	 	          
+ 	 	        var blockPortalaccess = '<%= session.getAttribute("blockaccess") %>';
  	 	        
- 	 	            if(currentDayNumber < (get7thDay && get7thDay.day)){
+ 	 	            if((currentDayNumber < (get7thDay && get7thDay.day)) || (blockPortalaccess == 'true')){
  	 	            	loginStatus = 'IndentorAllowed'; 	 	            	
  	 	            	if(document.getElementById('userRole').textContent.split(':')[1].trim() == 'Indent Manager'){
  		 	            	document.getElementById('indentordistributerStatus').style['display']='none';
@@ -665,13 +666,11 @@ h1 {
 	    return date.toLocaleDateString('en-GB', options);
 	}
 
-   
-   
-   
-
-
-
-
+    </script>
+     <script type="text/javascript">
+        // Retrieve the session attribute and assign it to a JavaScript variable
+        var blockaccess = '<%= session.getAttribute("blockaccess") %>';
+        console.log("Block Access Status:", blockaccess); // For debugging
     </script>
 </body>
 </html>

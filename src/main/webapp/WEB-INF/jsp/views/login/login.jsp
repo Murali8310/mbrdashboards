@@ -1,7 +1,10 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html dir="ltr">
-
+<%
+// Retrieve the session attribute
+String accessRole = (String) session.getAttribute("accessRole");
+%>
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -161,6 +164,12 @@ border-color:#01AFAE;
  }
 </style>
 
+ <script type="text/javascript">
+        // Store the session attribute in a JavaScript variable
+        var accessRole = '<%= accessRole %>';
+        console.log("Access Role:", accessRole); // For debugging
+    </script>
+
 </head>
 
 <body>
@@ -312,8 +321,10 @@ border-color:#01AFAE;
         // Check if the page was reloaded using navigation
         if (performance.navigation.type === 1) {
             // Clear the MESSAGE value
-            document.getElementById("error-message").textContent = "";
-        }
+var errorMessageElement = document.getElementById("error-message");
+if (errorMessageElement !== null) {
+    errorMessageElement.textContent = "";
+}        }
     </script>
 		<script>
 		sm="Indent Manager";
