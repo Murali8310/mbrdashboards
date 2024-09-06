@@ -107,7 +107,9 @@ a:hover {
 		<ul class="navbar-nav float-left mr-auto">
 			<li class="nav-item d-none d-md-block" id='sidebarToggle'><a
 				class="nav-link sidebartoggler waves-effect waves-light"
-				href="javascript:void(0)" data-sidebartype="mini-sidebar" id='clickid'></a></li>		
+				href="javascript:void(0)" data-sidebartype="mini-sidebar" id='clickid'>
+				<i class="mdi mdi-menu font-24"></i>
+				</a></li>		
 		<ul class="navbar-nav" style="align-items: center;font-size: 20px;font-weight:550;"> Welcome To Stationery Portal</ul>	
 			<!-- ============================================================== -->
 			<!-- create new -->
@@ -252,7 +254,8 @@ a:hover {
 		    setTimeout(function() {
 		        var element = document.getElementById('clickid');
 		        if (element) {
-		            element.click();
+		         // ] element.click();
+		        	
 		        }
 		        console.log('it is calling in header')
 

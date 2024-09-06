@@ -474,6 +474,15 @@ function getProductByIndent(){
 	
 
 	function incrementCount(element) {
+		var monthlyBalanceText = $("#totalOutput2 span.highlight:eq(2)").text();
+		if(monthlyBalanceText.includes('-')){
+				Swal.fire({
+							icon : 'error',
+			        	  title: 'Indent amount is exceeded the yearly budget!',
+							focusConfirm : false,
+						})
+						return;
+			}
 		var InputArray = [];
 		var input = element.parentNode.querySelector('.count-input');
 		var productCard = input.closest('.card');
@@ -501,7 +510,6 @@ function getProductByIndent(){
 							return;
 				}
 		var yearlybudget = document.querySelector("#totalOutput2 .highlight:nth-child(1)");
-		var monthlyBalanceText = $("#totalOutput2 span.highlight:eq(2)").text();
 		var monthlyBalance = parseFloat(monthlyBalanceText.replace(/[^\d.]/g, ''));
 		var indentBalanceText = $("#totalOutput2 span.highlight:eq(4)").text();
 		var indentBalance = parseFloat(indentBalanceText.replace(/[^\d.]/g, ''));

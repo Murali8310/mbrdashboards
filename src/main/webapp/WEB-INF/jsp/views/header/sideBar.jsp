@@ -80,6 +80,18 @@ margin: 5px;
 }
 
 
+
+/* For screens smaller than 768px */
+@media (max-width: 767px) {
+    #main-wrapper.mini-sidebar .left-sidebar:hover {
+        width: 250px !important;
+    }
+    
+    #main-wrapper.mini-sidebar .left-sidebar {
+    width: 250px !important;
+}
+}
+
 </style>
 </head>
 <body>

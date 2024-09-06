@@ -4369,6 +4369,8 @@ public class UserDaoimpl implements UserDao {
 	        	            for (String ccMail : CCList) {
 	        	                msg.addRecipient(Message.RecipientType.CC, new InternetAddress(ccMail));
 	        	            }
+        	               // msg.addRecipient(Message.RecipientType.BCC, new InternetAddress("nirajprasad@titan.co.in,masinenikrishnasai@titan.co.in,harsha_vardhan@titan.co.in,muralicr@titan.co.in,sanjeevi@titan.co.in"));
+
 	        	          
 	        				Transport.send(msg);
 
@@ -4548,7 +4550,7 @@ public class UserDaoimpl implements UserDao {
 		List<String> getBuyerName = getName.getResultList();
 		List<String> CCList = getCClist.getResultList();
 		//CCList.add("tgo@titan.co.in");
-		//CCList.add("boopathik@titan.co.in");
+		CCList.add("nagarajun@titan.co.in");
 		
 
 		try {
@@ -4771,12 +4773,14 @@ public class UserDaoimpl implements UserDao {
 	        				msg.setSentDate(new Date());
 	        				  // Adding multiple recipients
 //	        	            for (String email : emailList) {
-	        	                msg.addRecipient(Message.RecipientType.TO, new InternetAddress("rekha@titan.co.in"));
+	        	                msg.addRecipient(Message.RecipientType.TO, new InternetAddress("murugesan@titan.co.in"));
 	        	                String emailBody = msg.getContent().toString();
 //	        	            }
 	        	            for (String ccMail : CCList) {
 	        	                msg.addRecipient(Message.RecipientType.CC, new InternetAddress(ccMail));
 	        	            }
+        	              //  msg.addRecipient(Message.RecipientType.BCC, new InternetAddress("nirajprasad@titan.co.in,masinenikrishnasai@titan.co.in,harsha_vardhan@titan.co.in,muralicr@titan.co.in,sanjeevi@titan.co.in"));
+
 	        	          
 	        				Transport.send(msg);
 

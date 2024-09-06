@@ -858,6 +858,16 @@ li {
 		}
 	
 	function incrementCount1(element) {
+
+		var monthlyBalanceText = $("#totalOutput2 span.highlight:eq(2)").text();
+		if(monthlyBalanceText.includes('-')){
+				Swal.fire({
+							icon : 'error',
+			        	  title: 'Indent amount is exceeded the yearly budget!',
+							focusConfirm : false,
+						})
+						return;
+			}
 		var noBudget =$('#totalOutput2').text();
 		if(noBudget != 'No budget is defined'){
 		var yearlybudget = document.querySelector("#totalOutput2 .highlight:nth-child(2)");
@@ -882,7 +892,6 @@ li {
 			});
 			calculateIncrementTotal(input.value,productPrice);
 		var yearlybudget = document.querySelector("#totalOutput2 .highlight:nth-child(2)");
-		var monthlyBalanceText = $("#totalOutput2 span.highlight:eq(2)").text();
 		var indentBalanceText = $("#totalOutput2 span.highlight:eq(4)").text();
 		var monthlyBalance = parseFloat(monthlyBalanceText.replace(/[^\d.]/g, ''));
 		var indentBalance = parseFloat(indentBalanceText.replace(/[^\d.]/g, ''));
@@ -1023,6 +1032,16 @@ li {
 	
 	//..................
 	function incrementCount(element) {
+
+		var monthlyBalanceText = $("#totalOutput2 span.highlight:eq(2)").text();
+		if(monthlyBalanceText.includes('-')){
+				Swal.fire({
+							icon : 'error',
+			        	  title: 'Indent amount is exceeded the yearly budget!',
+							focusConfirm : false,
+						})
+						return;
+			}
 		var noBudget =$('#totalOutput2').text();
 		if(noBudget != 'No budget is defined'){
 		var yearlybudget = document.querySelector("#totalOutput2 .highlight:nth-child(2)");
@@ -1044,7 +1063,6 @@ li {
 			});
 			calculateIncrementTotal(input.value,productPrice);
 		var yearlybudget = document.querySelector("#totalOutput2 .highlight:nth-child(2)");
-		var monthlyBalanceText = $("#totalOutput2 span.highlight:eq(2)").text();
 		var indentBalanceText = $("#totalOutput2 span.highlight:eq(4)").text();
 		var monthlyBalance = parseFloat(monthlyBalanceText.replace(/[^\d.]/g, ''));
 		var indentBalance = parseFloat(indentBalanceText.replace(/[^\d.]/g, ''));

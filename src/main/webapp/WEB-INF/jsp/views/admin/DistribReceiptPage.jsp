@@ -359,7 +359,7 @@ table.dataTable tbody tr.selected a {
 													  <c:set var="collectionSize" value="${collectionSize + 1}" />
 													
 													</c:forEach>													
-														<td class='tbodyCustomColor'>${user[collectionSize + 8]}</td>
+														<td class='tbodyCustomColor'>${user[collectionSize + 4]}</td>
 														<td class='tbodyCustomColor' style="text-align:right !important">${user[7]*user[6]}</td>
 														<td class='tbodyCustomColor' style="text-align:right !important">${user[collectionSize + 3]}</td>
 														<td class="editable-cell" style="text-align:center !important">${user[collectionSize + 8]}</td>
