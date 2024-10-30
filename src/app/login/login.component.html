@@ -1,0 +1,110 @@
+<div class="login-container">
+    <div class="login-form">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-6 col-md-10">
+            <!-- <div class="logo mb-4 text-center">
+              <img src="assets/images/titan-logo.png" alt="Titan" class="mb-3" />
+              <h3>Titan Safety Portal</h3>
+            </div> -->
+            <div class="row mb-5 d-flex align-items-center">
+              <div class="col">
+                <img
+                  src="assets/images/Logo_of_Titan_Company.png"
+                  class="img-fluid"
+                  alt=""
+                />
+              </div>
+              <div class="col">
+                <img
+                  src="assets/images/OHSMS PORTAL.png"
+                  class="img-fluid"
+                  alt=""
+                />
+              </div>
+              <div class="col">
+                <img
+                  src="assets/images/surakshaicon.png"
+                  class="img-fluid"
+                  alt=""
+                />
+              </div>
+            </div>
+            <form
+              class="mb-4"
+              [formGroup]="loginForm"
+              *ngIf="allowOnlyAfterClearCache"
+            >
+              <div class="form-group mb-3" *ngIf="allowOnlyAfterClearCache">
+                <label for="exampleInputEmail1" class="mb-2"
+                  >Username <sup>*</sup></label
+                >
+                <input
+                  type="email"
+                  class="form-control"
+                  id="exampleInputEmail1"
+                  aria-describedby="emailHelp"
+                  maxlength="30"
+                  placeholder="Enter your Emp code with prefix E"
+                  formControlName="userName"
+                />
+              </div>
+              <div class="form-group mb-3">
+                <label for="exampleInputEmail1" class="mb-2"
+                  >Password <sup>*</sup></label
+                >
+                <div class="fmin-group">
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    aria-describedby="emailHelp"
+                    placeholder="Enter password"
+                    formControlName="password"
+                  />
+                  <i
+                    class="fa fa-eye"
+                    aria-hidden="true"
+                    (click)="showPassword()"
+                  ></i>
+                </div>
+              </div>
+              <button
+                type="submit"
+                class="btn btn-primary btn-block"
+                (click)="onSubmit()"
+              >
+                Login
+              </button>
+              <div class="alert alert-warning" *ngIf="submitted && isLoginFailed">
+                {{ errorMessage }}
+              </div>
+            </form>
+  
+            <div class="support clearfix">
+              <img
+                id="QRimg"
+                class="backRight"
+                style="width: 100px"
+                src="assets/images/surakshaQR.png"
+                title="Scan me to open in mobile"
+                alt="Scan me to open in mobile"
+                class="img-fluid"
+              />
+  
+              <a href="auth/contact-us">Get Support!!</a>
+            </div>
+  
+            <div class="copy-rights mt-5">
+              © 2024 - 2025 Titan company limited
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="back">
+      <div class="backRight"></div>
+    </div>
+  </div>
+  <!-- <ngx-ui-loader></ngx-ui-loader> -->
+  
