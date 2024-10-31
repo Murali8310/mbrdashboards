@@ -1,45 +1,80 @@
 // angular import
 import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ApexOptions } from 'ng-apexcharts'; // Use ApexOptions instead of ChartOptions
 
 // project import
 import { SharedModule } from 'src/app/theme/shared/shared.module';
-import { NgApexchartsModule } from 'ng-apexcharts';
+import { ApexGrid, ApexMarkers, ApexTitleSubtitle, NgApexchartsModule } from 'ng-apexcharts';
 import { ProductSaleComponent } from './product-sale/product-sale.component';
 
+// import {
+//   ChartComponent,
+//   ApexAxisChartSeries,
+//   ApexNonAxisChartSeries,
+//   ApexChart,
+//   ApexXAxis,
+//   ApexDataLabels,
+//   ApexStroke,
+//   ApexYAxis,
+//   ApexLegend,
+//   ApexFill,
+//   ApexGrid,
+//   ApexPlotOptions,
+//   ApexTooltip,
+//   ApexMarkers
+// } from 'ng-apexcharts';
+
 import {
-  ChartComponent,
   ApexAxisChartSeries,
-  ApexNonAxisChartSeries,
   ApexChart,
-  ApexXAxis,
+  ChartComponent,
   ApexDataLabels,
-  ApexStroke,
+  ApexPlotOptions,
   ApexYAxis,
   ApexLegend,
+  ApexStroke,
+  ApexXAxis,
   ApexFill,
-  ApexGrid,
-  ApexPlotOptions,
-  ApexTooltip,
-  ApexMarkers
-} from 'ng-apexcharts';
+  ApexTooltip
+} from "ng-apexcharts";
+import { DashboardService } from 'src/app/dashboard.service';
+
+// export type ChartOptions = {
+//   series: ApexAxisChartSeries | ApexNonAxisChartSeries;
+//   chart: ApexChart;
+//   xaxis: ApexXAxis;
+//   stroke: ApexStroke;
+//   dataLabels: ApexDataLabels;
+//   plotOptions: ApexPlotOptions;
+//   yaxis: ApexYAxis;
+//   tooltip: ApexTooltip;
+//   labels: string[];
+//   colors: string[];
+//   legend: ApexLegend;
+//   fill: ApexFill;
+//   grid: ApexGrid;
+//   markers: ApexMarkers;
+// };
+
+
 
 export type ChartOptions = {
-  series: ApexAxisChartSeries | ApexNonAxisChartSeries;
+  series: ApexAxisChartSeries;
   chart: ApexChart;
-  xaxis: ApexXAxis;
-  stroke: ApexStroke;
   dataLabels: ApexDataLabels;
   plotOptions: ApexPlotOptions;
   yaxis: ApexYAxis;
-  tooltip: ApexTooltip;
-  labels: string[];
-  colors: string[];
-  legend: ApexLegend;
+  xaxis: ApexXAxis;
   fill: ApexFill;
-  grid: ApexGrid;
-  markers: ApexMarkers;
+  tooltip: ApexTooltip;
+  stroke: ApexStroke;
+  legend: ApexLegend;
+  title: ApexTitleSubtitle;
+  markers:ApexMarkers;
+  grid:ApexGrid;
 };
+
 
 @Component({
   selector: 'app-dash-analytics',
@@ -49,234 +84,377 @@ export type ChartOptions = {
   styleUrls: ['./dash-analytics.component.scss']
 })
 export default class DashAnalyticsComponent {
+  chartOptionsline!: ApexOptions; // Change to ApexOptions
+
+  // public chartOptions5: {
+  //   series: ApexAxisChartSeries;
+  //   chart: ApexChart;
+  //   xaxis: ApexXAxis;
+  //   yaxis: ApexYAxis;
+  //   colors: string[];
+  //   fill: ApexFill;
+  //   plotOptions: ApexPlotOptions;
+  //   dataLabels: ApexDataLabels;
+  // };
+
+  // public chartOptions5: {
+  //   series: ApexAxisChartSeries;
+  //   chart: ApexChart;
+  //   xaxis: ApexXAxis;
+  //   yaxis: ApexYAxis;
+  //   colors: string[];
+  //   fill: ApexFill;
+  //   plotOptions: ApexPlotOptions;
+  //   dataLabels: ApexDataLabels;
+  //   title: ApexTitleSubtitle;
+  //   subtitle: ApexTitleSubtitle;
+  //   stroke: ApexStroke;  
+  // };
   // public props
   @ViewChild('chart') chart!: ChartComponent;
   chartOptions!: Partial<ChartOptions>;
+  // chartOptionsline!: Partial<ChartOptions>;
   chartOptions_1!: Partial<ChartOptions>;
   chartOptions_2!: Partial<ChartOptions>;
   chartOptions_3!: Partial<ChartOptions>;
 
   // constructor
-  constructor() {
+  constructor(public dashboardService:DashboardService) {
+    
     this.chartOptions = {
       chart: {
-        height: 205,
-        type: 'line',
+        type: "bar",
+        height: 350,
         toolbar: {
-          show: false
+          show: false // Optional: Hide toolbar if not needed
+        }
+      },
+      // title: {
+      //   text: "Growth over Previous Month", // Chart title
+      //   align: 'center',
+      //   style: {
+      //     fontSize: '16px',
+      //     fontWeight: 'bold',
+      //     color: '#333'
+      //   }
+      // },
+      series: [
+        {
+          name: "Number of Retailers",
+          data: [120, 150, 130] // Example values for Number of Retailers
+        },
+        {
+          name: "Quantity (k)",
+          data: [30, -25, 35] // Example values for Quantity
+        },
+        {
+          name: "Value",
+          data: [100, -70, 80] // Example values for Value
+        }
+      ],
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: "50%",
+          // endingShape: "rounded"
         }
       },
       dataLabels: {
         enabled: false
       },
       stroke: {
+        show: true,
         width: 2,
-        curve: 'smooth'
-      },
-      series: [
-        {
-          name: 'Arts',
-          data: [20, 50, 30, 60, 30, 50]
-        },
-        {
-          name: 'Commerce',
-          data: [60, 30, 65, 45, 67, 35]
-        }
-      ],
-      legend: {
-        position: 'top'
+        colors: ["transparent"]
       },
       xaxis: {
-        type: 'datetime',
-        categories: ['1/11/2000', '2/11/2000', '3/11/2000', '4/11/2000', '5/11/2000', '6/11/2000'],
-        axisBorder: {
-          show: false
-        }
+        categories: [
+          "Feb",
+          "Mar",
+          "Apr",
+          // "May",
+          // "Jun",
+          // "Jul",
+          // "Aug",
+          // "Sep",
+          // "Oct"
+        ]
       },
       yaxis: {
-        show: true,
-        min: 10,
-        max: 70
+        title: {
+          text: " (Growth percentage)"
+        },
+        min: -100, // Set a minimum value for y-axis to accommodate negative values
       },
-      colors: ['#73b4ff', '#59e0c5'],
       fill: {
-        type: 'gradient',
-        gradient: {
-          shade: 'light',
-          gradientToColors: ['#4099ff', '#2ed8b6'],
-          shadeIntensity: 0.5,
-          type: 'horizontal',
-          opacityFrom: 1,
-          opacityTo: 1,
-          stops: [0, 100]
-        }
-      },
-      grid: {
-        borderColor: '#cccccc3b'
-      }
-    };
-    this.chartOptions_1 = {
-      chart: {
-        height: 150,
-        type: 'donut'
-      },
-      dataLabels: {
-        enabled: false
-      },
-      plotOptions: {
-        pie: {
-          donut: {
-            size: '75%'
-          }
-        }
-      },
-      labels: ['New', 'Return'],
-      series: [39, 10],
-      legend: {
-        show: false
+        opacity: 1
       },
       tooltip: {
-        theme: 'datk'
-      },
-      grid: {
-        padding: {
-          top: 20,
-          right: 0,
-          bottom: 0,
-          left: 0
-        }
-      },
-      colors: ['#4680ff', '#2ed8b6'],
-      fill: {
-        opacity: [1, 1]
-      },
-      stroke: {
-        width: 0
-      }
-    };
-    this.chartOptions_2 = {
-      chart: {
-        height: 150,
-        type: 'donut'
-      },
-      dataLabels: {
-        enabled: false
-      },
-      plotOptions: {
-        pie: {
-          donut: {
-            size: '75%'
+        y: {
+          formatter: function(val) {
+            return "" + val + " ";
           }
         }
-      },
-      labels: ['New', 'Return'],
-      series: [20, 15],
-      legend: {
-        show: false
-      },
-      tooltip: {
-        theme: 'dark'
-      },
-      grid: {
-        padding: {
-          top: 20,
-          right: 0,
-          bottom: 0,
-          left: 0
-        }
-      },
-      colors: ['#fff', '#2ed8b6'],
-      fill: {
-        opacity: [1, 1]
-      },
-      stroke: {
-        width: 0
       }
     };
-    this.chartOptions_3 = {
-      chart: {
-        type: 'area',
-        height: 145,
-        sparkline: {
-          enabled: true
-        }
-      },
-      dataLabels: {
-        enabled: false
-      },
-      colors: ['#ff5370'],
-      fill: {
-        type: 'gradient',
-        gradient: {
-          shade: 'dark',
-          gradientToColors: ['#ff869a'],
-          shadeIntensity: 1,
-          type: 'horizontal',
-          opacityFrom: 1,
-          opacityTo: 0.8,
-          stops: [0, 100, 100, 100]
-        }
-      },
-      stroke: {
-        curve: 'smooth',
-        width: 2
-      },
+    // this.chartOptionsline = {
+    //   series: [
+    //     {
+    //       name: "Retailers",
+    //       data: [120, 150, 130]  // Example data for Retailers over 3 months
+    //     },
+    //     {
+    //       name: "Quantity (k)",
+    //       data: [30, 25, 35]  // Example data for Quantity over 3 months (all positive)
+    //     },
+    //     {
+    //       name: "Value",
+    //       data: [100, 70, 80]  // Example data for Value over 3 months (all positive)
+    //     }
+    //   ],
+    //   chart: {
+    //     height: 350,
+    //     type: "line"
+    //   },
+    //   dataLabels: {
+    //     enabled: false
+    //   },
+    //   stroke: {
+    //     width: 5,
+    //     curve: "smooth",  // Smooth curve for the line chart
+    //     dashArray: [0, 8, 5]  // Different dash arrays for each line
+    //   },
+    //   // title: {
+    //   //   text: "Growth over Previous Months",  // Updated title
+    //   //   align: "left"
+    //   // },
+    //   legend: {
+    //     tooltipHoverFormatter: function(val, opts) {
+    //       return (
+    //         val +
+    //         " - <strong>" +
+    //         opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] +
+    //         "</strong>"
+    //       );
+    //     }
+    //   },
+    //   // markers: {
+    //   //   size: 5,  // Size of markers on the line
+    //   //   hover: {
+    //   //     sizeOffset: 6
+    //   //   }
+    //   // },
+    //   xaxis: {
+    //     labels: {
+    //       trim: false
+    //     },
+    //     categories: [
+    //       "july",  // Replace with actual month names or dates
+    //       "august",
+    //       "september"
+    //     ]
+    //   },
+    //   tooltip: {
+    //     y: [
+    //       {
+    //         title: {
+    //           formatter: function(val) {
+    //             return val + " Retailers";
+    //           }
+    //         }
+    //       },
+    //       {
+    //         title: {
+    //           formatter: function(val) {
+    //             return val + " (k)";
+    //           }
+    //         }
+    //       },
+    //       {
+    //         title: {
+    //           formatter: function(val) {
+    //             return "$" + val;  // Format for value
+    //           }
+    //         }
+    //       }
+    //     ]
+    //   },
+    //   // grid: {
+    //   //   borderColor: "#f1f1f1"
+    //   // }
+    // };
+    
+    
+    this.chartOptionsline = {
       series: [
         {
-          data: [45, 35, 60, 50, 85, 70]
+          name: "Retailers",
+          data: [120, 150, 130]  // Example data for Retailers over 3 months
+        },
+        {
+          name: "Quantity (k)",
+          data: [30, 25, 35]  // Example data for Quantity over 3 months
+        },
+        {
+          name: "Value",
+          data: [100, 70, 80]  // Example data for Value over 3 months (in thousands)
         }
       ],
-      yaxis: {
-        min: 5,
-        max: 90
+      chart: {
+        height: 350,
+        type: "line"
       },
-      tooltip: {
-        fixed: {
-          enabled: false
-        },
-        x: {
-          show: false
-        },
-        marker: {
-          show: false
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        width: 5,
+        curve: "smooth",  // Smooth curve for the line chart
+        dashArray: [0, 8, 5]  // Different dash arrays for each line
+      },
+      title: {
+        text: "Growth over Previous Months",  // Updated title
+        align: "left"
+      },
+      legend: {
+        tooltipHoverFormatter: function(val, opts) {
+          return (
+            val +
+            " - <strong>" +
+            opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] +
+            "</strong>"
+          );
         }
+      },
+      markers: {
+        size: 5,  // Size of markers on the line
+        hover: {
+          sizeOffset: 6
+        }
+      },
+      xaxis: {
+        labels: {
+          trim: false
+        },
+        categories: [
+          "Month 1",  // Replace with actual month names or dates
+          "Month 2",
+          "Month 3"
+        ]
+      },
+      yaxis: [
+        {
+          title: {
+            text: "Value ($ thousands)",  // Left y-axis title
+            style: {
+              color: "#000000"  // Change color as needed
+            }
+          },
+          min: 0,  // Minimum value for left y-axis
+          labels: {
+            formatter: function(val) {
+              return "$" + val;  // Format for value
+            }
+          },
+          tickAmount: 4  // Adjust the number of ticks as necessary
+        },
+        {
+          opposite: true,  // Make this y-axis on the opposite side
+          title: {
+            text: "Quantity (Nos)",  // Right y-axis title
+            style: {
+              color: "#000000"  // Change color as needed
+            }
+          },
+          min: 0,  // Minimum value for right y-axis
+          tickAmount: 4  // Adjust the number of ticks as necessary
+        }
+      ],
+      tooltip: {
+        shared: true,  // Show shared tooltip
+        intersect: false,
+        y: [
+          {
+            title: {
+              formatter: function(val) {
+                return val + " Retailers";
+              }
+            }
+          },
+          {
+            title: {
+              formatter: function(val) {
+                return val + " (k)";
+              }
+            }
+          },
+          {
+            title: {
+              formatter: function(val) {
+                return "$" + val;  // Format for value
+              }
+            }
+          }
+        ]
+      },
+      grid: {
+        borderColor: "#f1f1f1"
       }
     };
+    
+    
   }
+
+  
+  // life cycle event
+  ngOnInit() {
+    this.MonthlyToalOrdaring();
+
+  }
+
   cards = [
     {
       background: 'bg-c-blue',
-      title: 'Orders Received',
+      title: 'Orders Received By South1 Region',
       icon: 'icon-shopping-cart',
-      text: 'Completed Orders',
+      text: 'Total qty',
       number: '486',
       no: '351'
     },
     {
       background: 'bg-c-green',
-      title: 'Total Sales',
-      icon: 'icon-tag',
-      text: 'This Month',
-      number: '1641',
-      no: '213'
+      title: 'Orders Received By South2 Region',
+      icon: 'icon-shopping-cart',
+      text: 'Total qty',
+      number: '486',
+      no: '351'
     },
     {
       background: 'bg-c-yellow',
-      title: 'Revenue',
-      icon: 'icon-repeat',
-      text: 'This Month',
-      number: '$42,56',
-      no: '$5,032'
+      title: 'Orders Received By East Region',
+      icon: 'icon-shopping-cart',
+      text: 'Total qty',
+      number: '486',
+      no: '351'
     },
     {
       background: 'bg-c-red',
-      title: 'Total Profit',
+      title: 'Orders Received By North Region',
       icon: 'icon-shopping-cart',
-      text: 'This Month',
-      number: '$9,562',
-      no: '$542'
+      text: 'Total qty',
+      number: '486',
+      no: '351'
+    },
+    {
+      background: 'bg-c-red',
+      title: 'Orders Received By West Region',
+      icon: 'icon-shopping-cart',
+      text: 'Total qty',
+      number: '486',
+      no: '351' 
     }
   ];
+  
 
   images = [
     {
@@ -295,4 +473,18 @@ export default class DashAnalyticsComponent {
       size: 'PNG-150KB'
     }
   ];
+
+
+  
+  public MonthlyToalOrdaring = (data?:any)=>{
+    this.dashboardService.MonthlyToalOrdaring().subscribe(
+      (response) => {
+         console.log("this is for checking")
+      },
+      (error) => {
+        // this.errorMessage = 'An error occurred during login';
+        console.error('Login error:', error);
+      }
+    );
+  }
 }

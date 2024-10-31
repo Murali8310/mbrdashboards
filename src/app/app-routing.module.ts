@@ -9,16 +9,16 @@ import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'dashboard',
     component: AdminComponent,
     children: [
+      // {
+      //   path: 'check',
+      //   redirectTo: '/analytics',
+      //   pathMatch: 'full'
+      // },
       {
-        path: 'check',
-        redirectTo: '/analytics',
-        pathMatch: 'full'
-      },
-      {
-        path: 'analytics',
+        path: 'charts',
         loadComponent: () => import('./demo/dashboard/dash-analytics/dash-analytics.component')
       },
       {
@@ -43,26 +43,26 @@ const routes: Routes = [
       }
     ]
   },
+  // {
+  //   path: '',
+  //   component: GuestComponent,
+  //   children: [
+  //     {
+  //       path: 'auth/signup',
+  //       loadComponent: () => import('./demo/authentication/sign-up/sign-up.component')
+  //     },
+  //     {
+  //       path: 'auth/signin',
+  //       loadComponent: () => import('./demo/authentication/sign-in/sign-in.component')
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '',
+  //   component: LoginComponent,
+  // },
   {
     path: '',
-    component: GuestComponent,
-    children: [
-      {
-        path: 'auth/signup',
-        loadComponent: () => import('./demo/authentication/sign-up/sign-up.component')
-      },
-      {
-        path: 'auth/signin',
-        loadComponent: () => import('./demo/authentication/sign-in/sign-in.component')
-      }
-    ]
-  },
-  {
-    path: '',
-    component: LoginComponent,
-  },
-  {
-    path: 'auth/login',
     component: LoginComponent,
   },
 ];

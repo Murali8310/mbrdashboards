@@ -60,4 +60,22 @@ export class DashboardService {
       );
   }
 
+
+
+  public MonthlyToalOrdaring(data?:any) {
+    const MonthlyToalOrdaringPayload = {
+      data: 'rrrr',
+      data2:'dddddd'
+      // browsersignature: new ClientJS().getFingerprint().toString(),
+    };
+    return this.http
+      .post<any>(
+        `${environment.apiUrl}/stationary/api/MonthlyToalOrdaring`,
+        JSON.stringify(MonthlyToalOrdaringPayload),
+        {
+          headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+          observe: 'response',
+        }
+      );      
+  }
 }

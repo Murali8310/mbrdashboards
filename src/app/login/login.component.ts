@@ -40,36 +40,13 @@ export class LoginComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    // if (this.cacheStatus) {
-    //   Swal.fire({
-    //     text: 'Please proceed to clear the cache by clicking OK.',
-    //     icon: 'warning',
-    //     confirmButtonText: 'OK',
-    //   }).then(async (result) => {
-    //     if (result.isConfirmed) {
-    //       // Handle the functionality here when the user clicks "OK"
-    //       // For example, you can proceed with confirmation or perform other actions
-    //       console.log('User clicked OK');
-    //       // Add your code here
-    //       await this.clearAllCaches();
-    //       this.updateAssets();
-    //       this.allowOnlyAfterClearCache = true;
-    //     }
-    //   });
-    // }
-
-    await this.clearAllCaches();
-    this.updateAssets();
-    document.body.style.overflow = 'hidden';
+    
+    // document.body.style.overflow = 'hidden';
     this.loginForm = this.formBuilder.group({
       userName: ['', [Validators.required]],
       password: ['', [Validators.required]],
     });
 
-    // const info = this.buildInfoService.getBuildInfo();
-   
-
-    return;
   }
 
   updateAssets() {
@@ -144,6 +121,10 @@ export class LoginComponent implements OnInit {
 
   async onSubmit() {
     localStorage.setItem('initialLogin', '0');
+    const nocatch = new Date().getTime();
+    this.router.navigate(['/dashboard/charts'], {
+      queryParams: { nocatch },
+    });
     this.dashboardservice
       .login(this.loginForm.value.userName, this.loginForm.value.password)
       .pipe(first())
@@ -151,8 +132,7 @@ export class LoginComponent implements OnInit {
         async (data) => {
           console.log('LOG RES');
           const nocatch = new Date().getTime();
-
-          this.router.navigate(['/pages/dashboard'], {
+          this.router.navigate(['/dashboard/charts'], {
             queryParams: { nocatch },
           });
 

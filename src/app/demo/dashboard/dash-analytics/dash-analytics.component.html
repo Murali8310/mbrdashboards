@@ -13,111 +13,112 @@
   </div>
   <!-- order-card end -->
 
-  <!-- account-section start -->
-  <div class="col-xl-6 col-md-12">
-    <app-card cardTitle="Unique Visitor" [options]="false">
-      <apx-chart
-        [chart]="chartOptions.chart!"
-        [dataLabels]="chartOptions.dataLabels!"
-        [stroke]="chartOptions.stroke!"
-        [series]="chartOptions.series!"
-        [xaxis]="chartOptions.xaxis!"
-        [colors]="chartOptions.colors!"
-        [fill]="chartOptions.fill!"
-        [markers]="chartOptions.markers!"
-        [yaxis]="chartOptions.yaxis!"
-      ></apx-chart>
-    </app-card>
-  </div>
-  <div class="col-xl-6 col-md-12">
-    <app-card cardTitle="Unique Visitor" [options]="false">
-      <apx-chart
-        [chart]="chartOptions.chart!"
-        [dataLabels]="chartOptions.dataLabels!"
-        [stroke]="chartOptions.stroke!"
-        [series]="chartOptions.series!"
-        [xaxis]="chartOptions.xaxis!"
-        [colors]="chartOptions.colors!"
-        [fill]="chartOptions.fill!"
-        [markers]="chartOptions.markers!"
-        [yaxis]="chartOptions.yaxis!"
-      ></apx-chart>
-    </app-card>
-  </div>
-  <!-- <div class="col-xl-6 col-md-12">
-    <div class="row">
-      <div class="col-md-6">
-        <app-card [hidHeader]="true">
-          <div class="row">
-            <div class="col-auto">
-              <span>Customers</span>
-            </div>
-            <div class="col text-end">
-              <h2 class="mb-0">826</h2>
-              <span class="text-c-green">8.2%<i class="feather icon-trending-up ms-1"></i></span>
-            </div>
-          </div>
-          <apx-chart
-            [series]="chartOptions_1.series!"
-            [chart]="chartOptions_1.chart!"
-            [stroke]="chartOptions_1.stroke!"
-            [dataLabels]="chartOptions_1.dataLabels!"
-            [labels]="chartOptions_1.labels!"
-            [legend]="chartOptions_1.legend!"
-            [colors]="chartOptions_1.colors!"
-            [fill]="chartOptions_1.fill!"
-            [grid]="chartOptions_1.grid!"
-          >
-            [plotOptions]="chartOptions_1.plotOptions" [tooltip]="chartOptions_1.tooltip"
-          </apx-chart>
-          <div class="row mt-3 text-center">
-            <div class="col">
-              <h3 class="m-0"><i class="fas fa-circle f-10 m-r-5 text-success"></i>674</h3>
-              <span class="ms-3">New</span>
-            </div>
-            <div class="col">
-              <h3 class="m-0"><i class="fas fa-circle text-primary f-10 m-r-5"></i>182</h3>
-              <span class="ms-3">Return</span>
-            </div>
-          </div>
-        </app-card>
+  <div class="container my-4">
+    <div class="row justify-content-center text-center">
+      <!-- Region -->
+      <div class="form-group col-md-2">
+        <label for="regionSelect" class="form-label">Region</label>
+        <select id="regionSelect" class="form-select custom-select">
+          <option value="Fastrack">Fastrack</option>
+          <option value="Clock">Clock</option>
+        </select>
       </div>
-      <div class="col-md-6">
-        <app-card [hidHeader]="true" cardClass="bg-primary text-white">
-          <div class="row">
-            <div class="col-auto">
-              <span>Customers</span>
-            </div>
-            <div class="col text-end">
-              <h2 class="mb-0 text-white">826</h2>
-              <span class="text-white">8.2%<i class="feather icon-trending-up ms-1"></i></span>
-            </div>
-          </div>
-          <apx-chart
-            [series]="chartOptions_2.series!"
-            [chart]="chartOptions_2.chart!"
-            [stroke]="chartOptions_2.stroke!"
-            [dataLabels]="chartOptions_2.dataLabels!"
-            [labels]="chartOptions_2.labels!"
-            [legend]="chartOptions_2.legend!"
-            [colors]="chartOptions_2.colors!"
-            [fill]="chartOptions_2.fill!"
-            [grid]="chartOptions_2.grid!"
-          >
-            [plotOptions]="chartOptions_2.plotOptions" [tooltip]="chartOptions_2.tooltip" ></apx-chart
-          >
-          <div class="row mt-3 text-center">
-            <div class="col">
-              <h3 class="m-0 text-white"><i class="fas fa-circle f-10 m-r-5 text-white"></i>674</h3>
-              <span class="ms-3">New</span>
-            </div>
-            <div class="col">
-              <h3 class="m-0 text-white"><i class="fas fa-circle text-white f-10 m-r-5"></i>182</h3>
-              <span class="ms-3">Return</span>
-            </div>
-          </div>
-        </app-card>
+  
+      <!-- ABM Name -->
+      <div class="form-group col-md-2">
+        <label for="abmSelect" class="form-label">ABM Name</label>
+        <select id="abmSelect" class="form-select custom-select">
+          <option value="Fastrack">Fastrack</option>
+          <option value="Clock">Clock</option>
+        </select>
+      </div>
+  
+      <!-- Retailer Type -->
+      <div class="form-group col-md-2">
+        <label for="retailerTypeSelect" class="form-label">Retailer Type</label>
+        <select id="retailerTypeSelect" class="form-select custom-select">
+          <option value="Fastrack">Fastrack</option>
+          <option value="Clock">Clock</option>
+        </select>
+      </div>
+  
+      <!-- RS Name -->
+      <div class="form-group col-md-2">
+        <label for="rsNameSelect" class="form-label">RS Name</label>
+        <select id="rsNameSelect" class="form-select custom-select">
+          <option value="Fastrack">Fastrack</option>
+          <option value="Clock">Clock</option>
+        </select>
+      </div>
+  
+      <!-- Brand -->
+      <div class="form-group col-md-2">
+        <label for="brandSelect" class="form-label">Brand</label>
+        <select id="brandSelect" class="form-select custom-select">
+          <option value="Fastrack">Fastrack</option>
+          <option value="Clock">Clock</option>
+        </select>
+      </div>
+  
+      <!-- Search Button -->
+      <div class="form-group col-md-2 d-flex align-items-end">
+        <button class="btn btn-primary w-100" style="font-weight: bold;">Search</button>
       </div>
     </div>
-  </div> -->
+  </div>
+  
+  <!-- account-section start -->
+  <div class="col-xl-6 col-md-12">
+    <app-card cardTitle="" [options]="false">
+      
+    <div id="chart">
+      <apx-chart
+        [series]="chartOptions.series"
+        [chart]="chartOptions.chart"
+        [dataLabels]="chartOptions.dataLabels"
+        [plotOptions]="chartOptions.plotOptions"
+        [yaxis]="chartOptions.yaxis"
+        [legend]="chartOptions.legend"
+        [fill]="chartOptions.fill"
+        [stroke]="chartOptions.stroke"
+        [tooltip]="chartOptions.tooltip"
+        [xaxis]="chartOptions.xaxis"
+      ></apx-chart>
+    </div>
+    
+    </app-card>
+  </div>
+
+  <div class="col-xl-6 col-md-12">
+    <app-card cardTitle="" [options]="false">
+    <div id="chart">
+      <!-- <apx-chart
+        [series]="chartOptionsline.series"
+        [chart]="chartOptionsline.chart"
+        [dataLabels]="chartOptionsline.dataLabels"
+        [plotOptions]="chartOptionsline.plotOptions"
+        [yaxis]="chartOptionsline.yaxis"
+        [legend]="chartOptionsline.legend"
+        [fill]="chartOptionsline.fill"
+        [stroke]="chartOptionsline.stroke"
+        [tooltip]="chartOptionsline.tooltip"
+        [xaxis]="chartOptionsline.xaxis"
+      ></apx-chart> -->
+      <apx-chart
+      [series]="chartOptionsline?.series"
+      [chart]="chartOptionsline?.chart"
+      [dataLabels]="chartOptionsline?.dataLabels"
+      [plotOptions]="chartOptionsline?.plotOptions"
+      [yaxis]="chartOptionsline?.yaxis"
+      [legend]="chartOptionsline?.legend"
+      [fill]="chartOptionsline?.fill"
+      [stroke]="chartOptionsline?.stroke"
+      [tooltip]="chartOptionsline?.tooltip"
+      [xaxis]="chartOptionsline?.xaxis"
+    ></apx-chart>
+    </div>
+    
+    </app-card>
+  </div>
+  
 </div>
