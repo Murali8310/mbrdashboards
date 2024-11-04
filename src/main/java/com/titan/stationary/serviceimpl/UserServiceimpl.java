@@ -1075,5 +1075,12 @@ public class UserServiceimpl implements Userservice {
 		getholidaymasterData = userDao.portalBlcokingMechanism(loginId);
 		return getholidaymasterData;
 	}
+	
+	@Override
+	public List<Object> monthlyToalOrdaringData() {
+		// TODO Auto-generated method stub
+		return userDao.monthlyToalOrdaringData();
+	}
+
 
 }

@@ -478,7 +478,6 @@ vertical-align: text-bottom ; footer {
 	    	totalSum = totalSum + Number(value);	        	
 	    });  
 	    // Redraw the table to reflect the changes
-	    table.draw();
 	    return totalSum.toFixed(2);
 	}
 	var table = $('#myDataTable').DataTable();
@@ -508,7 +507,6 @@ vertical-align: text-bottom ; footer {
 	       this.cell(rowIdx, numColumns + 4).data((row[numColumns+3] *row[numColumns+5]).toFixed(2));
 	       this.cell(rowIdx, numColumns + 7).data((row[numColumns+6] *row[numColumns+5]).toFixed(2));	
 	        });
-	    table.draw();
 	    
 	   $('#footerUserQty').text( Math.floor(updateColumnData(numColumns)));
 	  $('#footerMoqty').text( Math.floor(updateColumnData(numColumns + 1)));

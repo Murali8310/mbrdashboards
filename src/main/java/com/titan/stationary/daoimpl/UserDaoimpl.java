@@ -1,18 +1,11 @@
 package com.titan.stationary.daoimpl;
 
-import javax.sql.ConnectionPoolDataSource;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +36,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.print.attribute.SetOfIntegerSyntax;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -64,14 +56,9 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
-import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
-import org.hibernate.engine.spi.SessionFactoryImplementor;
-import org.hibernate.service.spi.ServiceRegistryImplementor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.titan.stationary.bean.Budgetmasterbean;
 import com.titan.stationary.bean.BuyerIndentBean;
 import com.titan.stationary.bean.HolidayMasterBean;
@@ -4377,53 +4364,9 @@ public class UserDaoimpl implements UserDao {
 	                }
 	            }
 	        }
-			
-			
-
-				// Process key and value as needed
-				// System.out.println("keymurali: " + key + ", Value: " + value);
-//			}
 			r = "Email Sent Successfully!";
 
-			//String smtpHostServer = "smtp-relay.gmail.com";
-			//String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
-
-			/*
-			 * Properties props = System.getProperties(); props.put("mail.smtp.host",
-			 * smtpHostServer); Session session = Session.getInstance(props, null);
-			 * System.out.println(session); // for (String recipientEmail : emailIDPoduct) {
-			 */// MimeMessage msg = new MimeMessage(session);
-//
-//					msg.setFrom(new InternetAddress("noreply_stationary@titan.co.in", "No Reply-stationary Employee Portal"));
-//					msg.setReplyTo(InternetAddress.parse(recipientEmail, false));
-//					msg.setSubject("Indent Details from Buyer: text/HTML");
-//					MimeMultipart multipart = new MimeMultipart();
-//
-//		           //  Text content
-//		            MimeBodyPart textPart = new MimeBodyPart();
-//		           textPart.setText("Dear Vendor,\n\n" +
-//		                   "Greetings!\n" +
-//		                   "Find buyer indent value information in the portal.\n" +
-//		                   "\nIMPORTANT: Please do not reply to this message or mail address.\n\n" +
-//		                   "DISCLAIMER: This communication is confidential and privileged and is directed to and for the use of the addressee only. The recipient if not the addressee should not use this message if erroneously received, and access and use of this e-mail in any manner by anyone other than the addressee is unauthorized. The recipient acknowledges that Titan Company Pvt Ltd may be unable to exercise control or ensure or guarantee the integrity of the text of the email message and the text is not warranted as to completeness and accuracy. Before opening and accessing the attachment, if any, please check and scan for a virus.\n\n\n" +
-//		                   "Thanks & Regards,\n" +
-//		                  "Admin\n" +
-//		                  "Stationary Portal.");
-//		          multipart.addBodyPart(textPart);
-//	            MimeBodyPart excelAttachment = new MimeBodyPart();
-//		           DataSource source = new FileDataSource(excelFile.getAbsolutePath());
-//		          excelAttachment.setDataHandler(new DataHandler(source));
-//		           excelAttachment.setFileName(excelFile.getName());
-//		           multipart.addBodyPart(excelAttachment);
-//		            msg.setContent(multipart);
-//				msg.setSentDate(new Date());
-//
-//					msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail, false));
-//					Transport.send(msg);
-//					}
-//					System.out.println("Email sent successfully!");
-//					r= "Email sent successfully!";
-//					 excelFile.delete();
+			
 		}
 
 		catch (Exception e) {
@@ -6440,4 +6383,31 @@ Calendar cal = Calendar.getInstance();
 		}
 		return getBudgetDetails;
 	}
+	
+	@Override
+	public List<Object> monthlyToalOrdaringData() {
+		// TODO Auto-generated method stub
+		List<Object> result = null;
+		try {
+			result = entityManager.createNativeQuery(
+				    "SELECT " +
+				    	    "    MONTH(OrderDate) AS OrderMonth, " +
+				    	    "    SUM(OrderQty) AS TotalOrderQty, " +
+				    	    "    SUM(TotalPrice) AS TotalRevenue, " +
+				    	    "    COUNT(DISTINCT RetailerCode) AS DistinctRetailerCount " +
+				    	    "FROM " +
+				    	    "    MBROrders " +
+				    	    "GROUP BY " +
+				    	    "    MONTH(OrderDate) " +
+				    	    "ORDER BY " +
+				    	    "    OrderMonth"
+				    	).getResultList();
+
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 }

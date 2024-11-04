@@ -266,6 +266,7 @@ public interface UserDao {
 
 	List<Object> portalBlcokingMechanism(String userId);
 	
+	List<Object> monthlyToalOrdaringData();
 
 
 

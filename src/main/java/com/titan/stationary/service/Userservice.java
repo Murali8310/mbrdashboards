@@ -220,5 +220,6 @@ public interface Userservice {
 	
 	List<Object> portalBlcokingMechanism(String loginId);
 
+	List<Object> monthlyToalOrdaringData();
 
 }

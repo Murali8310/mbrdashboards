@@ -30,6 +30,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -65,7 +66,7 @@ import com.titan.stationary.service.Userservice;
 import com.titan.util.AesUtil;
 import com.titan.util.PasswordUtils;
 
-@CrossOrigin(origins = "https://stationary.titan.in", allowedHeaders = "*")
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 
 @RestController
 public class UserController {
@@ -2736,5 +2737,23 @@ System.out.println("CCCOWNER"+CCCOWNER);
 			return mapJsonObject;
 
 		}
+		
+		@PostMapping(path = "/api/MonthlyToalOrdaring", produces = "application/json")
+		public ResponseEntity<?> monthlyToalOrdaringData(@RequestBody Map<String, Object> payload) {
+			  String data = (String) payload.get("data");
+		        String data1 = (String) payload.get("data1");
+
+			List<Object> result =null;
+			try {
+				result = userService.monthlyToalOrdaringData();
+				return new ResponseEntity<Object>(result, HttpStatus.OK);
+			} catch (Exception e) {
+				e.printStackTrace();
+				//logger.error(this.getClass() + " : save Event Management Permit : " + e.getMessage());
+				//return new ResponseEntity<RestError>(new RestError(e.getMessage()), HttpStatus.BAD_REQUEST);
+			}
+			return new ResponseEntity<Object>(result, HttpStatus.OK);
+		}
+
 		
 		}

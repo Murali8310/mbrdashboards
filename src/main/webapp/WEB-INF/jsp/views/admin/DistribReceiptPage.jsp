@@ -483,7 +483,7 @@ table.dataTable tbody tr.selected a {
 	    });
          console.log('3',totalSum)
 	    // Redraw the table to reflect the changes
-	    table.draw();
+	   // table.draw();
 	    return totalSum.toFixed(2);
 	}
 	function updateRowSums() {
@@ -528,7 +528,7 @@ table.dataTable tbody tr.selected a {
 		    }); */
 	        
 	    // Redraw the table to reflect the changes
-	    table.draw();
+	   // table.draw();
 	 $('#finalQty').text(Math.floor(updateColumnData(numColumns)));
 	  $('#finalValue').text(updateColumnData(numColumns + 1));
 	  $('#ReciptQty').text(Math.floor(updateColumnData(numColumns + 3)));
