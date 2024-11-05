@@ -70,9 +70,13 @@ import com.titan.stationary.bean.UserLoginBean;
 import com.titan.stationary.bean.productMasterbean;
 import com.titan.stationary.bean.smUserMasterBean;
 import com.titan.stationary.dao.UserDao;
+import com.titan.stationary.dto.MasterData;
+import com.titan.stationary.dto.MonthlyDataFilter;
+import com.titan.stationary.dto.OutputForMontlyFilter;
 import com.titan.stationary.security.AuthenticationService;
 import com.titan.util.PasswordUtils;
 import com.titan.util.Validations;
+import com.titan.stationary.model.user.*;
 
 @Repository
 public class UserDaoimpl implements UserDao {
@@ -6385,29 +6389,102 @@ Calendar cal = Calendar.getInstance();
 	}
 	
 	@Override
-	public List<Object> monthlyToalOrdaringData() {
+	public MasterData GetMasterData() {
 		// TODO Auto-generated method stub
-		List<Object> result = null;
+		MasterData result = getDataforMaster();
+		
+		return result;
+		
+	}
+	
+	private MasterData getDataforMaster() {
+		MasterData data=new MasterData();
+		List<Brand> brandName = selectBrandforMaster();
+		List<Region>regionName=selectRegionforMaster();
+		List<RSName>rsName=selectRsNameForMaster();
+		
+		data.setBrand(brandName);
+		data.setRegion(regionName);
+		data.setRsName(rsName);
+		return data;
+		
+	}
+	private List<Brand> selectBrandforMaster() {
+		List<Brand> brandName= null;
+		String checkSql = "SELECT * FROM MBRBrand";
 		try {
-			result = entityManager.createNativeQuery(
-				    "SELECT " +
-				    	    "    MONTH(OrderDate) AS OrderMonth, " +
-				    	    "    SUM(OrderQty) AS TotalOrderQty, " +
-				    	    "    SUM(TotalPrice) AS TotalRevenue, " +
-				    	    "    COUNT(DISTINCT RetailerCode) AS DistinctRetailerCount " +
-				    	    "FROM " +
-				    	    "    MBROrders " +
-				    	    "GROUP BY " +
-				    	    "    MONTH(OrderDate) " +
-				    	    "ORDER BY " +
-				    	    "    OrderMonth"
-				    	).getResultList();
-
-			
-		} catch (Exception e) {
+		Query checkQuery =  entityManager.createNativeQuery(checkSql);
+		brandName=checkQuery.getResultList();
+		}
+		catch(Exception e) {
 			e.printStackTrace();
 		}
-		return result;
+		return brandName;
+		
+	}
+	
+	private List<Region> selectRegionforMaster() {
+		List<Region> regionName= null;
+		String checkSql = "select distinct (Region) from MBROrders;";
+		Query checkQuery =  entityManager.createNativeQuery(checkSql);
+		regionName=checkQuery.getResultList();
+		return regionName;
+		
+	}
+	private List<RSName>selectRsNameForMaster(){
+		List<RSName> rsName= null;
+		String checkSql = "select  distinct RSCode, RSName from MBROrders;";
+		Query checkQuery =  entityManager.createNativeQuery(checkSql);
+		rsName=checkQuery.getResultList();
+		return rsName;
 	}
 
+	@Override
+	public OutputForMontlyFilter MonthlyTrend(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		OutputForMontlyFilter result=new OutputForMontlyFilter();
+		result =getDataForMonthlyTrend(filter);
+		return result;
+		
+	}
+	private OutputForMontlyFilter getDataForMonthlyTrend(MonthlyDataFilter filter) {
+		OutputForMontlyFilter filteredData=new OutputForMontlyFilter();
+		String storedProcedureCall = "EXEC GetOrderSummary @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList";
+        
+        // Create a native query
+        Query query = entityManager.createNativeQuery(storedProcedureCall);
+        
+        // Set the parameters for the stored procedure call
+        query.setParameter("regionList", filter.getRegionList());  // @RegionList (e.g., 'EAST, WEST')
+        query.setParameter("startDate", filter.getStartDate());    // @StartDate (e.g., 20240601)
+        query.setParameter("endDate", filter.getEndDate());        // @EndDate (e.g., 20240630)
+        query.setParameter("brandList", filter.getBrandList());    // @BrandList (e.g., 'Titan')
+        query.setParameter("rsNameList", filter.getRsNameList());  // @RSNameList (e.g., '' or some value)
+
+        // Execute the query to invoke the stored procedure
+        try {
+        	List<Object[]> result = query.getResultList();
+        	//filteredData = (OutputForMontlyFilter) query.getSingleResult();
+        	for (Object[] row : result) {
+        	    // Assuming row contains values in the correct order for mapping
+        	    filteredData.setTotalRevenue((BigDecimal)row[0]);
+        	    filteredData.setTotalQTY((Integer) row[1]);
+        	    filteredData.setTotalRetailerCode((Integer) row[2]);
+
+        	    // Now, filteredData is populated with values
+        	}
+        }
+        catch(Exception e) {
+        	e.printStackTrace();
+        }
+		
+		return filteredData;
+
+	}
+
+	@Override
+	public List<Object> monthlyToalOrdaringData() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -35,6 +35,9 @@ import com.titan.stationary.bean.Product;
 import com.titan.stationary.bean.UserLoginBean;
 import com.titan.stationary.bean.productMasterbean;
 import com.titan.stationary.dao.UserDao;
+import com.titan.stationary.dto.MasterData;
+import com.titan.stationary.dto.MonthlyDataFilter;
+import com.titan.stationary.dto.OutputForMontlyFilter;
 import com.titan.stationary.service.Userservice;
 
 @Service("userService")
@@ -713,11 +716,11 @@ public class UserServiceimpl implements Userservice {
 				
 	}
 	
-	@Override
-	public List<String> get7thworkingDay() {
-		return userDao.get7thworkingDay();	
-				
-	}
+//	@Override
+//	public List<String> get7thworkingDay() {
+//		return userDao.get7thworkingDay();	
+//				
+//	}
 	
 	@Override
 	public List<Object> getAllVendor() {
@@ -1077,9 +1080,26 @@ public class UserServiceimpl implements Userservice {
 	}
 	
 	@Override
+	public MasterData GetMasterData() {
+		// TODO Auto-generated method stub
+		return userDao.GetMasterData();
+	}
+
+	@Override
+	public OutputForMontlyFilter MonthlyTrend(MonthlyDataFilter filter) {
+		return userDao.MonthlyTrend(filter);
+	}
+
+	@Override
 	public List<Object> monthlyToalOrdaringData() {
 		// TODO Auto-generated method stub
-		return userDao.monthlyToalOrdaringData();
+		return null;
+	}
+
+	@Override
+	public List<String> get7thworkingDay() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

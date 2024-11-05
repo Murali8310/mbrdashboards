@@ -13,6 +13,9 @@ import com.titan.stationary.bean.IndentMasterBean;
 import com.titan.stationary.bean.Product;
 import com.titan.stationary.bean.UserLoginBean;
 import com.titan.stationary.bean.smUserMasterBean;
+import com.titan.stationary.dto.MasterData;
+import com.titan.stationary.dto.MonthlyDataFilter;
+import com.titan.stationary.dto.OutputForMontlyFilter;
 
 public interface Userservice {
 
@@ -221,5 +224,11 @@ public interface Userservice {
 	List<Object> portalBlcokingMechanism(String loginId);
 
 	List<Object> monthlyToalOrdaringData();
+
+
+	MasterData GetMasterData();
+
+
+	OutputForMontlyFilter MonthlyTrend(MonthlyDataFilter filter);
 
 }

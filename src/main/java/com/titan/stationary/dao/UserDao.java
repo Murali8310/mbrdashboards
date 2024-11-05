@@ -18,6 +18,9 @@ import com.titan.stationary.bean.UserBean;
 import com.titan.stationary.bean.UserLoginBean;
 import com.titan.stationary.bean.productMasterbean;
 import com.titan.stationary.bean.smUserMasterBean;
+import com.titan.stationary.dto.MasterData;
+import com.titan.stationary.dto.MonthlyDataFilter;
+import com.titan.stationary.dto.OutputForMontlyFilter;
 
 @Repository
 public interface UserDao {
@@ -267,6 +270,12 @@ public interface UserDao {
 	List<Object> portalBlcokingMechanism(String userId);
 	
 	List<Object> monthlyToalOrdaringData();
+
+
+	OutputForMontlyFilter MonthlyTrend(MonthlyDataFilter filter);
+
+
+	MasterData GetMasterData();
 
 
 

@@ -62,6 +62,9 @@ import com.titan.stationary.bean.IndentMasterBean;
 import com.titan.stationary.bean.Product;
 import com.titan.stationary.bean.UserLoginBean;
 import com.titan.stationary.bean.smUserMasterBean;
+import com.titan.stationary.dto.MasterData;
+import com.titan.stationary.dto.MonthlyDataFilter;
+import com.titan.stationary.dto.OutputForMontlyFilter;
 import com.titan.stationary.service.Userservice;
 import com.titan.util.AesUtil;
 import com.titan.util.PasswordUtils;
@@ -1831,7 +1834,7 @@ List<Object> BuyerList;
 			 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			 String formattedDateTime = now.format(formatter);
 			List<String> seventhDay = userService.get7thworkingDay();
-			System.out.println("seventhDay : "+seventhDay.get(0) );
+			//System.out.println("seventhDay : "+seventhDay.get(0) );
 			System.out.println("Current time is ::: " + formattedDateTime);
 			if (seventhDay != null && !seventhDay.isEmpty() && seventhDay.get(0).equals(formattedDateTime)) {
 				userService.sevenDayMailTrigger();
@@ -2738,22 +2741,48 @@ System.out.println("CCCOWNER"+CCCOWNER);
 
 		}
 		
-		@PostMapping(path = "/api/MonthlyToalOrdaring", produces = "application/json")
-		public ResponseEntity<?> monthlyToalOrdaringData(@RequestBody Map<String, Object> payload) {
-			  String data = (String) payload.get("data");
-		        String data1 = (String) payload.get("data1");
-
-			List<Object> result =null;
-			try {
-				result = userService.monthlyToalOrdaringData();
-				return new ResponseEntity<Object>(result, HttpStatus.OK);
-			} catch (Exception e) {
-				e.printStackTrace();
-				//logger.error(this.getClass() + " : save Event Management Permit : " + e.getMessage());
-				//return new ResponseEntity<RestError>(new RestError(e.getMessage()), HttpStatus.BAD_REQUEST);
-			}
-			return new ResponseEntity<Object>(result, HttpStatus.OK);
+		@GetMapping(value = "GetMasterData")
+		public MasterData GetMasterData(HttpServletRequest request, HttpServletResponse response,
+			 RedirectAttributes redirect, Model model) {
+			MasterData result =null;
+			
+			
+			HttpSession session = request.getSession();
+			String loginId = "";
+//			try {
+//				Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+//				loginId = (String) userMap.get("login_id");
+//			} catch (Exception er) {
+//				er.printStackTrace();
+//				//return new StringBuilder("Session is timeout, <a href='login' >click here</a> to login");
+//			}
+			
+				result = userService.GetMasterData();
+				redirect.addFlashAttribute("MESSAGE", result);
+				model.addAttribute("MESSAGE", result);
+				return result;
 		}
-
+		
+		@PostMapping(value = "MonthlyTrend")
+		public OutputForMontlyFilter MonthlyTrend(HttpServletRequest request, HttpServletResponse response,
+			 RedirectAttributes redirect, Model model, @RequestBody MonthlyDataFilter filter) {
+			OutputForMontlyFilter result =null;
+			
+			
+			HttpSession session = request.getSession();
+			String loginId = "";
+//			try {
+//				Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+//				loginId = (String) userMap.get("login_id");
+//			} catch (Exception er) {
+//				er.printStackTrace();
+//				//return new StringBuilder("Session is timeout, <a href='login' >click here</a> to login");
+//			}
+			
+				result = userService.MonthlyTrend(filter);
+				redirect.addFlashAttribute("MESSAGE", result);
+				model.addAttribute("MESSAGE", result);
+				return result;
+		}
 		
 		}
