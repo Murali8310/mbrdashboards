@@ -1,64 +1,274 @@
 <div class="row">
   <!-- order-card start -->
-  <div class="col-md-6 col-xl-3" *ngFor="let card of cards">
+  <div class="col-md-6" style="width: 20%;" *ngFor="let card of cards">
     <app-card [hidHeader]="true" cardClass="{{ card.background }} order-card">
-      <h6 class="text-white">{{ card.title }}</h6>
-      <h2 class="text-end text-white"
-        ><i class="feather {{ card.icon }} float-start"></i><span>{{ card.number }}</span>
-      </h2>
+      <h4 class="text-white">{{ card.title }}<i class="feather {{ card.icon }} float-end"></i></h4>
+      
       <p class="m-b-0"
-        >{{ card.text }}<span class="float-end">{{ card.no }}</span></p
+        >Total order<span class="float-end">{{ card.number }}</span></p
       >
+      <p class="m-b-0"
+        >Order Qty<span class="float-end">{{ card.no }}</span></p
+      >
+      <p class="m-b-0"
+      >Order Value<span class="float-end">{{ card.qtyValue }}</span></p
+    >
+    <p class="m-b-0"
+      >Dealers<span class="float-end">{{ card.dealercount }}</span></p
+    >
     </app-card>
   </div>
   <!-- order-card end -->
 
   <div class="container my-4">
-    <div class="row justify-content-center text-center">
+    <h4 style="
+    text-align: center;
+    /* margin-top: 12px; */
+">Total Ordering Overview Dashboard.</h4>
+<!-- <ng-multiselect-dropdown
+  [placeholder]="'Please Select'"
+  [data]="dropdownList"
+  [(ngModel)]="selectedItems"
+  [settings]="dropdownSettings"
+  (onSelect)="onItemSelect($event)"
+  (onDeSelect)="onItemDeselect($event)"
+  (onSelectAll)="onSelectAll($event)"
+  (onDeSelectAll)="onDeselectAll($event)">
+</ng-multiselect-dropdown> -->
+    <div class="row justify-content-center text-center" style="margin-top: 20px;">
       <!-- Region -->
       <div class="form-group col-md-2">
-        <label for="regionSelect" class="form-label">Region</label>
-        <select id="regionSelect" class="form-select custom-select">
-          <option value="Fastrack">Fastrack</option>
-          <option value="Clock">Clock</option>
-        </select>
+        <!-- <div class="row"> -->
+          <!-- <div class="col-xl-2"> -->
+            <label style="margin-top: 10px;
+            float: left;
+            font-weight: 800;" class="form-label">Region</label>
+          <!-- </div> -->
+          <!-- <div class="col-xl-10"> -->
+            <div class="multiselect-dropdown" tabindex="0">
+              <div (click)="toggleDropdownVisibility()" class="dropdown-btn" tabindex="-1">
+                <span *ngIf="selectedRegions.length === 0">Please Select</span>
+                <span *ngIf="selectedRegions.length > 0">
+                  <ng-container *ngFor="let region of selectedRegions; let isLast = last">
+                    <div class="selected-item">
+                      {{ region.name }}
+                      <span class="remove-icon" (click)="removeSelectedRegion(region, $event)">&#10005;</span>
+                    </div>
+                    <span *ngIf="!isLast">, </span>
+                  </ng-container>
+                </span>
+                <span class="dropdown-multiselect--active" style="float:right !important;padding-right:4px">
+                  <span class="dropdown-multiselect__caret"></span>
+                </span>
+              </div>
+              <div *ngIf="isDropdownOpen" class="dropdown-list">
+                <ul class="item1">
+                  <li class="multiselect-item-checkbox">
+                    <input type="checkbox" (change)="toggleAllRegionsSelection($event)" [checked]="areAllRegionsSelected" />
+                    <div style="margin-left: 10px;">Select All</div>
+                  </li>
+                  <li class="filter-textbox">
+                    <input type="text" placeholder="Search" [(ngModel)]="searchInputValue" (input)="filterAvailableRegions()" />
+                  </li>
+                </ul>
+                <ul class="item2" style="max-height: 197px; overflow-y: auto;">
+                  <li *ngFor="let region of filteredRegionsList" class="multiselect-item-checkbox">
+                    <input type="checkbox" [checked]="selectedRegions.includes(region)" (change)="toggleRegionSelection(region)" />
+                    <div style="margin-left: 10px;" [class.selected]="selectedRegions.includes(region)">{{ region.name }}</div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          <!-- </div> -->
+        <!-- </div> -->
       </div>
-  
-      <!-- ABM Name -->
+      
       <div class="form-group col-md-2">
-        <label for="abmSelect" class="form-label">ABM Name</label>
-        <select id="abmSelect" class="form-select custom-select">
-          <option value="Fastrack">Fastrack</option>
-          <option value="Clock">Clock</option>
-        </select>
+        <!-- <div class="row"> -->
+          <!-- <div class="col-xl-2"> -->
+            <label style="margin-top: 10px;
+                        float: left;
+                        font-weight: 800;" class="form-label">ABM Name</label>
+          <!-- </div> -->
+          <!-- <div class="col-xl-10"> -->
+            <div class="multiselect-dropdown" tabindex="0">
+              <div (click)="toggleDropdownVisibilityForAbm()" class="dropdown-btn" tabindex="-1">
+                <span *ngIf="selectedAbmNames.length === 0">Please Select</span>
+                <span *ngIf="selectedAbmNames.length > 0">
+                  <ng-container *ngFor="let abm of selectedAbmNames; let isLast = last">
+                    <div class="selected-item">
+                      {{ abm.name }}
+                      <span class="remove-icon" (click)="removeSelectedAbm(abm, $event)">&#10005;</span>
+                    </div>
+                    <span *ngIf="!isLast">, </span>
+                  </ng-container>
+                </span>
+                <span class="dropdown-multiselect--active" style="float:right !important;padding-right:4px">
+                  <span class="dropdown-multiselect__caret"></span>
+                </span>
+              </div>
+              <div *ngIf="isDropdownOpenForAbm" class="dropdown-list">
+                <ul class="item1">
+                  <li class="multiselect-item-checkbox">
+                    <input type="checkbox" (change)="toggleAllAbmSelection($event)" [checked]="areAllAbmSelected" />
+                    <div style="margin-left: 10px;">Select All</div>
+                  </li>
+                  <li class="filter-textbox">
+                    <input type="text" placeholder="Search" [(ngModel)]="searchInputValueForAbm" (input)="filterAvailableAbmNames()" />
+                  </li>
+                </ul>
+                <ul class="item2" style="max-height: 197px; overflow-y: auto;">
+                  <li *ngFor="let abm of filteredAbmNamesList" class="multiselect-item-checkbox">
+                    <input type="checkbox" [checked]="selectedAbmNames.includes(abm)" (change)="toggleAbmSelection(abm)" />
+                    <div style="margin-left: 10px;" [class.selected]="selectedAbmNames.includes(abm)">{{ abm.name }}</div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          <!-- </div> -->
+        <!-- </div> -->
       </div>
-  
-      <!-- Retailer Type -->
+    
       <div class="form-group col-md-2">
-        <label for="retailerTypeSelect" class="form-label">Retailer Type</label>
-        <select id="retailerTypeSelect" class="form-select custom-select">
-          <option value="Fastrack">Fastrack</option>
-          <option value="Clock">Clock</option>
-        </select>
+        <!-- <div class="row"> -->
+          <!-- <div class="col-xl-2"> -->
+            <label style="margin-top: 10px;
+            float: left;
+            font-weight: 800;" class="form-label">Retailer Type</label>
+          <!-- </div> -->
+          <!-- <div class="col-xl-10"> -->
+            <div class="multiselect-dropdown" tabindex="0">
+              <div (click)="toggleDropdownVisibilityForRetailer()" class="dropdown-btn" tabindex="-1">
+                <span *ngIf="selectedRetailerTypes.length === 0">Please Select</span>
+                <span *ngIf="selectedRetailerTypes.length > 0">
+                  <ng-container *ngFor="let retailer of selectedRetailerTypes; let isLast = last">
+                    <div class="selected-item">
+                      {{ retailer.name }}
+                      <span class="remove-icon" (click)="removeSelectedRetailer(retailer, $event)">&#10005;</span>
+                    </div>
+                    <span *ngIf="!isLast">, </span>
+                  </ng-container>
+                </span>
+                <span class="dropdown-multiselect--active" style="float:right !important;padding-right:4px">
+                  <span class="dropdown-multiselect__caret"></span>
+                </span>
+              </div>
+              <div *ngIf="isDropdownOpenForRetailer" class="dropdown-list">
+                <ul class="item1">
+                  <li class="multiselect-item-checkbox">
+                    <input type="checkbox" (change)="toggleAllRetailerSelection($event)" [checked]="areAllRetailerSelected" />
+                    <div style="margin-left: 10px;">Select All</div>
+                  </li>
+                  <li class="filter-textbox">
+                    <input type="text" placeholder="Search" [(ngModel)]="searchInputValueForRetailer" (input)="filterAvailableRetailerTypes()" />
+                  </li>
+                </ul>
+                <ul class="item2" style="max-height: 197px; overflow-y: auto;">
+                  <li *ngFor="let retailer of filteredRetailerTypesList" class="multiselect-item-checkbox">
+                    <input type="checkbox" [checked]="selectedRetailerTypes.includes(retailer)" (change)="toggleRetailerSelection(retailer)" />
+                    <div style="margin-left: 10px;" [class.selected]="selectedRetailerTypes.includes(retailer)">{{ retailer.name }}</div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          <!-- </div> -->
+        <!-- </div> -->
       </div>
+      
   
-      <!-- RS Name -->
       <div class="form-group col-md-2">
-        <label for="rsNameSelect" class="form-label">RS Name</label>
-        <select id="rsNameSelect" class="form-select custom-select">
-          <option value="Fastrack">Fastrack</option>
-          <option value="Clock">Clock</option>
-        </select>
+        <!-- <div class="row"> -->
+          <!-- <div class="col-xl-2"> -->
+            <label style="margin-top: 10px;
+            float: left;
+            font-weight: 800;" class="form-label">RS Name</label>
+          <!-- </div> -->
+          <!-- <div class="col-xl-10"> -->
+            <div class="multiselect-dropdown" tabindex="0">
+              <div (click)="toggleDropdownVisibilityForRS()" class="dropdown-btn" tabindex="-1">
+                <span *ngIf="selectedRSNames.length === 0">Please Select</span>
+                <span *ngIf="selectedRSNames.length > 0">
+                  <ng-container *ngFor="let rs of selectedRSNames; let isLast = last">
+                    <div class="selected-item">
+                      {{ rs.name }}
+                      <span class="remove-icon" (click)="removeSelectedRS(rs, $event)">&#10005;</span>
+                    </div>
+                    <span *ngIf="!isLast"></span>
+                  </ng-container>
+                </span>
+                <span class="dropdown-multiselect--active" style="float:right !important;padding-right:4px">
+                  <span class="dropdown-multiselect__caret"></span>
+                </span>
+              </div>
+              <div *ngIf="isDropdownOpenForRS" class="dropdown-list">
+                <ul class="item1">
+                  <li class="multiselect-item-checkbox">
+                    <input type="checkbox" (change)="toggleAllRSSelection($event)" [checked]="areAllRSSelected" />
+                    <div style="margin-left: 10px;">Select All</div>
+                  </li>
+                  <li class="filter-textbox">
+                    <input type="text" placeholder="Search" [(ngModel)]="searchInputValueForRS" (input)="filterAvailableRSNames()" />
+                  </li>
+                </ul>
+                <ul class="item2" style="max-height: 197px; overflow-y: auto;">
+                  <li *ngFor="let rs of filteredRSNamesList" class="multiselect-item-checkbox">
+                    <input type="checkbox" [checked]="selectedRSNames.includes(rs)" (change)="toggleRSSelection(rs)" />
+                    <div style="margin-left: 10px;" [class.selected]="selectedRSNames.includes(rs)">{{ rs.name }}</div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          <!-- </div> -->
+        <!-- </div> -->
       </div>
+      
   
-      <!-- Brand -->
       <div class="form-group col-md-2">
-        <label for="brandSelect" class="form-label">Brand</label>
-        <select id="brandSelect" class="form-select custom-select">
-          <option value="Fastrack">Fastrack</option>
-          <option value="Clock">Clock</option>
-        </select>
+        <!-- <div class="row"> -->
+          <!-- <div class="col-xl-2"> -->
+            <label style="margin-top: 10px;
+            float: left;
+            font-weight: 800;" class="form-label">Brand</label>
+          <!-- </div> -->
+          <!-- <div class="col-xl-10"> -->
+            <div class="multiselect-dropdown" tabindex="0">
+              <div (click)="toggleDropdownVisibilityForBrand()" class="dropdown-btn" tabindex="-1">
+                <span *ngIf="selectedBrands.length === 0">Please Select</span>
+                <span *ngIf="selectedBrands.length > 0">
+                  <ng-container *ngFor="let brand of selectedBrands; let isLast = last">
+                    <div class="selected-item">
+                      {{ brand.name }}
+                      <span class="remove-icon" (click)="removeSelectedBrand(brand, $event)">&#10005;</span>
+                    </div>
+                    <span *ngIf="!isLast"> </span>
+                  </ng-container>
+                </span>
+                <span class="dropdown-multiselect--active" style="float:right !important;padding-right:4px">
+                  <span class="dropdown-multiselect__caret"></span>
+                </span>
+              </div>
+              <div *ngIf="isDropdownOpenForBrand" class="dropdown-list">
+                <ul class="item1">
+                  <li class="multiselect-item-checkbox">
+                    <input type="checkbox" (change)="toggleAllBrandSelection($event)" [checked]="areAllBrandsSelected" />
+                    <div style="margin-left: 10px;">Select All</div>
+                  </li>
+                  <li class="filter-textbox">
+                    <input type="text" placeholder="Search" [(ngModel)]="searchInputValueForBrand" (input)="filterAvailableBrands()" />
+                  </li>
+                </ul>
+                <ul class="item2" style="max-height: 197px; overflow-y: auto;">
+                  <li *ngFor="let brand of filteredBrandsList" class="multiselect-item-checkbox">
+                    <input type="checkbox" [checked]="selectedBrands.includes(brand)" (change)="toggleBrandSelection(brand)" />
+                    <div style="margin-left: 10px;" [class.selected]="selectedBrands.includes(brand)">{{ brand.name }}</div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          <!-- </div> -->
+        <!-- </div> -->
       </div>
+      
   
       <!-- Search Button -->
       <div class="form-group col-md-2 d-flex align-items-end">
@@ -67,11 +277,32 @@
     </div>
   </div>
   
-  <!-- account-section start -->
-  <div class="col-xl-6 col-md-12">
+  <div class="col-xl-12 col-md-12">
+    <app-card cardTitle="" [options]="false">
+    <div id="chart">
+      <apx-chart
+      [series]="chartOptionsline.series"
+      [chart]="chartOptionsline.chart"
+      [dataLabels]="chartOptionsline.dataLabels"
+      [plotOptions]="chartOptionsline.plotOptions"
+      [yaxis]="chartOptionsline.yaxis"
+      [legend]="chartOptionsline.legend"
+      [fill]="chartOptionsline.fill"
+      [stroke]="chartOptionsline.stroke"
+      [tooltip]="chartOptionsline.tooltip"
+      [xaxis]="chartOptionsline.xaxis"
+      [title]="chartOptionsline.title"
+      [subtitle]="chartOptionsline.subtitle">
+    ></apx-chart>
+    </div>
+    
+    </app-card>
+  </div>
+
+  <div class="col-xl-12 col-md-12">
     <app-card cardTitle="" [options]="false">
       
-    <div id="chart">
+    <div id="chart2">
       <apx-chart
         [series]="chartOptions.series"
         [chart]="chartOptions.chart"
@@ -83,42 +314,54 @@
         [stroke]="chartOptions.stroke"
         [tooltip]="chartOptions.tooltip"
         [xaxis]="chartOptions.xaxis"
+        [title]="chartOptions.title">
+
       ></apx-chart>
     </div>
-    
     </app-card>
   </div>
 
-  <div class="col-xl-6 col-md-12">
+  <div class="col-xl-12 col-md-12">
     <app-card cardTitle="" [options]="false">
-    <div id="chart">
-      <!-- <apx-chart
-        [series]="chartOptionsline.series"
-        [chart]="chartOptionsline.chart"
-        [dataLabels]="chartOptionsline.dataLabels"
-        [plotOptions]="chartOptionsline.plotOptions"
-        [yaxis]="chartOptionsline.yaxis"
-        [legend]="chartOptionsline.legend"
-        [fill]="chartOptionsline.fill"
-        [stroke]="chartOptionsline.stroke"
-        [tooltip]="chartOptionsline.tooltip"
-        [xaxis]="chartOptionsline.xaxis"
-      ></apx-chart> -->
+      
+    <div id="chart2">
       <apx-chart
-      [series]="chartOptionsline?.series"
-      [chart]="chartOptionsline?.chart"
-      [dataLabels]="chartOptionsline?.dataLabels"
-      [plotOptions]="chartOptionsline?.plotOptions"
-      [yaxis]="chartOptionsline?.yaxis"
-      [legend]="chartOptionsline?.legend"
-      [fill]="chartOptionsline?.fill"
-      [stroke]="chartOptionsline?.stroke"
-      [tooltip]="chartOptionsline?.tooltip"
-      [xaxis]="chartOptionsline?.xaxis"
-    ></apx-chart>
+        [series]="chartOptionsRegionwise.series"
+        [chart]="chartOptionsRegionwise.chart"
+        [dataLabels]="chartOptionsRegionwise.dataLabels"
+        [plotOptions]="chartOptionsRegionwise.plotOptions"
+        [yaxis]="chartOptionsRegionwise.yaxis"
+        [legend]="chartOptionsRegionwise.legend"
+        [fill]="chartOptionsRegionwise.fill"
+        [stroke]="chartOptionsRegionwise.stroke"
+        [tooltip]="chartOptionsRegionwise.tooltip"
+        [xaxis]="chartOptionsRegionwise.xaxis"
+        [title]="chartOptionsRegionwise.title">
+
+      ></apx-chart>
     </div>
-    
     </app-card>
   </div>
-  
+
+  <div class="col-xl-12 col-md-12">
+    <app-card cardTitle="" [options]="false">
+      
+    <div id="chart2">
+      <apx-chart
+        [series]="chartOptionsRegionwiseGrowth.series"
+        [chart]="chartOptionsRegionwiseGrowth.chart"
+        [dataLabels]="chartOptionsRegionwiseGrowth.dataLabels"
+        [plotOptions]="chartOptionsRegionwiseGrowth.plotOptions"
+        [yaxis]="chartOptionsRegionwiseGrowth.yaxis"
+        [legend]="chartOptionsRegionwiseGrowth.legend"
+        [fill]="chartOptionsRegionwiseGrowth.fill"
+        [stroke]="chartOptionsRegionwiseGrowth.stroke"
+        [tooltip]="chartOptionsRegionwiseGrowth.tooltip"
+        [xaxis]="chartOptionsRegionwiseGrowth.xaxis"
+        [title]="chartOptionsRegionwiseGrowth.title">
+
+      ></apx-chart>
+    </div>
+    </app-card>
+  </div>
 </div>

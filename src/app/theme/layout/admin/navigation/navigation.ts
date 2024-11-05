@@ -19,73 +19,127 @@ export interface NavigationItem {
 }
 
 export const NavigationItems: NavigationItem[] = [
-  // {
-  //   id: 'navigation',
-  //   title: 'Navigation',
-  //   type: 'group',
-  //   icon: 'icon-group',
-  //   children: [
-  //     {
-  //       id: 'dashboard',
-  //       title: 'Dashboard',
-  //       type: 'item',
-  //       url: '/analytics',
-  //       icon: 'feather icon-home'
-  //     }
-  //   ]
-  // },
   {
-    id: 'ui-component',
-    title: 'Dashboard',
+    id: 'chart',
+    title: 'Chart',
     type: 'group',
-    icon: 'feather icon-home',
+    icon: 'icon-group',
     children: [
       {
-        id: 'basic',
+        id: 'apexchart',
         title: 'Dashboard',
-        type: 'collapse',
-        icon: 'feather icon-box',
-        children: [
-          {
-            id: 'button',
-            title: 'Total Ordering',
-            type: 'item',
-            url: '/analytics'
-          },
-          // {
-          //   id: 'badges',
-          //   title: 'Badges',
-          //   type: 'item',
-          //   url: '/component/badges'
-          // },
-          // {
-          //   id: 'breadcrumb-pagination',
-          //   title: 'Breadcrumb & Pagination',
-          //   type: 'item',
-          //   url: '/component/breadcrumb-paging'
-          // },
-          // {
-          //   id: 'collapse',
-          //   title: 'Collapse',
-          //   type: 'item',
-          //   url: '/component/collapse'
-          // },
-          // {
-          //   id: 'tabs-pills',
-          //   title: 'Tabs & Pills',
-          //   type: 'item',
-          //   url: '/component/tabs-pills'
-          // },
-          // {
-          //   id: 'typography',
-          //   title: 'Typography',
-          //   type: 'item',
-          //   url: '/component/typography'
-          // }
-        ]
+        type: 'item',
+        url: '/chart',
+        classes: 'nav-item',
+        icon: 'feather icon-pie-chart'
       }
     ]
   },
+
+  {
+    id: 'chart',
+    title: 'Chart',
+    type: 'group',
+    icon: 'icon-group',
+    children: [
+      {
+        id: 'apexchart',
+        title: 'Total Ordering',
+        type: 'item',
+        url: '/chart',
+        classes: 'nav-item',
+        icon: 'feather icon-pie-chart'
+      }
+    ]
+  },
+  
+  // {
+  //   id: 'ui-component',
+  //   title: '',
+  //   type: 'group',
+  //   icon: 'feather icon-home',
+  //   children: [
+  //     {
+  //       id: 'basic',
+  //       title: 'Dashboard',
+  //       type: 'collapse',
+  //       icon: 'feather icon-box',
+  //       children: [
+  //       ]
+  //     }
+  //   ]
+  // },
+  // {
+  //   id: 'ui-component',
+  //   title: '',
+  //   type: 'group',
+  //   icon: 'feather icon-home',
+  //   children: [
+  //     {
+  //       id: 'basic',
+  //       title: 'Dashboard',
+  //       type: 'collapse',
+  //       icon: 'feather icon-box',
+  //       children: [
+  //         {
+  //           id: '1',
+  //           title: 'Total Ordering',
+  //           type: 'item',
+  //           url: '/analytics'
+  //         },
+  //         {
+  //           id: '2',
+  //           title: 'Total Ordering Pivots',
+  //           type: 'item',
+  //           url: '/analytics'
+  //         },
+  //         {
+  //           id: '3',
+  //           title: 'Ordering Behaviour',
+  //           type: 'item',
+  //           url: '/analytics'
+  //         },
+  //         {
+  //           id: '4',
+  //           title: 'Day & Time Analysis',
+  //           type: 'item',
+  //           url: '/analytics'
+  //         },
+          
+  //         // {
+  //         //   id: 'badges',
+  //         //   title: 'Badges',
+  //         //   type: 'item',
+  //         //   url: '/component/badges'
+  //         // },
+  //         // {
+  //         //   id: 'breadcrumb-pagination',
+  //         //   title: 'Breadcrumb & Pagination',
+  //         //   type: 'item',
+  //         //   url: '/component/breadcrumb-paging'
+  //         // },
+  //         // {
+  //         //   id: 'collapse',
+  //         //   title: 'Collapse',
+  //         //   type: 'item',
+  //         //   url: '/component/collapse'
+  //         // },
+  //         // {
+  //         //   id: 'tabs-pills',
+  //         //   title: 'Tabs & Pills',
+  //         //   type: 'item',
+  //         //   url: '/component/tabs-pills'
+  //         // },
+  //         // {
+  //         //   id: 'typography',
+  //         //   title: 'Typography',
+  //         //   type: 'item',
+  //         //   url: '/component/typography'
+  //         // }
+  //       ]
+  //     }
+  //   ]
+  // },
   // {
   //   id: 'Authentication',
   //   title: 'Authentication',
@@ -112,22 +166,22 @@ export const NavigationItems: NavigationItem[] = [
   //     }
   //   ]
   // },
-  {
-    id: 'chart',
-    title: 'Chart',
-    type: 'group',
-    icon: 'icon-group',
-    children: [
-      {
-        id: 'apexchart',
-        title: 'ApexChart',
-        type: 'item',
-        url: '/chart',
-        classes: 'nav-item',
-        icon: 'feather icon-pie-chart'
-      }
-    ]
-  },
+  // {
+  //   id: 'chart',
+  //   title: 'Chart',
+  //   type: 'group',
+  //   icon: 'icon-group',
+  //   children: [
+  //     {
+  //       id: 'apexchart',
+  //       title: 'ApexChart',
+  //       type: 'item',
+  //       url: '/chart',
+  //       classes: 'nav-item',
+  //       icon: 'feather icon-pie-chart'
+  //     }
+  //   ]
+  // },
   // {
   //   id: 'forms & tables',
   //   title: 'Forms & Tables',

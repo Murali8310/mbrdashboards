@@ -17,6 +17,7 @@ import 'mousetrap';
 
 // bootstrap import
 import { NgbDropdownModule, NgbNavModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+// import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import { NgbDropdownModule, NgbNavModule, NgbModule } from '@ng-bootstrap/ng-boo
     NgbNavModule,
     NgbModule,
     NgScrollbarModule,
-    NgClickOutsideDirective
+    NgClickOutsideDirective,
+    // NgMultiSelectDropDownModule.forRoot()
   ],
   exports: [
     CommonModule,

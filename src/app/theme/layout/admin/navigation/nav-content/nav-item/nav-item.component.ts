@@ -12,7 +12,7 @@ export class NavItemComponent {
   @Input() item!: NavigationItem;
 
   // public method
-  closeOtherMenu(event: MouseEvent) {
+  closeOtherMenu(event: MouseEvent,data:any) {
     const ele = event.target as HTMLElement;
     if (ele !== null && ele !== undefined) {
       const parent = ele.parentElement as HTMLElement;
