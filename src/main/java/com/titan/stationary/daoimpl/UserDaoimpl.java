@@ -73,6 +73,7 @@ import com.titan.stationary.dao.UserDao;
 import com.titan.stationary.dto.MasterData;
 import com.titan.stationary.dto.MonthlyDataFilter;
 import com.titan.stationary.dto.OutputForMontlyFilter;
+import com.titan.stationary.dto.OutputGrowthOverPreviousMonth;
 import com.titan.stationary.security.AuthenticationService;
 import com.titan.util.PasswordUtils;
 import com.titan.util.Validations;
@@ -6489,5 +6490,48 @@ Calendar cal = Calendar.getInstance();
 	public List<Object> monthlyToalOrdaringData() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<OutputGrowthOverPreviousMonth> GrowthOverPreviousMonth(MonthlyDataFilter filter) {
+		List<OutputGrowthOverPreviousMonth> growthOverPreviousMonthData=new ArrayList<>();
+		String storedProcedureCall = "EXEC GrowthOverPreviousMonth @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList";
+        
+        // Create a native query
+        Query query = entityManager.createNativeQuery(storedProcedureCall);
+        
+        // Set the parameters for the stored procedure call
+        query.setParameter("regionList", filter.getRegionList());  // @RegionList (e.g., 'EAST, WEST')
+        query.setParameter("startDate", filter.getStartDate());    // @StartDate (e.g., 20240601)
+        query.setParameter("endDate", filter.getEndDate());        // @EndDate (e.g., 20240630)
+        query.setParameter("brandList", filter.getBrandList());    // @BrandList (e.g., 'Titan')
+        query.setParameter("rsNameList", filter.getRsNameList());  // @RSNameList (e.g., '' or some value)
+
+        // Execute the query to invoke the stored procedure
+        try {
+        	List<Object[]> result = query.getResultList();
+        	//filteredData = (OutputForMontlyFilter) query.getSingleResult();
+        	
+        	for (Object[] row : result) {
+        	    // Assuming row contains values in the correct order for mapping
+        		OutputGrowthOverPreviousMonth data= new OutputGrowthOverPreviousMonth();
+        		data.setYear((Integer) row[0]);
+        		data.setMonth((Integer) row[1]);
+        		data.setTotalRevenue((BigDecimal)row[2]);
+        		data.setTotalQTY((Integer) row[3]);
+        		data.setTotalRetailerCode((Integer) row[4]);
+        		data.setPriceGrowthPercentage((BigDecimal)row[5]);
+        		data.setOrderQtyGrowthPercentage((BigDecimal)row[6]);
+        		data.setRetailerGrowthPercentage((BigDecimal)row[7]);
+        		growthOverPreviousMonthData.add(data);
+        	    // Now, filteredData is populated with values
+        	}
+        }
+        catch(Exception e) {
+        	e.printStackTrace();
+        }
+		
+		return growthOverPreviousMonthData;
+
 	}
 }

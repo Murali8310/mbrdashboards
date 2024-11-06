@@ -38,6 +38,7 @@ import com.titan.stationary.dao.UserDao;
 import com.titan.stationary.dto.MasterData;
 import com.titan.stationary.dto.MonthlyDataFilter;
 import com.titan.stationary.dto.OutputForMontlyFilter;
+import com.titan.stationary.dto.OutputGrowthOverPreviousMonth;
 import com.titan.stationary.service.Userservice;
 
 @Service("userService")
@@ -1100,6 +1101,12 @@ public class UserServiceimpl implements Userservice {
 	public List<String> get7thworkingDay() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<OutputGrowthOverPreviousMonth> GrowthOverPreviousMonth(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		return userDao.GrowthOverPreviousMonth(filter);
 	}
 
 

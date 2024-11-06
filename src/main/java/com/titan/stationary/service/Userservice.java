@@ -16,6 +16,7 @@ import com.titan.stationary.bean.smUserMasterBean;
 import com.titan.stationary.dto.MasterData;
 import com.titan.stationary.dto.MonthlyDataFilter;
 import com.titan.stationary.dto.OutputForMontlyFilter;
+import com.titan.stationary.dto.OutputGrowthOverPreviousMonth;
 
 public interface Userservice {
 
@@ -230,5 +231,8 @@ public interface Userservice {
 
 
 	List<OutputForMontlyFilter> MonthlyTrend(MonthlyDataFilter filter);
+
+
+	List<OutputGrowthOverPreviousMonth> GrowthOverPreviousMonth(MonthlyDataFilter filter);
 
 }

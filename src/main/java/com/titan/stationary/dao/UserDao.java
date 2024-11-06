@@ -21,6 +21,7 @@ import com.titan.stationary.bean.smUserMasterBean;
 import com.titan.stationary.dto.MasterData;
 import com.titan.stationary.dto.MonthlyDataFilter;
 import com.titan.stationary.dto.OutputForMontlyFilter;
+import com.titan.stationary.dto.OutputGrowthOverPreviousMonth;
 
 @Repository
 public interface UserDao {
@@ -276,6 +277,9 @@ public interface UserDao {
 
 
 	MasterData GetMasterData();
+
+
+	List<OutputGrowthOverPreviousMonth> GrowthOverPreviousMonth(MonthlyDataFilter filter);
 
 
 

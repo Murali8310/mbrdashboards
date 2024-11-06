@@ -65,6 +65,7 @@ import com.titan.stationary.bean.smUserMasterBean;
 import com.titan.stationary.dto.MasterData;
 import com.titan.stationary.dto.MonthlyDataFilter;
 import com.titan.stationary.dto.OutputForMontlyFilter;
+import com.titan.stationary.dto.OutputGrowthOverPreviousMonth;
 import com.titan.stationary.service.Userservice;
 import com.titan.util.AesUtil;
 import com.titan.util.PasswordUtils;
@@ -2782,6 +2783,31 @@ System.out.println("CCCOWNER"+CCCOWNER);
 //			}
 			
 				result = userService.MonthlyTrend(filter);
+				redirect.addFlashAttribute("MESSAGE", result);
+				model.addAttribute("MESSAGE", result);
+				return result;
+		}
+		
+		
+		
+		
+		@RequestMapping(value = "GrowthOverPreviousMonth", method = RequestMethod.POST)
+		public List<OutputGrowthOverPreviousMonth> GrowthOverPreviousMonth(HttpServletRequest request, HttpServletResponse response,
+			 RedirectAttributes redirect, Model model, @RequestBody MonthlyDataFilter filter) {
+			List<OutputGrowthOverPreviousMonth> result =new ArrayList<>();
+			
+			
+			HttpSession session = request.getSession();
+			String loginId = "";
+//			try {
+//				Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+//				loginId = (String) userMap.get("login_id");
+//			} catch (Exception er) {
+//				er.printStackTrace();
+//				//return new StringBuilder("Session is timeout, <a href='login' >click here</a> to login");
+//			}
+			
+				result = userService.GrowthOverPreviousMonth(filter);
 				redirect.addFlashAttribute("MESSAGE", result);
 				model.addAttribute("MESSAGE", result);
 				return result;
