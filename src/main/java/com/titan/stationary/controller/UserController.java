@@ -263,7 +263,7 @@ public class UserController {
 	
 
 	    @RequestMapping(value = "loginSubmit", method = RequestMethod.POST)
-	    public String loginSubmit(
+	    public Map<String, Object> loginSubmit(
 	            HttpServletRequest request,
 	            HttpServletResponse response,
 	            @RequestBody Map<String, String> loginData // Accepts raw JSON payload
@@ -311,11 +311,11 @@ public class UserController {
 	            session.setAttribute("accessRole", userMap.get("accessRole"));
 	            session.setAttribute("blockaccess", blockAccessStatus);
 
-	            return "landPage";
+	            return userMap;
 	        } else {
 	            // Set message in session and return to login page on failure
 	            session.setAttribute("MESSAGE", userMap.get("message"));
-	            return "login";
+	            return userMap;
 	        }
 	    }
 	
