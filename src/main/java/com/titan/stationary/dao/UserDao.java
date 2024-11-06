@@ -272,7 +272,7 @@ public interface UserDao {
 	List<Object> monthlyToalOrdaringData();
 
 
-	OutputForMontlyFilter MonthlyTrend(MonthlyDataFilter filter);
+	List<OutputForMontlyFilter> MonthlyTrend(MonthlyDataFilter filter);
 
 
 	MasterData GetMasterData();

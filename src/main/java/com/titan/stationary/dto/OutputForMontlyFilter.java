@@ -7,6 +7,7 @@ public class OutputForMontlyFilter {
 	private BigDecimal totalRevenue;
 	private Integer totalQTY;
 	private Integer totalRetailerCode;
+	private Integer month;
 	
 	
 	public BigDecimal getTotalRevenue() {
@@ -27,4 +28,12 @@ public class OutputForMontlyFilter {
 	public void setTotalRetailerCode(Integer totalRetailerCode) {
 		this.totalRetailerCode = totalRetailerCode;
 	}
+	public Integer getMonth() {
+		return month;
+	}
+	public void setMonth(Integer month) {
+		this.month = month;
+	}
+	
+	
 }

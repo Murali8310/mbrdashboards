@@ -6440,15 +6440,15 @@ Calendar cal = Calendar.getInstance();
 	}
 
 	@Override
-	public OutputForMontlyFilter MonthlyTrend(MonthlyDataFilter filter) {
+	public List<OutputForMontlyFilter> MonthlyTrend(MonthlyDataFilter filter) {
 		// TODO Auto-generated method stub
-		OutputForMontlyFilter result=new OutputForMontlyFilter();
+		List<OutputForMontlyFilter> result=new ArrayList<>();
 		result =getDataForMonthlyTrend(filter);
 		return result;
 		
 	}
-	private OutputForMontlyFilter getDataForMonthlyTrend(MonthlyDataFilter filter) {
-		OutputForMontlyFilter filteredData=new OutputForMontlyFilter();
+	private List<OutputForMontlyFilter> getDataForMonthlyTrend(MonthlyDataFilter filter) {
+		List<OutputForMontlyFilter> filteredData=new ArrayList<>();
 		String storedProcedureCall = "EXEC GetOrderSummary @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList";
         
         // Create a native query
@@ -6465,12 +6465,15 @@ Calendar cal = Calendar.getInstance();
         try {
         	List<Object[]> result = query.getResultList();
         	//filteredData = (OutputForMontlyFilter) query.getSingleResult();
+        	
         	for (Object[] row : result) {
         	    // Assuming row contains values in the correct order for mapping
-        	    filteredData.setTotalRevenue((BigDecimal)row[0]);
-        	    filteredData.setTotalQTY((Integer) row[1]);
-        	    filteredData.setTotalRetailerCode((Integer) row[2]);
-
+        		OutputForMontlyFilter data= new OutputForMontlyFilter();
+        		data.setMonth((Integer) row[1]);
+        		data.setTotalRevenue((BigDecimal)row[2]);
+        		data.setTotalQTY((Integer) row[3]);
+        		data.setTotalRetailerCode((Integer) row[4]);
+        		filteredData.add(data);
         	    // Now, filteredData is populated with values
         	}
         }

@@ -229,6 +229,6 @@ public interface Userservice {
 	MasterData GetMasterData();
 
 
-	OutputForMontlyFilter MonthlyTrend(MonthlyDataFilter filter);
+	List<OutputForMontlyFilter> MonthlyTrend(MonthlyDataFilter filter);
 
 }

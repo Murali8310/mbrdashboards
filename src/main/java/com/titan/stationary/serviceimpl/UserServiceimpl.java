@@ -1086,7 +1086,7 @@ public class UserServiceimpl implements Userservice {
 	}
 
 	@Override
-	public OutputForMontlyFilter MonthlyTrend(MonthlyDataFilter filter) {
+	public List<OutputForMontlyFilter> MonthlyTrend(MonthlyDataFilter filter) {
 		return userDao.MonthlyTrend(filter);
 	}
 
