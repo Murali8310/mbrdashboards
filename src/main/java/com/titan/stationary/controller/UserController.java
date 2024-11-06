@@ -2741,7 +2741,7 @@ System.out.println("CCCOWNER"+CCCOWNER);
 
 		}
 		
-		@GetMapping(value = "GetMasterData")
+@GetMapping(value = "GetMasterData")
 		public MasterData GetMasterData(HttpServletRequest request, HttpServletResponse response,
 			 RedirectAttributes redirect, Model model) {
 			MasterData result =null;
@@ -2763,8 +2763,10 @@ System.out.println("CCCOWNER"+CCCOWNER);
 				return result;
 		}
 		
-		@PostMapping(value = "MonthlyTrend")
-		public List<OutputForMontlyFilter> MonthlyTrend(HttpServletRequest request, HttpServletResponse response,
+		@RequestMapping(value = "MonthlyTrend", method = RequestMethod.POST)
+
+//		@PostMapping(value = "MonthlyTrend" , method = RequestMethod.POST)
+		public OutputForMontlyFilter MonthlyTrend(HttpServletRequest request, HttpServletResponse response,
 			 RedirectAttributes redirect, Model model, @RequestBody MonthlyDataFilter filter) {
 			List<OutputForMontlyFilter> result =new ArrayList<>();
 			
