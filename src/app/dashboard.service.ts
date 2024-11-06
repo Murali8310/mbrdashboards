@@ -18,7 +18,7 @@ public selectedData:any = '1';
 
   
   GetMasterData(): Observable<any> {
-    return this.http.get<any>(environment.apiUrl + '/stationary/GetMasterData');
+    return this.http.get<any>(environment.apiUrl + '/GetMasterData');
   }
 
   
@@ -45,7 +45,7 @@ public selectedData:any = '1';
     };
     return this.http
       .post<any>(
-        `${environment.apiUrl}/stationary/loginSubmit`,
+        `${environment.apiUrl}/loginSubmit`,
         JSON.stringify(loginInfo),
         {
           headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -94,7 +94,7 @@ public selectedData:any = '1';
 
     return this.http
       .post<any>(
-        `${environment.apiUrl}/stationary/MonthlyTrend`,
+        `${environment.apiUrl}/MonthlyTrend`,
         JSON.stringify(MonthlyToalOrdaringPayload),
         {
           headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -102,4 +102,38 @@ public selectedData:any = '1';
         }
       );      
   }
+
+  public  GrowthOverPreviousMonth(data?:any) {
+    // const MonthlyToalOrdaringPayload = {
+    //   data: 'rrrr',
+    //   data2:'dddddd'
+    //   // browsersignature: new ClientJS().getFingerprint().toString(),
+    // };
+
+    // const MonthlyToalOrdaringPayload :any = {
+    //   "regionList": "EAST, WEST",  /// default all regions 
+    //     "startDate":20240601,       /// default case start date of financial year in integer format
+    //     "endDate": 20240730,       ////  default case end date of financial year in integer format
+    //     "brandList": "",       //// default casen ""
+    //     "rsNameList": ""//// default casen ""
+    //   };
+
+    const GrowthOverPreviousMonthPayload :any = {
+      "regionList": "EAST, WEST,NORTH,SOUTH 1,SOUTH 2",  /// default all regions 
+        "startDate":20240401,       /// default case start date of financial year in integer format
+        "endDate": 202401030,       ////  default case end date of financial year in integer format
+        "brandList": "",       //// default casen ""
+        "rsNameList": ""//// default casen ""
+      };
+
+    return this.http
+      .post<any>(
+        `${environment.apiUrl}/GrowthOverPreviousMonth`,
+        JSON.stringify(GrowthOverPreviousMonthPayload),
+        {
+          headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+          observe: 'response',
+        }
+      );      
+  } 
 }

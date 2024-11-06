@@ -248,82 +248,7 @@ export default class DashAnalyticsComponent {
     public dashboardService: DashboardService,
     private spinner: NgxSpinnerService
   ) {
-    this.chartOptions = {
-      chart: {
-        type: 'bar',
-        height: 350,
-        toolbar: {
-          show: false // Optional: Hide toolbar if not needed
-        }
-      },
-      title: {
-        text: 'Growth Over Previous Month.', // Chart title
-        align: 'center',
-        style: {
-          fontSize: '16px',
-          fontWeight: 'bold',
-          color: '#333'
-        }
-      },
-      series: [
-        {
-          name: 'Number of Retailers',
-          data: [120, 150, 130] // Example values for Number of Retailers
-        },
-        {
-          name: 'Quantity (k)',
-          data: [30, -25, 35] // Example values for Quantity
-        },
-        {
-          name: 'Value',
-          data: [100, -70, 80] // Example values for Value
-        }
-      ],
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: '50%'
-          // endingShape: "rounded"
-        }
-      },
-      dataLabels: {
-        enabled: true
-      },
-      stroke: {
-        show: true,
-        width: 2,
-        colors: ['transparent']
-      },
-      xaxis: {
-        categories: [
-          'Feb',
-          'Mar',
-          'Apr'
-          // "May",
-          // "Jun",
-          // "Jul",
-          // "Aug",
-          // "Sep",
-          // "Oct"
-        ]
-      },
-      yaxis: {
-        title: {
-          text: ' (Growth percentage)'
-        },
-        min: -100 // Set a minimum value for y-axis to accommodate negative values
-      },
-      fill: {
-        opacity: 1
-      },
-      tooltip: {
-        y: {
-          formatter: function (val) {
-            return '' + val + ' ';
-          }
-        }
-      }
-    };
+  
     this.chartOptionsRegionwise = {
       chart: {
         type: 'bar',
@@ -687,6 +612,7 @@ export default class DashAnalyticsComponent {
     this.spinner.show();
     await this.GetMasterData();
     await this.MonthlyToalOrdaring();
+    await this.GrowthOverPreviousMonth();
     this.spinner.hide();
     // Simulate a delay for demonstration (e.g., data fetching)
     // setTimeout(() => {
@@ -917,6 +843,109 @@ export default class DashAnalyticsComponent {
               ]
             }
           };
+        }
+        console.log('this is for checking');
+      },
+      (error) => {
+        // this.errorMessage = 'An error occurred during login';
+        console.error('Login error:', error);
+      }
+    );
+  };
+
+  public GrowthOverPreviousMonth = (data?: any) => {
+    this.spinner.show();
+    this.dashboardService.GrowthOverPreviousMonth().subscribe(
+      (response) => {
+        if (response && response.body) {
+          this.spinner.hide();
+
+          // Define month names for easy mapping
+          const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+          // Prepare data for each series
+          const retailersData:any = [];
+          const quantityData:any = [];
+          const valueData :any= [];
+          const categories: string[] = []; // This will hold the month names
+
+          response.body.forEach((item: any) => {
+            // Push values to each series array
+            retailersData.push(item.totalRetailerCode);
+            quantityData.push(item.totalQTY);
+            valueData.push(item.totalRevenue);
+
+            // Get month name and add to categories
+            categories.push(monthNames[item.month - 1]);
+          });
+
+          this.chartOptions = {
+            chart: {
+              type: 'bar',
+              height: 350,
+              toolbar: {
+                show: false // Optional: Hide toolbar if not needed
+              }
+            },
+            title: {
+              text: 'Growth Over Previous Month.', // Chart title
+              align: 'center',
+              style: {
+                fontSize: '16px',
+                fontWeight: 'bold',
+                color: '#333'
+              }
+            },
+            series: [
+              {
+                name: 'Number of Retailers',
+                data: retailersData // Example values for Number of Retailers
+              },
+              {
+                name: 'Quantity (k)',
+                data: quantityData // Example values for Quantity
+              },
+              {
+                name: 'Value',
+                data: valueData // Example values for Value
+              }
+            ],
+            plotOptions: {
+              bar: {
+                horizontal: false,
+                columnWidth: '50%'
+                // endingShape: "rounded"
+              }
+            },
+            dataLabels: {
+              enabled: true
+            },
+            stroke: {
+              show: true,
+              width: 2,
+              colors: ['transparent']
+            },
+            xaxis: {
+              categories: categories
+            },
+            yaxis: {
+              title: {
+                text: ' (Growth percentage)'
+              },
+              min: -100 // Set a minimum value for y-axis to accommodate negative values
+            },
+            fill: {
+              opacity: 1
+            },
+            tooltip: {
+              y: {
+                formatter: function (val) {
+                  return '' + val + ' ';
+                }
+              }
+            }
+          };
+        
         }
         console.log('this is for checking');
       },

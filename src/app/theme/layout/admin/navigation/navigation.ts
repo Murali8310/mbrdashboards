@@ -29,7 +29,7 @@ export const NavigationItems: NavigationItem[] = [
         id: '1',
         title: 'Dashboard',
         type: 'item',
-        url: '/chart',
+        url: '/charts',
         classes: 'nav-item',
         icon: 'feather icon-pie-chart'
       }
@@ -46,7 +46,7 @@ export const NavigationItems: NavigationItem[] = [
         id: '2',
         title: 'Total Ordering',
         type: 'item',
-        url: '/chart',
+        url: '/charts',
         classes: 'nav-item',
         icon: 'fas fa-sort-amount-up'
       }

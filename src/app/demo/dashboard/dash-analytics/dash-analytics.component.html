@@ -53,7 +53,9 @@ text-align: center;
               <div (click)="toggleDropdownVisibility()" class="dropdown-btn" tabindex="-1">
                 <span *ngIf="selectedRegions.length === 0">Please Select</span>
                 <i *ngIf="selectedRegions.length == 0" class="fas fa-chevron-down"></i>
-                <span *ngIf="selectedRegions.length > 0">
+                <!-- <span *ngIf="selectedRegions.length > 0"> -->
+                  <div *ngIf="selectedRegions.length > 0" class="selected-items-container">
+
                   <ng-container *ngFor="let region of selectedRegions; let isLast = last">
                     <div class="selected-item">
                       {{ region.name }}
@@ -61,7 +63,8 @@ text-align: center;
                     </div>
                     <!-- <span *ngIf="!isLast">, </span> -->
                   </ng-container>
-                </span>
+                <!-- </span> -->
+                </div>
                 <span class="dropdown-multiselect--active" style="float:right !important;padding-right:4px">
                   <span class="dropdown-multiselect__caret"></span>
                 </span>
@@ -147,7 +150,9 @@ text-align: center;
               <div (click)="toggleDropdownVisibilityForRetailer()" class="dropdown-btn" tabindex="-1">
                 <span *ngIf="selectedRetailerTypes.length === 0">Please Select</span>
                 <i *ngIf="selectedRetailerTypes.length == 0" class="fas fa-chevron-down"></i>
-                <span *ngIf="selectedRetailerTypes.length > 0">
+                <!-- <span *ngIf="selectedRetailerTypes.length > 0"> -->
+                  <div *ngIf="selectedRetailerTypes.length > 0" class="selected-items-container">
+
                   <ng-container *ngFor="let retailer of selectedRetailerTypes; let isLast = last">
                     <div class="selected-item">
                       {{ retailer.name }}
@@ -155,7 +160,8 @@ text-align: center;
                     </div>
                     <!-- <span *ngIf="!isLast">, </span> -->
                   </ng-container>
-                </span>
+                <!-- </span> -->
+                </div>
                 <span class="dropdown-multiselect--active" style="float:right !important;padding-right:4px">
                   <span class="dropdown-multiselect__caret"></span>
                 </span>
@@ -195,7 +201,8 @@ text-align: center;
               <div (click)="toggleDropdownVisibilityForRS()" class="dropdown-btn" tabindex="-1">
                 <span *ngIf="selectedRSNames.length === 0">Please Select</span>
                 <i *ngIf="selectedRSNames.length == 0" class="fas fa-chevron-down"></i>
-                <span *ngIf="selectedRSNames.length > 0">
+                <!-- <span *ngIf="selectedRSNames.length > 0"> -->
+                  <div *ngIf="selectedRSNames.length > 0" class="selected-items-container">
                   <ng-container *ngFor="let rs of selectedRSNames; let isLast = last">
                     <div class="selected-item">
                       {{ rs.name }}
@@ -203,7 +210,8 @@ text-align: center;
                     </div>
                     <!-- <span *ngIf="!isLast"></span> -->
                   </ng-container>
-                </span>
+                <!-- </span> -->
+                </div>
                 <span class="dropdown-multiselect--active" style="float:right !important;padding-right:4px">
                   <span class="dropdown-multiselect__caret"></span>
                 </span>
@@ -243,7 +251,8 @@ text-align: center;
               <div (click)="toggleDropdownVisibilityForBrand()" class="dropdown-btn" tabindex="-1">
                 <span *ngIf="selectedBrands.length === 0">Please Select</span>
                 <i *ngIf="selectedBrands.length == 0" class="fas fa-chevron-down"></i>
-                <span *ngIf="selectedBrands.length > 0">
+                <!-- <span *ngIf="selectedBrands.length > 0"> -->
+                  <div *ngIf="selectedBrands.length > 0" class="selected-items-container">
                   <div class="selected-items-container">
                     <ng-container *ngFor="let brand of selectedBrands; let isLast = last">
                       <div class="selected-item">
@@ -252,7 +261,8 @@ text-align: center;
                       </div>
                     </ng-container>
                   </div>
-                </span>
+                <!-- </span> -->
+                </div>
                 
                 <span class="dropdown-multiselect--active" style="float:right !important;padding-right:4px">
                   <span class="dropdown-multiselect__caret"></span>
