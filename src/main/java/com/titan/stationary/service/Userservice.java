@@ -17,6 +17,7 @@ import com.titan.stationary.dto.MasterData;
 import com.titan.stationary.dto.MonthlyDataFilter;
 import com.titan.stationary.dto.OutputForMontlyFilter;
 import com.titan.stationary.dto.OutputGrowthOverPreviousMonth;
+import com.titan.stationary.dto.OutputRegionWiseMonthlyDistribution;
 
 public interface Userservice {
 
@@ -234,5 +235,8 @@ public interface Userservice {
 
 
 	List<OutputGrowthOverPreviousMonth> GrowthOverPreviousMonth(MonthlyDataFilter filter);
+
+
+	List<OutputRegionWiseMonthlyDistribution> RegionWiseMonthlyDistribution(MonthlyDataFilter filter);
 
 }
