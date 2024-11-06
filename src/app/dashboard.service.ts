@@ -39,14 +39,14 @@ public selectedData:any = '1';
 
   login(username: string, password: string) {
     const loginInfo = {
-      userName: username,
+      login_id: username,
       password,
       // browsersignature: new ClientJS().getFingerprint().toString(),
     };
     return this.http
       .post<any>(
         `${environment.apiUrl}/loginSubmit`,
-        JSON.stringify(loginInfo),
+        loginInfo,
         {
           headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
           observe: 'response',
