@@ -23,7 +23,7 @@ select distinct(RBM)from MBROrders;
 -- select orderQty, TotalPrice, count(RetailerCode)  from MBROrders distinct Month(OrderDate);
 
 
-------------------------------- Monthly Trend -------------------------------
+------------------------------------------------------------------------- Monthly Trend -------------------------------
 
 CREATE PROCEDURE GetOrderSummary
     @RegionList VARCHAR(MAX),     -- Comma-separated list of regions
@@ -198,4 +198,80 @@ EXEC RegionWiseMonthlyDistribution
 	@BrandList ='',
 	@RSNameList ='';
 
+----------------------------------------------------------------------------------Region Wise Growth over Previous Months-------------------------------------------------------
 
+Alter PROCEDURE RegionWiseGrowthoverPreviousMonths
+    @RegionList VARCHAR(MAX),     -- Comma-separated list of regions
+    @StartDate INT,               -- Start date in yyyymmdd format (e.g., 20240601)
+    @EndDate INT,                 -- End date in yyyymmdd format (e.g., 20240630)
+    @RSNameList VARCHAR(MAX),
+    @BrandList VARCHAR(MAX)
+AS
+BEGIN
+    ;WITH MonthlySummary AS (
+        -- Select the sum of TotalPrice, sum of OrderQty, and count of distinct RetailerCode per month
+        SELECT 
+            YEAR(OrderDate) AS Year,
+            MONTH(OrderDate) AS Month,
+            Region,
+            SUM(TotalPrice) AS TotalPriceSum,
+            SUM(OrderQty) AS TotalOrderQty,
+            COUNT(DISTINCT RetailerCode) AS DistinctRetailerCount
+        FROM 
+            MBROrders
+        WHERE 
+            Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RegionList, ','))  -- Split the @RegionList string into values
+            AND CONVERT(VARCHAR, OrderDate, 112) >= @StartDate                        -- Compare OrderDate with StartDate
+            AND CONVERT(VARCHAR, OrderDate, 112) <= @EndDate                          -- Compare OrderDate with EndDate
+            OR (Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@BrandList, ',')) OR @BrandList IS NULL)
+            OR (RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RSNameList, ',')) OR @RSNameList IS NULL)
+        GROUP BY
+            YEAR(OrderDate),
+            MONTH(OrderDate),
+            Region
+    )
+    -- Now, calculate the growth over the previous month using the LAG function and compute percentage growth
+    SELECT 
+        Year,
+        Month,
+        Region,
+        TotalPriceSum,
+        TotalOrderQty,
+        DistinctRetailerCount,
+        
+        -- Calculate the percentage growth in TotalPrice (month-over-month growth)
+        CASE 
+            WHEN LAG(TotalPriceSum, 1) OVER (PARTITION BY Region ORDER BY Year, Month) IS NULL THEN NULL
+            WHEN LAG(TotalPriceSum, 1) OVER (PARTITION BY Region ORDER BY Year, Month) = 0 THEN NULL
+            ELSE 
+                ((TotalPriceSum - LAG(TotalPriceSum, 1) OVER (PARTITION BY Region ORDER BY Year, Month)) * 1.0 / LAG(TotalPriceSum, 1) OVER (PARTITION BY Region ORDER BY Year, Month)) * 100
+        END AS PriceGrowthPercentage,
+        
+        -- Calculate the percentage growth in TotalOrderQty (month-over-month growth)
+        CASE 
+            WHEN LAG(TotalOrderQty, 1) OVER (PARTITION BY Region ORDER BY Year, Month) IS NULL THEN NULL
+            WHEN LAG(TotalOrderQty, 1) OVER (PARTITION BY Region ORDER BY Year, Month) = 0 THEN NULL
+            ELSE 
+                ((TotalOrderQty - LAG(TotalOrderQty, 1) OVER (PARTITION BY Region ORDER BY Year, Month)) * 1.0 / LAG(TotalOrderQty, 1) OVER (PARTITION BY Region ORDER BY Year, Month)) * 100
+        END AS OrderQtyGrowthPercentage,
+        
+        -- Calculate the percentage growth in DistinctRetailerCount (month-over-month growth)
+        CASE 
+            WHEN LAG(DistinctRetailerCount, 1) OVER (PARTITION BY Region ORDER BY Year, Month) IS NULL THEN NULL
+            WHEN LAG(DistinctRetailerCount, 1) OVER (PARTITION BY Region ORDER BY Year, Month) = 0 THEN NULL
+            ELSE 
+                ((DistinctRetailerCount - LAG(DistinctRetailerCount, 1) OVER (PARTITION BY Region ORDER BY Year, Month)) * 1.0 / LAG(DistinctRetailerCount, 1) OVER (PARTITION BY Region ORDER BY Year, Month)) * 100
+        END AS RetailerGrowthPercentage
+    FROM 
+        MonthlySummary
+    ORDER BY
+        Region, Year, Month;
+END;
+
+
+EXEC RegionWiseGrowthoverPreviousMonths
+    @RegionList = 'EAST',    -- Comma-separated list of regions
+    @StartDate = 20240401,         -- Start date in yyyymmdd format
+    @EndDate = 20240630,		   -- End date in yyyymmdd format
+	@BrandList ='',
+	@RSNameList ='';

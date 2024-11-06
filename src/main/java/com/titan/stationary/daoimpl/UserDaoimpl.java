@@ -74,6 +74,7 @@ import com.titan.stationary.dto.MasterData;
 import com.titan.stationary.dto.MonthlyDataFilter;
 import com.titan.stationary.dto.OutputForMontlyFilter;
 import com.titan.stationary.dto.OutputGrowthOverPreviousMonth;
+import com.titan.stationary.dto.OutputRegionWiseGrowthOverPreviousMonth;
 import com.titan.stationary.dto.OutputRegionWiseMonthlyDistribution;
 import com.titan.stationary.security.AuthenticationService;
 import com.titan.util.PasswordUtils;
@@ -6574,6 +6575,51 @@ Calendar cal = Calendar.getInstance();
         }
 		
 		return regionWiseMonthlyDistributionData;
+
+	}
+
+	@Override
+	public List<OutputRegionWiseGrowthOverPreviousMonth> RegionWiseGrowthOverPreviousMonth(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		List<OutputRegionWiseGrowthOverPreviousMonth> regionWiseMonthlyGrowthData=new ArrayList<>();
+		String storedProcedureCall = "EXEC RegionWiseGrowthoverPreviousMonths @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList";
+        
+        // Create a native query
+        Query query = entityManager.createNativeQuery(storedProcedureCall);
+        
+        // Set the parameters for the stored procedure call
+        query.setParameter("regionList", filter.getRegionList());  // @RegionList (e.g., 'EAST, WEST')
+        query.setParameter("startDate", filter.getStartDate());    // @StartDate (e.g., 20240601)
+        query.setParameter("endDate", filter.getEndDate());        // @EndDate (e.g., 20240630)
+        query.setParameter("brandList", filter.getBrandList());    // @BrandList (e.g., 'Titan')
+        query.setParameter("rsNameList", filter.getRsNameList());  // @RSNameList (e.g., '' or some value)
+
+        // Execute the query to invoke the stored procedure
+        try {
+        	List<Object[]> result = query.getResultList();
+        	//filteredData = (OutputForMontlyFilter) query.getSingleResult();
+        	
+        	for (Object[] row : result) {
+        	    // Assuming row contains values in the correct order for mapping
+        		OutputRegionWiseGrowthOverPreviousMonth data= new OutputRegionWiseGrowthOverPreviousMonth();
+        		data.setYear((Integer) row[0]);
+        		data.setMonth((Integer) row[1]);
+        		data.setRegion(row[2].toString());
+        		data.setTotalRevenue((BigDecimal)row[3]);
+        		data.setTotalQTY((Integer) row[4]);
+        		data.setTotalRetailerCode((Integer) row[5]);
+        		data.setPriceGrowthPercentage((BigDecimal)row[6]);
+        		data.setOrderQtyGrowthPercentage((BigDecimal)row[7]);
+        		data.setRetailerGrowthPercentage((BigDecimal)row[8]);
+        		regionWiseMonthlyGrowthData.add(data);
+        	    // Now, filteredData is populated with values
+        	}
+        }
+        catch(Exception e) {
+        	e.printStackTrace();
+        }
+		
+		return regionWiseMonthlyGrowthData;
 
 	}
 }

@@ -66,6 +66,7 @@ import com.titan.stationary.dto.MasterData;
 import com.titan.stationary.dto.MonthlyDataFilter;
 import com.titan.stationary.dto.OutputForMontlyFilter;
 import com.titan.stationary.dto.OutputGrowthOverPreviousMonth;
+import com.titan.stationary.dto.OutputRegionWiseGrowthOverPreviousMonth;
 import com.titan.stationary.dto.OutputRegionWiseMonthlyDistribution;
 import com.titan.stationary.service.Userservice;
 import com.titan.util.AesUtil;
@@ -2777,4 +2778,30 @@ public class UserController {
 		return result;
 	}
 
+	
+	
+	@RequestMapping(value = "RegionWiseGrowthOverPreviousMonth", method = RequestMethod.POST)
+	public List<OutputRegionWiseGrowthOverPreviousMonth> RegionWiseGrowthOverPreviousMonth(HttpServletRequest request,
+			HttpServletResponse response, RedirectAttributes redirect, Model model,
+			@RequestBody MonthlyDataFilter filter) {
+		List<OutputRegionWiseGrowthOverPreviousMonth> result = new ArrayList<>();
+
+		HttpSession session = request.getSession();
+		String loginId = "";
+//			try {
+//				Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+//				loginId = (String) userMap.get("login_id");
+//			} catch (Exception er) {
+//				er.printStackTrace();
+//				//return new StringBuilder("Session is timeout, <a href='login' >click here</a> to login");
+//			}
+
+		result = userService.RegionWiseGrowthOverPreviousMonth(filter);
+		redirect.addFlashAttribute("MESSAGE", result);
+		model.addAttribute("MESSAGE", result);
+		return result;
+	}
+	
+	
+	
 }
