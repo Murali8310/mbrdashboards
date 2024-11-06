@@ -201,64 +201,125 @@ public class UserController {
 	 * @param user_selection
 	 * @return
 	 */
-	@RequestMapping(value = "loginSubmit", method = RequestMethod.POST)
-	public String loginSubmit(HttpServletRequest request, HttpServletResponse response, Model model,
-			UserLoginBean userLoginBean, RedirectAttributes redirect) {
-		HttpSession session = request.getSession();
-		String value = (String) session.getAttribute("key");
+//	@RequestMapping(value = "loginSubmit", method = RequestMethod.POST)
+//	public String loginSubmit(HttpServletRequest request, HttpServletResponse response, Model model,
+//			UserLoginBean userLoginBean, RedirectAttributes redirect) {
+//		HttpSession session = request.getSession();
+//		String value = (String) session.getAttribute("key");
+//
+//		String passwords = "";
+//		String decryptedPassword = new String(java.util.Base64.getDecoder().decode(userLoginBean.getPassword()));
+//		AesUtil aesUtil = new AesUtil(128, 1000);
+//		Map map = new HashMap<>();
+//		if (decryptedPassword != null && decryptedPassword.split("::").length == 3) {
+//			passwords = aesUtil.decrypt(decryptedPassword.split("::")[1], decryptedPassword.split("::")[0], value,
+//					decryptedPassword.split("::")[2]);
+//
+//		}
+//		model.addAttribute("login_id", userLoginBean.getLogin_id());
+//		Map<String, Object> userMap = null;
+//
+//		userMap = (Map<String, Object>) userService.findloginuser(userLoginBean, passwords);
+//
+//		userLoginBean.setLogin_id(userLoginBean.getLogin_id());
+//		List<Object> getAccessStatus = userService.portalBlcokingMechanism(null);
+//
+//		Object blockAccessStatus = null;
+//
+//		// Check if the list is not empty and get the first value
+//		if (getAccessStatus != null && !getAccessStatus.isEmpty()) {
+//			blockAccessStatus = getAccessStatus.get(0);
+//		}
+//		if (userLoginBean.getLogin_id() == null) {
+//			System.out.println("userLoginBean.getLogin_id()" + userLoginBean.getLogin_id());
+//			return "login";
+//		}
+//		if (userMap.get("message").equals("SUCCESS")) {
+//
+//			session = request.getSession(true);
+//			session.setAttribute("loginBean", userLoginBean);
+//			session.setAttribute("userMap", userMap);
+//			session.setAttribute("user_id", userMap.get("user_id"));
+//			session.setAttribute("user_Name", userMap.get("user_Name"));
+//			session.setAttribute("email_id", userMap.get("email_id"));
+//			session.setAttribute("login_id", userMap.get("login_id"));
+//			session.setAttribute("role", userMap.get("role"));
+//			session.setAttribute("storeCode", userMap.get("storeCode"));
+//			session.setAttribute("accessRole", userMap.get("accessRole"));
+//			session.setAttribute("blockaccess", blockAccessStatus);
+//			// session.setAttribute("StoressSM", userMap.get("StoressSM"));
+//			// session.setAttribute("region", userMap.get("region"));
+//
+//			return "landPage";
+//		} else {
+//			// redirect.addFlashAttribute("MESSAGE", userMap.get("message"));
+//
+//			session.setAttribute("MESSAGE", userMap.get("message"));
+//			// return new ModelAndView("redirect:login");
+//			return "login";
+//		}
+//	}
+	
+	
 
-		String passwords = "";
-		String decryptedPassword = new String(java.util.Base64.getDecoder().decode(userLoginBean.getPassword()));
-		AesUtil aesUtil = new AesUtil(128, 1000);
-		Map map = new HashMap<>();
-		if (decryptedPassword != null && decryptedPassword.split("::").length == 3) {
-			passwords = aesUtil.decrypt(decryptedPassword.split("::")[1], decryptedPassword.split("::")[0], value,
-					decryptedPassword.split("::")[2]);
+	    @RequestMapping(value = "loginSubmit", method = RequestMethod.POST)
+	    public String loginSubmit(
+	            HttpServletRequest request,
+	            HttpServletResponse response,
+	            @RequestBody Map<String, String> loginData // Accepts raw JSON payload
+	    ) {
+	        HttpSession session = request.getSession();
+	        String value = (String) session.getAttribute("key");
 
-		}
-		model.addAttribute("login_id", userLoginBean.getLogin_id());
-		Map<String, Object> userMap = null;
+	        String loginId = loginData.get("login_id");
+	        String encryptedPassword = loginData.get("password");
+	        String decryptedPassword = "";
+	        AesUtil aesUtil = new AesUtil(128, 1000);
+	        Map<String, Object> userMap = null;
 
-		userMap = (Map<String, Object>) userService.findloginuser(userLoginBean, passwords);
+	        // Decrypt the password if it’s in the expected format
+	        if (encryptedPassword != null && encryptedPassword.split("::").length == 3) {
+	            decryptedPassword = aesUtil.decrypt(
+	                encryptedPassword.split("::")[1],
+	                encryptedPassword.split("::")[0],
+	                value,
+	                encryptedPassword.split("::")[2]
+	            );
+	        }
+	        
+	        UserLoginBean userLoginBean = new UserLoginBean();
+	        userLoginBean.setLogin_id(loginId);
+	        userLoginBean.setPassword(encryptedPassword);
 
-		userLoginBean.setLogin_id(userLoginBean.getLogin_id());
-		List<Object> getAccessStatus = userService.portalBlcokingMechanism(null);
+	        // Perform login validation
+	        userMap = (Map<String, Object>) userService.findloginuser(userLoginBean, encryptedPassword);
+	       // userMap = (Map<String, Object>) userService.findloginuser(loginId, decryptedPassword);
+	        List<Object> accessStatus = userService.portalBlcokingMechanism(null);
+	        Object blockAccessStatus = accessStatus != null && !accessStatus.isEmpty() ? accessStatus.get(0) : null;
 
-		Object blockAccessStatus = null;
+	        // Check login result
+	        if ("SUCCESS".equals(userMap.get("message"))) {
+	            // Set user attributes in session on successful login
+	            session.setAttribute("loginBean", loginData);
+	            session.setAttribute("userMap", userMap);
+	            session.setAttribute("user_id", userMap.get("user_id"));
+	            session.setAttribute("user_Name", userMap.get("user_Name"));
+	            session.setAttribute("email_id", userMap.get("email_id"));
+	            session.setAttribute("login_id", userMap.get("login_id"));
+	            session.setAttribute("role", userMap.get("role"));
+	            session.setAttribute("storeCode", userMap.get("storeCode"));
+	            session.setAttribute("accessRole", userMap.get("accessRole"));
+	            session.setAttribute("blockaccess", blockAccessStatus);
 
-		// Check if the list is not empty and get the first value
-		if (getAccessStatus != null && !getAccessStatus.isEmpty()) {
-			blockAccessStatus = getAccessStatus.get(0);
-		}
-		if (userLoginBean.getLogin_id() == null) {
-			System.out.println("userLoginBean.getLogin_id()" + userLoginBean.getLogin_id());
-			return "login";
-		}
-		if (userMap.get("message").equals("SUCCESS")) {
+	            return "landPage";
+	        } else {
+	            // Set message in session and return to login page on failure
+	            session.setAttribute("MESSAGE", userMap.get("message"));
+	            return "login";
+	        }
+	    }
+	
 
-			session = request.getSession(true);
-			session.setAttribute("loginBean", userLoginBean);
-			session.setAttribute("userMap", userMap);
-			session.setAttribute("user_id", userMap.get("user_id"));
-			session.setAttribute("user_Name", userMap.get("user_Name"));
-			session.setAttribute("email_id", userMap.get("email_id"));
-			session.setAttribute("login_id", userMap.get("login_id"));
-			session.setAttribute("role", userMap.get("role"));
-			session.setAttribute("storeCode", userMap.get("storeCode"));
-			session.setAttribute("accessRole", userMap.get("accessRole"));
-			session.setAttribute("blockaccess", blockAccessStatus);
-			// session.setAttribute("StoressSM", userMap.get("StoressSM"));
-			// session.setAttribute("region", userMap.get("region"));
-
-			return "landPage";
-		} else {
-			// redirect.addFlashAttribute("MESSAGE", userMap.get("message"));
-
-			session.setAttribute("MESSAGE", userMap.get("message"));
-			// return new ModelAndView("redirect:login");
-			return "login";
-		}
-	}
 
 	@RequestMapping(value = "manageByAdmin", method = RequestMethod.GET)
 	public ModelAndView manageByAdmin(HttpServletRequest request, HttpServletResponse response, Model model) {
