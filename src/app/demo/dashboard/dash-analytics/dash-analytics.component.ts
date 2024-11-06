@@ -207,6 +207,9 @@ export default class DashAnalyticsComponent {
   filteredRSNamesList = this.availableRSNames;
   @ViewChild('chart') chart!: ChartComponent;
   chartOptions!: Partial<ChartOptions>;
+  dashBoardInitalDataOptions!: Partial<ChartOptions>;
+
+  
   // chartOptionsline!: Partial<ChartOptions>;
   chartOptions_1!: Partial<ChartOptions>;
   chartOptions_2!: Partial<ChartOptions>;
@@ -242,6 +245,7 @@ export default class DashAnalyticsComponent {
 
   // Filtered brands based on search input
   filteredBrandsList = this.availableBrands;
+  isLoading = false; // Start with loading state
 
   // constructor
   constructor(
@@ -610,10 +614,15 @@ export default class DashAnalyticsComponent {
   // life cycle event
   async ngOnInit() {
     this.spinner.show();
+    // this.loadData();
+
+    await this.dashBoardInitalDataFn();
+
     await this.GetMasterData();
     await this.MonthlyToalOrdaring();
     await this.GrowthOverPreviousMonth();
     this.spinner.hide();
+    // this.isLoading = false;
     // Simulate a delay for demonstration (e.g., data fetching)
     // setTimeout(() => {
     //   // Hide the spinner after the delay
@@ -932,7 +941,7 @@ export default class DashAnalyticsComponent {
               title: {
                 text: ' (Growth percentage)'
               },
-              min: -100 // Set a minimum value for y-axis to accommodate negative values
+              // min: -100 // Set a minimum value for y-axis to accommodate negative values
             },
             fill: {
               opacity: 1
@@ -1260,5 +1269,112 @@ export default class DashAnalyticsComponent {
         console.error('Login error:', error);
       }
     );
+  }
+
+  public dashBoardInitalDataFn = (data?: any) => {
+    this.spinner.show();
+    this.dashboardService.GrowthOverPreviousMonth().subscribe(
+      (response) => {
+        if (response && response.body) {
+          this.spinner.hide();
+
+          // Define month names for easy mapping
+          const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+          // Prepare data for each series
+          const retailersData:any = [];
+          const quantityData:any = [];
+          const valueData :any= [];
+          const categories: string[] = []; // This will hold the month names
+
+          response.body.forEach((item: any) => {
+            // Push values to each series array
+            retailersData.push(item.totalRetailerCode);
+            quantityData.push(item.totalQTY);
+            valueData.push(item.totalRevenue);
+
+            // Get month name and add to categories
+            categories.push(monthNames[item.month - 1]);
+          });
+
+          this.dashBoardInitalDataOptions = {
+            chart: {
+              type: 'bar',
+              height: 350,
+              toolbar: {
+                show: false // Optional: Hide toolbar if not needed
+              }
+            },
+            title: {
+              text: 'Orders Monthly Details.', // Chart title
+              align: 'center',
+              style: {
+                fontSize: '16px',
+                fontWeight: 'bold',
+                color: '#333'
+              }
+            },
+            series: [
+              {
+                name: 'Order Qty',
+                data: retailersData // Example values for Number of Retailers
+              },
+              {
+                name: 'Order Value',
+                data: quantityData // Example values for Quantity
+              }
+            ],
+            plotOptions: {
+              bar: {
+                horizontal: false,
+                columnWidth: '60%'
+                // endingShape: "rounded"
+              }
+            },
+            dataLabels: {
+              enabled: true
+            },
+            stroke: {
+              show: true,
+              width: 2,
+              colors: ['transparent']
+            },
+            xaxis: {
+              categories: categories
+            },
+            yaxis: {
+              title: {
+                text: ' (Orders)'
+              },
+              // min: -100 // Set a minimum value for y-axis to accommodate negative values
+            },
+            fill: {
+              opacity: 1
+            },
+            tooltip: {
+              y: {
+                formatter: function (val) {
+                  return '' + val + ' ';
+                }
+              }
+            }
+          };
+        
+        }
+        console.log('this is for checking');
+      },
+      (error) => {
+        // this.errorMessage = 'An error occurred during login';
+        console.error('Login error:', error);
+      }
+    );
+  };
+
+  loadData() {
+    // Simulate a delay for loading data
+    setTimeout(() => {
+      // Data is loaded, hide the spinner
+      this.isLoading = false;
+    }, 3000); // Adjust this timeout as needed
   }
 }

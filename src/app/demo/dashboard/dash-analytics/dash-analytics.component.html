@@ -25,6 +25,28 @@ text-align: center;
     </app-card>
   <!-- </ng-container> -->
 </div>
+
+<div class="col-xl-12 col-md-12" *ngIf="dashBoardInitalDataOptions">
+  <app-card cardTitle="" [options]="false">
+    
+  <div id="chart2">
+    <apx-chart
+      [series]="dashBoardInitalDataOptions.series"
+      [chart]="dashBoardInitalDataOptions.chart"
+      [dataLabels]="dashBoardInitalDataOptions.dataLabels"
+      [plotOptions]="dashBoardInitalDataOptions.plotOptions"
+      [yaxis]="dashBoardInitalDataOptions.yaxis"
+      [legend]="dashBoardInitalDataOptions.legend"
+      [fill]="dashBoardInitalDataOptions.fill"
+      [stroke]="dashBoardInitalDataOptions.stroke"
+      [tooltip]="dashBoardInitalDataOptions.tooltip"
+      [xaxis]="dashBoardInitalDataOptions.xaxis"
+      [title]="dashBoardInitalDataOptions.title">
+
+    ></apx-chart>
+  </div>
+  </app-card>
+</div>
 </div>
 <div class="row" *ngIf="dashboardService.selectedData === '2'">
  
@@ -396,3 +418,8 @@ text-align: center;
   color="#007bff"
   type="ball-spin-clockwise"> <!-- Ensure this type is specified -->
 </ngx-spinner>
+
+<div *ngIf="isLoading" class="spinner-overlay">
+  <div class="spinner"></div>
+</div>
+
