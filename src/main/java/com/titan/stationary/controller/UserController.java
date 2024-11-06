@@ -2766,7 +2766,7 @@ System.out.println("CCCOWNER"+CCCOWNER);
 		@RequestMapping(value = "MonthlyTrend", method = RequestMethod.POST)
 
 //		@PostMapping(value = "MonthlyTrend" , method = RequestMethod.POST)
-		public OutputForMontlyFilter MonthlyTrend(HttpServletRequest request, HttpServletResponse response,
+		public List<OutputForMontlyFilter> MonthlyTrend(HttpServletRequest request, HttpServletResponse response,
 			 RedirectAttributes redirect, Model model, @RequestBody MonthlyDataFilter filter) {
 			List<OutputForMontlyFilter> result =new ArrayList<>();
 			
