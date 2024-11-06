@@ -26,6 +26,7 @@ import { SharedModule } from './theme/shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './login/login.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { NgxSpinnerModule } from "ngx-spinner";
 
 @NgModule({
   declarations: [
@@ -47,7 +48,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     NavGroupComponent,
     LoginComponent
   ],
-  imports: [BrowserModule,NgApexchartsModule, AppRoutingModule, SharedModule, FormsModule, ReactiveFormsModule, BrowserAnimationsModule,HttpClientModule],
+  imports: [BrowserModule,NgApexchartsModule, AppRoutingModule, SharedModule, FormsModule, ReactiveFormsModule, BrowserAnimationsModule,HttpClientModule,NgxSpinnerModule.forRoot()],
   providers: [],
   bootstrap: [AppComponent]
 })

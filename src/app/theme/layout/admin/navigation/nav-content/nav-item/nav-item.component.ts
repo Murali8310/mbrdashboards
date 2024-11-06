@@ -1,6 +1,8 @@
 // Angular Import
 import { Component, Input } from '@angular/core';
 import { NavigationItem } from '../../navigation';
+import { ChangeDetectorRef } from '@angular/core';
+import { DashboardService } from 'src/app/dashboard.service';
 
 @Component({
   selector: 'app-nav-item',
@@ -10,9 +12,12 @@ import { NavigationItem } from '../../navigation';
 export class NavItemComponent {
   // public props
   @Input() item!: NavigationItem;
+  selectedList: any = null;
+  constructor(private cdr: ChangeDetectorRef,public dashboardSerive:DashboardService) {}
 
   // public method
   closeOtherMenu(event: MouseEvent,data:any) {
+    
     const ele = event.target as HTMLElement;
     if (ele !== null && ele !== undefined) {
       const parent = ele.parentElement as HTMLElement;
@@ -38,5 +43,9 @@ export class NavItemComponent {
     if (document.querySelector('app-navigation.pcoded-navbar')?.classList.contains('mob-open')) {
       document.querySelector('app-navigation.pcoded-navbar')?.classList.remove('mob-open');
     }
+
+    this.dashboardSerive.selectedData = data.id;
+    this.cdr.detectChanges();  // Manually trigger change detection if needed
+
   }
 }

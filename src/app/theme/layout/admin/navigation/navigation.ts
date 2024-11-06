@@ -26,7 +26,7 @@ export const NavigationItems: NavigationItem[] = [
     icon: 'icon-group',
     children: [
       {
-        id: 'apexchart',
+        id: '1',
         title: 'Dashboard',
         type: 'item',
         url: '/chart',
@@ -43,12 +43,12 @@ export const NavigationItems: NavigationItem[] = [
     icon: 'icon-group',
     children: [
       {
-        id: 'apexchart',
+        id: '2',
         title: 'Total Ordering',
         type: 'item',
         url: '/chart',
         classes: 'nav-item',
-        icon: 'feather icon-pie-chart'
+        icon: 'fas fa-sort-amount-up'
       }
     ]
   },

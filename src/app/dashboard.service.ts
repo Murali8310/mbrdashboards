@@ -11,10 +11,17 @@ export class DashboardService {
   // http://localhost:8080/stationary/loginSubmit
 
   constructor(private http: HttpClient) { }
-
+public selectedData:any = '1';
   getData(): Observable<any> {
     return this.http.get<any>(environment.apiUrl + '/stationary/loginSubmit');
   }
+
+  
+  GetMasterData(): Observable<any> {
+    return this.http.get<any>(environment.apiUrl + '/stationary/GetMasterData');
+  }
+
+  
 
   // login(login_id: string, password: string): Observable<any> {
   //   const headers = new HttpHeaders({
@@ -62,15 +69,32 @@ export class DashboardService {
 
 
 
-  public MonthlyToalOrdaring(data?:any) {
-    const MonthlyToalOrdaringPayload = {
-      data: 'rrrr',
-      data2:'dddddd'
-      // browsersignature: new ClientJS().getFingerprint().toString(),
-    };
+  public  MonthlyToalOrdaring(data?:any) {
+    // const MonthlyToalOrdaringPayload = {
+    //   data: 'rrrr',
+    //   data2:'dddddd'
+    //   // browsersignature: new ClientJS().getFingerprint().toString(),
+    // };
+
+    // const MonthlyToalOrdaringPayload :any = {
+    //   "regionList": "EAST, WEST",  /// default all regions 
+    //     "startDate":20240601,       /// default case start date of financial year in integer format
+    //     "endDate": 20240730,       ////  default case end date of financial year in integer format
+    //     "brandList": "",       //// default casen ""
+    //     "rsNameList": ""//// default casen ""
+    //   };
+
+    const MonthlyToalOrdaringPayload :any = {
+      "regionList": "EAST, WEST,NORTH,SOUTH 1,SOUTH 2",  /// default all regions 
+        "startDate":20240401,       /// default case start date of financial year in integer format
+        "endDate": 202401030,       ////  default case end date of financial year in integer format
+        "brandList": "",       //// default casen ""
+        "rsNameList": ""//// default casen ""
+      };
+
     return this.http
       .post<any>(
-        `${environment.apiUrl}/stationary/api/MonthlyToalOrdaring`,
+        `${environment.apiUrl}/stationary/MonthlyTrend`,
         JSON.stringify(MonthlyToalOrdaringPayload),
         {
           headers: new HttpHeaders({ 'Content-Type': 'application/json' }),

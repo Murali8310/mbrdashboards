@@ -1,13 +1,13 @@
-<li [ngClass]="item.classes" *ngIf="item.url && !item.external" [routerLinkActive]="['active']">
+<li [ngClass]="item.classes" [ngClass]="{'bgColor': item.id === dashboardSerive.selectedData}" *ngIf="item.url && !item.external" [routerLinkActive]="['active']">
   <a class="nav-link" [target]="item.target ? '_blank' : '_self'" [routerLink]="[item.url]" (click)="closeOtherMenu($event,item)">
-    <span *ngIf="item.icon" class="pcoded-micon"><i class="feather" [ngClass]="item.icon"></i></span>
+    <span *ngIf="item.icon" class="pcoded-micon"><i [ngClass]="item.icon"></i></span>
     <span class="pcoded-mtext" *ngIf="item.icon; else directTitle">{{ item.title }}</span>
     <ng-template #directTitle>
       {{ item.title }}
     </ng-template>
   </a>
 </li>
-<li [ngClass]="item.classes" *ngIf="item.url && item.external">
+<li [ngClass]="item.classes" [class.bgColor]="item.id == selectedList" *ngIf="item.url && item.external">
   <a [target]="item.target ? '_blank' : '_self'" [href]="item.url">
     <span *ngIf="item.icon" class="pcoded-micon"><i class="feather" [ngClass]="item.icon"></i></span>
     <span class="pcoded-mtext" *ngIf="item.icon; else directTitle">{{ item.title }}</span>

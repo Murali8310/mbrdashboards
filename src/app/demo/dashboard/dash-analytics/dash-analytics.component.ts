@@ -1,8 +1,10 @@
 // angular import
-import { Component, ViewChild,NO_ERRORS_SCHEMA ,AfterViewInit} from '@angular/core';
+import { Component, ViewChild, NO_ERRORS_SCHEMA, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApexOptions } from 'ng-apexcharts'; // Use ApexOptions instead of ChartOptions
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 // project import
 import { SharedModule } from 'src/app/theme/shared/shared.module';
@@ -10,6 +12,10 @@ import { ApexGrid, ApexMarkers, ApexTitleSubtitle, NgApexchartsModule } from 'ng
 import { ProductSaleComponent } from './product-sale/product-sale.component';
 declare var $: any; // Declare jQuery globally
 
+interface Brand {
+  id: number;
+  name: string;
+}
 // import {
 //   ChartComponent,
 //   ApexAxisChartSeries,
@@ -39,7 +45,7 @@ import {
   ApexXAxis,
   ApexFill,
   ApexTooltip
-} from "ng-apexcharts";
+} from 'ng-apexcharts';
 import { DashboardService } from 'src/app/dashboard.service';
 
 // export type ChartOptions = {
@@ -59,8 +65,6 @@ import { DashboardService } from 'src/app/dashboard.service';
 //   markers: ApexMarkers;
 // };
 
-
-
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -73,29 +77,26 @@ export type ChartOptions = {
   stroke: ApexStroke;
   legend: ApexLegend;
   title: ApexTitleSubtitle;
-  markers:ApexMarkers;
-  grid:ApexGrid;
+  markers: ApexMarkers;
+  grid: ApexGrid;
 };
-
 
 @Component({
   selector: 'app-dash-analytics',
   standalone: true,
-  imports: [CommonModule, SharedModule, NgApexchartsModule, ProductSaleComponent,NgMultiSelectDropDownModule],
+  imports: [CommonModule, NgxSpinnerModule, SharedModule, NgApexchartsModule, ProductSaleComponent, NgMultiSelectDropDownModule],
   templateUrl: './dash-analytics.component.html',
-  styleUrls: ['./dash-analytics.component.scss'],
+  styleUrls: ['./dash-analytics.component.scss']
 })
-export default class DashAnalyticsComponent implements AfterViewInit  {
+export default class DashAnalyticsComponent {
   chartOptionsline!: ApexOptions; // Change to ApexOptions
   chartOptionsRegionwise!: ApexOptions;
   chartOptionsRegionwiseGrowth!: ApexOptions;
-  public appendClass:any;
+  public appendClass: any;
 
   isOpen = false;
   selectedItems: string[] = [];
 
-
-  
   items: string[] = ['New Delhi', 'Mumbai', 'Bangalore', 'Pune', 'Chennai', 'Navsari'];
   filteredItems: string[] = this.items;
   searchTerm: string = '';
@@ -107,14 +108,14 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
     { id: 5, name: 'West' }
   ];
 
-  availableRegions = [
-    { id: 1, name: 'East' },
-    { id: 2, name: 'North' },
-    { id: 3, name: 'South1' },
-    { id: 4, name: 'South2' },
-    { id: 5, name: 'West' }
+  availableRegions: any = [
+    // { id: 1, name: 'East' },
+    // { id: 2, name: 'North' },
+    // { id: 3, name: 'South1' },
+    // { id: 4, name: 'South2' },
+    // { id: 5, name: 'West' }
   ];
-  selectedRegions: { id: number, name: string }[] = [];
+  selectedRegions: { id: number; name: string }[] = [];
   isDropdownOpen = false;
   searchInputValue = '';
   filteredRegionsList = this.availableRegions;
@@ -128,14 +129,14 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
   ];
 
   // Holds selected ABM names
-  selectedAbmNames: { id: number, name: string }[] = [];
-  
+  selectedAbmNames: { id: number; name: string }[] = [];
+
   // Control dropdown visibility
   isDropdownOpenForAbm = false;
-  
+
   // Search input value
   searchInputValueForAbm = '';
-  
+
   // Filtered ABM names based on search input
   filteredAbmNamesList = this.availableAbmNames;
 
@@ -169,36 +170,32 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
   selectedRsNames: any[] = [];
   // selectedBrands: any[] = [];
   availableRetailerTypes = [
-    { id: 1, name: 'Retailer Type 1' },
-    { id: 2, name: 'Retailer Type 2' },
-    { id: 3, name: 'Retailer Type 3' },
-    { id: 4, name: 'Retailer Type 4' },
-    { id: 5, name: 'Retailer Type 5' }
+    { id: 1, name: 'DD' },
+    { id: 2, name: 'IDD' }
   ];
 
   // Holds selected retailer types
-  selectedRetailerTypes: { id: number, name: string }[] = [];
-  
+  selectedRetailerTypes: { id: number; name: string }[] = [];
+
   // Control dropdown visibility
   isDropdownOpenForRetailer = false;
-  
+
   // Search input value
   searchInputValueForRetailer = '';
-  
+
   // Filtered retailer types based on search input
   filteredRetailerTypesList = this.availableRetailerTypes;
 
-
-  availableRSNames = [
-    { id: 1, name: 'RS Name 1' },
-    { id: 2, name: 'RS Name 2' },
-    { id: 3, name: 'RS Name 3' },
-    { id: 4, name: 'RS Name 4' },
-    { id: 5, name: 'RS Name 5' }
+  availableRSNames: any = [
+    // { id: 1, name: 'RS Name 1' },
+    // { id: 2, name: 'RS Name 2' },
+    // { id: 3, name: 'RS Name 3' },
+    // { id: 4, name: 'RS Name 4' },
+    // { id: 5, name: 'RS Name 5' }
   ];
 
   // Holds selected RS names
-  selectedRSNames: { id: number, name: string }[] = [];
+  selectedRSNames: { id: number; name: string }[] = [];
 
   // Control dropdown visibility
   isDropdownOpenForRS = false;
@@ -215,27 +212,27 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
   chartOptions_2!: Partial<ChartOptions>;
   chartOptions_3!: Partial<ChartOptions>;
   @ViewChild('multiSelect') multiSelect: any;
-  public data:any = [];
+  public data: any = [];
   public settings = {};
   // public selectedItems = [];
   dropdownOptions = [
     { id: 1, name: 'Option 1' },
     { id: 2, name: 'Option 2' },
     { id: 3, name: 'Option 3' },
-    { id: 4, name: 'Option 4' },
+    { id: 4, name: 'Option 4' }
   ];
   selectedOptions: any[] = [];
 
-  availableBrands = [
-    { id: 1, name: 'Brand A' },
-    { id: 2, name: 'Brand B' },
-    { id: 3, name: 'Brand C' },
-    { id: 4, name: 'Brand D' },
-    { id: 5, name: 'Brand E' }
+  availableBrands: any = [
+    // { id: 1, name: 'Brand A' },
+    // { id: 2, name: 'Brand B' },
+    // { id: 3, name: 'Brand C' },
+    // { id: 4, name: 'Brand D' },
+    // { id: 5, name: 'Brand E' }
   ];
 
   // Holds selected brands
-  selectedBrands: { id: number, name: string }[] = [];
+  selectedBrands: { id: number; name: string }[] = [];
 
   // Control dropdown visibility
   isDropdownOpenForBrand = false;
@@ -247,7 +244,10 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
   filteredBrandsList = this.availableBrands;
 
   // constructor
-  constructor(public dashboardService: DashboardService) {
+  constructor(
+    public dashboardService: DashboardService,
+    private spinner: NgxSpinnerService
+  ) {
     this.chartOptions = {
       chart: {
         type: 'bar',
@@ -680,132 +680,21 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
     //     borderColor: "#f1f1f1"
     //   }
     // };
-
-    this.chartOptionsline = {
-      series: [
-        {
-          name: 'Retailers',
-          data: [120, 150, 130] // Example data for Retailers over 3 months
-        },
-        {
-          name: 'Quantity (k)',
-          data: [30, 25, 35] // Example data for Quantity over 3 months
-        },
-        {
-          name: 'Value',
-          data: [100, 70, 80] // Example data for Value over 3 months (in thousands)
-        }
-      ],
-      chart: {
-        height: 350,
-        type: 'line'
-      },
-      dataLabels: {
-        enabled: true
-      },
-      stroke: {
-        width: 5,
-        curve: 'smooth', // Smooth curve for the line chart
-        dashArray: [0, 8, 5] // Different dash arrays for each line
-      },
-      title: {
-        text: 'Monthly Trend',
-        align: 'center'
-      },
-      // subtitle: {
-      //   text: 'No of Re-retailers, Value, and Qty',
-      //   align: 'center',
-      //   style: {
-      //     fontSize: '14px',
-      //     color: '#666'
-      //   }
-      // },
-      legend: {
-        tooltipHoverFormatter: function (val, opts) {
-          return val + ' - <strong>' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + '</strong>';
-        }
-      },
-      markers: {
-        size: 5, // Size of markers on the line
-        hover: {
-          sizeOffset: 6
-        }
-      },
-      xaxis: {
-        labels: {
-          trim: false
-        },
-        categories: [
-          'Sep', 
-          'Oct',
-          'Nov'
-        ]
-      },
-      yaxis: [
-        {
-          title: {
-            text: 'Value (L)', // Left y-axis title
-            style: {
-              color: '#000000' // Change color as needed
-            }
-          },
-          min: 0, // Minimum value for left y-axis
-          labels: {
-            formatter: function (val) {
-              return '' + val; // Format for value
-            }
-          },
-          tickAmount: 4 // Adjust the number of ticks as necessary
-        },
-        {
-          opposite: true, // Make this y-axis on the opposite side
-          title: {
-            text: 'Quantity', // Right y-axis title
-            style: {
-              color: '#000000' // Change color as needed
-            }
-          },
-          min: 0, // Minimum value for right y-axis
-          tickAmount: 4 // Adjust the number of ticks as necessary
-        }
-      ],
-      tooltip: {
-        shared: true, // Show shared tooltip
-        intersect: false,
-        y: [
-          {
-            title: {
-              formatter: function (val) {
-                return val + ' Retailers';
-              }
-            }
-          },
-          {
-            // title: {
-            //   formatter: function (val) {
-            //     return val + '(k)';
-            //   }
-            // }
-          },
-          {
-            title: {
-              formatter: function (val) {
-                return '' + val; // Format for value
-              }
-            }
-          }
-        ]
-      }
-    };
   }
 
   // life cycle event
-  ngOnInit() {
-    this.MonthlyToalOrdaring();
-  
+  async ngOnInit() {
+    this.spinner.show();
+    await this.GetMasterData();
+    await this.MonthlyToalOrdaring();
+    this.spinner.hide();
+    // Simulate a delay for demonstration (e.g., data fetching)
+    // setTimeout(() => {
+    //   // Hide the spinner after the delay
+    //   this.spinner.hide();
+    // }, 3000);
   }
 
-  
   cards = [
     {
       background: 'bg-c-blue',
@@ -814,9 +703,9 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
       number: '486',
       text: 'Total qty',
       order: '345',
-      qtyText:'Value',
+      qtyText: 'Value',
       qtyValue: '333',
-      dealercount : '20',
+      dealercount: '20',
       no: '351'
     },
     {
@@ -824,8 +713,8 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
       title: 'North',
       icon: 'icon-shopping-cart',
       text: 'Total qty',
-       qtyValue: '333',
-      qtyText:'Value',
+      qtyValue: '333',
+      qtyText: 'Value',
       number: '486',
       no: '351'
     },
@@ -836,7 +725,7 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
       text: 'Total qty',
       number: '486',
       qtyValue: '333',
-      qtyText:'Value',
+      qtyText: 'Value',
       no: '351'
     },
     {
@@ -846,8 +735,8 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
       text: 'Total qty',
       number: '486',
       no: '351',
-     qtyValue: '333',
-      qtyText:'Value'
+      qtyValue: '333',
+      qtyText: 'Value'
     },
     {
       background: 'bg-c-red',
@@ -857,7 +746,7 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
       number: '486',
       no: '351',
       qtyValue: '333',
-      qtyText:'Value'
+      qtyText: 'Value'
     }
   ];
 
@@ -880,8 +769,155 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
   ];
 
   public MonthlyToalOrdaring = (data?: any) => {
+    this.spinner.show();
     this.dashboardService.MonthlyToalOrdaring().subscribe(
       (response) => {
+        if (response && response.body) {
+          this.spinner.hide();
+
+          // Define month names for easy mapping
+          const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+          // Prepare data for each series
+          const retailersData = [];
+          const quantityData = [];
+          const valueData = [];
+          const categories: string[] = []; // This will hold the month names
+
+          response.body.forEach((item: any) => {
+            // Push values to each series array
+            retailersData.push(item.totalRetailerCode);
+            quantityData.push(item.totalQTY);
+            valueData.push(item.totalRevenue);
+
+            // Get month name and add to categories
+            categories.push(monthNames[item.month - 1]);
+          });
+          this.chartOptionsline = {
+            series: [
+              // {
+              //   name: 'Retailers',
+              //   data: [120, 150, 130] // Example data for Retailers over 3 months
+              // },
+              // {
+              //   name: 'Quantity (k)',
+              //   data: [30, 25, 35] // Example data for Quantity over 3 months
+              // },
+              // {
+              //   name: 'Value',
+              //   data: [100, 70, 80] // Example data for Value over 3 months (in thousands)
+              // }
+              {
+                name: 'Retailers',
+                data: response.body.map((item: any) => item.totalRetailerCode) // Extracts totalRetailerCode values
+              },
+              {
+                name: 'Quantity (k)',
+                data: response.body.map((item: any) => item.totalQTY) // Extracts totalQTY values
+              },
+              {
+                name: 'Value',
+                data: response.body.map((item: any) => item.totalRevenue) // Extracts totalRevenue values
+              }
+            ],
+            chart: {
+              height: 350,
+              type: 'line'
+            },
+            dataLabels: {
+              enabled: true
+            },
+            stroke: {
+              width: 5,
+              curve: 'smooth', // Smooth curve for the line chart
+              dashArray: [0, 8, 5] // Different dash arrays for each line
+            },
+            title: {
+              text: 'Monthly Trend',
+              align: 'center'
+            },
+            // subtitle: {
+            //   text: 'No of Re-retailers, Value, and Qty',
+            //   align: 'center',
+            //   style: {
+            //     fontSize: '14px',
+            //     color: '#666'
+            //   }
+            // },
+            legend: {
+              tooltipHoverFormatter: function (val, opts) {
+                return val + ' - <strong>' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + '</strong>';
+              }
+            },
+            markers: {
+              size: 5, // Size of markers on the line
+              hover: {
+                sizeOffset: 6
+              }
+            },
+            xaxis: {
+              labels: {
+                trim: false
+              },
+              categories: categories
+            },
+            yaxis: [
+              {
+                title: {
+                  text: 'Value (L)', // Left y-axis title
+                  style: {
+                    color: '#000000' // Change color as needed
+                  }
+                },
+                min: 0, // Minimum value for left y-axis
+                labels: {
+                  formatter: function (val) {
+                    return '' + val; // Format for value
+                  }
+                },
+                tickAmount: 4 // Adjust the number of ticks as necessary
+              },
+              {
+                opposite: true, // Make this y-axis on the opposite side
+                title: {
+                  text: 'Quantity', // Right y-axis title
+                  style: {
+                    color: '#000000' // Change color as needed
+                  }
+                },
+                min: 0, // Minimum value for right y-axis
+                tickAmount: 4 // Adjust the number of ticks as necessary
+              }
+            ],
+            tooltip: {
+              shared: true, // Show shared tooltip
+              intersect: false,
+              y: [
+                {
+                  title: {
+                    formatter: function (val) {
+                      return val;
+                    }
+                  }
+                },
+                {
+                  // title: {
+                  //   formatter: function (val) {
+                  //     return val + '(k)';
+                  //   }
+                  // }
+                },
+                {
+                  title: {
+                    formatter: function (val) {
+                      return '' + val; // Format for value
+                    }
+                  }
+                }
+              ]
+            }
+          };
+        }
         console.log('this is for checking');
       },
       (error) => {
@@ -902,7 +938,7 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
 
   onSelectOption(option: any) {
     if (this.selectedOptions.includes(option)) {
-      this.selectedOptions = this.selectedOptions.filter(item => item !== option);
+      this.selectedOptions = this.selectedOptions.filter((item) => item !== option);
     } else {
       this.selectedOptions.push(option);
     }
@@ -910,14 +946,6 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
 
   isSelected(option: any): boolean {
     return this.selectedOptions.includes(option);
-  }
-
-  ngAfterViewInit() {
-    $('#regionSelect').multiselect({
-      includeSelectAllOption: true,
-      nonSelectedText: 'Select Regions',
-      buttonWidth: '100%'
-    });
   }
 
   toggleDropdown() {
@@ -946,9 +974,7 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
   }
 
   filterItems() {
-    this.filteredItems = this.items.filter(item =>
-      item.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
+    this.filteredItems = this.items.filter((item) => item.toLowerCase().includes(this.searchTerm.toLowerCase()));
   }
 
   get allSelected(): boolean {
@@ -963,23 +989,23 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
     }
   }
 
-   // Toggle dropdown visibility
-   toggleDropdownVisibility() {
+  // Toggle dropdown visibility
+  toggleDropdownVisibility() {
     this.isDropdownOpen = !this.isDropdownOpen;
     if (this.isDropdownOpen) {
       this.filteredRegionsList = this.availableRegions; // Reset filtered list on opening
     }
   }
-   // Filter regions based on search input
-   filterAvailableRegions() {
-    this.filteredRegionsList = this.availableRegions.filter(region =>
+  // Filter regions based on search input
+  filterAvailableRegions() {
+    this.filteredRegionsList = this.availableRegions.filter((region: any) =>
       region.name.toLowerCase().includes(this.searchInputValue.toLowerCase())
     );
   }
 
   // Toggle selection of a specific region
-  toggleRegionSelection(region: { id: number, name: string }) {
-    const index = this.selectedRegions.findIndex(selected => selected.id === region.id);
+  toggleRegionSelection(region: { id: number; name: string }) {
+    const index = this.selectedRegions.findIndex((selected) => selected.id === region.id);
     if (index > -1) {
       this.selectedRegions.splice(index, 1); // Remove region if already selected
     } else {
@@ -987,8 +1013,8 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
     }
   }
 
-   // Remove a selected region
-   removeSelectedRegion(region: { id: number, name: string }, event: MouseEvent) {
+  // Remove a selected region
+  removeSelectedRegion(region: { id: number; name: string }, event: MouseEvent) {
     event.stopPropagation(); // Prevent dropdown from closing
     this.toggleRegionSelection(region); // Toggle selection
   }
@@ -1003,7 +1029,6 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
     return this.selectedRegions.length === this.availableRegions.length; // Return true if all regions are selected
   }
 
-
   // Toggle dropdown visibility for ABM names
   toggleDropdownVisibilityForAbm() {
     this.isDropdownOpenForAbm = !this.isDropdownOpenForAbm;
@@ -1014,14 +1039,14 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
 
   // Filter ABM names based on search input
   filterAvailableAbmNames() {
-    this.filteredAbmNamesList = this.availableAbmNames.filter(abm =>
+    this.filteredAbmNamesList = this.availableAbmNames.filter((abm) =>
       abm.name.toLowerCase().includes(this.searchInputValueForAbm.toLowerCase())
     );
   }
 
   // Toggle selection of a specific ABM name
-  toggleAbmSelection(abm: { id: number, name: string }) {
-    const index = this.selectedAbmNames.findIndex(selected => selected.id === abm.id);
+  toggleAbmSelection(abm: { id: number; name: string }) {
+    const index = this.selectedAbmNames.findIndex((selected) => selected.id === abm.id);
     if (index > -1) {
       this.selectedAbmNames.splice(index, 1); // Remove ABM name if already selected
     } else {
@@ -1030,7 +1055,7 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
   }
 
   // Remove a selected ABM name
-  removeSelectedAbm(abm: { id: number, name: string }, event: MouseEvent) {
+  removeSelectedAbm(abm: { id: number; name: string }, event: MouseEvent) {
     event.stopPropagation(); // Prevent dropdown from closing
     this.toggleAbmSelection(abm); // Toggle selection
   }
@@ -1045,8 +1070,8 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
     return this.selectedAbmNames.length === this.availableAbmNames.length; // Return true if all ABM names are selected
   }
 
-   // Toggle dropdown visibility for retailer types
-   toggleDropdownVisibilityForRetailer() {
+  // Toggle dropdown visibility for retailer types
+  toggleDropdownVisibilityForRetailer() {
     this.isDropdownOpenForRetailer = !this.isDropdownOpenForRetailer;
     if (this.isDropdownOpenForRetailer) {
       this.filteredRetailerTypesList = this.availableRetailerTypes; // Reset filtered list on opening
@@ -1055,14 +1080,14 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
 
   // Filter retailer types based on search input
   filterAvailableRetailerTypes() {
-    this.filteredRetailerTypesList = this.availableRetailerTypes.filter(retailer =>
+    this.filteredRetailerTypesList = this.availableRetailerTypes.filter((retailer) =>
       retailer.name.toLowerCase().includes(this.searchInputValueForRetailer.toLowerCase())
     );
   }
 
   // Toggle selection of a specific retailer type
-  toggleRetailerSelection(retailer: { id: number, name: string }) {
-    const index = this.selectedRetailerTypes.findIndex(selected => selected.id === retailer.id);
+  toggleRetailerSelection(retailer: { id: number; name: string }) {
+    const index = this.selectedRetailerTypes.findIndex((selected) => selected.id === retailer.id);
     if (index > -1) {
       this.selectedRetailerTypes.splice(index, 1); // Remove retailer type if already selected
     } else {
@@ -1071,7 +1096,7 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
   }
 
   // Remove a selected retailer type
-  removeSelectedRetailer(retailer: { id: number, name: string }, event: MouseEvent) {
+  removeSelectedRetailer(retailer: { id: number; name: string }, event: MouseEvent) {
     event.stopPropagation(); // Prevent dropdown from closing
     this.toggleRetailerSelection(retailer); // Toggle selection
   }
@@ -1095,14 +1120,14 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
 
   // Filter RS names based on search input
   filterAvailableRSNames() {
-    this.filteredRSNamesList = this.availableRSNames.filter(rs =>
+    this.filteredRSNamesList = this.availableRSNames.filter((rs: any) =>
       rs.name.toLowerCase().includes(this.searchInputValueForRS.toLowerCase())
     );
   }
 
   // Toggle selection of a specific RS name
-  toggleRSSelection(rs: { id: number, name: string }) {
-    const index = this.selectedRSNames.findIndex(selected => selected.id === rs.id);
+  toggleRSSelection(rs: { id: number; name: string }) {
+    const index = this.selectedRSNames.findIndex((selected) => selected.id === rs.id);
     if (index > -1) {
       this.selectedRSNames.splice(index, 1); // Remove RS name if already selected
     } else {
@@ -1111,7 +1136,7 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
   }
 
   // Remove a selected RS name
-  removeSelectedRS(rs: { id: number, name: string }, event: MouseEvent) {
+  removeSelectedRS(rs: { id: number; name: string }, event: MouseEvent) {
     event.stopPropagation(); // Prevent dropdown from closing
     this.toggleRSSelection(rs); // Toggle selection
   }
@@ -1126,7 +1151,6 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
     return this.selectedRSNames.length === this.availableRSNames.length; // Return true if all RS names are selected
   }
 
-
   // Toggle dropdown visibility for Brands
   toggleDropdownVisibilityForBrand() {
     this.isDropdownOpenForBrand = !this.isDropdownOpenForBrand;
@@ -1137,14 +1161,14 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
 
   // Filter Brands based on search input
   filterAvailableBrands() {
-    this.filteredBrandsList = this.availableBrands.filter(brand =>
+    this.filteredBrandsList = this.availableBrands.filter((brand: any) =>
       brand.name.toLowerCase().includes(this.searchInputValueForBrand.toLowerCase())
     );
   }
 
   // Toggle selection of a specific Brand
-  toggleBrandSelection(brand: { id: number, name: string }) {
-    const index = this.selectedBrands.findIndex(selected => selected.id === brand.id);
+  toggleBrandSelection(brand: { id: number; name: string }) {
+    const index = this.selectedBrands.findIndex((selected) => selected.id === brand.id);
     if (index > -1) {
       this.selectedBrands.splice(index, 1); // Remove Brand if already selected
     } else {
@@ -1153,7 +1177,7 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
   }
 
   // Remove a selected Brand
-  removeSelectedBrand(brand: { id: number, name: string }, event: MouseEvent) {
+  removeSelectedBrand(brand: { id: number; name: string }, event: MouseEvent) {
     event.stopPropagation(); // Prevent dropdown from closing
     this.toggleBrandSelection(brand); // Toggle selection
   }
@@ -1166,5 +1190,46 @@ export default class DashAnalyticsComponent implements AfterViewInit  {
   // Check if all Brands are selected
   get areAllBrandsSelected() {
     return this.selectedBrands.length === this.availableBrands.length; // Return true if all Brands are selected
+  }
+
+  GetMasterData(): void {
+    this.dashboardService.GetMasterData().subscribe(
+      (response) => {
+        if (response && response.region && response.region.length > 0) {
+          const availableRegions = response.region.map((region: any, index: any) => {
+            return {
+              id: index + 1, // Assign unique IDs starting from 1
+              name: region.replace(' ', '') // Replace space in 'SOUTH 1' and 'SOUTH 2' with empty string
+            };
+          });
+          this.availableRegions = availableRegions;
+        }
+        if (response && response.brand && response.brand.length > 0) {
+          // Step 3: Transform the data with type assertion
+          const availableBrands: Brand[] = response.brand.map(([id, name]: [string, string]) => {
+            return {
+              id: parseInt(id), // Convert ID to a number
+              name: name // Keep the name as is
+            };
+          });
+          this.availableBrands = availableBrands;
+        }
+
+        if (response && response.rsName && response.rsName.length > 0) {
+          // Step 3: Transform the data with type assertion
+          const availableRSNames: Brand[] = response.rsName.map(([id, name]: [string, string]) => {
+            return {
+              id: parseInt(id), // Convert ID to a number
+              name: name // Keep the name as is
+            };
+          });
+          this.availableRSNames = availableRSNames;
+        }
+      },
+      (error) => {
+        // this.errorMessage = 'An error occurred during login';
+        console.error('Login error:', error);
+      }
+    );
   }
 }

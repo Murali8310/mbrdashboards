@@ -33,7 +33,9 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/ngx-spinner/animations/ball-scale-multiple.css",
+               "node_modules/ngx-spinner/animations/ball-spin-clockwise.css"
             ],
             "scripts": [
               "node_modules/apexcharts/dist/apexcharts.min.js"

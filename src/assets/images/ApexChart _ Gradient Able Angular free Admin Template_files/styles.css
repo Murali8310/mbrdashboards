@@ -41298,3 +41298,28 @@ app-nav-group > app-nav-collapse > li > a {
 }
 
 /*# sourceMappingURL=styles.css.map*/
+
+@import "~ngx-spinner/animations/ball-scale-multiple.css";
+@import "~ngx-spinner/animations/ball-spin-clockwise.css";
+@import "~ngx-spinner/animations/ball-spin-clockwise-fade-rotating.css";
+@import "~ngx-spinner/animations/ball-spin.css";
+@import "~ngx-spinner/animations/ball-clip-rotate.css";
+@import "~ngx-spinner/animations/ball-clip-rotate-pulse.css";
+@import "~ngx-spinner/animations/ball-clip-rotate-multiple.css";
+@import "~ngx-spinner/animations/ball-clip-rotate-fade.css";
+@import "~ngx-spinner/animations/ball-scale-ripple-multiple.css";
+@import "~ngx-spinner/animations/ball-scale.css";
+@import "~ngx-spinner/animations/ball-zig-zag.css";
+@import "~ngx-spinner/animations/ball-zig-zag-deflect.css";
+@import "~ngx-spinner/animations/square-jelly-box.css";
+@import "~ngx-spinner/animations/square-loader.css";
+@import "~ngx-spinner/animations/pacman.css";
+@import "~ngx-spinner/animations/line-scale.css";
+@import "~ngx-spinner/animations/line-scale-party.css";
+@import "~ngx-spinner/animations/line-scale-pulse-out.css";
+@import "~ngx-spinner/animations/line-scale-pulse-out-rapid.css";
+@import "~ngx-spinner/animations/line-spin-clockwise-fade.css";
+@import "~ngx-spinner/animations/line-spin-clockwise-fade-rotating.css";
+@import "~ngx-spinner/animations/cube-transition.css";
+@import "~ngx-spinner/animations/semi-circle-spin.css";
+@import "~ngx-spinner/animations/square-spin.css";

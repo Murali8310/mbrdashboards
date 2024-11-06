@@ -1641,21 +1641,21 @@
   &[class*='header-'] {
     .mobile-menu {
       span {
-        background-color: transparentize($header-dark-text-color, 0.2);
+        background-color:  #5213e6;
 
         &:after,
         &:before {
-          background-color: transparentize($header-dark-text-color, 0.2);
+          background-color: #5213e6;
         }
       }
 
       &:hover {
         span {
-          background-color: #fff;
+          background-color: #5213e6;
 
           &:after,
           &:before {
-            background-color: #fff;
+            background-color:  #5213e6;
           }
         }
       }
@@ -1676,7 +1676,7 @@
     $i: index($color-header-name, $value);
 
     &.header-#{'' + $value} {
-      background: #beb2c9;
+      // background: #beb2c9;
       color: rgba(256, 256, 256, 0.8);
 
       .profile-notification {
