@@ -94,6 +94,7 @@ export default class DashAnalyticsComponent {
   chartOptionsline!: ApexOptions; // Change to ApexOptions
   chartOptionsRegionwise!: ApexOptions;
   chartOptionsRegionwiseGrowth!: ApexOptions;
+  regionWiseGrowthOptions!:ApexOptions;
   public appendClass: any;
 
   isOpen = false;
@@ -255,6 +256,133 @@ export default class DashAnalyticsComponent {
     private router: Router,
     private route: ActivatedRoute
   ) {
+
+    this.regionWiseGrowthOptions = {
+      series: [
+        // Retailers group for 5 regions
+        {
+          name: "East Region",
+          group: "retailers",
+          data: [44000, 55000, 41000, 67000, 22000, 43000]
+        },
+        {
+          name: "North Region",
+          group: "retailers",
+          data: [13000, 36000, 20000, 8000, 13000, 27000]
+        },
+        {
+          name: "South 1 Region",
+          group: "retailers",
+          data: [13000, 36000, 20000, 8000, 13000, 27000]
+        },
+        {
+          name: "South 2 Region",
+          group: "retailers",
+          data: [13000, 36000, 20000, 8000, 13000, 27000]
+        },
+        {
+          name: "West Region",
+          group: "retailers",
+          data: [13000, 36000, 20000, 8000, 13000, 27000]
+        },
+    
+        // qty group for same 5 regions
+        {
+          name: "qty East Region",
+          group: "qty",
+          data: [20000, 40000, 25000, 10000, 12000, 28000]
+        },
+        {
+          name: "qty North Region",
+          group: "qty",
+          data: [20000, 40000, 25000, 10000, 12000, 28000]
+        },
+        {
+          name: "qty South 1 Region",
+          group: "qty",
+          data: [20000, 40000, 25000, 10000, 12000, 28000]
+        },
+        {
+          name: "qty South 2 Region",
+          group: "qty",
+          data: [20000, 40000, 25000, 10000, 12000, 28000]
+        },
+        {
+          name: "qty West Region",
+          group: "qty",
+          data: [20000, 40000, 25000, 10000, 12000, 28000]
+        },
+    
+        // value group for same 5 regions
+        {
+          name: "Value East Region",
+          group: "value",
+          data: [20000, 40000, 25000, 10000, 12000, 28000]
+        },
+        {
+          name: "Value North Region",
+          group: "value",
+          data: [20000, 40000, 25000, 10000, 12000, 28000]
+        },
+        {
+          name: "Value South 1 Region",
+          group: "value",
+          data: [20000, 40000, 25000, 10000, 12000, 28000]
+        },
+        {
+          name: "Value South 2 Region",
+          group: "value",
+          data: [20000, 40000, 25000, 10000, 12000, 28000]
+        },
+        {
+          name: "Value West Region",
+          group: "value",
+          data: [20000, 40000, 25000, 10000, 12000, 28000]
+        }
+      ],
+      chart: {
+        type: "bar",
+        height: 350,
+        stacked: true
+      },
+      stroke: {
+        width: 1,
+        colors: ["#fff"]
+      },
+      dataLabels: {
+        formatter: (val) => {
+          return Number(val) / 1000 + "K";
+        }
+      },
+      plotOptions: {
+        bar: {
+          horizontal: false
+        }
+      },
+      xaxis: {
+        categories: [
+          'April',
+          'May',
+          'June'
+        ]
+      },
+      fill: {
+        opacity: 1
+      },
+      colors: ["#80c7fd", "#008FFB", "#80f1cb", "#00E396"],
+      yaxis: {
+        labels: {
+          formatter: (val) => {
+            return val / 1000 + "K";
+          }
+        }
+      },
+      legend: {
+        position: "top",
+        horizontalAlign: "left"
+      }
+    };
+    
     // const queryParams = (router.routerState.snapshot as RouterStateSnapshot).root.queryParams;
     // const queryParamsKey = Object.keys(queryParams);
     // if (queryParamsKey && queryParamsKey.includes('id')) {
@@ -503,53 +631,53 @@ export default class DashAnalyticsComponent {
       background: 'bg-c-blue',
       title: 'East',
       icon: 'icon-shopping-cart',
-      number: '486',
+      number: '',
       text: 'Total qty',
-      order: '345',
+      order: '',
       qtyText: 'Value',
-      qtyValue: '333',
-      dealercount: '20',
-      no: '351'
+      qtyValue: '',
+      dealercount: '',
+      no: ''
     },
     {
       background: 'bg-c-green',
       title: 'North',
       icon: 'icon-shopping-cart',
       text: 'Total qty',
-      qtyValue: '333',
+      qtyValue: '',
       qtyText: 'Value',
-      number: '486',
-      no: '351'
+      number: '',
+      no: ''
     },
     {
       background: 'bg-c-yellow',
       title: 'South1',
       icon: 'icon-shopping-cart',
       text: 'Total qty',
-      number: '486',
-      qtyValue: '333',
-      qtyText: 'Value',
-      no: '351'
+      number: '',
+      qtyValue: '',
+      qtyText: '',
+      no: ''
     },
     {
       background: 'bg-c-red',
       title: 'South2',
       icon: 'icon-shopping-cart',
       text: 'Total qty',
-      number: '486',
-      no: '351',
-      qtyValue: '333',
-      qtyText: 'Value'
+      number: '',
+      no: '',
+      qtyValue: '',
+      qtyText: ''
     },
     {
       background: 'bg-c-red',
       title: 'West',
       icon: 'icon-shopping-cart',
       text: 'Total qty',
-      number: '486',
-      no: '351',
-      qtyValue: '333',
-      qtyText: 'Value'
+      number: '',
+      no: '',
+      qtyValue: '',
+      qtyText: ''
     }
   ];
 
@@ -807,7 +935,7 @@ export default class DashAnalyticsComponent {
             },
             yaxis: {
               title: {
-                text: ' (Growth percentage)'
+                text: ' (Growth Value)'
               }
               // min: -100 // Set a minimum value for y-axis to accommodate negative values
             },
@@ -1206,25 +1334,159 @@ export default class DashAnalyticsComponent {
       (response) => {
         if (response && response.body) {
           this.spinner.hide();
+          this.cards[0].number = response.body[0].totalOrder;
+          this.cards[0].qtyValue = response.body[0].orderValue;
+          this.cards[0].dealercount = response.body[0].delears;
+          this.cards[0].no = response.body[0].orderQuentity;
+          
 
+
+          this.cards[1].number = response.body[1].totalOrder;
+          this.cards[1].qtyValue = response.body[1].orderValue;
+          this.cards[1].dealercount = response.body[1].delears;
+          this.cards[1].no = response.body[1].orderQuentity;
+
+          this.cards[2].number = response.body[2].totalOrder;
+          this.cards[2].qtyValue = response.body[2].orderValue;
+          this.cards[2].dealercount = response.body[2].delears;
+          this.cards[2].no = response.body[2].orderQuentity;
+
+
+          this.cards[3].number = response.body[3].totalOrder;
+          this.cards[3].qtyValue = response.body[3].orderValue;
+          this.cards[3].dealercount = response.body[3].delears;
+          this.cards[3].no = response.body[3].orderQuentity;
+
+          this.cards[4].number = response.body[4].totalOrder;
+          this.cards[4].qtyValue = response.body[4].orderValue;
+          this.cards[4].dealercount = response.body[4].delears;
+          this.cards[4].no = response.body[4].orderQuentity;
+
+this.dashBoardInitalDataforchart();
+          // // Define month names for easy mapping
+          // const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+          // // Prepare data for each series
+          // const retailersData: any = [];
+          // const quantityData: any = [];
+          // const valueData: any = [];
+          // const categories: string[] = []; // This will hold the month names
+
+          // response.body.forEach((item: any) => {
+          //   // Push values to each series array
+          //   retailersData.push(item.totalRetailerCode);
+          //   quantityData.push(item.totalQTY);
+          //   valueData.push(item.totalRevenue);
+
+          //   // Get month name and add to categories
+          //   categories.push(monthNames[item.month - 1]);
+          // });
+
+          // this.dashBoardInitalDataOptions = {
+          //   chart: {
+          //     type: 'bar',
+          //     height: 350,
+          //     toolbar: {
+          //       show: false // Optional: Hide toolbar if not needed
+          //     }
+          //   },
+          //   title: {
+          //     text: 'Orders Monthly Details.', // Chart title
+          //     align: 'center',
+          //     style: {
+          //       fontSize: '16px',
+          //       fontWeight: 'bold',
+          //       color: '#333'
+          //     }
+          //   },
+          //   series: [
+          //     {
+          //       name: 'Order Qty',
+          //       data: retailersData // Example values for Number of Retailers
+          //     },
+          //     {
+          //       name: 'Order Value',
+          //       data: quantityData // Example values for Quantity
+          //     }
+          //   ],
+          //   plotOptions: {
+          //     bar: {
+          //       horizontal: false,
+          //       columnWidth: '60%'
+          //       // endingShape: "rounded"
+          //     }
+          //   },
+          //   dataLabels: {
+          //     enabled: true
+          //   },
+          //   stroke: {
+          //     show: true,
+          //     width: 2,
+          //     colors: ['transparent']
+          //   },
+          //   xaxis: {
+          //     categories: categories
+          //   },
+          //   yaxis: {
+          //     title: {
+          //       text: ' (Orders)'
+          //     }
+          //     // min: -100 // Set a minimum value for y-axis to accommodate negative values
+          //   },
+          //   fill: {
+          //     opacity: 1
+          //   },
+          //   tooltip: {
+          //     y: {
+          //       formatter: function (val) {
+          //         return '' + val + ' ';
+          //       }
+          //     }
+          //   }
+          // };
+        }
+        console.log('this is for checking');
+      },
+      (error) => {
+        // this.errorMessage = 'An error occurred during login';
+        console.error('Login error:', error);
+      }
+    );
+  };
+
+  loadData() {
+    // Simulate a delay for loading data
+    setTimeout(() => {
+      // Data is loaded, hide the spinner
+      this.isLoading = false;
+    }, 3000); // Adjust this timeout as needed
+  }
+
+  public dashBoardInitalDataforchart = async (data?: any) => {
+    this.spinner.show();
+    this.dashboardService.dashBoardInitalData().subscribe(
+      (response) => {
+        if (response && response.body) {
+          this.spinner.hide();
+         
           // Define month names for easy mapping
           const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
           // Prepare data for each series
-          const retailersData: any = [];
-          const quantityData: any = [];
+          const retailersData: any = [200,499,444,200,499,444,200,499,444];
+          const quantityData: any = [100,469,789,100,469,789,100,469,789];
           const valueData: any = [];
           const categories: string[] = []; // This will hold the month names
 
-          response.body.forEach((item: any) => {
-            // Push values to each series array
-            retailersData.push(item.totalRetailerCode);
-            quantityData.push(item.totalQTY);
-            valueData.push(item.totalRevenue);
+          // response.body.forEach((item: any) => {
+          //   // Push values to each series array
+          //   retailersData.push(item.totalRetailerCode);
+          //   quantityData.push(item.totalQTY);
+          //   valueData.push(item.totalRevenue);
 
-            // Get month name and add to categories
-            categories.push(monthNames[item.month - 1]);
-          });
+          //   // Get month name and add to categories
+          //   categories.push(monthNames[item.month - 1]);
+          // });
 
           this.dashBoardInitalDataOptions = {
             chart: {
@@ -1269,7 +1531,7 @@ export default class DashAnalyticsComponent {
               colors: ['transparent']
             },
             xaxis: {
-              categories: categories
+              categories: monthNames
             },
             yaxis: {
               title: {
@@ -1297,12 +1559,4 @@ export default class DashAnalyticsComponent {
       }
     );
   };
-
-  loadData() {
-    // Simulate a delay for loading data
-    setTimeout(() => {
-      // Data is loaded, hide the spinner
-      this.isLoading = false;
-    }, 3000); // Adjust this timeout as needed
-  }
 }

@@ -13,12 +13,15 @@ text-align: center;
       <p class="m-b-0"
         >Total order<span class="float-end">{{ card.number }}</span></p
       >
+      <br>
       <p class="m-b-0"
         >Order Qty<span class="float-end">{{ card.no }}</span></p
       >
+      <br>
       <p class="m-b-0"
       >Order Value<span class="float-end">{{ card.qtyValue }}</span></p
     >
+    <br>
     <p class="m-b-0"
       >Dealers<span class="float-end">{{ card.dealercount }}</span></p
     >
@@ -421,4 +424,18 @@ text-align: center;
 <!-- <div *ngIf="isLoading" class="spinner-overlay">
   <div class="spinner"></div>
 </div> -->
-
+<!-- 
+<div id="chart">
+  <apx-chart
+    [series]="regionWiseGrowthOptions.series"
+    [chart]="regionWiseGrowthOptions.chart"
+    [stroke]="regionWiseGrowthOptions.stroke"
+    [dataLabels]="regionWiseGrowthOptions.dataLabels"
+    [plotOptions]="regionWiseGrowthOptions.plotOptions"
+    [xaxis]="regionWiseGrowthOptions.xaxis"
+    [colors]="regionWiseGrowthOptions.colors"
+    [fill]="regionWiseGrowthOptions.fill"
+    [yaxis]="regionWiseGrowthOptions.yaxis"
+    [legend]="regionWiseGrowthOptions.legend"
+  ></apx-chart>
+</div> -->
