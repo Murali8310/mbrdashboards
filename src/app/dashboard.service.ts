@@ -10,13 +10,14 @@ export class DashboardService {
   private apiUrl = '/stationary/loginSubmit'; // Replace with your API URL
   // http://localhost:8080/stationary/loginSubmit
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    // localStorage.setItem('selectedData', '1');
+   }
 public selectedData:any = '1';
   getData(): Observable<any> {
     return this.http.get<any>(environment.apiUrl + '/stationary/loginSubmit');
   }
 
-  
   GetMasterData(): Observable<any> {
     return this.http.get<any>(environment.apiUrl + '/GetMasterData');
   }

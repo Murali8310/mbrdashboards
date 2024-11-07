@@ -27,6 +27,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './login/login.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { TotalorderingComponent } from './totalordering/totalordering.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { NgxSpinnerModule } from "ngx-spinner";
     NavItemComponent,
     NavCollapseComponent,
     NavGroupComponent,
-    LoginComponent
+    LoginComponent,
+    TotalorderingComponent
   ],
   imports: [BrowserModule,NgApexchartsModule, AppRoutingModule, SharedModule, FormsModule, ReactiveFormsModule, BrowserAnimationsModule,HttpClientModule,NgxSpinnerModule.forRoot()],
   providers: [],

@@ -28,11 +28,13 @@ export class NavRightComponent implements DoCheck {
   chatMessage: boolean;
   friendId!: number;
   gradientConfig = GradientConfig;
-
+public selectedData:any
   // constructor
   constructor() {
     this.visibleUserList = false;
     this.chatMessage = false;
+    const selectedData :any= localStorage.getItem('selectedData');
+this.selectedData = JSON.parse(selectedData);
   }
 
   // public method

@@ -47,6 +47,7 @@ import {
   ApexTooltip
 } from 'ng-apexcharts';
 import { DashboardService } from 'src/app/dashboard.service';
+import { ActivatedRoute, Router, RouterStateSnapshot } from '@angular/router';
 
 // export type ChartOptions = {
 //   series: ApexAxisChartSeries | ApexNonAxisChartSeries;
@@ -209,7 +210,6 @@ export default class DashAnalyticsComponent {
   chartOptions!: Partial<ChartOptions>;
   dashBoardInitalDataOptions!: Partial<ChartOptions>;
 
-  
   // chartOptionsline!: Partial<ChartOptions>;
   chartOptions_1!: Partial<ChartOptions>;
   chartOptions_2!: Partial<ChartOptions>;
@@ -250,9 +250,23 @@ export default class DashAnalyticsComponent {
   // constructor
   constructor(
     public dashboardService: DashboardService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private router: Router,
+    private route: ActivatedRoute,
   ) {
-  
+    // const queryParams = (router.routerState.snapshot as RouterStateSnapshot).root.queryParams;
+    // const queryParamsKey = Object.keys(queryParams);
+    // if (queryParamsKey && queryParamsKey.includes('id')) {
+    //   this.dashboardService.selectedData = queryParams['id'];
+    // }
+
+    this.route.queryParams.subscribe(params => {
+      this.dashboardService.selectedData  = params['id'];
+      // console.log('Query parameter ID changed:', this.selectedId);
+      // Refresh or load data based on the new ID
+      this.ngOnInit();
+    });
+
     this.chartOptionsRegionwise = {
       chart: {
         type: 'bar',
@@ -329,6 +343,7 @@ export default class DashAnalyticsComponent {
         }
       }
     };
+
     this.chartOptionsRegionwiseGrowth = {
       chart: {
         type: 'bar',
@@ -405,225 +420,19 @@ export default class DashAnalyticsComponent {
         }
       }
     };
-
-    // this.chartOptionsline = {
-    //   series: [
-    //     {
-    //       name: "Retailers",
-    //       data: [120, 150, 130]  // Example data for Retailers over 3 months
-    //     },
-    //     {
-    //       name: "Quantity (k)",
-    //       data: [30, 25, 35]  // Example data for Quantity over 3 months (all positive)
-    //     },
-    //     {
-    //       name: "Value",
-    //       data: [100, 70, 80]  // Example data for Value over 3 months (all positive)
-    //     }
-    //   ],
-    //   chart: {
-    //     height: 350,
-    //     type: "line"
-    //   },
-    //   dataLabels: {
-    //     enabled: false
-    //   },
-    //   stroke: {
-    //     width: 5,
-    //     curve: "smooth",  // Smooth curve for the line chart
-    //     dashArray: [0, 8, 5]  // Different dash arrays for each line
-    //   },
-    //   // title: {
-    //   //   text: "Growth over Previous Months",  // Updated title
-    //   //   align: "left"
-    //   // },
-    //   legend: {
-    //     tooltipHoverFormatter: function(val, opts) {
-    //       return (
-    //         val +
-    //         " - <strong>" +
-    //         opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] +
-    //         "</strong>"
-    //       );
-    //     }
-    //   },
-    //   // markers: {
-    //   //   size: 5,  // Size of markers on the line
-    //   //   hover: {
-    //   //     sizeOffset: 6
-    //   //   }
-    //   // },
-    //   xaxis: {
-    //     labels: {
-    //       trim: false
-    //     },
-    //     categories: [
-    //       "july",  // Replace with actual month names or dates
-    //       "august",
-    //       "september"
-    //     ]
-    //   },
-    //   tooltip: {
-    //     y: [
-    //       {
-    //         title: {
-    //           formatter: function(val) {
-    //             return val + " Retailers";
-    //           }
-    //         }
-    //       },
-    //       {
-    //         title: {
-    //           formatter: function(val) {
-    //             return val + " (k)";
-    //           }
-    //         }
-    //       },
-    //       {
-    //         title: {
-    //           formatter: function(val) {
-    //             return "$" + val;  // Format for value
-    //           }
-    //         }
-    //       }
-    //     ]
-    //   },
-    //   // grid: {
-    //   //   borderColor: "#f1f1f1"
-    //   // }
-    // };
-
-    // this.chartOptionsline = {
-    //   series: [
-    //     {
-    //       name: "Retailers",
-    //       data: [120, 150, 130]  // Example data for Retailers over 3 months
-    //     },
-    //     {
-    //       name: "Quantity (k)",
-    //       data: [30, 25, 35]  // Example data for Quantity over 3 months
-    //     },
-    //     {
-    //       name: "Value",
-    //       data: [100, 70, 80]  // Example data for Value over 3 months (in thousands)
-    //     }
-    //   ],
-    //   chart: {
-    //     height: 350,
-    //     type: "line"
-    //   },
-    //   dataLabels: {
-    //     enabled: true
-    //   },
-    //   stroke: {
-    //     width: 5,
-    //     curve: "smooth",  // Smooth curve for the line chart
-    //     dashArray: [0, 8, 5]  // Different dash arrays for each line
-    //   },
-    //   title: {
-    //     text: "Monthly Trend.",  // Updated title
-    //     align: "center"
-    //   },
-    //   legend: {
-    //     tooltipHoverFormatter: function(val, opts) {
-    //       return (
-    //         val +
-    //         " - <strong>" +
-    //         opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] +
-    //         "</strong>"
-    //       );
-    //     }
-    //   },
-    //   markers: {
-    //     size: 5,  // Size of markers on the line
-    //     hover: {
-    //       sizeOffset: 6
-    //     }
-    //   },
-    //   xaxis: {
-    //     labels: {
-    //       trim: false
-    //     },
-    //     categories: [
-    //       "Month 1",  // Replace with actual month names or dates
-    //       "Month 2",
-    //       "Month 3"
-    //     ]
-    //   },
-    //   yaxis: [
-    //     {
-    //       title: {
-    //         text: "Value ($ thousands)",  // Left y-axis title
-    //         style: {
-    //           color: "#000000"  // Change color as needed
-    //         }
-    //       },
-    //       min: 0,  // Minimum value for left y-axis
-    //       labels: {
-    //         formatter: function(val) {
-    //           return "$" + val;  // Format for value
-    //         }
-    //       },
-    //       tickAmount: 4  // Adjust the number of ticks as necessary
-    //     },
-    //     {
-    //       opposite: true,  // Make this y-axis on the opposite side
-    //       title: {
-    //         text: "Quantity (Nos)",  // Right y-axis title
-    //         style: {
-    //           color: "#000000"  // Change color as needed
-    //         }
-    //       },
-    //       min: 0,  // Minimum value for right y-axis
-    //       tickAmount: 4  // Adjust the number of ticks as necessary
-    //     }
-    //   ],
-    //   tooltip: {
-    //     shared: true,  // Show shared tooltip
-    //     intersect: false,
-    //     y: [
-    //       {
-    //         title: {
-    //           formatter: function(val) {
-    //             return val + " Retailers";
-    //           }
-    //         }
-    //       },
-    //       {
-    //         title: {
-    //           formatter: function(val) {
-    //             return val + " (k)";
-    //           }
-    //         }
-    //       },
-    //       {
-    //         title: {
-    //           formatter: function(val) {
-    //             return "$" + val;  // Format for value
-    //           }
-    //         }
-    //       }
-    //     ]
-    //   },
-    //   grid: {
-    //     borderColor: "#f1f1f1"
-    //   }
-    // };
   }
 
   // life cycle event
   async ngOnInit() {
     this.spinner.show();
-    // this.loadData();
-
+    if (this.dashboardService.selectedData === '2') {
+      this.GetMasterData();
+     this.MonthlyToalOrdaring();
+       this.GrowthOverPreviousMonth();
+    } else if (this.dashboardService.selectedData === '1') {
     await this.dashBoardInitalDataFn();
-
-    await this.GetMasterData();
-    await this.MonthlyToalOrdaring();
-    await this.GrowthOverPreviousMonth();
-    this.spinner.hide();
+    }
     // this.isLoading = false;
-    // Simulate a delay for demonstration (e.g., data fetching)
     // setTimeout(() => {
     //   // Hide the spinner after the delay
     //   this.spinner.hide();
@@ -873,9 +682,9 @@ export default class DashAnalyticsComponent {
           const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
           // Prepare data for each series
-          const retailersData:any = [];
-          const quantityData:any = [];
-          const valueData :any= [];
+          const retailersData: any = [];
+          const quantityData: any = [];
+          const valueData: any = [];
           const categories: string[] = []; // This will hold the month names
 
           response.body.forEach((item: any) => {
@@ -940,7 +749,7 @@ export default class DashAnalyticsComponent {
             yaxis: {
               title: {
                 text: ' (Growth percentage)'
-              },
+              }
               // min: -100 // Set a minimum value for y-axis to accommodate negative values
             },
             fill: {
@@ -954,7 +763,6 @@ export default class DashAnalyticsComponent {
               }
             }
           };
-        
         }
         console.log('this is for checking');
       },
@@ -1231,8 +1039,11 @@ export default class DashAnalyticsComponent {
   }
 
   GetMasterData(): void {
+    this.spinner.show();
     this.dashboardService.GetMasterData().subscribe(
       (response) => {
+        this.spinner.hide();
+
         if (response && response.region && response.region.length > 0) {
           const availableRegions = response.region.map((region: any, index: any) => {
             return {
@@ -1271,7 +1082,7 @@ export default class DashAnalyticsComponent {
     );
   }
 
-  public dashBoardInitalDataFn = (data?: any) => {
+  public dashBoardInitalDataFn = async (data?: any) => {
     this.spinner.show();
     this.dashboardService.GrowthOverPreviousMonth().subscribe(
       (response) => {
@@ -1282,9 +1093,9 @@ export default class DashAnalyticsComponent {
           const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
           // Prepare data for each series
-          const retailersData:any = [];
-          const quantityData:any = [];
-          const valueData :any= [];
+          const retailersData: any = [];
+          const quantityData: any = [];
+          const valueData: any = [];
           const categories: string[] = []; // This will hold the month names
 
           response.body.forEach((item: any) => {
@@ -1345,7 +1156,7 @@ export default class DashAnalyticsComponent {
             yaxis: {
               title: {
                 text: ' (Orders)'
-              },
+              }
               // min: -100 // Set a minimum value for y-axis to accommodate negative values
             },
             fill: {
@@ -1359,7 +1170,6 @@ export default class DashAnalyticsComponent {
               }
             }
           };
-        
         }
         console.log('this is for checking');
       },

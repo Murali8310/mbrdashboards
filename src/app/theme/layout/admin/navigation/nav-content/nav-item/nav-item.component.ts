@@ -3,6 +3,7 @@ import { Component, Input } from '@angular/core';
 import { NavigationItem } from '../../navigation';
 import { ChangeDetectorRef } from '@angular/core';
 import { DashboardService } from 'src/app/dashboard.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nav-item',
@@ -13,7 +14,7 @@ export class NavItemComponent {
   // public props
   @Input() item!: NavigationItem;
   selectedList: any = null;
-  constructor(private cdr: ChangeDetectorRef,public dashboardSerive:DashboardService) {}
+  constructor(private cdr: ChangeDetectorRef,public dashboardSerive:DashboardService,private router: Router) {}
 
   // public method
   closeOtherMenu(event: MouseEvent,data:any) {
@@ -44,8 +45,11 @@ export class NavItemComponent {
       document.querySelector('app-navigation.pcoded-navbar')?.classList.remove('mob-open');
     }
 
-    this.dashboardSerive.selectedData = data.id;
-    this.cdr.detectChanges();  // Manually trigger change detection if needed
-
+    // this.dashboardSerive.selectedData = data.id;
+    // this.cdr.detectChanges();  // Manually trigger change detection if needed
+    // localStorage.setItem('selectedData', data.id);
+    this.router.navigate(['/dashboard/charts'], {
+      queryParams: { id: data.id}
+    });
   }
 }

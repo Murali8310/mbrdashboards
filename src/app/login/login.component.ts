@@ -122,19 +122,26 @@ export class LoginComponent implements OnInit {
   async onSubmit() {
     localStorage.setItem('initialLogin', '0');
     const nocatch = new Date().getTime();
-    this.router.navigate(['/dashboard/charts'], {
-      queryParams: { nocatch },
-    });
+    // this.router.navigate(['/dashboard/charts'], {
+    //   queryParams: { nocatch },
+    // });
+    this.submitted = true;
     this.dashboardservice
       .login(this.loginForm.value.userName, this.loginForm.value.password)
       .pipe(first())
       .subscribe(
         async (data) => {
-          console.log('LOG RES');
-          const nocatch = new Date().getTime();
-          this.router.navigate(['/dashboard/charts'], {
-            queryParams: { nocatch },
-          });
+          if(data && data.message && (data.message === "SUCCESS")){
+            console.log('LOG RES');
+            localStorage.setItem('userData', data);
+            const nocatch = new Date().getTime();
+            this.router.navigate(['/dashboard/charts'], {
+              queryParams: { nocatch },
+            });
+          } else {
+            this.errorMessage = data.message;
+            this.isLoginFailed = true;
+          }
 
           /*   this.router.navigate(['/pages/' + page], {
             queryParams: { reload: new Date().getTime() },

@@ -76,25 +76,10 @@
               >
                 Login
               </button>
-              <div class="alert alert-warning" *ngIf="submitted && isLoginFailed">
+              <div class="alert alert-warning" style="margin-top: 10px;" *ngIf="submitted && isLoginFailed">
                 {{ errorMessage }}
               </div>
             </form>
-  
-            <div class="support clearfix">
-              <img
-                id="QRimg"
-                class="backRight"
-                style="width: 100px"
-                src="assets/images/surakshaQR.png"
-                title="Scan me to open in mobile"
-                alt="Scan me to open in mobile"
-                class="img-fluid"
-              />
-  
-              <a href="auth/contact-us">Get Support!!</a>
-            </div>
-  
             <div class="copy-rights mt-5">
               © 2024 - 2025 Titan company limited
             </div>
