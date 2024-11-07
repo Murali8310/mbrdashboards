@@ -131,7 +131,7 @@ Alter PROCEDURE GetOrderSummary
 
 
 	EXEC GetOrderSummary
-		@RegionList = '', -- Comma-separated list of regions
+		@RegionList = 'EAST', -- Comma-separated list of regions
 		@StartDate = 20240401,         -- Start date in yyyymmdd format
 		@EndDate = 20240630,		   -- End date in yyyymmdd format
 		@BrandList ='',
@@ -145,7 +145,8 @@ Alter PROCEDURE GetOrderSummary
     @StartDate INT,               -- Start date in yyyymmdd format (e.g., 20240601)
     @EndDate INT,                 -- End date in yyyymmdd format (e.g., 20240630)
     @RSNameList VARCHAR(MAX),
-    @BrandList VARCHAR(MAX)
+    @BrandList VARCHAR(MAX),
+	@ABMName VARCHAR(MAX)
 AS
 BEGIN
     ;WITH MonthlySummary AS (
@@ -168,6 +169,14 @@ BEGIN
             Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@BrandList, ','))  -- Split the @BrandList string into values
             OR 
             RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RSNameList, ',')) -- Split the @RSNameList string into values
+			OR
+			(
+				-- Check if ABMName is provided and exists in ABMEMM or ABMKAM columns
+				@ABMName IS NOT NULL AND @ABMName <> '' AND (
+					ABMEMM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ',')) 
+					OR ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ','))
+				) 
+			)
         GROUP BY
             YEAR(OrderDate),
             MONTH(OrderDate)
@@ -217,7 +226,8 @@ EXEC GrowthOverPreviousMonth
     @StartDate = 20230201,         -- Start date in yyyymmdd format
     @EndDate = 20240630,		   -- End date in yyyymmdd format
 	@BrandList ='',
-	@RSNameList ='';
+	@RSNameList ='',
+	@ABMName='1762473,60227';
 
 ----------------------------------------------------------------------------------Region Wise Monthly Distribution-------------------------------------------------------
 
