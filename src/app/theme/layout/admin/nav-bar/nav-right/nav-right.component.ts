@@ -5,6 +5,8 @@ import { GradientConfig } from 'src/app/app-config';
 
 // bootstrap
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
+import { DashboardService } from 'src/app/dashboard.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nav-right',
@@ -28,19 +30,28 @@ export class NavRightComponent implements DoCheck {
   chatMessage: boolean;
   friendId!: number;
   gradientConfig = GradientConfig;
-public selectedData:any
+  public selectedData: any;
   // constructor
-  constructor() {
+  constructor(private dash: DashboardService, private router: Router,) {
     this.visibleUserList = false;
     this.chatMessage = false;
-    const selectedData :any= localStorage.getItem('selectedData');
-this.selectedData = JSON.parse(selectedData);
+    const selectedData: any = localStorage.getItem('userData');
+
+    this.selectedData = JSON.parse(selectedData);
   }
 
   // public method
   onChatToggle(friendID: number) {
     this.friendId = friendID;
     this.chatMessage = !this.chatMessage;
+  }
+
+  public logout() {
+    this.router.navigate(['']);
+    this.dash.logout().subscribe((data: any) => {
+      console.log(data);
+      
+    });
   }
 
   ngDoCheck() {

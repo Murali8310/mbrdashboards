@@ -133,7 +133,9 @@ export class LoginComponent implements OnInit {
         async (data) => {
           if(data && data.message && (data.message === "SUCCESS")){
             console.log('LOG RES');
-            localStorage.setItem('userData', data);
+            // localStorage.setItem('userData', data);
+            localStorage.setItem('userData', JSON.stringify(data));
+
             const nocatch = new Date().getTime();
             // this.router.navigate(['/dashboard/charts'], {
             //   queryParams: { nocatch },

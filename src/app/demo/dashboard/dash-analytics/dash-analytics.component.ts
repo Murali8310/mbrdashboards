@@ -396,6 +396,7 @@ export default class DashAnalyticsComponent {
       // this.ngOnInit();
       if(params['id'] === '1'){
         this.dashBoardInitalDataFn();
+
       }else if(params['id'] === '2'){
         this.prepareSearchData('reset');
       }
@@ -571,7 +572,7 @@ export default class DashAnalyticsComponent {
     if (this.dashboardService.selectedData === '2') {
       this.GetMasterData();
       this.MonthlyToalOrdaring(GrowthOverPreviousMonthPayload);
-      this.GrowthOverPreviousMonth();
+      this.GrowthOverPreviousMonth(GrowthOverPreviousMonthPayload);
     } else if (this.dashboardService.selectedData === '1') {
       await this.dashBoardInitalDataFn();
     }
@@ -592,12 +593,6 @@ export default class DashAnalyticsComponent {
     let retailerTypeList: any = '';
 
     if (data === 'search') {
-      this.selectedAbmNames;
-      this.selectedBrands;
-      this.selectedRSNames;
-      this.selectedRegions;
-      this.selectedRetailerTypes;
-
       // Prepare comma-separated strings for each array
       abmNameList = this.selectedAbmNames.map((item) => item.id).join(', ');
       brandList = this.selectedBrands.map((item) => item.name).join(', ');
@@ -610,7 +605,8 @@ export default class DashAnalyticsComponent {
         startDate: 20240401, /// default case start date of financial year in integer format
         endDate: 202401030, ////  default case end date of financial year in integer format
         brandList: brandList, //// default casen ""
-        rsNameList: rsNameList //// default casen ""
+        rsNameList: rsNameList, //// default casen ""
+        abmName:abmNameList
       };
     } else {
       MonthlyToalOrdaringPayload  = {
@@ -618,12 +614,19 @@ export default class DashAnalyticsComponent {
           "startDate":20240401,       /// default case start date of financial year in integer format
           "endDate": 202401030,       ////  default case end date of financial year in integer format
           "brandList": "",       //// default casen ""
-          "rsNameList": ""//// default casen ""
+          "rsNameList": "",//// default casen ""
+          "abmName":""
         };
+
+        this.selectedAbmNames = [];
+        this.selectedBrands = [];
+        this.selectedRSNames = [];
+        this.selectedRegions = [];
+        this.selectedRetailerTypes = [];
     }
     this.GetMasterData();
     this.MonthlyToalOrdaring(MonthlyToalOrdaringPayload);
-    this.GrowthOverPreviousMonth();
+    this.GrowthOverPreviousMonth(MonthlyToalOrdaringPayload);
   }
 
   cards = [
@@ -858,9 +861,9 @@ export default class DashAnalyticsComponent {
     );
   };
 
-  public GrowthOverPreviousMonth = (data?: any) => {
+  public GrowthOverPreviousMonth = (MonthlyToalOrdaringPayload?: any) => {
     this.spinner.show();
-    this.dashboardService.GrowthOverPreviousMonth().subscribe(
+    this.dashboardService.GrowthOverPreviousMonth(MonthlyToalOrdaringPayload).subscribe(
       (response) => {
         if (response && response.body) {
           this.spinner.hide();
@@ -1067,15 +1070,16 @@ export default class DashAnalyticsComponent {
   // Toggle dropdown visibility for ABM names
   toggleDropdownVisibilityForAbm() {
     // this.isDropdownOpenForAbm = !this.isDropdownOpenForAbm;
-    if (this.isDropdownOpenForAbm) {
-      this.filteredAbmNamesList = this.availableAbmNames; // Reset filtered list on opening
-    }
+   
     // isDropdownOpenForRS
     // isDropdownOpenForBrand
     // isDropdownOpen
     // isDropdownOpenForAbm
     // this.hideOtherDropDowns('abm');
     this.toggleDropdownVisibility1('isDropdownOpenForAbm');
+    if (this.isDropdownOpenForAbm) {
+      this.filteredAbmNamesList = this.availableAbmNames; // Reset filtered list on opening
+    }
   }
 
   hideOtherDropDowns(selectedDropdown: any): void {
@@ -1453,6 +1457,7 @@ this.dashBoardInitalDataforchart();
       }
     );
   };
+  
 
   loadData() {
     // Simulate a delay for loading data
@@ -1464,7 +1469,7 @@ this.dashBoardInitalDataforchart();
 
   public dashBoardInitalDataforchart = async (data?: any) => {
     this.spinner.show();
-    this.dashboardService.dashBoardInitalData().subscribe(
+    this.dashboardService.dashboardGraph().subscribe(
       (response) => {
         if (response && response.body) {
           this.spinner.hide();
@@ -1473,20 +1478,20 @@ this.dashBoardInitalDataforchart();
           const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
           // Prepare data for each series
-          const retailersData: any = [200,499,444,200,499,444,200,499,444];
-          const quantityData: any = [100,469,789,100,469,789,100,469,789];
+          const retailersData: any = [];
+          const quantityData: any = [];
           const valueData: any = [];
           const categories: string[] = []; // This will hold the month names
 
-          // response.body.forEach((item: any) => {
-          //   // Push values to each series array
-          //   retailersData.push(item.totalRetailerCode);
-          //   quantityData.push(item.totalQTY);
-          //   valueData.push(item.totalRevenue);
+          response.body.forEach((item: any) => {
+            // Push values to each series array
+            retailersData.push(item.totalOrder);
+            quantityData.push(item.orderValue);
+            valueData.push(item.totalRevenue);
 
-          //   // Get month name and add to categories
-          //   categories.push(monthNames[item.month - 1]);
-          // });
+            // Get month name and add to categories
+            categories.push(monthNames[item.month - 1]);
+          });
 
           this.dashBoardInitalDataOptions = {
             chart: {
@@ -1531,7 +1536,7 @@ this.dashBoardInitalDataforchart();
               colors: ['transparent']
             },
             xaxis: {
-              categories: monthNames
+              categories: categories
             },
             yaxis: {
               title: {

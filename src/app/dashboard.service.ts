@@ -17,6 +17,12 @@ public selectedData:any = '1';
   getData(): Observable<any> {
     return this.http.get<any>(environment.apiUrl + '/stationary/loginSubmit');
   }
+  
+  logout(): Observable<any> {
+    return this.http.get<any>(environment.apiUrl + '/logout');
+  }
+
+  
 
   GetMasterData(): Observable<any> {
     return this.http.get<any>(environment.apiUrl + '/GetMasterData');
@@ -82,19 +88,19 @@ public selectedData:any = '1';
       );      
   }
 
-  public  GrowthOverPreviousMonth(data?:any) {
-    const GrowthOverPreviousMonthPayload :any = {
-      "regionList": "EAST, WEST,NORTH,SOUTH 1,SOUTH 2",  /// default all regions 
-        "startDate":20240401,       /// default case start date of financial year in integer format
-        "endDate": 202401030,       ////  default case end date of financial year in integer format
-        "brandList": "",       //// default casen ""
-        "rsNameList": ""//// default casen ""
-      };
+  public  GrowthOverPreviousMonth(MonthlyToalOrdaringPayload?:any) {
+    // const GrowthOverPreviousMonthPayload :any = {
+    //   "regionList": "EAST, WEST,NORTH,SOUTH 1,SOUTH 2",  /// default all regions 
+    //     "startDate":20240401,       /// default case start date of financial year in integer format
+    //     "endDate": 202401030,       ////  default case end date of financial year in integer format
+    //     "brandList": "",       //// default casen ""
+    //     "rsNameList": ""//// default casen ""
+    //   };
 
     return this.http
       .post<any>(
         `${environment.apiUrl}/GrowthOverPreviousMonth`,
-        JSON.stringify(GrowthOverPreviousMonthPayload),
+        JSON.stringify(MonthlyToalOrdaringPayload),
         {
           headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
           observe: 'response',
@@ -124,4 +130,25 @@ public selectedData:any = '1';
             }
           ); 
   } 
+
+  public  dashboardGraph(data?:any) {
+    const dashboardGraph :any = {
+      // "regionList": "EAST, WEST,NORTH,SOUTH 1,SOUTH 2",  /// default all regions 
+        "startDate":20240401,       /// default case start date of financial year in integer format
+        "endDate": 202401030,       ////  default case end date of financial year in integer format
+        // "brandList": "",       //// default casen ""
+        // "rsNameList": ""//// default casen ""
+      };
+
+    return this.http
+      .post<any>(
+        `${environment.apiUrl}/dashboardGraphs`,
+        JSON.stringify(dashboardGraph),
+        {
+          headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+          observe: 'response',
+        }
+      ); 
+} 
+  
 }
