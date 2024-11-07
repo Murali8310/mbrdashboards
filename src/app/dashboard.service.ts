@@ -70,29 +70,7 @@ public selectedData:any = '1';
 
 
 
-  public  MonthlyToalOrdaring(data?:any) {
-    // const MonthlyToalOrdaringPayload = {
-    //   data: 'rrrr',
-    //   data2:'dddddd'
-    //   // browsersignature: new ClientJS().getFingerprint().toString(),
-    // };
-
-    // const MonthlyToalOrdaringPayload :any = {
-    //   "regionList": "EAST, WEST",  /// default all regions 
-    //     "startDate":20240601,       /// default case start date of financial year in integer format
-    //     "endDate": 20240730,       ////  default case end date of financial year in integer format
-    //     "brandList": "",       //// default casen ""
-    //     "rsNameList": ""//// default casen ""
-    //   };
-
-    const MonthlyToalOrdaringPayload :any = {
-      "regionList": "EAST, WEST,NORTH,SOUTH 1,SOUTH 2",  /// default all regions 
-        "startDate":20240401,       /// default case start date of financial year in integer format
-        "endDate": 202401030,       ////  default case end date of financial year in integer format
-        "brandList": "",       //// default casen ""
-        "rsNameList": ""//// default casen ""
-      };
-
+  public  MonthlyToalOrdaring(MonthlyToalOrdaringPayload?:any) {
     return this.http
       .post<any>(
         `${environment.apiUrl}/MonthlyTrend`,
@@ -129,16 +107,16 @@ public selectedData:any = '1';
       
       public  dashBoardInitalData(data?:any) {
         const GrowthOverPreviousMonthPayload :any = {
-          "regionList": "EAST, WEST,NORTH,SOUTH 1,SOUTH 2",  /// default all regions 
-            "startDate":20240401,       /// default case start date of financial year in integer format
+          // "regionList": "EAST, WEST,NORTH,SOUTH 1,SOUTH 2",  /// default all regions 
+            "startDate":20241001,       /// default case start date of financial year in integer format
             "endDate": 202401030,       ////  default case end date of financial year in integer format
-            "brandList": "",       //// default casen ""
-            "rsNameList": ""//// default casen ""
+            // "brandList": "",       //// default casen ""
+            // "rsNameList": ""//// default casen ""
           };
     
         return this.http
           .post<any>(
-            `${environment.apiUrl}/dashBoardInitalData`,
+            `${environment.apiUrl}/dashboardTiles`,
             JSON.stringify(GrowthOverPreviousMonthPayload),
             {
               headers: new HttpHeaders({ 'Content-Type': 'application/json' }),

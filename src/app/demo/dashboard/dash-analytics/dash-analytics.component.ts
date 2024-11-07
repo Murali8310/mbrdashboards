@@ -11,6 +11,7 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { ApexGrid, ApexMarkers, ApexTitleSubtitle, NgApexchartsModule } from 'ng-apexcharts';
 import { ProductSaleComponent } from './product-sale/product-sale.component';
 declare var $: any; // Declare jQuery globally
+type DropdownFlag = 'isDropdownOpenForRetailer' | 'isDropdownOpenForRS' | 'isDropdownOpenForBrand' | 'isDropdownOpen' | 'isDropdownOpenForAbm';
 
 interface Brand {
   id: number;
@@ -121,7 +122,7 @@ export default class DashAnalyticsComponent {
   searchInputValue = '';
   filteredRegionsList = this.availableRegions;
 
-  availableAbmNames :any= [
+  availableAbmNames: any = [
     // { id: 1, name: 'ABM1' },
     // { id: 2, name: 'ABM2' },
     // { id: 3, name: 'ABM3' },
@@ -252,7 +253,7 @@ export default class DashAnalyticsComponent {
     public dashboardService: DashboardService,
     private spinner: NgxSpinnerService,
     private router: Router,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {
     // const queryParams = (router.routerState.snapshot as RouterStateSnapshot).root.queryParams;
     // const queryParamsKey = Object.keys(queryParams);
@@ -260,11 +261,16 @@ export default class DashAnalyticsComponent {
     //   this.dashboardService.selectedData = queryParams['id'];
     // }
 
-    this.route.queryParams.subscribe(params => {
-      this.dashboardService.selectedData  = params['id'];
+    this.route.queryParams.subscribe((params) => {
+      this.dashboardService.selectedData = params['id'];
       // console.log('Query parameter ID changed:', this.selectedId);
       // Refresh or load data based on the new ID
-      this.ngOnInit();
+      // this.ngOnInit();
+      if(params['id'] === '1'){
+        this.dashBoardInitalDataFn();
+      }else if(params['id'] === '2'){
+        this.prepareSearchData('reset');
+      }
     });
 
     this.chartOptionsRegionwise = {
@@ -424,19 +430,72 @@ export default class DashAnalyticsComponent {
 
   // life cycle event
   async ngOnInit() {
+    console.log('calling count')
     this.spinner.show();
+    const GrowthOverPreviousMonthPayload :any = {
+      "regionList": "EAST, WEST,NORTH,SOUTH 1,SOUTH 2",  /// default all regions 
+        "startDate":20240401,       /// default case start date of financial year in integer format
+        "endDate": 202401030,       ////  default case end date of financial year in integer format
+        "brandList": "",       //// default casen ""
+        "rsNameList": ""//// default casen ""
+      };
+
     if (this.dashboardService.selectedData === '2') {
       this.GetMasterData();
-     this.MonthlyToalOrdaring();
-       this.GrowthOverPreviousMonth();
+      this.MonthlyToalOrdaring(GrowthOverPreviousMonthPayload);
+      this.GrowthOverPreviousMonth();
     } else if (this.dashboardService.selectedData === '1') {
-    await this.dashBoardInitalDataFn();
+      await this.dashBoardInitalDataFn();
     }
     // this.isLoading = false;
     // setTimeout(() => {
     //   // Hide the spinner after the delay
     //   this.spinner.hide();
     // }, 3000);
+  }
+
+  // this is to get the searched data;
+  public prepareSearchData(data: any) {
+    let MonthlyToalOrdaringPayload: any = {};
+    let abmNameList: any = '';
+    let brandList: any = '';
+    let rsNameList: any = '';
+    let regionList: any = '';
+    let retailerTypeList: any = '';
+
+    if (data === 'search') {
+      this.selectedAbmNames;
+      this.selectedBrands;
+      this.selectedRSNames;
+      this.selectedRegions;
+      this.selectedRetailerTypes;
+
+      // Prepare comma-separated strings for each array
+      abmNameList = this.selectedAbmNames.map((item) => item.id).join(', ');
+      brandList = this.selectedBrands.map((item) => item.name).join(', ');
+      rsNameList = this.selectedRSNames.map((item) => item.name).join(', ');
+      regionList = this.selectedRegions.map((item) => item.name).join(', ');
+      retailerTypeList = this.selectedRetailerTypes.map((item) => item.name).join(', ');
+
+      MonthlyToalOrdaringPayload = {
+        regionList: regionList, /// default all regions
+        startDate: 20240401, /// default case start date of financial year in integer format
+        endDate: 202401030, ////  default case end date of financial year in integer format
+        brandList: brandList, //// default casen ""
+        rsNameList: rsNameList //// default casen ""
+      };
+    } else {
+      MonthlyToalOrdaringPayload  = {
+        "regionList": "EAST, WEST,NORTH,SOUTH 1,SOUTH 2",  /// default all regions 
+          "startDate":20240401,       /// default case start date of financial year in integer format
+          "endDate": 202401030,       ////  default case end date of financial year in integer format
+          "brandList": "",       //// default casen ""
+          "rsNameList": ""//// default casen ""
+        };
+    }
+    this.GetMasterData();
+    this.MonthlyToalOrdaring(MonthlyToalOrdaringPayload);
+    this.GrowthOverPreviousMonth();
   }
 
   cards = [
@@ -512,9 +571,9 @@ export default class DashAnalyticsComponent {
     }
   ];
 
-  public MonthlyToalOrdaring = (data?: any) => {
+  public MonthlyToalOrdaring = (MonthlyToalOrdaringPayload?: any) => {
     this.spinner.show();
-    this.dashboardService.MonthlyToalOrdaring().subscribe(
+    this.dashboardService.MonthlyToalOrdaring(MonthlyToalOrdaringPayload).subscribe(
       (response) => {
         if (response && response.body) {
           this.spinner.hide();
@@ -837,10 +896,12 @@ export default class DashAnalyticsComponent {
 
   // Toggle dropdown visibility
   toggleDropdownVisibility() {
-    this.isDropdownOpen = !this.isDropdownOpen;
+    // this.isDropdownOpen = !this.isDropdownOpen;
     if (this.isDropdownOpen) {
       this.filteredRegionsList = this.availableRegions; // Reset filtered list on opening
     }
+    // this.hideOtherDropDowns('general');
+    this.toggleDropdownVisibility1('isDropdownOpen');
   }
   // Filter regions based on search input
   filterAvailableRegions() {
@@ -877,15 +938,56 @@ export default class DashAnalyticsComponent {
 
   // Toggle dropdown visibility for ABM names
   toggleDropdownVisibilityForAbm() {
-    this.isDropdownOpenForAbm = !this.isDropdownOpenForAbm;
+    // this.isDropdownOpenForAbm = !this.isDropdownOpenForAbm;
     if (this.isDropdownOpenForAbm) {
       this.filteredAbmNamesList = this.availableAbmNames; // Reset filtered list on opening
+    }
+    // isDropdownOpenForRS
+    // isDropdownOpenForBrand
+    // isDropdownOpen
+    // isDropdownOpenForAbm
+    // this.hideOtherDropDowns('abm');
+    this.toggleDropdownVisibility1('isDropdownOpenForAbm');
+  }
+
+  hideOtherDropDowns(selectedDropdown: any): void {
+    //    // Check if the selected dropdown is already open
+    // if (this[selectedDropdown]) {
+    //   // If it's already open, close it
+    //   this[selectedDropdown] = false;
+    // } else {
+    //   // If it's not open, close all dropdowns and open the selected one
+    //   this.isDropdownOpenForRetailer = false;
+    //   this.isDropdownOpenForRS = false;
+    //   this.isDropdownOpenForBrand = false;
+    //   this.isDropdownOpen = false;
+    //   this.isDropdownOpenForAbm = false;
+    //   // Open the selected dropdown
+    //   this[selectedDropdown] = true;
+    // }
+  }
+
+  toggleDropdownVisibility1(selectedDropdown: DropdownFlag): void {
+    // Check if the selected dropdown is already open
+    if (this[selectedDropdown]) {
+      // If it's already open, close it
+      this[selectedDropdown] = false;
+    } else {
+      // If it's not open, close all dropdowns and open the selected one
+      this.isDropdownOpenForRetailer = false;
+      this.isDropdownOpenForRS = false;
+      this.isDropdownOpenForBrand = false;
+      this.isDropdownOpen = false;
+      this.isDropdownOpenForAbm = false;
+
+      // Open the selected dropdown
+      this[selectedDropdown] = true;
     }
   }
 
   // Filter ABM names based on search input
   filterAvailableAbmNames() {
-    this.filteredAbmNamesList = this.availableAbmNames.filter((abm:any) =>
+    this.filteredAbmNamesList = this.availableAbmNames.filter((abm: any) =>
       abm.name.toLowerCase().includes(this.searchInputValueForAbm.toLowerCase())
     );
   }
@@ -918,10 +1020,12 @@ export default class DashAnalyticsComponent {
 
   // Toggle dropdown visibility for retailer types
   toggleDropdownVisibilityForRetailer() {
-    this.isDropdownOpenForRetailer = !this.isDropdownOpenForRetailer;
+    // this.isDropdownOpenForRetailer = !this.isDropdownOpenForRetailer;
     if (this.isDropdownOpenForRetailer) {
       this.filteredRetailerTypesList = this.availableRetailerTypes; // Reset filtered list on opening
     }
+    // this.hideOtherDropDowns('retailer');
+    this.toggleDropdownVisibility1('isDropdownOpenForRetailer');
   }
 
   // Filter retailer types based on search input
@@ -958,10 +1062,12 @@ export default class DashAnalyticsComponent {
   }
 
   toggleDropdownVisibilityForRS() {
-    this.isDropdownOpenForRS = !this.isDropdownOpenForRS;
+    // this.isDropdownOpenForRS = !this.isDropdownOpenForRS;
     if (this.isDropdownOpenForRS) {
       this.filteredRSNamesList = this.availableRSNames; // Reset filtered list on opening
     }
+    // this.hideOtherDropDowns('RS');
+    this.toggleDropdownVisibility1('isDropdownOpenForRS');
   }
 
   // Filter RS names based on search input
@@ -999,10 +1105,12 @@ export default class DashAnalyticsComponent {
 
   // Toggle dropdown visibility for Brands
   toggleDropdownVisibilityForBrand() {
-    this.isDropdownOpenForBrand = !this.isDropdownOpenForBrand;
+    // this.isDropdownOpenForBrand = !this.isDropdownOpenForBrand;
     if (this.isDropdownOpenForBrand) {
       this.filteredBrandsList = this.availableBrands; // Reset filtered list on opening
     }
+    // this.hideOtherDropDowns('brand');
+    this.toggleDropdownVisibility1('isDropdownOpenForBrand');
   }
 
   // Filter Brands based on search input
@@ -1094,7 +1202,7 @@ export default class DashAnalyticsComponent {
 
   public dashBoardInitalDataFn = async (data?: any) => {
     this.spinner.show();
-    this.dashboardService.GrowthOverPreviousMonth().subscribe(
+    this.dashboardService.dashBoardInitalData().subscribe(
       (response) => {
         if (response && response.body) {
           this.spinner.hide();

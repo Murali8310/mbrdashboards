@@ -316,10 +316,9 @@ text-align: center;
       <!-- Search Button -->
       <div class="form-group col-md-2 d-flex align-items-end row">
         <div class="col-md-10">
-          <button class="btn btn-primary w-100 mb-2 fw-bold">Search</button>
-          <button class="btn btn-secondary w-100 fw-bold">Reset</button>
+          <button class="btn btn-primary w-100 mb-2 fw-bold" (click)="prepareSearchData('search')">Search</button>
+          <button class="btn btn-secondary w-100 fw-bold" (click)="prepareSearchData('reset')">Reset</button>
         </div>
-        
       </div>
     </div>
   </div>
