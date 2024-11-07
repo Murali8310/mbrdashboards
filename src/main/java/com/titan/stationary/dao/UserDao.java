@@ -20,6 +20,7 @@ import com.titan.stationary.bean.productMasterbean;
 import com.titan.stationary.bean.smUserMasterBean;
 import com.titan.stationary.dto.MasterData;
 import com.titan.stationary.dto.MonthlyDataFilter;
+import com.titan.stationary.dto.OutputDashboardTiles;
 import com.titan.stationary.dto.OutputForMontlyFilter;
 import com.titan.stationary.dto.OutputGrowthOverPreviousMonth;
 import com.titan.stationary.dto.OutputRegionWiseGrowthOverPreviousMonth;
@@ -286,6 +287,9 @@ public interface UserDao {
 
 
 	List<OutputRegionWiseGrowthOverPreviousMonth> RegionWiseGrowthOverPreviousMonth(MonthlyDataFilter filter);
+
+
+	List<OutputDashboardTiles> OutputDashboardTiles(MonthlyDataFilter filter);
 
 
 

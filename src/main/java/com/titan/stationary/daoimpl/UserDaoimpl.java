@@ -80,6 +80,7 @@ import com.titan.stationary.security.AuthenticationService;
 import com.titan.util.PasswordUtils;
 import com.titan.util.Validations;
 import com.titan.stationary.model.user.*;
+import com.titan.stationary.dto.OutputDashboardTiles; 
 
 @Repository
 public class UserDaoimpl implements UserDao {
@@ -6340,7 +6341,7 @@ Calendar cal = Calendar.getInstance();
 	}
 	private List<OutputForMontlyFilter> getDataForMonthlyTrend(MonthlyDataFilter filter) {
 		List<OutputForMontlyFilter> filteredData=new ArrayList<>();
-		String storedProcedureCall = "EXEC GetOrderSummary @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList";
+		String storedProcedureCall = "EXEC GetOrderSummary @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList;";
         
         // Create a native query
         Query query = entityManager.createNativeQuery(storedProcedureCall);
@@ -6351,7 +6352,7 @@ Calendar cal = Calendar.getInstance();
         query.setParameter("endDate", filter.getEndDate());        // @EndDate (e.g., 20240630)
         query.setParameter("brandList", filter.getBrandList());    // @BrandList (e.g., 'Titan')
         query.setParameter("rsNameList", filter.getRsNameList());  // @RSNameList (e.g., '' or some value)
-
+        //query.setParameter("abmName", filter.getAbmName());
         // Execute the query to invoke the stored procedure
         try {
         	List<Object[]> result = query.getResultList();
@@ -6508,6 +6509,67 @@ Calendar cal = Calendar.getInstance();
         }
 		
 		return regionWiseMonthlyGrowthData;
+
+	}
+
+	@Override
+	public List<OutputDashboardTiles> OutputDashboardTiles(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		List<OutputDashboardTiles> outputDashboardTiles=new ArrayList<>();
+		String storedProcedureCall = "SELECT \r\n"
+				+ "    -- Extract Year and Month to group by month\r\n"
+				+ "    YEAR(OrderDate) AS Year,\r\n"
+				+ "    MONTH(OrderDate) AS Month,\r\n"
+				+ "    SUM(TotalPrice) AS OrderValue,\r\n"
+				+ "    SUM(OrderQty) AS TotalOrder,\r\n"
+				+ "    COUNT(DISTINCT OrderNo) AS OrderQty,\r\n"
+				+ "    COUNT(DISTINCT RetailerCode) AS Dealers,\r\n"
+				+ "    Region\r\n"
+				+ "FROM \r\n"
+				+ "    MBROrders\r\n"
+				+ "WHERE \r\n"
+				+ "    CONVERT(VARCHAR, OrderDate, 112) >= :startDate    -- Compare OrderDate with StartDate\r\n"
+				+ "    AND CONVERT(VARCHAR, OrderDate, 112) <= :endDate \r\n"
+				+ "GROUP BY\r\n"
+				+ "    YEAR(OrderDate),\r\n"
+				+ "    MONTH(OrderDate),\r\n"
+				+ "    Region\r\n"
+				+ "ORDER BY\r\n"
+				+ "    YEAR(OrderDate),\r\n"
+				+ "    MONTH(OrderDate);";
+        
+        // Create a native query
+        Query query = entityManager.createNativeQuery(storedProcedureCall);
+        
+        // Set the parameters for the stored procedure call
+        query.setParameter("startDate", filter.getStartDate());    // @StartDate (e.g., 20240601)
+        query.setParameter("endDate", filter.getEndDate());        // @EndDate (e.g., 20240630)
+         // @RSNameList (e.g., '' or some value)
+
+        // Execute the query to invoke the stored procedure
+        try {
+        	List<Object[]> result = query.getResultList();
+        	//filteredData = (OutputForMontlyFilter) query.getSingleResult();
+        	
+        	for (Object[] row : result) {
+        	    // Assuming row contains values in the correct order for mapping
+        		OutputDashboardTiles data= new OutputDashboardTiles();
+        		data.setYear((Integer) row[0]);
+        		data.setMonth((Integer) row[1]);
+        		data.setOrderValue((BigDecimal) row[2]);
+        		data.setTotalOrder((Integer) row[3]);
+        		data.setOrderQuentity((Integer) row[4]);
+        		data.setDelears((Integer) row[5]);
+        		data.setRegion(row[6].toString());
+        		outputDashboardTiles.add(data);
+        	    // Now, filteredData is populated with values
+        	}
+        }
+        catch(Exception e) {
+        	e.printStackTrace();
+        }
+		
+		return outputDashboardTiles;
 
 	}
 }

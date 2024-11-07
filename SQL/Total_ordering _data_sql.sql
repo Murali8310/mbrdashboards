@@ -10,9 +10,14 @@ select COUNT(*) from MBRUsers where Desig_Id=6 ;
 select COUNT(distinct ABMEMM) from MBROrders;
 select COUNT(distinct ABMEMM) from MBROrders;
 select COUNT(distinct ABMKAM) from MBROrders;
+EXEC sp_help 'MBROrders';
 
+SELECT ABMEMM, ABMKAM, COUNT(*) AS TotalOrders, SUM(OrderQty) AS TotalAmount
+FROM MBROrders
+WHERE ABMEMM = '1776314' OR ABMKAM = '1776314'
+GROUP BY ABMEMM, ABMKAM;
 
-
+select SUM(OrderQty) from MBROrders where ABMKAM = '1776314' GROUP BY ABMKAM;
 
 ---------------------------- Masters Query--------------------------------------
 select distinct (Region) from MBROrders;
@@ -25,31 +30,63 @@ SELECT DISTINCT RSCode, RSName FROM MBROrders;
 select * from MBRUsers where Desig_Id=7 or Desig_Id=6;
 
 
-
-SELECT 
-    t.EmpId AS Value,
-    t.Name
-FROM (
-    SELECT DISTINCT ABMEMM AS ID
-    FROM MBROrders
-    UNION
-    SELECT DISTINCT ABMKAM AS ID
-    FROM MBROrders
-) AS combined_ids
-JOIN MBRUsers AS t
-    ON t.EmpId = combined_ids.ID;
-
 -- select orderQty, TotalPrice, count(RetailerCode)  from MBROrders distinct Month(OrderDate);
+
+-------------------------------------------Landing Page Queries-------------------------------------------------------------------------
+
+------------------tiles------------------------------------
+   SELECT 
+        -- Extract Year and Month to group by month
+        YEAR(OrderDate) AS Year,
+        MONTH(OrderDate) AS Month,
+        SUM(TotalPrice) AS OrderValue,
+        SUM(OrderQty) AS TotalOrder,
+		COUNT(DISTINCT OrderNo) AS OrderQty,
+        COUNT(DISTINCT RetailerCode) AS delalers,
+		Region
+    FROM 
+        MBROrders
+	Where 
+			CONVERT(VARCHAR, OrderDate, 112) >= 20240401                        -- Compare OrderDate with StartDate
+            AND CONVERT(VARCHAR, OrderDate, 112) <= 20240530
+	Group BY
+	 YEAR(OrderDate),
+        MONTH(OrderDate),
+		Region
+    ORDER BY
+        YEAR(OrderDate),
+        MONTH(OrderDate); 	
+		
+
+------------------------charts---------------------------------------
+	SELECT 
+        -- Extract Year and Month to group by month
+        YEAR(OrderDate) AS Year,
+        MONTH(OrderDate) AS Month,
+        SUM(TotalPrice) AS OrderValue,
+        SUM(OrderQty) AS TotalOrder
+    FROM 
+        MBROrders
+	Where 
+			CONVERT(VARCHAR, OrderDate, 112) >= 20240401                        -- Compare OrderDate with StartDate
+            AND CONVERT(VARCHAR, OrderDate, 112) <= 20240530
+	Group BY
+	 YEAR(OrderDate),
+        MONTH(OrderDate)
+    ORDER BY
+        YEAR(OrderDate),
+        MONTH(OrderDate);
 
 
 ------------------------------------------------------------------------- Monthly Trend -------------------------------
 
-CREATE PROCEDURE GetOrderSummary
+Alter PROCEDURE GetOrderSummary
     @RegionList VARCHAR(MAX),     -- Comma-separated list of regions
     @StartDate INT,               -- Start date in yyyymmdd format (e.g., 20240601)
     @EndDate INT,                 -- End date in yyyymmdd format (e.g., 20240630)
     @RSNameList VARCHAR(MAX),
     @BrandList VARCHAR(MAX)
+	--@ABMName VARCHAR(MAX)
 AS
 BEGIN
     -- Select the sum of TotalPrice, sum of OrderQty, and count of distinct RetailerCode
@@ -72,20 +109,30 @@ BEGIN
         Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@BrandList, ','))  -- Split the @BrandList string into values
         OR 
         RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RSNameList, ',')) -- Split the @RSNameList string into values
+		--OR
+		--ABMEMM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ','))
+		--OR
+		--ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ','))
+
+
     GROUP BY
         YEAR(OrderDate),
         MONTH(OrderDate)
+		--ABMEMM, 
+		--ABMKAM
+
     ORDER BY
         YEAR(OrderDate),
         MONTH(OrderDate);  -- Order by year and month
 END;
 
 EXEC GetOrderSummary
-    @RegionList = 'EAST',    -- Comma-separated list of regions
+    @RegionList = 'EAST', -- Comma-separated list of regions
     @StartDate = 20240501,         -- Start date in yyyymmdd format
     @EndDate = 20240630,		   -- End date in yyyymmdd format
 	@BrandList ='',
-	@RSNameList ='';
+	@RSNameList =''
+	--@ABMName='';
 
 
 ----------------------------------------------------------------------Growth over Previous Month------------------------------------------------------

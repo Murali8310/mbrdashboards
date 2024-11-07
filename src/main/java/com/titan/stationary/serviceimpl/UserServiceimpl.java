@@ -42,6 +42,7 @@ import com.titan.stationary.dto.OutputGrowthOverPreviousMonth;
 import com.titan.stationary.dto.OutputRegionWiseGrowthOverPreviousMonth;
 import com.titan.stationary.dto.OutputRegionWiseMonthlyDistribution;
 import com.titan.stationary.service.Userservice;
+import com.titan.stationary.dto.OutputDashboardTiles;
 
 @Service("userService")
 @Transactional()
@@ -1121,6 +1122,12 @@ public class UserServiceimpl implements Userservice {
 	public List<OutputRegionWiseGrowthOverPreviousMonth> RegionWiseGrowthOverPreviousMonth(MonthlyDataFilter filter) {
 		// TODO Auto-generated method stub
 		return userDao.RegionWiseGrowthOverPreviousMonth(filter);
+	}
+
+	@Override
+	public List<OutputDashboardTiles> OutputDashboardTiles(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		return userDao.OutputDashboardTiles(filter);
 	}
 
 

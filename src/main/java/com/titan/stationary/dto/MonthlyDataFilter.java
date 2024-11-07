@@ -6,6 +6,7 @@ public class MonthlyDataFilter {
 	private Integer endDate;
 	private String brandList;
 	private String rsNameList;
+	private String abmName;
 	
 	
 	public String getRegionList() {
@@ -37,6 +38,12 @@ public class MonthlyDataFilter {
 	}
 	public void setRsNameList(String rsNameList) {
 		this.rsNameList = rsNameList;
+	}
+	public String getAbmName() {
+		return abmName;
+	}
+	public void setAbmName(String abmName) {
+		this.abmName = abmName;
 	}
 	
 
