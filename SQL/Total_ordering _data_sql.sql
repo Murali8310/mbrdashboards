@@ -295,7 +295,8 @@ Alter PROCEDURE RegionWiseGrowthoverPreviousMonths
     @StartDate INT,               -- Start date in yyyymmdd format (e.g., 20240601)
     @EndDate INT,                 -- End date in yyyymmdd format (e.g., 20240630)
     @RSNameList VARCHAR(MAX),
-    @BrandList VARCHAR(MAX)
+    @BrandList VARCHAR(MAX),
+	@ABMName VARCHAR(MAX)
 AS
 BEGIN
     ;WITH MonthlySummary AS (
@@ -315,6 +316,14 @@ BEGIN
             AND CONVERT(VARCHAR, OrderDate, 112) <= @EndDate                          -- Compare OrderDate with EndDate
             OR (Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@BrandList, ',')) OR @BrandList IS NULL)
             OR (RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RSNameList, ',')) OR @RSNameList IS NULL)
+			OR
+			(
+				-- Check if ABMName is provided and exists in ABMEMM or ABMKAM columns
+				@ABMName IS NOT NULL AND @ABMName <> '' AND (
+					ABMEMM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ',')) 
+					OR ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ','))
+				) 
+			)
         GROUP BY
             YEAR(OrderDate),
             MONTH(OrderDate),
