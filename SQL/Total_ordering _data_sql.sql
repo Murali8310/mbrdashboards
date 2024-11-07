@@ -1,10 +1,16 @@
 ---------------------------- General Queries--------------------------------------
 
-use DB_MBR;
-select * from MBRUsers where Desig_Id=7;
+use DB_MBR; 
+select * from MBRUsers where Desig_Id=7 or Desig_Id=6;
 SELECT * FROM MBROrders order by OrderDate;
 select * from MBRDesignation;
 select * from MBRBrand;
+select COUNT(*) from MBRUsers where Desig_Id=7 ;
+select COUNT(*) from MBRUsers where Desig_Id=6 ;
+select COUNT(distinct ABMEMM) from MBROrders;
+select COUNT(distinct ABMEMM) from MBROrders;
+select COUNT(distinct ABMKAM) from MBROrders;
+
 
 
 
@@ -14,11 +20,24 @@ select distinct (Brand) from MBROrders;
 select distinct(RetailerName)from MBROrders;
 select distinct(RSName)from MBROrders;
 SELECT DISTINCT RSCode, RSName FROM MBROrders;
-select distinct(ABMEMM)from MBROrders;
-select distinct(ABMKAM)from MBROrders;
-select distinct(MBROrders.ABMKAM)from MBROrders join MBRUsers on MBRUsers.EmpId=MBROrders.ABMEMM;
-select distinct(RBM)from MBROrders;
+-- select distinct(ABMEMM)from MBROrders;
+-- select distinct(ABMKAM)from MBROrders;
+select * from MBRUsers where Desig_Id=7 or Desig_Id=6;
 
+
+
+SELECT 
+    t.EmpId AS Value,
+    t.Name
+FROM (
+    SELECT DISTINCT ABMEMM AS ID
+    FROM MBROrders
+    UNION
+    SELECT DISTINCT ABMKAM AS ID
+    FROM MBROrders
+) AS combined_ids
+JOIN MBRUsers AS t
+    ON t.EmpId = combined_ids.ID;
 
 -- select orderQty, TotalPrice, count(RetailerCode)  from MBROrders distinct Month(OrderDate);
 

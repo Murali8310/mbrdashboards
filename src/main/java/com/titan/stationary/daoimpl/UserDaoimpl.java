@@ -6285,10 +6285,11 @@ Calendar cal = Calendar.getInstance();
 		List<Brand> brandName = selectBrandforMaster();
 		List<Region>regionName=selectRegionforMaster();
 		List<RSName>rsName=selectRsNameForMaster();
-		
+		List<ABMName>ABMName=selectABMNameForMaster();
 		data.setBrand(brandName);
 		data.setRegion(regionName);
 		data.setRsName(rsName);
+		data.setAbmName(ABMName);
 		return data;
 		
 	}
@@ -6322,6 +6323,13 @@ Calendar cal = Calendar.getInstance();
 		return rsName;
 	}
 
+	private List<ABMName>selectABMNameForMaster(){
+		List<ABMName> ABMName= null;
+		String checkSql = "select EmpId, Name,Region from MBRUsers where Desig_Id=7 or Desig_Id=6;";
+		Query checkQuery =  entityManager.createNativeQuery(checkSql);
+		ABMName=checkQuery.getResultList();
+		return ABMName;
+	}
 	@Override
 	public List<OutputForMontlyFilter> MonthlyTrend(MonthlyDataFilter filter) {
 		// TODO Auto-generated method stub

@@ -8,7 +8,7 @@ public class MasterData {
 	private List<Region> region;
 	private List<Brand> brand;
 	private List<RSName>rsName;
-//	private List<ABMName>abmName;
+	private List<ABMName>abmName;
 	
 	
 	public List<Region> getRegion() {
@@ -29,12 +29,12 @@ public class MasterData {
 	public void setRsName(List<RSName> rsName) {
 		this.rsName = rsName;
 	}
-//	public List<ABMName> getAbmName() {
-//		return abmName;
-//	}
-//	public void setAbmName(List<ABMName> abmName) {
-//		this.abmName = abmName;
-//	}
+	public List<ABMName> getAbmName() {
+		return abmName;
+	}
+	public void setAbmName(List<ABMName> abmName) {
+		this.abmName = abmName;
+	}
 	
 	
 	
