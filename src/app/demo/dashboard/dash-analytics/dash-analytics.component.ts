@@ -1025,11 +1025,11 @@ export default class DashAnalyticsComponent {
   // Toggle dropdown visibility
   toggleDropdownVisibility() {
     // this.isDropdownOpen = !this.isDropdownOpen;
+    this.toggleDropdownVisibility1('isDropdownOpen');
     if (this.isDropdownOpen) {
       this.filteredRegionsList = this.availableRegions; // Reset filtered list on opening
     }
     // this.hideOtherDropDowns('general');
-    this.toggleDropdownVisibility1('isDropdownOpen');
   }
   // Filter regions based on search input
   filterAvailableRegions() {
@@ -1149,11 +1149,11 @@ export default class DashAnalyticsComponent {
   // Toggle dropdown visibility for retailer types
   toggleDropdownVisibilityForRetailer() {
     // this.isDropdownOpenForRetailer = !this.isDropdownOpenForRetailer;
+    // this.hideOtherDropDowns('retailer');
+    this.toggleDropdownVisibility1('isDropdownOpenForRetailer');
     if (this.isDropdownOpenForRetailer) {
       this.filteredRetailerTypesList = this.availableRetailerTypes; // Reset filtered list on opening
     }
-    // this.hideOtherDropDowns('retailer');
-    this.toggleDropdownVisibility1('isDropdownOpenForRetailer');
   }
 
   // Filter retailer types based on search input
@@ -1191,11 +1191,11 @@ export default class DashAnalyticsComponent {
 
   toggleDropdownVisibilityForRS() {
     // this.isDropdownOpenForRS = !this.isDropdownOpenForRS;
+    // this.hideOtherDropDowns('RS');
+    this.toggleDropdownVisibility1('isDropdownOpenForRS');
     if (this.isDropdownOpenForRS) {
       this.filteredRSNamesList = this.availableRSNames; // Reset filtered list on opening
     }
-    // this.hideOtherDropDowns('RS');
-    this.toggleDropdownVisibility1('isDropdownOpenForRS');
   }
 
   // Filter RS names based on search input
@@ -1234,11 +1234,11 @@ export default class DashAnalyticsComponent {
   // Toggle dropdown visibility for Brands
   toggleDropdownVisibilityForBrand() {
     // this.isDropdownOpenForBrand = !this.isDropdownOpenForBrand;
+    // this.hideOtherDropDowns('brand');
+    this.toggleDropdownVisibility1('isDropdownOpenForBrand');
     if (this.isDropdownOpenForBrand) {
       this.filteredBrandsList = this.availableBrands; // Reset filtered list on opening
     }
-    // this.hideOtherDropDowns('brand');
-    this.toggleDropdownVisibility1('isDropdownOpenForBrand');
   }
 
   // Filter Brands based on search input
@@ -1275,10 +1275,10 @@ export default class DashAnalyticsComponent {
   }
 
   GetMasterData(): void {
-    this.spinner.show();
+    // this.spinner.show();
     this.dashboardService.GetMasterData().subscribe(
       (response) => {
-        this.spinner.hide();
+        // this.spinner.hide();
 
         if (response && response.region && response.region.length > 0) {
           const availableRegions = response.region.map((region: any, index: any) => {
