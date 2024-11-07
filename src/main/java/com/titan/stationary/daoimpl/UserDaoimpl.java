@@ -6419,6 +6419,7 @@ Calendar cal = Calendar.getInstance();
         		data.setPriceGrowthPercentage((BigDecimal)row[5]);
         		data.setOrderQtyGrowthPercentage((BigDecimal)row[6]);
         		data.setRetailerGrowthPercentage((BigDecimal)row[7]);
+        		
         		growthOverPreviousMonthData.add(data);
         	    // Now, filteredData is populated with values
         	}
@@ -6434,7 +6435,7 @@ Calendar cal = Calendar.getInstance();
 	@Override
 	public List<OutputRegionWiseMonthlyDistribution> RegionWiseMonthlyDistribution(MonthlyDataFilter filter) {
 		List<OutputRegionWiseMonthlyDistribution> regionWiseMonthlyDistributionData=new ArrayList<>();
-		String storedProcedureCall = "EXEC RegionWiseMonthlyDistribution @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList";
+		String storedProcedureCall = "EXEC RegionWiseMonthlyDistribution @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName";
         
         // Create a native query
         Query query = entityManager.createNativeQuery(storedProcedureCall);
@@ -6445,7 +6446,7 @@ Calendar cal = Calendar.getInstance();
         query.setParameter("endDate", filter.getEndDate());        // @EndDate (e.g., 20240630)
         query.setParameter("brandList", filter.getBrandList());    // @BrandList (e.g., 'Titan')
         query.setParameter("rsNameList", filter.getRsNameList());  // @RSNameList (e.g., '' or some value)
-
+        query.setParameter("abmName", filter.getAbmName());
         // Execute the query to invoke the stored procedure
         try {
         	List<Object[]> result = query.getResultList();
