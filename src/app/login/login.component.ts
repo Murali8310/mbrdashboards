@@ -135,8 +135,11 @@ export class LoginComponent implements OnInit {
             console.log('LOG RES');
             localStorage.setItem('userData', data);
             const nocatch = new Date().getTime();
+            // this.router.navigate(['/dashboard/charts'], {
+            //   queryParams: { nocatch },
+            // });
             this.router.navigate(['/dashboard/charts'], {
-              queryParams: { nocatch },
+              queryParams: { id: '1'}
             });
           } else {
             this.errorMessage = data.message;

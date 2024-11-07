@@ -121,12 +121,12 @@ export default class DashAnalyticsComponent {
   searchInputValue = '';
   filteredRegionsList = this.availableRegions;
 
-  availableAbmNames = [
-    { id: 1, name: 'ABM1' },
-    { id: 2, name: 'ABM2' },
-    { id: 3, name: 'ABM3' },
-    { id: 4, name: 'ABM4' },
-    { id: 5, name: 'ABM5' }
+  availableAbmNames :any= [
+    // { id: 1, name: 'ABM1' },
+    // { id: 2, name: 'ABM2' },
+    // { id: 3, name: 'ABM3' },
+    // { id: 4, name: 'ABM4' },
+    // { id: 5, name: 'ABM5' }
   ];
 
   // Holds selected ABM names
@@ -885,7 +885,7 @@ export default class DashAnalyticsComponent {
 
   // Filter ABM names based on search input
   filterAvailableAbmNames() {
-    this.filteredAbmNamesList = this.availableAbmNames.filter((abm) =>
+    this.filteredAbmNamesList = this.availableAbmNames.filter((abm:any) =>
       abm.name.toLowerCase().includes(this.searchInputValueForAbm.toLowerCase())
     );
   }
@@ -1073,6 +1073,16 @@ export default class DashAnalyticsComponent {
             };
           });
           this.availableRSNames = availableRSNames;
+        }
+        if (response && response.abmName && response.abmName.length > 0) {
+          // Step 3: Transform the data with type assertion
+          const availableAbmNames: Brand[] = response.abmName.map(([id, name]: [string, string]) => {
+            return {
+              id: parseInt(id), // Convert ID to a number
+              name: name // Keep the name as is
+            };
+          });
+          this.availableAbmNames = availableAbmNames;
         }
       },
       (error) => {
