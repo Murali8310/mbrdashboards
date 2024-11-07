@@ -15,6 +15,7 @@ import com.titan.stationary.bean.UserLoginBean;
 import com.titan.stationary.bean.smUserMasterBean;
 import com.titan.stationary.dto.MasterData;
 import com.titan.stationary.dto.MonthlyDataFilter;
+import com.titan.stationary.dto.OutputDashboardGraphs;
 import com.titan.stationary.dto.OutputDashboardTiles;
 import com.titan.stationary.dto.OutputForMontlyFilter;
 import com.titan.stationary.dto.OutputGrowthOverPreviousMonth;
@@ -246,5 +247,8 @@ public interface Userservice {
 
 
 	List<OutputDashboardTiles> OutputDashboardTiles(MonthlyDataFilter filter);
+
+
+	List<OutputDashboardGraphs> OutputDashboardGraphs(MonthlyDataFilter filter);
 
 }
