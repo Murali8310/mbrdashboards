@@ -183,7 +183,7 @@ public class UserController {
 		HttpSession session = request.getSession();
 
 		String login_id = (String) session.getAttribute("login_id");
-		int status = userService.updateLogouTIme(login_id);
+//		int status = userService.updateLogouTIme(login_id);
 		session.invalidate();
 		session = request.getSession(false);
 		redirect.addFlashAttribute("MESSAGE", "Logged Out Successfully.");
