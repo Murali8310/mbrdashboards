@@ -6345,7 +6345,7 @@ Calendar cal = Calendar.getInstance();
 	private List<OutputForMontlyFilter> getDataForMonthlyTrend(MonthlyDataFilter filter) {
 		List<OutputForMontlyFilter> filteredData=new ArrayList<>();
 		
-		String storedProcedureCall = "EXEC GetOrderSummary @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName";
+		String storedProcedureCall = "EXEC GetOrderSummary @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
         
         // Create a native query
         Query query = entityManager.createNativeQuery(storedProcedureCall);
@@ -6357,7 +6357,7 @@ Calendar cal = Calendar.getInstance();
         query.setParameter("brandList", filter.getBrandList());    // @BrandList (e.g., 'Titan')
         query.setParameter("rsNameList", filter.getRsNameList());  // @RSNameList (e.g., '' or some value)
         query.setParameter("abmName", filter.getAbmName());
-        // Execute the query to invoke the stored procedure
+        query.setParameter("retailerType", filter.getRetailerType());        // Execute the query to invoke the stored procedure
         try {
         	List<Object[]> result = query.getResultList();
         	//filteredData = (OutputForMontlyFilter) query.getSingleResult();
@@ -6477,7 +6477,7 @@ Calendar cal = Calendar.getInstance();
 	public List<OutputRegionWiseGrowthOverPreviousMonth> RegionWiseGrowthOverPreviousMonth(MonthlyDataFilter filter) {
 		// TODO Auto-generated method stub
 		List<OutputRegionWiseGrowthOverPreviousMonth> regionWiseMonthlyGrowthData=new ArrayList<>();
-		String storedProcedureCall = "EXEC RegionWiseGrowthoverPreviousMonths @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName";
+		String storedProcedureCall = "EXEC RegionWiseGrowthoverPreviousMonths @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
         
         // Create a native query
         Query query = entityManager.createNativeQuery(storedProcedureCall);
@@ -6489,7 +6489,7 @@ Calendar cal = Calendar.getInstance();
         query.setParameter("brandList", filter.getBrandList());    // @BrandList (e.g., 'Titan')
         query.setParameter("rsNameList", filter.getRsNameList());  // @RSNameList (e.g., '' or some value)
         query.setParameter("abmName", filter.getAbmName());
-
+        query.setParameter("retailerType", filter.getRetailerType());
         // Execute the query to invoke the stored procedure
         try {
         	List<Object[]> result = query.getResultList();

@@ -86,7 +86,8 @@ Alter PROCEDURE GetOrderSummary
 		@EndDate INT,                -- End date in yyyymmdd format (e.g., 20240630)
 		@RSNameList VARCHAR(MAX),
 		@BrandList VARCHAR(MAX),
-		@ABMName VARCHAR(MAX)       -- New parameter for ABMName
+		@ABMName VARCHAR(MAX),       -- New parameter for ABMName
+		@RetailerType VARCHAR(MAX) 
 	AS
 	BEGIN
 		-- Select the sum of TotalPrice, sum of OrderQty, and count of distinct RetailerCode
@@ -120,6 +121,17 @@ Alter PROCEDURE GetOrderSummary
 					OR ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ','))
 				) 
 			)
+			OR
+			(
+			@RetailerType IS NOT NULL AND(
+				 RetailerCode LIKE 
+				 CASE 
+				  WHEN @RetailerType = 'IDD' THEN '9%'
+			 WHEN @RetailerType = 'DD' THEN '1%'
+			 ELSE ''
+			 END
+		)
+		)
 		GROUP BY
 			YEAR(OrderDate),
 			MONTH(OrderDate)
@@ -136,7 +148,8 @@ Alter PROCEDURE GetOrderSummary
 		@EndDate = 20240630,		   -- End date in yyyymmdd format
 		@BrandList ='',
 		@RSNameList ='',
-		@ABMName='1762473,60227';
+		@ABMName='1762473,60227',
+		@RetailerType='DD';
 
 
 ----------------------------------------------------------------------Growth over Previous Month------------------------------------------------------

@@ -7,8 +7,10 @@ public class MonthlyDataFilter {
 	private String brandList;
 	private String rsNameList;
 	private String abmName;
+	private String retailerType;
 	
 	
+
 	public String getRegionList() {
 		return regionList;
 	}
@@ -46,5 +48,11 @@ public class MonthlyDataFilter {
 		this.abmName = abmName;
 	}
 	
+	public String getRetailerType() {
+		return retailerType;
+	}
+	public void setRetailerType(String retailerType) {
+		this.retailerType = retailerType;
+	}
 
 }
