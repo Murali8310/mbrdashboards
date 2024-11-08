@@ -6327,7 +6327,7 @@ Calendar cal = Calendar.getInstance();
 
 	private List<ABMName>selectABMNameForMaster(){
 		List<ABMName> ABMName= null;
-		String checkSql = "select EmpId, Name,Region from MBRUsers where Desig_Id=7 or Desig_Id=6;";
+		String checkSql = "select UserName, Name, Region from MBRUsers where Desig_Id=7 or Desig_Id=6;";
 		Query checkQuery =  entityManager.createNativeQuery(checkSql);
 		ABMName=checkQuery.getResultList();
 		return ABMName;
