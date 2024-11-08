@@ -570,13 +570,13 @@ export default class DashAnalyticsComponent {
         "retailerType":"",
       };
 
-    if (this.dashboardService.selectedData === '2') {
-      this.GetMasterData();
-      this.MonthlyToalOrdaring(GrowthOverPreviousMonthPayload);
-      this.GrowthOverPreviousMonth(GrowthOverPreviousMonthPayload);
-    } else if (this.dashboardService.selectedData === '1') {
-      await this.dashBoardInitalDataFn();
-    }
+    // if (this.dashboardService.selectedData === '2') {
+    //   this.GetMasterData();
+    //   this.MonthlyToalOrdaring(GrowthOverPreviousMonthPayload);
+    //   this.GrowthOverPreviousMonth(GrowthOverPreviousMonthPayload);
+    // } else if (this.dashboardService.selectedData === '1') {
+    //   await this.dashBoardInitalDataFn();
+    // }
     // this.isLoading = false;
     // setTimeout(() => {
     //   // Hide the spinner after the delay
@@ -801,7 +801,7 @@ export default class DashAnalyticsComponent {
             yaxis: [
               {
                 title: {
-                  text: 'Value (L)', // Left y-axis title
+                  text: 'Quantity (K)', // Left y-axis title
                   style: {
                     color: '#000000' // Change color as needed
                   }
@@ -817,7 +817,7 @@ export default class DashAnalyticsComponent {
               {
                 opposite: true, // Make this y-axis on the opposite side
                 title: {
-                  text: 'Quantity', // Right y-axis title
+                  text: 'Value (L)', // Right y-axis title
                   style: {
                     color: '#000000' // Change color as needed
                   }
@@ -882,9 +882,9 @@ export default class DashAnalyticsComponent {
 
           response.body.forEach((item: any) => {
             // Push values to each series array
-            retailersData.push(item.totalRetailerCode);
-            quantityData.push(item.totalQTY);
-            valueData.push(item.totalRevenue);
+            retailersData.push(item.retailerGrowthPercentage);
+            quantityData.push(item.orderQtyGrowthPercentage);
+            valueData.push(item.priceGrowthPercentage);
 
             // Get month name and add to categories
             categories.push(monthNames[item.month - 1]);
@@ -929,7 +929,7 @@ export default class DashAnalyticsComponent {
               }
             },
             dataLabels: {
-              enabled: true
+              enabled: false
             },
             stroke: {
               show: true,
