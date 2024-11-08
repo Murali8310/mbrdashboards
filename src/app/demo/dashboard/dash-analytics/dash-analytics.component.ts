@@ -1,5 +1,5 @@
 // angular import
-import { Component, ViewChild, NO_ERRORS_SCHEMA, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, NO_ERRORS_SCHEMA, AfterViewInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApexOptions } from 'ng-apexcharts'; // Use ApexOptions instead of ChartOptions
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
@@ -97,6 +97,41 @@ export default class DashAnalyticsComponent {
   regionWiseGrowthOptions!:ApexOptions;
   public appendClass: any;
 
+
+  @HostListener('window:click', ['$event'])
+  onWindowClick(event: MouseEvent) {
+    // Ignore clicks on the specific button with id 'allowClickButton'
+    const targetElement = event.target as HTMLElement;
+
+    if (
+      targetElement.closest('#allowClickButton') || targetElement.closest('#allowClickButtonabm') || targetElement.closest('#restrictclicksabm')||
+      targetElement.closest('#restrictclicks') || targetElement.closest('#retailerTypeallow') || targetElement.closest('#retailerTypeallow') || targetElement.closest('#retailerTypeallowDropdown')
+      ||targetElement.closest('#rsnamemenu2')||targetElement.closest('#rsnamemenu') || targetElement.closest('#brandDropdown') ||targetElement.closest('#brandDropdownmenu')
+    ) {
+      return; // Ignore clicks on this button and its children
+    }
+
+    // If dropdown is open and click is outside the filter, close it
+    if (this.isDropdownOpen) {
+      this.isDropdownOpen = !this.isDropdownOpen;
+    }
+    if (this.isDropdownOpenForAbm) {
+      this.isDropdownOpenForAbm = !this.isDropdownOpenForAbm;
+    }
+
+    if (this.isDropdownOpenForRetailer) {
+      this.isDropdownOpenForRetailer = !this.isDropdownOpenForRetailer;
+    }
+    if (this.isDropdownOpenForRS) {
+      this.isDropdownOpenForRS = !this.isDropdownOpenForRS;
+    }
+    if (this.isDropdownOpenForBrand) {
+      this.isDropdownOpenForBrand = !this.isDropdownOpenForBrand;
+    }
+
+    
+    
+  }
   isOpen = false;
   selectedItems: string[] = [];
 
@@ -209,7 +244,7 @@ export default class DashAnalyticsComponent {
   // Filtered RS names based on search input
   filteredRSNamesList = this.availableRSNames;
   @ViewChild('chart') chart!: ChartComponent;
-  chartOptions!: Partial<ChartOptions>;
+  chartOptions!: ApexOptions;
   dashBoardInitalDataOptions!: Partial<ChartOptions>;
 
   // chartOptionsline!: Partial<ChartOptions>;
@@ -753,7 +788,7 @@ export default class DashAnalyticsComponent {
                 data: response.body.map((item: any) => item.totalQTY) // Extracts totalQTY values
               },
               {
-                name: 'Value',
+                name: 'Value (Cr)',
                 data: response.body.map((item: any) => item.totalRevenue) // Extracts totalRevenue values
               }
             ],
@@ -762,7 +797,7 @@ export default class DashAnalyticsComponent {
               type: 'line'
             },
             dataLabels: {
-              enabled: true
+              enabled: false
             },
             stroke: {
               width: 5,
@@ -882,9 +917,9 @@ export default class DashAnalyticsComponent {
 
           response.body.forEach((item: any) => {
             // Push values to each series array
-            retailersData.push(item.retailerGrowthPercentage);
+            retailersData.push(item.orderGrowth);
             quantityData.push(item.orderQtyGrowthPercentage);
-            valueData.push(item.priceGrowthPercentage);
+            valueData.push(item.priceGrowth);
 
             // Get month name and add to categories
             categories.push(monthNames[item.month - 1]);
@@ -917,7 +952,7 @@ export default class DashAnalyticsComponent {
                 data: quantityData // Example values for Quantity
               },
               {
-                name: 'Value',
+                name: 'Value (Cr)',
                 data: valueData // Example values for Value
               }
             ],
@@ -939,19 +974,37 @@ export default class DashAnalyticsComponent {
             xaxis: {
               categories: categories
             },
-            yaxis: {
-              title: {
-                text: ' (Growth Value)'
-              }
-              // min: -100 // Set a minimum value for y-axis to accommodate negative values
-            },
+            // yaxis: {
+            //   title: {
+            //     text: ' (Growth Value)'
+            //   },
+            //               // min: -100 // Set a minimum value for y-axis to accommodate negative values
+            // },
+
+            yaxis: [
+              {
+                title: {
+                  text: ' (Growth Value)', // Left y-axis title
+                  style: {
+                    color: '#000000' // Change color as needed
+                  }
+                },
+                // min: 0, // Minimum value for left y-axis
+                labels: {
+                  formatter: function (val:any) {
+                    return '' + val; // Format for value
+                  }
+                },
+                tickAmount: 4 // Adjust the number of ticks as necessary
+              },
+            ],
             fill: {
               opacity: 1
             },
             tooltip: {
               y: {
                 formatter: function (val) {
-                  return '' + val + ' ';
+                  return val.toFixed(2);
                 }
               }
             }
@@ -1321,7 +1374,7 @@ export default class DashAnalyticsComponent {
           // Step 3: Transform the data with type assertion
           const availableAbmNames: Brand[] = response.abmName.map(([id, name]: [string, string]) => {
             return {
-              id: parseInt(id), // Convert ID to a number
+              id: id, // Convert ID to a number
               name: name // Keep the name as is
             };
           });

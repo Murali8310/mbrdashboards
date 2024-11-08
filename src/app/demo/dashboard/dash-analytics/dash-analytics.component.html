@@ -75,7 +75,7 @@ text-align: center;
           <!-- </div> -->
           <!-- <div class="col-xl-10"> -->
             <div class="multiselect-dropdown" tabindex="0">
-              <div (click)="toggleDropdownVisibility()" class="dropdown-btn" tabindex="-1">
+              <div (click)="toggleDropdownVisibility()" class="dropdown-btn" tabindex="-1" id="allowClickButton">
                 <span *ngIf="selectedRegions.length === 0">Please Select</span>
                 <i *ngIf="selectedRegions.length == 0" class="fas fa-chevron-down"></i>
                 <!-- <span *ngIf="selectedRegions.length > 0"> -->
@@ -94,7 +94,7 @@ text-align: center;
                   <span class="dropdown-multiselect__caret"></span>
                 </span>
               </div>
-              <div *ngIf="isDropdownOpen" class="dropdown-list">
+              <div *ngIf="isDropdownOpen" class="dropdown-list" id="restrictclicks">
                 <ul class="item1">
                   <li class="multiselect-item-checkbox">
                     <input type="checkbox" (change)="toggleAllRegionsSelection($event)" [checked]="areAllRegionsSelected" />
@@ -125,7 +125,7 @@ text-align: center;
           <!-- </div> -->
           <!-- <div class="col-xl-10"> -->
             <div class="multiselect-dropdown" tabindex="0">
-              <div (click)="toggleDropdownVisibilityForAbm()" class="dropdown-btn" tabindex="-1">
+              <div (click)="toggleDropdownVisibilityForAbm()" class="dropdown-btn" tabindex="-1" id="allowClickButtonabm">
                 <span *ngIf="selectedAbmNames.length === 0">Please Select</span>
                 <!-- <i *ngIf="isExpanded" class="fas fa-chevron-up"></i> -->
                 <i *ngIf="selectedAbmNames.length == 0" class="fas fa-chevron-down"></i>
@@ -141,7 +141,7 @@ text-align: center;
                   <span class="dropdown-multiselect__caret"></span>
                 </span>
               </div>
-              <div *ngIf="isDropdownOpenForAbm" class="dropdown-list">
+              <div *ngIf="isDropdownOpenForAbm" class="dropdown-list" id="restrictclicksabm">
                 <ul class="item1">
                   <li class="multiselect-item-checkbox">
                     <input type="checkbox" (change)="toggleAllAbmSelection($event)" [checked]="areAllAbmSelected" />
@@ -172,7 +172,7 @@ text-align: center;
           <!-- </div> -->
           <!-- <div class="col-xl-10"> -->
             <div class="multiselect-dropdown" tabindex="0">
-              <div (click)="toggleDropdownVisibilityForRetailer()" class="dropdown-btn" tabindex="-1">
+              <div (click)="toggleDropdownVisibilityForRetailer()" class="dropdown-btn" tabindex="-1" id="retailerTypeallow">
                 <span *ngIf="selectedRetailerTypes.length === 0">Please Select</span>
                 <i *ngIf="selectedRetailerTypes.length == 0" class="fas fa-chevron-down"></i>
                 <!-- <span *ngIf="selectedRetailerTypes.length > 0"> -->
@@ -191,7 +191,7 @@ text-align: center;
                   <span class="dropdown-multiselect__caret"></span>
                 </span>
               </div>
-              <div *ngIf="isDropdownOpenForRetailer" class="dropdown-list">
+              <div *ngIf="isDropdownOpenForRetailer" class="dropdown-list" id="retailerTypeallowDropdown">
                 <ul class="item1">
                   <li class="multiselect-item-checkbox">
                     <input type="checkbox" (change)="toggleAllRetailerSelection($event)" [checked]="areAllRetailerSelected" />
@@ -223,7 +223,7 @@ text-align: center;
           <!-- </div> -->
           <!-- <div class="col-xl-10"> -->
             <div class="multiselect-dropdown" tabindex="0">
-              <div (click)="toggleDropdownVisibilityForRS()" class="dropdown-btn" tabindex="-1">
+              <div (click)="toggleDropdownVisibilityForRS()" class="dropdown-btn" tabindex="-1" id="rsnamemenu">
                 <span *ngIf="selectedRSNames.length === 0">Please Select</span>
                 <i *ngIf="selectedRSNames.length == 0" class="fas fa-chevron-down"></i>
                 <!-- <span *ngIf="selectedRSNames.length > 0"> -->
@@ -241,7 +241,7 @@ text-align: center;
                   <span class="dropdown-multiselect__caret"></span>
                 </span>
               </div>
-              <div *ngIf="isDropdownOpenForRS" class="dropdown-list">
+              <div *ngIf="isDropdownOpenForRS" class="dropdown-list" id="rsnamemenu2">
                 <ul class="item1">
                   <li class="multiselect-item-checkbox">
                     <input type="checkbox" (change)="toggleAllRSSelection($event)" [checked]="areAllRSSelected" />
@@ -273,7 +273,7 @@ text-align: center;
           <!-- </div> -->
           <!-- <div class="col-xl-10"> -->
             <div class="multiselect-dropdown" tabindex="0">
-              <div (click)="toggleDropdownVisibilityForBrand()" class="dropdown-btn" tabindex="-1">
+              <div (click)="toggleDropdownVisibilityForBrand()" class="dropdown-btn" tabindex="-1" id="brandDropdown">
                 <span *ngIf="selectedBrands.length === 0">Please Select</span>
                 <i *ngIf="selectedBrands.length == 0" class="fas fa-chevron-down"></i>
                 <!-- <span *ngIf="selectedBrands.length > 0"> -->
@@ -293,7 +293,7 @@ text-align: center;
                   <span class="dropdown-multiselect__caret"></span>
                 </span>
               </div>
-              <div *ngIf="isDropdownOpenForBrand" class="dropdown-list">
+              <div *ngIf="isDropdownOpenForBrand" class="dropdown-list" id="brandDropdownmenu">
                 <ul class="item1">
                   <li class="multiselect-item-checkbox">
                     <input type="checkbox" (change)="toggleAllBrandSelection($event)" [checked]="areAllBrandsSelected" />
