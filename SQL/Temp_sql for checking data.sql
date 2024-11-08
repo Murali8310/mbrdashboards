@@ -33,7 +33,6 @@ BEGIN
     FROM STRING_SPLIT(@ABMName, ',');
 
     -- Select the sum of TotalPrice, sum of OrderQty, and count of distinct RetailerCode
-	SELECT * from  @RegionTable
     SELECT 
         YEAR(OrderDate) AS Year,
         MONTH(OrderDate) AS Month,
@@ -70,7 +69,7 @@ BEGIN
         YEAR(OrderDate),
         MONTH(OrderDate);  -- Order by year and month
 END;
-
+-----------------------------------
 
 	EXEC GetOrderSummary_temp
 		@RegionList = 'EAST, WEST, NORTH, SOUTH 1, SOUTH 2', -- Comma-separated list of regions
@@ -80,7 +79,7 @@ END;
 		@RSNameList ='',
 		@ABMName='',
 		@RetailerType='';
-
+----
 		EXEC GetOrderSummary_temp
 		@RegionList = 'EAST, WEST, NORTH, SOUTH 1, SOUTH 2', -- Comma-separated list of regions
 		@StartDate = 20240401,         -- Start date in yyyymmdd format
@@ -93,7 +92,7 @@ END;
 		select * from MBROrders where RetailerCode not like '9%'
 		select * from MBRUsers;
 		select * from MBRORDERS;
-
+------------------------------------------------------------------------------------------------------------------------
 
 ALTER PROCEDURE GrowthOverPreviousMonth_temp
     @RegionList VARCHAR(MAX),     -- Comma-separated list of regions
@@ -148,6 +147,7 @@ BEGIN
             YEAR(OrderDate),
             MONTH(OrderDate)
     )
+
     -- Now, calculate the growth over the previous month using the LAG function and compute percentage growth
     SELECT 
         Year,
@@ -158,12 +158,12 @@ BEGIN
         
 
 
-		  -- Calculate the percentage growth in TotalPrice (month-over-month growth)
+		  -- Calculate the growth in TotalPrice (month-over-month growth)
         CASE 
             WHEN LAG(TotalPriceSum, 1) OVER (ORDER BY Year, Month) = 0 THEN NULL
             WHEN LAG(TotalPriceSum, 1) OVER (ORDER BY Year, Month) IS NULL THEN NULL -- Handle NULL for the first record
             ELSE 
-                (TotalPriceSum - LAG(TotalPriceSum, 1) OVER (ORDER BY Year, Month)) * 1.0 
+                (TotalPriceSum - LAG(TotalPriceSum, 1) OVER (ORDER BY Year, Month))
         END AS PriceGrowth,
         
         -- Calculate the percentage growth in TotalPrice (month-over-month growth)
@@ -174,6 +174,16 @@ BEGIN
                 ((TotalPriceSum - LAG(TotalPriceSum, 1) OVER (ORDER BY Year, Month)) * 1.0 / LAG(TotalPriceSum, 1) OVER (ORDER BY Year, Month)) * 100
         END AS PriceGrowthPercentage,
         
+
+		 -- Calculate the growth in TotalOrderQty (month-over-month growth)
+        CASE 
+            WHEN LAG(TotalOrderQty, 1) OVER (ORDER BY Year, Month) = 0 THEN NULL
+            WHEN LAG(TotalOrderQty, 1) OVER (ORDER BY Year, Month) IS NULL THEN NULL -- Handle NULL for the first record
+            ELSE 
+                (TotalOrderQty - LAG(TotalOrderQty, 1) OVER (ORDER BY Year, Month))
+        END AS OrderGrowth,
+
+
         -- Calculate the percentage growth in TotalOrderQty (month-over-month growth)
         CASE 
             WHEN LAG(TotalOrderQty, 1) OVER (ORDER BY Year, Month) = 0 THEN NULL
@@ -182,6 +192,16 @@ BEGIN
                 ((TotalOrderQty - LAG(TotalOrderQty, 1) OVER (ORDER BY Year, Month)) * 1.0 / LAG(TotalOrderQty, 1) OVER (ORDER BY Year, Month)) * 100
         END AS OrderQtyGrowthPercentage,
         
+		  -- Calculate the growth in DistinctRetailerCount (month-over-month growth)
+		  CASE 
+            WHEN LAG(DistinctRetailerCount, 1) OVER (ORDER BY Year, Month) = 0 THEN NULL
+            WHEN LAG(DistinctRetailerCount, 1) OVER (ORDER BY Year, Month) IS NULL THEN NULL -- Handle NULL for the first record
+            ELSE 
+                (DistinctRetailerCount - LAG(DistinctRetailerCount, 1) OVER (ORDER BY Year, Month))
+        END AS RetailerGrowth,
+
+
+
         -- Calculate the percentage growth in DistinctRetailerCount (month-over-month growth)
         CASE 
             WHEN LAG(DistinctRetailerCount, 1) OVER (ORDER BY Year, Month) = 0 THEN NULL
@@ -190,7 +210,6 @@ BEGIN
                 ((DistinctRetailerCount - LAG(DistinctRetailerCount, 1) OVER (ORDER BY Year, Month)) * 1.0 / LAG(DistinctRetailerCount, 1) OVER (ORDER BY Year, Month)) * 100
         END AS RetailerGrowthPercentage
 
-		--------------Added
 
 
     FROM 
@@ -201,11 +220,11 @@ BEGIN
 END;
 
 
-EXEC GrowthOverPreviousMonth
-    @RegionList =     -- Comma-separated list of regions
+EXEC GrowthOverPreviousMonth_temp
+    @RegionList ='EAST, WEST, NORTH, SOUTH 1, SOUTH 2' ,    -- Comma-separated list of regions
     @StartDate = 20230201,         -- Start date in yyyymmdd format
-    @EndDate = 20240630,		   -- End date in yyyymmdd format
+    @EndDate = 202401030,		   -- End date in yyyymmdd format
 	@BrandList ='',
 	@RSNameList ='',
 	@ABMName='',
-	@RetailerType ='IDD'
+	@RetailerType =''
