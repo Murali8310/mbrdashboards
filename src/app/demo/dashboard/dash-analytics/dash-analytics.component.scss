@@ -41,16 +41,42 @@
     border-radius: 4px; /* Add border radius */
     background-color: #fff; /* Background color */
     z-index: 1000; /* Ensure dropdown is above other elements */
+    background: url(/assets/images/chartheader.png);
+    border-radius: 10px;
+    cursor: pointer;
+    background-size: cover;
+  }
+
+  .posinherit {
+    position: inherit !important;
+  }
+
+  .multiselect-dropdown2 {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    border: 1px solid #ccc; /* Add border for the dropdown */
+    border-radius: 4px; /* Add border radius */
+    background-color: #fff; /* Background color */
+    z-index: 1000; /* Ensure dropdown is above other elements */
+    background: url(/assets/images/chartheader.png);
+    border-radius: 10px;
+    cursor: pointer;
+    background-size: cover;
   }
   
   .dropdown-btn {
     padding: 5px;
+    margin-right: 22px;
+    float: right;
     cursor: pointer;
     display: flex;
-    justify-content: space-between;
+    justify-content: right;
     align-items: center;
     margin-left: 5px;
     margin-top: 4px;
+    width: 95%;
+    overflow-x: auto;
   }
   
   .selected-item {
@@ -96,8 +122,9 @@
   .multiselect-item-checkbox {
     display: flex; /* Flex layout for checkboxes */
     align-items: center; /* Center items vertically */
-    padding: 10px; /* Padding for each item */
+    padding: 1px 1px 0px 4px; /* Padding for each item */
     cursor: pointer; /* Pointer cursor for items */
+    white-space: nowrap;
   }
   
   .multiselect-item-checkbox:hover {

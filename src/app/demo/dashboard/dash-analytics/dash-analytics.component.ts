@@ -751,16 +751,16 @@ export default class DashAnalyticsComponent {
           const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
           // Prepare data for each series
-          const retailersData = [];
-          const quantityData = [];
-          const valueData = [];
+          const retailersData :any= [];
+          const quantityData :any= [];
+          const valueData:any = [];
           const categories: string[] = []; // This will hold the month names
 
           response.body.forEach((item: any) => {
             // Push values to each series array
             retailersData.push(item.totalRetailerCode);
-            quantityData.push(item.totalQTY);
-            valueData.push(item.totalRevenue);
+            quantityData.push(item.totalQTY /1000);
+            valueData.push(item.totalRevenue / 10000000);
 
             // Get month name and add to categories
             categories.push(monthNames[item.month - 1]);
@@ -781,15 +781,15 @@ export default class DashAnalyticsComponent {
               // }
               {
                 name: 'Retailers',
-                data: response.body.map((item: any) => item.totalRetailerCode) // Extracts totalRetailerCode values
+                data: retailersData // Extracts totalRetailerCode values
               },
               {
                 name: 'Quantity (k)',
-                data: response.body.map((item: any) => item.totalQTY) // Extracts totalQTY values
+                data: quantityData // Extracts totalQTY values
               },
               {
                 name: 'Value (Cr)',
-                data: response.body.map((item: any) => item.totalRevenue) // Extracts totalRevenue values
+                data: valueData // Extracts totalRevenue values
               }
             ],
             chart: {
@@ -816,11 +816,18 @@ export default class DashAnalyticsComponent {
             //     color: '#666'
             //   }
             // },
+            // legend: {
+            //   tooltipHoverFormatter: function (val, opts) {
+            //     return val + ' - <strong>' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + '</strong>';
+            //   }
+            // },
             legend: {
               tooltipHoverFormatter: function (val, opts) {
-                return val + ' - <strong>' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + '</strong>';
+                const dataValue = opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex];
+                const formattedValue = dataValue % 1 === 0 ? dataValue : dataValue.toFixed(2);
+                return val + ' - <strong>' + formattedValue + '</strong>';
               }
-            },
+            },            
             markers: {
               size: 5, // Size of markers on the line
               hover: {
@@ -844,7 +851,8 @@ export default class DashAnalyticsComponent {
                 min: 0, // Minimum value for left y-axis
                 labels: {
                   formatter: function (val) {
-                    return '' + val; // Format for value
+                    // return '' + val; // Format for value
+                    return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
                   }
                 },
                 tickAmount: 4 // Adjust the number of ticks as necessary
@@ -852,9 +860,15 @@ export default class DashAnalyticsComponent {
               {
                 opposite: true, // Make this y-axis on the opposite side
                 title: {
-                  text: 'Value (L)', // Right y-axis title
+                  text: 'Value (Cr)', // Right y-axis title
                   style: {
                     color: '#000000' // Change color as needed
+                  }
+                },
+                 labels: {
+                  formatter: function (val) {
+                    // return '' + val; // Format for value
+                    return val.toFixed(0);
                   }
                 },
                 min: 0, // Minimum value for right y-axis
@@ -873,16 +887,16 @@ export default class DashAnalyticsComponent {
                   }
                 },
                 {
-                  // title: {
-                  //   formatter: function (val) {
-                  //     return val + '(k)';
-                  //   }
-                  // }
+                  title: {
+                    formatter: function (val) {
+                      return val;
+                    }
+                  }
                 },
                 {
                   title: {
                     formatter: function (val) {
-                      return '' + val; // Format for value
+                      return  val; // Format for value
                     }
                   }
                 }
@@ -917,9 +931,12 @@ export default class DashAnalyticsComponent {
 
           response.body.forEach((item: any) => {
             // Push values to each series array
-            retailersData.push(item.orderGrowth);
-            quantityData.push(item.orderQtyGrowthPercentage);
-            valueData.push(item.priceGrowth);
+            // retailersData.push(item.retailerGrowth);
+            // quantityData.push(item.orderGrowth);
+            // valueData.push(item.priceGrowth);
+            retailersData.push(item.retailerGrowth);
+            quantityData.push(item.orderGrowth / 1000); // Converts orderGrowth to thousands
+            valueData.push(item.priceGrowth / 10000000); // Converts priceGrowth to crores
 
             // Get month name and add to categories
             categories.push(monthNames[item.month - 1]);
@@ -930,7 +947,15 @@ export default class DashAnalyticsComponent {
               type: 'bar',
               height: 350,
               toolbar: {
-                show: false // Optional: Hide toolbar if not needed
+                show: true,
+                tools: {
+                  zoom: true,           // Enable zoom
+                  zoomin: true,         // Enable zoom-in
+                  zoomout: true,        // Enable zoom-out
+                  pan: true,            // Enable panning
+                  reset: true           // Reset zoom and pan to the initial state
+                },
+                autoSelected: 'zoom'    // Set default tool to zoom
               }
             },
             title: {
@@ -942,6 +967,13 @@ export default class DashAnalyticsComponent {
                 color: '#333'
               }
             },
+            legend: {
+              tooltipHoverFormatter: function (val, opts) {
+                const dataValue = opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex];
+                const formattedValue = dataValue % 1 === 0 ? dataValue : dataValue.toFixed(2);
+                return val + ' - <strong>' + formattedValue + '</strong>';
+              }
+            }, 
             series: [
               {
                 name: 'Number of Retailers',
@@ -1004,7 +1036,9 @@ export default class DashAnalyticsComponent {
             tooltip: {
               y: {
                 formatter: function (val) {
-                  return val.toFixed(2);
+                  // return val.toFixed(2);
+                  return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
+
                 }
               }
             }
@@ -1422,7 +1456,7 @@ export default class DashAnalyticsComponent {
           this.cards[4].dealercount = response.body[4].delears;
           this.cards[4].no = response.body[4].orderQuentity;
 
-this.dashBoardInitalDataforchart();
+// this.dashBoardInitalDataforchart();
           // // Define month names for easy mapping
           // const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 

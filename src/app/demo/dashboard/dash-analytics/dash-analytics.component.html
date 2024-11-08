@@ -29,7 +29,7 @@ text-align: center;
   <!-- </ng-container> -->
 </div>
 
-<div class="col-xl-12 col-md-12" *ngIf="dashBoardInitalDataOptions">
+<div class="col-xl-12 col-md-12" *ngIf="dashBoardInitalDataOptions && false">
   <app-card cardTitle="" [options]="false">
     
   <div id="chart2">
@@ -55,7 +55,7 @@ text-align: center;
  
   <div class="container my-4">
 <!-- <ng-multiselect-dropdown
-  [placeholder]="'Please Select'"
+  [placeholder]="'Select one'"
   [data]="dropdownList"
   [(ngModel)]="selectedItems"
   [settings]="dropdownSettings"
@@ -64,9 +64,9 @@ text-align: center;
   (onSelectAll)="onSelectAll($event)"
   (onDeSelectAll)="onDeselectAll($event)">
 </ng-multiselect-dropdown> -->
-    <div class="row justify-content-center text-center" style="margin-top: 20px;">
+    <div class="row justify-content-center text-center">
       <!-- Region -->
-      <div class="form-group col-md-2">
+      <div class="form-group col-md-3">
         <!-- <div class="row"> -->
           <!-- <div class="col-xl-2"> -->
             <label style="margin-top: 10px;
@@ -76,7 +76,7 @@ text-align: center;
           <!-- <div class="col-xl-10"> -->
             <div class="multiselect-dropdown" tabindex="0">
               <div (click)="toggleDropdownVisibility()" class="dropdown-btn" tabindex="-1" id="allowClickButton">
-                <span *ngIf="selectedRegions.length === 0">Please Select</span>
+                <span  style="margin-left: 5px;" *ngIf="selectedRegions.length === 0">Select one</span>
                 <i *ngIf="selectedRegions.length == 0" class="fas fa-chevron-down"></i>
                 <!-- <span *ngIf="selectedRegions.length > 0"> -->
                   <div *ngIf="selectedRegions.length > 0" class="selected-items-container">
@@ -116,7 +116,7 @@ text-align: center;
         <!-- </div> -->
       </div>
       
-      <div class="form-group col-md-2">
+      <div class="form-group col-md-6">
         <!-- <div class="row"> -->
           <!-- <div class="col-xl-2"> -->
             <label style="margin-top: 10px;
@@ -126,7 +126,7 @@ text-align: center;
           <!-- <div class="col-xl-10"> -->
             <div class="multiselect-dropdown" tabindex="0">
               <div (click)="toggleDropdownVisibilityForAbm()" class="dropdown-btn" tabindex="-1" id="allowClickButtonabm">
-                <span *ngIf="selectedAbmNames.length === 0">Please Select</span>
+                <span style="margin-left: 5px;" *ngIf="selectedAbmNames.length === 0">Select one</span>
                 <!-- <i *ngIf="isExpanded" class="fas fa-chevron-up"></i> -->
                 <i *ngIf="selectedAbmNames.length == 0" class="fas fa-chevron-down"></i>
                 <div *ngIf="selectedAbmNames.length > 0" class="selected-items-container">
@@ -163,7 +163,7 @@ text-align: center;
         <!-- </div> -->
       </div>
     
-      <div class="form-group col-md-2">
+      <div class="form-group col-md-3">
         <!-- <div class="row"> -->
           <!-- <div class="col-xl-2"> -->
             <label style="margin-top: 10px;
@@ -173,7 +173,7 @@ text-align: center;
           <!-- <div class="col-xl-10"> -->
             <div class="multiselect-dropdown" tabindex="0">
               <div (click)="toggleDropdownVisibilityForRetailer()" class="dropdown-btn" tabindex="-1" id="retailerTypeallow">
-                <span *ngIf="selectedRetailerTypes.length === 0">Please Select</span>
+                <span style="margin-left: 5px;" *ngIf="selectedRetailerTypes.length === 0">Select one</span>
                 <i *ngIf="selectedRetailerTypes.length == 0" class="fas fa-chevron-down"></i>
                 <!-- <span *ngIf="selectedRetailerTypes.length > 0"> -->
                   <div *ngIf="selectedRetailerTypes.length > 0" class="selected-items-container">
@@ -213,8 +213,9 @@ text-align: center;
         <!-- </div> -->
       </div>
       
-  
-      <div class="form-group col-md-2">
+      </div>
+      <div class="row" >
+      <div class="form-group col-md-4">
         <!-- <div class="row"> -->
           <!-- <div class="col-xl-2"> -->
             <label style="margin-top: 10px;
@@ -222,9 +223,9 @@ text-align: center;
             font-weight: 800;" class="form-label">RS Name</label>
           <!-- </div> -->
           <!-- <div class="col-xl-10"> -->
-            <div class="multiselect-dropdown" tabindex="0">
+            <div class="multiselect-dropdown" [class.posinherit]="!isDropdownOpenForRS" tabindex="0">
               <div (click)="toggleDropdownVisibilityForRS()" class="dropdown-btn" tabindex="-1" id="rsnamemenu">
-                <span *ngIf="selectedRSNames.length === 0">Please Select</span>
+                <span style="margin-left: 5px;" *ngIf="selectedRSNames.length === 0">Select one</span>
                 <i *ngIf="selectedRSNames.length == 0" class="fas fa-chevron-down"></i>
                 <!-- <span *ngIf="selectedRSNames.length > 0"> -->
                   <div *ngIf="selectedRSNames.length > 0" class="selected-items-container">
@@ -264,7 +265,7 @@ text-align: center;
       </div>
       
   
-      <div class="form-group col-md-2">
+      <div class="form-group col-md-4">
         <!-- <div class="row"> -->
           <!-- <div class="col-xl-2"> -->
             <label style="margin-top: 10px;
@@ -272,9 +273,9 @@ text-align: center;
             font-weight: 800;" class="form-label">Brand</label>
           <!-- </div> -->
           <!-- <div class="col-xl-10"> -->
-            <div class="multiselect-dropdown" tabindex="0">
+            <div class="multiselect-dropdown" tabindex="0" [class.posinherit]="!isDropdownOpenForBrand">
               <div (click)="toggleDropdownVisibilityForBrand()" class="dropdown-btn" tabindex="-1" id="brandDropdown">
-                <span *ngIf="selectedBrands.length === 0">Please Select</span>
+                <span style="margin-left: 5px;" *ngIf="selectedBrands.length === 0">Select one</span>
                 <i *ngIf="selectedBrands.length == 0" class="fas fa-chevron-down"></i>
                 <!-- <span *ngIf="selectedBrands.length > 0"> -->
                   <div *ngIf="selectedBrands.length > 0" class="selected-items-container">
@@ -317,12 +318,15 @@ text-align: center;
       
   
       <!-- Search Button -->
-      <div class="form-group col-md-2 d-flex align-items-end row">
-        <div class="col-md-10">
-          <button class="btn btn-primary w-100 mb-2 fw-bold" (click)="prepareSearchData('search')">Search</button>
+      <div class="form-group col-md-4 d-flex align-items-end row">
+        <div class="col-md-6">
+          <button class="btn btn-primary w-100 fw-bold" (click)="prepareSearchData('search')">Search</button>
+        </div>
+        <div class="col-md-6">
           <button class="btn btn-secondary w-100 fw-bold" (click)="prepareSearchData('reset')">Reset</button>
         </div>
       </div>
+      
     </div>
   </div>
   
