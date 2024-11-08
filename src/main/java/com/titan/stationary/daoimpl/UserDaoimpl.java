@@ -6417,9 +6417,19 @@ Calendar cal = Calendar.getInstance();
         		data.setTotalRevenue((BigDecimal)row[2]);
         		data.setTotalQTY((Integer) row[3]);
         		data.setTotalRetailerCode((Integer) row[4]);
-        		data.setPriceGrowthPercentage((BigDecimal)row[5]);
-        		data.setOrderQtyGrowthPercentage((BigDecimal)row[6]);
-        		data.setRetailerGrowthPercentage((BigDecimal)row[7]);
+//        		data.setPriceGrowth((BigDecimal)row[5]);
+//        		data.setPriceGrowthPercentage((Integer)row[6]);
+//        		data.setOrderGrowth((Integer) row[7]);
+//        		data.setOrderQtyGrowthPercentage((BigDecimal)row[8]);
+//        		data.setRetailerGrowth((Integer) row[9]);
+//        		data.setRetailerGrowthPercentage(((BigDecimal)row[10]));
+        		data.setRetailerGrowthPercentage((BigDecimal)row[5]);
+        		data.setPriceGrowth((BigDecimal)row[6]);
+        		data.setOrderGrowth((Integer)row[7]);
+        		data.setRetailerGrowth((Integer)row[8]);
+        		data.setPriceGrowthPercentage((BigDecimal)row[9]);
+        		data.setOrderQtyGrowthPercentage((BigDecimal)row[10]);
+        		
         		
         		growthOverPreviousMonthData.add(data);
         	    // Now, filteredData is populated with values

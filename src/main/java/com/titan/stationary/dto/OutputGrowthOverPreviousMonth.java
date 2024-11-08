@@ -12,6 +12,10 @@ public class OutputGrowthOverPreviousMonth {
 	private BigDecimal orderQtyGrowthPercentage;
 	private BigDecimal retailerGrowthPercentage;
 	
+	private BigDecimal priceGrowth;
+	private Integer orderGrowth;
+	private Integer retailerGrowth;
+	
 	
 	public Integer getMonth() {
 		return month;
@@ -60,6 +64,24 @@ public class OutputGrowthOverPreviousMonth {
 	}
 	public void setRetailerGrowthPercentage(BigDecimal retailerGrowthPercentage) {
 		this.retailerGrowthPercentage = retailerGrowthPercentage;
+	}
+	public BigDecimal getPriceGrowth() {
+		return priceGrowth;
+	}
+	public Integer getOrderGrowth() {
+		return orderGrowth;
+	}
+	public Integer getRetailerGrowth() {
+		return retailerGrowth;
+	}
+	public void setPriceGrowth(BigDecimal priceGrowth) {
+		this.priceGrowth = priceGrowth;
+	}
+	public void setOrderGrowth(Integer orderGrowth) {
+		this.orderGrowth = orderGrowth;
+	}
+	public void setRetailerGrowth(Integer retailerGrowth) {
+		this.retailerGrowth = retailerGrowth;
 	}
 
 }
