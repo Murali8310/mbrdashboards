@@ -8,6 +8,8 @@ export const environment = {
   appVersion: packageInfo.version,
   production: false,
   apiUrl: 'http://localhost:8080/stationary'
+  // apiUrl: 'http://172.25.21.25:8080/stationary'
+
 };
 
 /*

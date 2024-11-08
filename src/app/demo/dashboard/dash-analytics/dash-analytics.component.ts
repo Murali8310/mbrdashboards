@@ -566,7 +566,8 @@ export default class DashAnalyticsComponent {
         "startDate":20240401,       /// default case start date of financial year in integer format
         "endDate": 202401030,       ////  default case end date of financial year in integer format
         "brandList": "",       //// default casen ""
-        "rsNameList": ""//// default casen ""
+        "rsNameList": "",//// default casen ""
+        "retailerType":"",
       };
 
     if (this.dashboardService.selectedData === '2') {
@@ -606,7 +607,8 @@ export default class DashAnalyticsComponent {
         endDate: 202401030, ////  default case end date of financial year in integer format
         brandList: brandList, //// default casen ""
         rsNameList: rsNameList, //// default casen ""
-        abmName:abmNameList
+        abmName:abmNameList,
+        retailerType:retailerTypeList,
       };
     } else {
       MonthlyToalOrdaringPayload  = {
@@ -615,7 +617,8 @@ export default class DashAnalyticsComponent {
           "endDate": 202401030,       ////  default case end date of financial year in integer format
           "brandList": "",       //// default casen ""
           "rsNameList": "",//// default casen ""
-          "abmName":""
+          "abmName":"",
+          "retailerType":""
         };
 
         this.selectedAbmNames = [];
@@ -1540,7 +1543,7 @@ this.dashBoardInitalDataforchart();
             },
             yaxis: {
               title: {
-                text: ' (Orders)'
+                text: ' (Order value)'
               }
               // min: -100 // Set a minimum value for y-axis to accommodate negative values
             },
