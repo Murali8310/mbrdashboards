@@ -373,7 +373,51 @@ text-align: center;
     </div>
     </app-card>
   </div>
+  <div class="col-xl-12 col-md-12">
+    <app-card cardTitle="" [options]="false">
 
+    <div id="chart2">
+      <apx-chart
+      [series]="RegionWiseMonthlyDistibutionOptions.series"
+      [chart]="RegionWiseMonthlyDistibutionOptions.chart"
+      [stroke]="RegionWiseMonthlyDistibutionOptions.stroke"
+      [dataLabels]="RegionWiseMonthlyDistibutionOptions.dataLabels"
+      [plotOptions]="RegionWiseMonthlyDistibutionOptions.plotOptions"
+      [xaxis]="RegionWiseMonthlyDistibutionOptions.xaxis"
+      [yaxis]="RegionWiseMonthlyDistibutionOptions.yaxis"
+      [fill]="RegionWiseMonthlyDistibutionOptions.fill"
+      [colors]="RegionWiseMonthlyDistibutionOptions.colors"
+      [legend]="RegionWiseMonthlyDistibutionOptions.legend"
+      [tooltip]="RegionWiseMonthlyDistibutionOptions.tooltip"
+      [xaxis]="RegionWiseMonthlyDistibutionOptions.xaxis"
+      [title]="RegionWiseMonthlyDistibutionOptions.title">
+    </apx-chart>
+    </div>
+    </app-card>
+  </div>
+  
+  <div class="col-xl-12 col-md-12">
+    <app-card cardTitle="" [options]="false">
+    <div id="chart2">
+      <apx-chart
+      [series]="RegionWiseGrowthOverPreviousMonthOptions.series"
+      [chart]="RegionWiseGrowthOverPreviousMonthOptions.chart"
+      [stroke]="RegionWiseGrowthOverPreviousMonthOptions.stroke"
+      [dataLabels]="RegionWiseGrowthOverPreviousMonthOptions.dataLabels"
+      [plotOptions]="RegionWiseGrowthOverPreviousMonthOptions.plotOptions"
+      [xaxis]="RegionWiseGrowthOverPreviousMonthOptions.xaxis"
+      [yaxis]="RegionWiseGrowthOverPreviousMonthOptions.yaxis"
+      [fill]="RegionWiseGrowthOverPreviousMonthOptions.fill"
+      [colors]="RegionWiseGrowthOverPreviousMonthOptions.colors"
+      [legend]="RegionWiseGrowthOverPreviousMonthOptions.legend"
+      [tooltip]="RegionWiseGrowthOverPreviousMonthOptions.tooltip"
+      [xaxis]="RegionWiseGrowthOverPreviousMonthOptions.xaxis"
+      [title]="RegionWiseGrowthOverPreviousMonthOptions.title"
+      >
+    </apx-chart>
+    </div>
+    </app-card>
+  </div>
   <div class="col-xl-12 col-md-12" *ngIf="chartOptionsRegionwise && false">
     <app-card cardTitle="" [options]="false">
       
@@ -418,6 +462,21 @@ text-align: center;
     </app-card>
   </div>
 </div>
+
+
+<!-- 
+<apx-chart
+  [series]="budgetChartOptions.series"
+  [chart]="budgetChartOptions.chart"
+  [stroke]="budgetChartOptions.stroke"
+  [dataLabels]="budgetChartOptions.dataLabels"
+  [plotOptions]="budgetChartOptions.plotOptions"
+  [xaxis]="budgetChartOptions.xaxis"
+  [yaxis]="budgetChartOptions.yaxis"
+  [fill]="budgetChartOptions.fill"
+  [colors]="budgetChartOptions.colors"
+  [legend]="budgetChartOptions.legend">
+</apx-chart> -->
 <!-- <ngx-spinner
   bdColor="rgba(0, 0, 0, 0.8)"
   size="medium"
@@ -443,3 +502,4 @@ text-align: center;
     [legend]="regionWiseGrowthOptions.legend"
   ></apx-chart>
 </div> -->
+

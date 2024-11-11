@@ -88,6 +88,36 @@ public selectedData:any = '1';
       );      
   }
 
+  public  RegionWiseMonthlyDistribution(MonthlyToalOrdaringPayload?:any) {
+    return this.http
+      .post<any>(
+        `${environment.apiUrl}/RegionWiseMonthlyDistribution`,
+        JSON.stringify(MonthlyToalOrdaringPayload),
+        {
+          headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+          observe: 'response',
+        }
+      );      
+  }
+
+  /**
+   * This is for geting the region wise growth over data.
+   * @param MonthlyToalOrdaringPayload 
+   * @returns 
+   */
+  public  RegionWiseGrowthOverPreviousMonth(MonthlyToalOrdaringPayload?:any) {
+    return this.http
+      .post<any>(
+        `${environment.apiUrl}/RegionWiseGrowthOverPreviousMonth`,
+        JSON.stringify(MonthlyToalOrdaringPayload),
+        {
+          headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+          observe: 'response',
+        }
+      );      
+  }
+  
+
   public  GrowthOverPreviousMonth(MonthlyToalOrdaringPayload?:any) {
     // const GrowthOverPreviousMonthPayload :any = {
     //   "regionList": "EAST, WEST,NORTH,SOUTH 1,SOUTH 2",  /// default all regions 
