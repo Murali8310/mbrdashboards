@@ -6513,6 +6513,9 @@ Calendar cal = Calendar.getInstance();
         		data.setPriceGrowthPercentage((BigDecimal)row[6]);
         		data.setOrderQtyGrowthPercentage((BigDecimal)row[7]);
         		data.setRetailerGrowthPercentage((BigDecimal)row[8]);
+        		data.setPriceGrowth((BigDecimal)row[9]);
+        		data.setOrderGrowth((Integer) row[10]);
+        		data.setRetailerGrowth((Integer) row[11]);
         		regionWiseMonthlyGrowthData.add(data);
         	    // Now, filteredData is populated with values
         	}

@@ -12,6 +12,9 @@ public class OutputRegionWiseGrowthOverPreviousMonth {
 	private BigDecimal orderQtyGrowthPercentage;
 	private BigDecimal retailerGrowthPercentage;
 	private String region;
+	private BigDecimal priceGrowth;
+	private Integer orderGrowth;
+	private Integer retailerGrowth;
 	
 	public Integer getMonth() {
 		return month;
@@ -66,6 +69,24 @@ public class OutputRegionWiseGrowthOverPreviousMonth {
 	}
 	public void setRegion(String region) {
 		this.region = region;
+	}
+	public BigDecimal getPriceGrowth() {
+		return priceGrowth;
+	}
+	public Integer getOrderGrowth() {
+		return orderGrowth;
+	}
+	public Integer getRetailerGrowth() {
+		return retailerGrowth;
+	}
+	public void setPriceGrowth(BigDecimal priceGrowth) {
+		this.priceGrowth = priceGrowth;
+	}
+	public void setOrderGrowth(Integer orderGrowth) {
+		this.orderGrowth = orderGrowth;
+	}
+	public void setRetailerGrowth(Integer retailerGrowth) {
+		this.retailerGrowth = retailerGrowth;
 	}
 
 }

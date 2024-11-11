@@ -374,7 +374,8 @@ Alter PROCEDURE RegionWiseMonthlyDistribution
     @EndDate INT,                 -- End date in yyyymmdd format (e.g., 20240630)
     @RSNameList VARCHAR(MAX),
     @BrandList VARCHAR(MAX),
-	@ABMName VARCHAR(MAX)
+	@ABMName VARCHAR(MAX),
+	@RetailerType VARCHAR(MAX)
 AS
 BEGIN
     -- Select the sum of TotalPrice, sum of OrderQty, and count of distinct RetailerCode
@@ -406,6 +407,18 @@ BEGIN
 					OR ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ','))
 				) 
 			)
+			OR
+			(
+			@RetailerType IS NOT NULL AND(
+				 RetailerCode LIKE 
+				 CASE 
+				  WHEN @RetailerType = 'IDD' THEN '9%'
+			 WHEN @RetailerType = 'DD' THEN '1%'
+			 ELSE ''
+			 END
+		)
+		)
+
     GROUP BY
         YEAR(OrderDate),
         MONTH(OrderDate),
@@ -421,7 +434,8 @@ EXEC RegionWiseMonthlyDistribution
     @EndDate = 20240630,		   -- End date in yyyymmdd format
 	@BrandList ='',
 	@RSNameList ='',
-	@ABMName=''
+	@ABMName='',
+	@RetailerType=''
 
 ----------------------------------------------------------------------------------Region Wise Growth over Previous Months-------------------------------------------------------
 
@@ -431,7 +445,8 @@ Alter PROCEDURE RegionWiseGrowthoverPreviousMonths
     @EndDate INT,                 -- End date in yyyymmdd format (e.g., 20240630)
     @RSNameList VARCHAR(MAX),
     @BrandList VARCHAR(MAX),
-	@ABMName VARCHAR(MAX)
+	@ABMName VARCHAR(MAX),
+	@RetailerType VARCHAR(MAX)
 AS
 BEGIN
     ;WITH MonthlySummary AS (
@@ -508,6 +523,7 @@ EXEC RegionWiseGrowthoverPreviousMonths
     @StartDate = 20240401,         -- Start date in yyyymmdd format
     @EndDate = 20240630,		   -- End date in yyyymmdd format
 	@BrandList ='',
-	@ABMName ='';
+	@ABMName ='',
+	@RetailerType=''
 
 
