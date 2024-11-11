@@ -2123,6 +2123,35 @@ export default class DashAnalyticsComponent {
                 color: '#333'
               }
             },
+            yaxis: [
+              {
+                title: {
+                  text: '(Quantity) Loading...', // Left y-axis title
+                  style: {
+                    color: '#000000' // Change color as needed
+                  }
+                },
+                // min: 0, // Minimum value for left y-axis
+                labels: {
+                  formatter: function (val:any) {
+                    return '' + val; // Format for value
+                  }
+                },
+                tickAmount: 4 // Adjust the number of ticks as necessary
+              },
+            ],
+            xaxis: {
+              labels: {
+                trim: false
+              },
+              categories: ['April', 'May', 'June'],
+              title: {
+                // text: 'Monthly Distribution Loading...', // Left y-axis title
+                style: {
+                  color: '#000000' // Change color as needed
+                }
+              },
+            },
             dataLabels: {
               enabled: false
             },
@@ -2131,9 +2160,9 @@ export default class DashAnalyticsComponent {
               height: 350,
               stacked: true
             },
-            xaxis: {
-              categories: ['April', 'May', 'June']
-            },
+            // xaxis: {
+            //   categories: ['April', 'May', 'June']
+            // },
             plotOptions: {
               bar: {
                 horizontal: false
@@ -2206,8 +2235,20 @@ export default class DashAnalyticsComponent {
               height: 350,
               stacked: true
             },
+            // xaxis: {
+            //   categories: ['April', 'May', 'June']
+            // },
             xaxis: {
-              categories: ['April', 'May', 'June']
+              labels: {
+                trim: false
+              },
+              categories: ['April', 'May', 'June'],
+              title: {
+                // text: 'Monthly Distribution Loading...', // Left y-axis title
+                style: {
+                  color: '#000000' // Change color as needed
+                }
+              },
             },
             plotOptions: {
               bar: {
@@ -2287,8 +2328,21 @@ export default class DashAnalyticsComponent {
               height: 350,
               stacked: true
             },
+            // xaxis: {
+            //   categories: ['April', 'May', 'June']
+            // },
+
             xaxis: {
-              categories: ['April', 'May', 'June']
+              labels: {
+                trim: false
+              },
+              categories: ['April', 'May', 'June'],
+              title: {
+                // text: 'Monthly Distribution Loading...', // Left y-axis title
+                style: {
+                  color: '#000000' // Change color as needed
+                }
+              },
             },
             plotOptions: {
               bar: {
@@ -2363,8 +2417,37 @@ export default class DashAnalyticsComponent {
               stacked: true
             },
             xaxis: {
-              categories: ['April', 'May', 'June']
+              labels: {
+                trim: false
+              },
+              categories: ['April', 'May', 'June'],
+              title: {
+                // text: 'Monthly Distribution Loading...', // Left y-axis title
+                style: {
+                  color: '#000000' // Change color as needed
+                }
+              },
             },
+            // xaxis: {
+            //   categories: ['April', 'May', 'June']
+            // },
+            yaxis: [
+              {
+                title: {
+                  text: '(Growth Value) Loading...', // Left y-axis title
+                  style: {
+                    color: '#000000' // Change color as needed
+                  }
+                },
+                // min: 0, // Minimum value for left y-axis
+                labels: {
+                  formatter: function (val:any) {
+                    return '' + val; // Format for value
+                  }
+                },
+                tickAmount: 4 // Adjust the number of ticks as necessary
+              },
+            ],
             plotOptions: {
               bar: {
                 horizontal: false
