@@ -672,53 +672,53 @@ export default class DashAnalyticsComponent {
       background: 'bg-c-blue',
       title: 'East',
       icon: 'icon-shopping-cart',
-      number: '',
+      number: 'Loading...',
       text: 'Total qty',
-      order: '',
+      order: 'Loading...',
       qtyText: 'Value',
-      qtyValue: '',
-      dealercount: '',
-      no: ''
+      qtyValue: 'Loading...',
+      dealercount: 'Loading...',
+      no: 'Loading...'
     },
     {
       background: 'bg-c-green',
       title: 'North',
       icon: 'icon-shopping-cart',
       text: 'Total qty',
-      qtyValue: '',
-      qtyText: 'Value',
-      number: '',
-      no: ''
+      qtyValue: 'Loading...',
+      qtyText: 'Loading...',
+      number: 'Loading...',
+      no: 'Loading...'
     },
     {
       background: 'bg-c-yellow',
       title: 'South1',
       icon: 'icon-shopping-cart',
       text: 'Total qty',
-      number: '',
-      qtyValue: '',
-      qtyText: '',
-      no: ''
+      number: 'Loading...',
+      qtyValue: 'Loading...',
+      qtyText: 'Loading...',
+      no: 'Loading...'
     },
     {
       background: 'bg-c-red',
       title: 'South2',
       icon: 'icon-shopping-cart',
       text: 'Total qty',
-      number: '',
-      no: '',
-      qtyValue: '',
-      qtyText: ''
+      number: 'Loading...',
+      no: 'Loading...',
+      qtyValue: 'Loading...',
+      qtyText: 'Loading...'
     },
     {
       background: 'bg-c-red',
       title: 'West',
       icon: 'icon-shopping-cart',
       text: 'Total qty',
-      number: '',
-      no: '',
-      qtyValue: '',
-      qtyText: ''
+      number: 'Loading...',
+      no: 'Loading...',
+      qtyValue: 'Loading...',
+      qtyText: 'Loading...'
     }
   ];
 
@@ -742,10 +742,6 @@ export default class DashAnalyticsComponent {
 
   public MonthlyToalOrdaring = (MonthlyToalOrdaringPayload?: any) => {
     this.spinner.show();
-    this.dashboardService.MonthlyToalOrdaring(MonthlyToalOrdaringPayload).subscribe(
-      (response) => {
-        if (response && response.body) {
-          this.spinner.hide();
 
           // Define month names for easy mapping
           const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -755,6 +751,143 @@ export default class DashAnalyticsComponent {
           const quantityData :any= [];
           const valueData:any = [];
           const categories: string[] = []; // This will hold the month names
+
+    this.chartOptionsline = {
+      series: [
+           {
+          name: 'Retailers',
+          data: retailersData // Extracts totalRetailerCode values
+        },
+        {
+          name: 'Quantity (k)',
+          data: quantityData // Extracts totalQTY values
+        },
+        {
+          name: 'Value (Cr)',
+          data: valueData // Extracts totalRevenue values
+        }
+      ],
+      chart: {
+        height: 350,
+        type: 'line'
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        width: 5,
+        curve: 'smooth', // Smooth curve for the line chart
+        dashArray: [0, 8, 5] // Different dash arrays for each line
+      },
+      title: {
+        text: 'Monthly Trend Loading...',
+        align: 'center'
+      },
+      // subtitle: {
+      //   text: 'No of Re-retailers, Value, and Qty',
+      //   align: 'center',
+      //   style: {
+      //     fontSize: '14px',
+      //     color: '#666'
+      //   }
+      // },
+      // legend: {
+      //   tooltipHoverFormatter: function (val, opts) {
+      //     return val + ' - <strong>' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + '</strong>';
+      //   }
+      // },
+      legend: {
+        tooltipHoverFormatter: function (val, opts) {
+          const dataValue = opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex];
+          const formattedValue = dataValue % 1 === 0 ? dataValue : dataValue.toFixed(2);
+          return val + ' - <strong>' + formattedValue + '</strong>';
+        }
+      },            
+      markers: {
+        size: 5, // Size of markers on the line
+        hover: {
+          sizeOffset: 6
+        }
+      },
+      xaxis: {
+        labels: {
+          trim: false
+        },
+        categories: categories,
+        title: {
+          text: 'Monthly Distribution Loading...', // Left y-axis title
+          style: {
+            color: '#000000' // Change color as needed
+          }
+        },
+      },
+      yaxis: [
+        {
+          title: {
+            text: 'Quantity (K) Loading...', // Left y-axis title
+            style: {
+              color: '#000000' // Change color as needed
+            }
+          },
+          min: 0, // Minimum value for left y-axis
+          labels: {
+            formatter: function (val) {
+              // return '' + val; // Format for value
+              return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
+            }
+          },
+          tickAmount: 4 // Adjust the number of ticks as necessary
+        },
+        {
+          opposite: true, // Make this y-axis on the opposite side
+          title: {
+            text: 'Value (Cr)', // Right y-axis title
+            style: {
+              color: '#000000' // Change color as needed
+            }
+          },
+           labels: {
+            formatter: function (val) {
+              // return '' + val; // Format for value
+              return val.toFixed(0);
+            }
+          },
+          min: 0, // Minimum value for right y-axis
+          tickAmount: 4 // Adjust the number of ticks as necessary
+        }
+      ],
+      tooltip: {
+        shared: true, // Show shared tooltip
+        intersect: false,
+        y: [
+          {
+            title: {
+              formatter: function (val) {
+                return val;
+              }
+            }
+          },
+          {
+            title: {
+              formatter: function (val) {
+                return val;
+              }
+            }
+          },
+          {
+            title: {
+              formatter: function (val) {
+                return  val; // Format for value
+              }
+            }
+          }
+        ]
+      }
+    };
+    this.dashboardService.MonthlyToalOrdaring(MonthlyToalOrdaringPayload).subscribe(
+      (response) => {
+        if (response && response.body) {
+          this.spinner.hide();
 
           response.body.forEach((item: any) => {
             // Push values to each series array
@@ -915,11 +1048,7 @@ export default class DashAnalyticsComponent {
 
   public GrowthOverPreviousMonth = (MonthlyToalOrdaringPayload?: any) => {
     this.spinner.show();
-    this.dashboardService.GrowthOverPreviousMonth(MonthlyToalOrdaringPayload).subscribe(
-      (response) => {
-        if (response && response.body) {
-          this.spinner.hide();
-
+    
           // Define month names for easy mapping
           const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -928,6 +1057,117 @@ export default class DashAnalyticsComponent {
           const quantityData: any = [];
           const valueData: any = [];
           const categories: string[] = []; // This will hold the month names
+          this.chartOptions = {
+            chart: {
+              type: 'bar',
+              height: 350,
+              toolbar: {
+                show: true,
+                tools: {
+                  zoom: true,           // Enable zoom
+                  zoomin: true,         // Enable zoom-in
+                  zoomout: true,        // Enable zoom-out
+                  pan: true,            // Enable panning
+                  reset: true           // Reset zoom and pan to the initial state
+                },
+                autoSelected: 'zoom'    // Set default tool to zoom
+              }
+            },
+            title: {
+              text: 'Growth Over Previous Month Loading...', // Chart title
+              align: 'center',
+              style: {
+                fontSize: '16px',
+                fontWeight: 'bold',
+                color: '#333'
+              }
+            },
+            legend: {
+              tooltipHoverFormatter: function (val, opts) {
+                const dataValue = opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex];
+                const formattedValue = dataValue % 1 === 0 ? dataValue : dataValue.toFixed(2);
+                return val + ' - <strong>' + formattedValue + '</strong>';
+              }
+            }, 
+            series: [
+              {
+                name: 'Number of Retailers',
+                data: retailersData // Example values for Number of Retailers
+              },
+              {
+                name: 'Quantity (k)',
+                data: quantityData // Example values for Quantity
+              },
+              {
+                name: 'Value (Cr)',
+                data: valueData // Example values for Value
+              }
+            ],
+            plotOptions: {
+              bar: {
+                horizontal: false,
+                columnWidth: '50%'
+                // endingShape: "rounded"
+              }
+            },
+            dataLabels: {
+              enabled: false
+            },
+            stroke: {
+              show: true,
+              width: 2,
+              colors: ['transparent']
+            },
+            xaxis: {
+              categories: categories,
+              title: {
+                text: 'Monthly Distribution Loading...', // Left y-axis title
+                style: {
+                  color: '#000000' // Change color as needed
+                }
+              },
+            },
+            // yaxis: {
+            //   title: {
+            //     text: ' (Growth Value)'
+            //   },
+            //               // min: -100 // Set a minimum value for y-axis to accommodate negative values
+            // },
+
+            yaxis: [
+              {
+                title: {
+                  text: '(Growth Value) Loading...', // Left y-axis title
+                  style: {
+                    color: '#000000' // Change color as needed
+                  }
+                },
+                // min: 0, // Minimum value for left y-axis
+                labels: {
+                  formatter: function (val:any) {
+                    return '' + val; // Format for value
+                  }
+                },
+                tickAmount: 4 // Adjust the number of ticks as necessary
+              },
+            ],
+            fill: {
+              opacity: 1
+            },
+            tooltip: {
+              y: {
+                formatter: function (val) {
+                  // return val.toFixed(2);
+                  return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
+
+                }
+              }
+            }
+          };
+    this.dashboardService.GrowthOverPreviousMonth(MonthlyToalOrdaringPayload).subscribe(
+      (response) => {
+        if (response && response.body) {
+          this.spinner.hide();
 
           response.body.forEach((item: any) => {
             // Push values to each series array

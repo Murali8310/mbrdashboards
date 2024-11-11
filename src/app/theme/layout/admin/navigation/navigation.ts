@@ -31,7 +31,7 @@ export const NavigationItems: NavigationItem[] = [
         type: 'item',
         url: '/charts',
         classes: 'nav-item',
-        icon: 'feather icon-pie-chart'
+        icon: 'fas fa-chart-bar'
       }
     ]
   },

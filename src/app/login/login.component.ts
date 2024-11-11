@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
   buildInfo: BuildInfo | undefined;
   public allowOnlyAfterClearCache: any = true;
   public cacheStatus: any = true;
-
+public loginText:any = 'Login';
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
@@ -120,6 +120,7 @@ export class LoginComponent implements OnInit {
   }
 
   async onSubmit() {
+    this.loginText = 'Logging';
     localStorage.setItem('initialLogin', '0');
     const nocatch = new Date().getTime();
     // this.router.navigate(['/dashboard/charts'], {
@@ -135,7 +136,7 @@ export class LoginComponent implements OnInit {
             console.log('LOG RES');
             // localStorage.setItem('userData', data);
             localStorage.setItem('userData', JSON.stringify(data));
-
+            this.loginText = 'Logged in';
             const nocatch = new Date().getTime();
             // this.router.navigate(['/dashboard/charts'], {
             //   queryParams: { nocatch },
@@ -146,6 +147,7 @@ export class LoginComponent implements OnInit {
           } else {
             this.errorMessage = data.message;
             this.isLoginFailed = true;
+            this.loginText = 'Login';
           }
 
           /*   this.router.navigate(['/pages/' + page], {
@@ -158,6 +160,7 @@ export class LoginComponent implements OnInit {
           this.errorMessage = error.error.message;
           this.isLoggedIn = false;
           this.isLoginFailed = true;
+          this.loginText = 'Login';
     //     }
         }
       );

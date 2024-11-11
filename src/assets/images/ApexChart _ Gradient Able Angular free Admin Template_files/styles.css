@@ -38752,7 +38752,7 @@ select.form-control[data-multiselectsplitter-firstselect-selector], select.form-
     padding-right: 20px;
   }
   .pcoded-navbar {
-    margin-left: -235px;
+    /* margin-left: -235px; */
     position: absolute;
     height: 100%;
     box-shadow: none;

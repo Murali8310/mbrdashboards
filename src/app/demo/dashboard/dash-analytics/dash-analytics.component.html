@@ -23,7 +23,7 @@ text-align: center;
     >
     <br>
     <p class="m-b-0"
-      >Dealers<span class="float-end">{{ card.dealercount }}</span></p
+      >Dealers<span class="float-end">{{ card.dealercount ?  card.dealercount : 'Loading'}}</span></p
     >
     </app-card>
   <!-- </ng-container> -->
@@ -330,7 +330,7 @@ text-align: center;
     </div>
   </div>
   
-  <div class="col-xl-12 col-md-12" *ngIf="chartOptionsline">
+  <div class="col-xl-12 col-md-12">
     <app-card cardTitle="" [options]="false">
     <div id="chart">
       <apx-chart
@@ -352,7 +352,7 @@ text-align: center;
     </app-card>
   </div>
 
-  <div class="col-xl-12 col-md-12" *ngIf="chartOptions">
+  <div class="col-xl-12 col-md-12">
     <app-card cardTitle="" [options]="false">
       
     <div id="chart2">
@@ -418,12 +418,12 @@ text-align: center;
     </app-card>
   </div>
 </div>
-<ngx-spinner
+<!-- <ngx-spinner
   bdColor="rgba(0, 0, 0, 0.8)"
   size="medium"
   color="#007bff"
-  type="ball-spin-clockwise"> <!-- Ensure this type is specified -->
-</ngx-spinner>
+  type="ball-spin-clockwise"> 
+ </ngx-spinner> - -->
 
 <!-- <div *ngIf="isLoading" class="spinner-overlay">
   <div class="spinner"></div>
