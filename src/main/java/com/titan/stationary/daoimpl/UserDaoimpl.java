@@ -6319,7 +6319,28 @@ Calendar cal = Calendar.getInstance();
 	}
 	private List<RSName>selectRsNameForMaster(){
 		List<RSName> rsName= null;
-		String checkSql = "select  distinct RSCode, RSName from MBROrders;";
+		String checkSql = "\r\n"
+				+ "SELECT DISTINCT \r\n"
+				+ "    MBROrders.RSName, \r\n"
+				+ "    MBROrders.Region, \r\n"
+				+ "    CASE\r\n"
+				+ "        WHEN ABMEMMUser.Name IS NOT NULL THEN ABMEMMUser.Name\r\n"
+				+ "        WHEN ABMKAMUser.Name IS NOT NULL THEN ABMKAMUser.Name\r\n"
+				+ "        ELSE 'No Name'  -- Optional, in case both are NULL\r\n"
+				+ "    END AS ABM_EMMName,  -- Changed alias to ABM_EMMName\r\n"
+				+ "    CASE\r\n"
+				+ "        WHEN ABMEMMUser.UserName IS NOT NULL THEN ABMEMMUser.UserName\r\n"
+				+ "        WHEN ABMKAMUser.UserName IS NOT NULL THEN ABMKAMUser.UserName\r\n"
+				+ "        ELSE 'No Name'  -- Optional, in case both are NULL\r\n"
+				+ "    END AS ABM_KAMName  -- Changed alias to ABM_KAMName\r\n"
+				+ "FROM \r\n"
+				+ "    MBROrders\r\n"
+				+ "LEFT JOIN \r\n"
+				+ "    MBRUsers AS ABMEMMUser\r\n"
+				+ "    ON MBROrders.ABMEMM = ABMEMMUser.UserName\r\n"
+				+ "LEFT JOIN \r\n"
+				+ "    MBRUsers AS ABMKAMUser\r\n"
+				+ "    ON MBROrders.ABMKAM = ABMKAMUser.UserName;";
 		Query checkQuery =  entityManager.createNativeQuery(checkSql);
 		rsName=checkQuery.getResultList();
 		return rsName;
