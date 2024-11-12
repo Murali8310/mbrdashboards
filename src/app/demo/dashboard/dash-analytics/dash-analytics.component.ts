@@ -1565,6 +1565,13 @@ export default class DashAnalyticsComponent {
     } else {
       this.selectedRegions.push(region); // Add region if not selected
     }
+
+    // to filter the abms based on the user selection.
+    // const FilterAbms = this.availableAbmNames.filter((data: any) => 
+    //   data.region && this.selectedRegions.some((selectedRegion: any) => selectedRegion.name === data.region)
+    // );
+    // this.availableAbmNames = FilterAbms;
+
   }
 
   // Remove a selected region
@@ -1576,6 +1583,11 @@ export default class DashAnalyticsComponent {
   // Select or deselect all regions
   toggleAllRegionsSelection(event: any) {
     this.selectedRegions = event.target.checked ? [...this.availableRegions] : []; // Select/Deselect all
+    // to filter the abms based on the user selection.
+    // const FilterAbms = this.availableAbmNames.filter((data: any) => 
+    //   data.region && this.selectedRegions.some((selectedRegion: any) => selectedRegion.name === data.region)
+    // );
+    // this.availableAbmNames = FilterAbms;
   }
 
   // Check if all regions are selected
@@ -1648,6 +1660,12 @@ export default class DashAnalyticsComponent {
     } else {
       this.selectedAbmNames.push(abm); // Add ABM name if not selected
     }
+
+    // // to filter the abms based on the user selection.
+    // const FilterRSNames = this.availableRSNames.filter((data: any) => 
+    //   data.region && this.selectedAbmNames.some((selectedAbm: any) => selectedAbm.name === data.region)
+    // );
+    // this.availableRSNames = FilterRSNames;
   }
 
   // Remove a selected ABM name
@@ -1659,6 +1677,12 @@ export default class DashAnalyticsComponent {
   // Select or deselect all ABM names
   toggleAllAbmSelection(event: any) {
     this.selectedAbmNames = event.target.checked ? [...this.availableAbmNames] : []; // Select/Deselect all
+
+     // to filter the abms based on the user selection.
+     const FilterRSNames = this.availableRSNames.filter((data: any) => 
+      data.region && this.selectedAbmNames.some((selectedAbm: any) => selectedAbm.name === data.region)
+    );
+    this.availableRSNames = FilterRSNames;
   }
 
   // Check if all ABM names are selected
@@ -1822,20 +1846,24 @@ export default class DashAnalyticsComponent {
 
         if (response && response.rsName && response.rsName.length > 0) {
           // Step 3: Transform the data with type assertion
-          const availableRSNames: Brand[] = response.rsName.map(([id, name]: [string, string]) => {
+          const availableRSNames: Brand[] = response.rsName.map(([id, region,name,abmid]: [string, string,string,string]) => {
             return {
-              id: parseInt(id), // Convert ID to a number
-              name: name // Keep the name as is
+              id: id, // Convert ID to a number
+              name: name,
+              region:region,
+              abmid:abmid
+              // Keep the name as is
             };
           });
           this.availableRSNames = availableRSNames;
         }
         if (response && response.abmName && response.abmName.length > 0) {
           // Step 3: Transform the data with type assertion
-          const availableAbmNames: Brand[] = response.abmName.map(([id, name]: [string, string]) => {
+          const availableAbmNames: Brand[] = response.abmName.map(([id, name,region]: [string, string,string]) => {
             return {
               id: id, // Convert ID to a number
-              name: name // Keep the name as is
+              name: name,// Keep the name as is
+              region:region
             };
           });
           this.availableAbmNames = availableAbmNames;
@@ -2874,7 +2902,25 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
 
     this.RegionWiseGrowthOverPreviousMonthOptions = {
         series: [
-            // Placeholder series that will be updated dynamically
+          { name: 'Retailers - East', group: 'retailers', data: [] },
+          { name: 'Retailers - South1', group: 'retailers', data: [] },
+          { name: 'Retailers - South2', group: 'retailers', data: [] },
+          { name: 'Retailers - North', group: 'retailers', data: [] },
+          { name: 'Retailers - West', group: 'retailers', data: [] },
+    
+          // Qty group
+          { name: 'Qty - East', group: 'qty', data: [] },
+          { name: 'Qty - South1', group: 'qty', data: [] },
+          { name: 'Qty - South2', group: 'qty', data: [] },
+          { name: 'Qty - North', group: 'qty', data: [] },
+          { name: 'Qty - West', group: 'qty', data: [] },
+    
+          // Value group
+          { name: 'Value - East', group: 'value', data: [] },
+          { name: 'Value - South1', group: 'value', data: [] },
+          { name: 'Value - South2', group: 'value', data: [] },
+          { name: 'Value - North', group: 'value', data: [] },
+          { name: 'Value - West', group: 'value', data: [] }
         ],
         title: {
             text: 'Region Wise Growth Loading...',
