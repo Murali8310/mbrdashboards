@@ -18,6 +18,7 @@ import com.titan.stationary.bean.UserBean;
 import com.titan.stationary.bean.UserLoginBean;
 import com.titan.stationary.bean.productMasterbean;
 import com.titan.stationary.bean.smUserMasterBean;
+import com.titan.stationary.dto.InputFilterData;
 import com.titan.stationary.dto.MasterData;
 import com.titan.stationary.dto.MonthlyDataFilter;
 import com.titan.stationary.dto.OutputDashboardGraphs;
@@ -280,7 +281,7 @@ public interface UserDao {
 	List<OutputForMontlyFilter> MonthlyTrend(MonthlyDataFilter filter);
 
 
-	MasterData GetMasterData();
+	MasterData GetMasterData(MonthlyDataFilter filter);
 
 
 	List<OutputGrowthOverPreviousMonth> GrowthOverPreviousMonth(MonthlyDataFilter filter);
@@ -294,6 +295,10 @@ public interface UserDao {
 
 
 	List<OutputDashboardGraphs> OutputDashboardGraphs(MonthlyDataFilter filter);
+
+
+
+	MasterData getFilterData(MonthlyDataFilter data);
 
 
 

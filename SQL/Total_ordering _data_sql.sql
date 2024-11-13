@@ -5,8 +5,9 @@ select * from MBRUsers where Desig_Id=7 or Desig_Id=6;
 SELECT * FROM MBROrders order by OrderDate;
 select * from MBRDesignation;
 select * from MBRBrand;
-select COUNT(*) from MBRUsers where Desig_Id=7 ;
-select COUNT(*) from MBRUsers where Desig_Id=6 ;
+select * from ER_User_Master;
+select * from MBRUsers where Desig_Id=4 ;
+select * from MBRUsers where Desig_Id=6 ;
 select COUNT(distinct ABMEMM) from MBROrders;
 select COUNT(distinct ABMEMM) from MBROrders;
 select COUNT(distinct ABMKAM) from MBROrders;
@@ -19,15 +20,42 @@ GROUP BY ABMEMM, ABMKAM;
 
 select SUM(OrderQty) from MBROrders where ABMKAM = '1776314' GROUP BY ABMKAM;
 
+select * from MBROrders where rs;
+select * from MBRUsers where rs
+
 ---------------------------- Masters Query--------------------------------------
 select distinct (Region) from MBROrders;
 select distinct (Brand) from MBROrders;
 select distinct(RetailerName)from MBROrders;
 select distinct(RSName)from MBROrders;
-SELECT DISTINCT RSCode, RSName FROM MBROrders;
+
+--SELECT DISTINCT RSCode, RSName FROM MBROrders;
 -- select distinct(ABMEMM)from MBROrders;
 -- select distinct(ABMKAM)from MBROrders;
 select * from MBRUsers where Desig_Id=7 or Desig_Id=6;
+
+SELECT DISTINCT 
+    MBROrders.RSCode, 
+    MBROrders.RSName, 
+    MBROrders.Region, 
+    CASE
+        WHEN ABMEMMUser.Name IS NOT NULL THEN ABMEMMUser.Name
+        WHEN ABMKAMUser.Name IS NOT NULL THEN ABMKAMUser.Name
+        ELSE 'No Name'  -- Optional, in case both are NULL
+    END AS ABM_Name,  -- Changed alias to ABM_EMMName
+    CASE
+        WHEN ABMEMMUser.UserName IS NOT NULL THEN ABMEMMUser.UserName
+        WHEN ABMKAMUser.UserName IS NOT NULL THEN ABMKAMUser.UserName
+        ELSE 'No Name'  -- Optional, in case both are NULL
+    END AS ABM_USERNAME  -- Changed alias to ABM_KAMName
+FROM 
+    MBROrders
+LEFT JOIN 
+    MBRUsers AS ABMEMMUser
+    ON MBROrders.ABMEMM = ABMEMMUser.UserName
+LEFT JOIN 
+    MBRUsers AS ABMKAMUser
+    ON MBROrders.ABMKAM = ABMKAMUser.UserName;
 
 
 -- select orderQty, TotalPrice, count(RetailerCode)  from MBROrders distinct Month(OrderDate);
@@ -45,7 +73,7 @@ select * from MBRUsers where Desig_Id=7 or Desig_Id=6;
         COUNT(DISTINCT RetailerCode) AS delalers,
 		Region
     FROM 
-        MBROrders
+        MBROrders (nolock)
 	Where 
 			CONVERT(VARCHAR, OrderDate, 112) >= 20240401                        -- Compare OrderDate with StartDate
             AND CONVERT(VARCHAR, OrderDate, 112) <= 20240530
@@ -81,7 +109,7 @@ select * from MBRUsers where Desig_Id=7 or Desig_Id=6;
 ------------------------------------------------------------------------- Monthly Trend -------------------------------
 --- Monthly Trend Old Backup
 Alter PROCEDURE GetOrderSummary
-  @RegionList VARCHAR(MAX),    -- Comma-separated list of regions
+		@RegionList VARCHAR(MAX),    -- Comma-separated list of regions
 		@StartDate INT,              -- Start date in yyyymmdd format (e.g., 20240601)
 		@EndDate INT,                -- End date in yyyymmdd format (e.g., 20240630)
 		@RSNameList VARCHAR(MAX),
@@ -101,7 +129,7 @@ Alter PROCEDURE GetOrderSummary
 		--	ABMEMM as EMPID ,
 		
 		FROM 
-			MBROrders
+			MBROrders (nolock)
 		WHERE 
 				 CONVERT(VARCHAR, OrderDate, 112) >= @StartDate                        -- Compare OrderDate with StartDate
 				AND CONVERT(VARCHAR, OrderDate, 112) <= @EndDate                          
@@ -143,15 +171,15 @@ Alter PROCEDURE GetOrderSummary
 
 
 	EXEC GetOrderSummary
-		@RegionList = '', -- Comma-separated list of regions
+		@RegionList = 'east,west,north,south1,south2', -- Comma-separated list of regions
 		@StartDate = 20240401,         -- Start date in yyyymmdd format
-		@EndDate = 20240630,		   -- End date in yyyymmdd format
+		@EndDate = 20241030,		   -- End date in yyyymmdd format
 		@BrandList ='',
 		@RSNameList ='',
 		@ABMName='',
-		@RetailerType='IDD';
+		@RetailerType='';
 
------------------------- Monthly Trend new Query optimized one ----
+------------------------ Monthly Trend new Query optimized one --not using this--
 
 ALTER PROCEDURE GetOrderSummary
   @RegionList VARCHAR(MAX),    -- Comma-separated list of regions
@@ -159,72 +187,70 @@ ALTER PROCEDURE GetOrderSummary
   @EndDate INT,                -- End date in yyyymmdd format (e.g., 20240630)
   @RSNameList VARCHAR(MAX),
   @BrandList VARCHAR(MAX),
-  @ABMName VARCHAR(MAX),
-  @RetailerType VARCHAR(MAX)   -- New parameter for ABMName
+  @ABMName VARCHAR(MAX),       -- New parameter for ABMName
+  @RetailerType VARCHAR(MAX)
 AS
 BEGIN
-    -- Declare table variables to store the split values
-    DECLARE @RegionTable TABLE (Region VARCHAR(255));
-    DECLARE @BrandTable TABLE (Brand VARCHAR(255));
-    DECLARE @RSNameTable TABLE (RSName VARCHAR(255));
-    DECLARE @ABMNameTable TABLE (ABMName VARCHAR(255));
+  -- Create temporary tables or use table variables to hold the split lists
+  DECLARE @RegionTable TABLE (Region VARCHAR(100));
+  DECLARE @BrandTable TABLE (Brand VARCHAR(100));
+  DECLARE @RSNameTable TABLE (RSName VARCHAR(100));
+  DECLARE @ABMTable TABLE (ABMName VARCHAR(100));
 
-    -- Insert the split values into the table variables
-    INSERT INTO @RegionTable (Region)
-    SELECT LTRIM(RTRIM(value)) 
-    FROM STRING_SPLIT(@RegionList, ',');
+  -- Populate the temporary tables using STRING_SPLIT
+  INSERT INTO @RegionTable (Region)
+  SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RegionList, ',');
 
-    INSERT INTO @BrandTable (Brand)
-    SELECT LTRIM(RTRIM(value)) 
-    FROM STRING_SPLIT(@BrandList, ',');
+  INSERT INTO @BrandTable (Brand)
+  SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@BrandList, ',');
 
-    INSERT INTO @RSNameTable (RSName)
-    SELECT LTRIM(RTRIM(value)) 
-    FROM STRING_SPLIT(@RSNameList, ',');
+  INSERT INTO @RSNameTable (RSName)
+  SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RSNameList, ',');
 
-    INSERT INTO @ABMNameTable (ABMName)
-    SELECT LTRIM(RTRIM(value)) 
-    FROM STRING_SPLIT(@ABMName, ',');
+  IF @ABMName IS NOT NULL AND @ABMName <> ''
+  BEGIN
+    INSERT INTO @ABMTable (ABMName)
+    SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ',');
+  END
 
-    -- Select the sum of TotalPrice, sum of OrderQty, and count of distinct RetailerCode
-    SELECT 
-        YEAR(OrderDate) AS Year,
-        MONTH(OrderDate) AS Month,
-        SUM(TotalPrice) AS TotalPriceSum,
-        SUM(OrderQty) AS TotalOrderQty,
-        COUNT(DISTINCT RetailerCode) AS DistinctRetailerCount
-    FROM 
-        MBROrders O
-    LEFT JOIN 
-        @RegionTable R ON O.Region = R.Region
-    LEFT JOIN 
-        @BrandTable B ON O.Brand = B.Brand
-    LEFT JOIN 
-        @RSNameTable RS ON O.RSName = RS.RSName
-    LEFT JOIN 
-        @ABMNameTable ABM ON O.ABMEMM = ABM.ABMName OR O.ABMKAM = ABM.ABMName
-    WHERE 
-        O.OrderDate >= CONVERT(VARCHAR, CAST(@StartDate AS CHAR(8)))   -- Convert to DATE format for comparison
-        AND O.OrderDate <= CONVERT(VARCHAR, CAST(@EndDate AS CHAR(8))) 
+  -- Main query for getting the order summary
+  SELECT 
+    YEAR(OrderDate) AS Year,
+    MONTH(OrderDate) AS Month,
+    SUM(TotalPrice) AS TotalPriceSum,
+    SUM(OrderQty) AS TotalOrderQty,
+    COUNT(DISTINCT RetailerCode) AS DistinctRetailerCount
+  FROM 
+    MBROrders (NOLOCK)
+  WHERE 
+    OrderDate BETWEEN CAST(CAST(@StartDate AS CHAR(8)) AS nvarchar) AND CAST(CAST(@EndDate AS CHAR(8)) AS nvarchar)  -- Date comparison using BETWEEN
 
-		 --CONVERT(VARCHAR, OrderDate, 112) >= @StartDate                        -- Compare OrderDate with StartDate
-		--		AND CONVERT(VARCHAR, OrderDate, 112) <= @EndDate  
-        AND (
-            @RetailerType IS NULL OR 
-            (O.RetailerCode LIKE 
-                CASE 
-                    WHEN @RetailerType = 'IDD' THEN '9%' 
-                    WHEN @RetailerType = 'DD' THEN '1%' 
-                    ELSE '' 
-                END
-            )
+    -- Filtering based on Region, Brand, RSName, ABMName, and RetailerType using JOINs or EXISTS
+    AND (
+      EXISTS (SELECT 1 FROM @RegionTable r WHERE r.Region = MBROrders.Region)
+      OR EXISTS (SELECT 1 FROM @BrandTable b WHERE b.Brand = MBROrders.Brand)
+      OR EXISTS (SELECT 1 FROM @RSNameTable s WHERE s.RSName = MBROrders.RSName)
+      OR (
+        @ABMName IS NOT NULL AND @ABMName <> '' AND (
+          EXISTS (SELECT 1 FROM @ABMTable a WHERE a.ABMName = MBROrders.ABMEMM)
+          OR EXISTS (SELECT 1 FROM @ABMTable a WHERE a.ABMName = MBROrders.ABMKAM)
         )
-    GROUP BY
-        YEAR(OrderDate),
-        MONTH(OrderDate)
-    ORDER BY
-        YEAR(OrderDate),
-        MONTH(OrderDate);  -- Order by year and month
+      )
+      OR (
+        @RetailerType IS NOT NULL AND (
+          -- Logic to filter RetailerType
+          (@RetailerType = 'IDD' AND MBROrders.RetailerCode LIKE '9%')
+          OR (@RetailerType = 'DD' AND MBROrders.RetailerCode LIKE '1%')
+          OR (@RetailerType NOT IN ('IDD', 'DD')) -- This allows for cases where RetailerType is not IDD or DD
+        )
+      )
+    )
+  GROUP BY 
+    YEAR(OrderDate),
+    MONTH(OrderDate)
+  ORDER BY 
+    YEAR(OrderDate),
+    MONTH(OrderDate);
 END;
 
 
@@ -232,7 +258,7 @@ END;
 EXEC GetOrderSummary
 		@RegionList = '', -- Comma-separated list of regions
 		@StartDate = 20240401,         -- Start date in yyyymmdd format
-		@EndDate = 20240630,		   -- End date in yyyymmdd format
+		@EndDate = 20241030,		   -- End date in yyyymmdd format
 		@BrandList ='',
 		@RSNameList ='',
 		@ABMName='',
@@ -258,7 +284,7 @@ BEGIN
             SUM(OrderQty) AS TotalOrderQty,
             COUNT(DISTINCT RetailerCode) AS DistinctRetailerCount
         FROM 
-            MBROrders
+            MBROrders(nolock)
         WHERE 
             (
                 Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RegionList, ','))  -- Split the @RegionList string into values
@@ -292,6 +318,9 @@ BEGIN
             YEAR(OrderDate),
             MONTH(OrderDate)
     )
+
+
+
     -- Now, calculate the growth over the previous month using the LAG function and compute percentage growth
     SELECT 
         Year,
@@ -357,8 +386,8 @@ END;
 
 EXEC GrowthOverPreviousMonth
    @RegionList ='EAST, WEST, NORTH, SOUTH 1, SOUTH 2' ,  -- Comma-separated list of regions
-    @StartDate = 20230201,         -- Start date in yyyymmdd format
-    @EndDate = 20240630,		   -- End date in yyyymmdd format
+    @StartDate = 20240401,         -- Start date in yyyymmdd format
+    @EndDate = 20241030,		   -- End date in yyyymmdd format
 	@BrandList ='',
 	@RSNameList ='',
 	@ABMName='',
@@ -388,7 +417,7 @@ BEGIN
         COUNT(DISTINCT RetailerCode) AS DistinctRetailerCount,
 		Region
     FROM 
-        MBROrders
+        MBROrders(nolock)
     WHERE 
         (
             Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RegionList, ','))  -- Split the @RegionList string into values
@@ -459,7 +488,7 @@ BEGIN
             SUM(OrderQty) AS TotalOrderQty,
             COUNT(DISTINCT RetailerCode) AS DistinctRetailerCount
         FROM 
-            MBROrders
+            MBROrders(nolock)
         WHERE 
             Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RegionList, ','))  -- Split the @RegionList string into values
             AND CONVERT(VARCHAR, OrderDate, 112) >= @StartDate                        -- Compare OrderDate with StartDate
@@ -510,7 +539,31 @@ BEGIN
             WHEN LAG(DistinctRetailerCount, 1) OVER (PARTITION BY Region ORDER BY Year, Month) = 0 THEN NULL
             ELSE 
                 ((DistinctRetailerCount - LAG(DistinctRetailerCount, 1) OVER (PARTITION BY Region ORDER BY Year, Month)) * 1.0 / LAG(DistinctRetailerCount, 1) OVER (PARTITION BY Region ORDER BY Year, Month)) * 100
-        END AS RetailerGrowthPercentage
+        END AS RetailerGrowthPercentage,
+
+				  -- Calculate the growth in TotalPrice (month-over-month growth)
+        CASE 
+            WHEN LAG(TotalPriceSum, 1) OVER (ORDER BY Year, Month) = 0 THEN NULL
+            WHEN LAG(TotalPriceSum, 1) OVER (ORDER BY Year, Month) IS NULL THEN NULL -- Handle NULL for the first record
+            ELSE 
+                (TotalPriceSum - LAG(TotalPriceSum, 1) OVER ( PARTITION BY Region ORDER BY Year, Month))
+        END AS PriceGrowth,
+
+		 -- Calculate the growth in TotalOrderQty (month-over-month growth)
+        CASE 
+            WHEN LAG(TotalOrderQty, 1) OVER (ORDER BY Year, Month) = 0 THEN NULL
+            WHEN LAG(TotalOrderQty, 1) OVER (ORDER BY Year, Month) IS NULL THEN NULL -- Handle NULL for the first record
+            ELSE 
+                (TotalOrderQty - LAG(TotalOrderQty, 1) OVER ( PARTITION BY Region ORDER BY Year, Month))
+        END AS OrderGrowth, 
+
+		CASE 
+            WHEN LAG(DistinctRetailerCount, 1) OVER (ORDER BY Year, Month) = 0 THEN NULL
+            WHEN LAG(DistinctRetailerCount, 1) OVER (ORDER BY Year, Month) IS NULL THEN NULL -- Handle NULL for the first record
+            ELSE 
+                (DistinctRetailerCount - LAG(DistinctRetailerCount, 1) OVER ( PARTITION BY Region ORDER BY Year, Month))
+        END AS RetailerGrowth
+
     FROM 
         MonthlySummary
     ORDER BY
@@ -519,11 +572,13 @@ END;
 
 
 EXEC RegionWiseGrowthoverPreviousMonths
-    @RegionList = 'EAST',    -- Comma-separated list of regions
+    @RegionList = 'EAST, WEST, NORTH, SOUTH 1, SOUTH 2',    -- Comma-separated list of regions
     @StartDate = 20240401,         -- Start date in yyyymmdd format
-    @EndDate = 20240630,		   -- End date in yyyymmdd format
+    @EndDate = 20241030,		   -- End date in yyyymmdd format
 	@BrandList ='',
 	@ABMName ='',
-	@RetailerType=''
+	@RetailerType='',
+	@RSNameList=''
 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

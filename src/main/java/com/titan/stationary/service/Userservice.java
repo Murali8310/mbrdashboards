@@ -13,6 +13,7 @@ import com.titan.stationary.bean.IndentMasterBean;
 import com.titan.stationary.bean.Product;
 import com.titan.stationary.bean.UserLoginBean;
 import com.titan.stationary.bean.smUserMasterBean;
+import com.titan.stationary.dto.InputFilterData;
 import com.titan.stationary.dto.MasterData;
 import com.titan.stationary.dto.MonthlyDataFilter;
 import com.titan.stationary.dto.OutputDashboardGraphs;
@@ -231,7 +232,7 @@ public interface Userservice {
 	List<Object> monthlyToalOrdaringData();
 
 
-	MasterData GetMasterData();
+	MasterData GetMasterData(MonthlyDataFilter filter);
 
 
 	List<OutputForMontlyFilter> MonthlyTrend(MonthlyDataFilter filter);
@@ -250,5 +251,11 @@ public interface Userservice {
 
 
 	List<OutputDashboardGraphs> OutputDashboardGraphs(MonthlyDataFilter filter);
+
+
+	MasterData getFilterData(InputFilterData data);
+
+
+	MasterData getFilterData(MonthlyDataFilter filter);
 
 }

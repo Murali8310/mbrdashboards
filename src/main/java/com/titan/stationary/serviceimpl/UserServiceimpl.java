@@ -24,6 +24,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.titan.stationary.bean.Budgetmasterbean;
@@ -35,6 +36,7 @@ import com.titan.stationary.bean.Product;
 import com.titan.stationary.bean.UserLoginBean;
 import com.titan.stationary.bean.productMasterbean;
 import com.titan.stationary.dao.UserDao;
+import com.titan.stationary.dto.InputFilterData;
 import com.titan.stationary.dto.MasterData;
 import com.titan.stationary.dto.MonthlyDataFilter;
 import com.titan.stationary.dto.OutputForMontlyFilter;
@@ -1085,9 +1087,9 @@ public class UserServiceimpl implements Userservice {
 	}
 	
 	@Override
-	public MasterData GetMasterData() {
+	public MasterData GetMasterData(MonthlyDataFilter filter) {
 		// TODO Auto-generated method stub
-		return userDao.GetMasterData();
+		return userDao.GetMasterData(filter);
 	}
 
 	@Override
@@ -1135,6 +1137,18 @@ public class UserServiceimpl implements Userservice {
 	public List<OutputDashboardGraphs> OutputDashboardGraphs(MonthlyDataFilter filter) {
 		// TODO Auto-generated method stub
 		return userDao.OutputDashboardGraphs(filter);
+	}
+
+	@Override
+	public MasterData getFilterData(MonthlyDataFilter data) {
+		// TODO Auto-generated method stub
+		return userDao.getFilterData(data);
+	}
+
+	@Override
+	public MasterData getFilterData(InputFilterData data) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

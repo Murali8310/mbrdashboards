@@ -20,6 +20,7 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -58,6 +59,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.titan.stationary.bean.Budgetmasterbean;
 import com.titan.stationary.bean.BuyerIndentBean;
@@ -70,6 +72,7 @@ import com.titan.stationary.bean.UserLoginBean;
 import com.titan.stationary.bean.productMasterbean;
 import com.titan.stationary.bean.smUserMasterBean;
 import com.titan.stationary.dao.UserDao;
+import com.titan.stationary.dto.InputFilterData;
 import com.titan.stationary.dto.MasterData;
 import com.titan.stationary.dto.MonthlyDataFilter;
 import com.titan.stationary.dto.OutputForMontlyFilter;
@@ -6274,24 +6277,30 @@ Calendar cal = Calendar.getInstance();
 	}
 	
 	@Override
-	public MasterData GetMasterData() {
+	public MasterData GetMasterData(MonthlyDataFilter filter) {
 		// TODO Auto-generated method stub
-		MasterData result = getDataforMaster();
+		MasterData result = getDataforMaster(filter);
 		
 		return result;
 		
 	}
 	
-	private MasterData getDataforMaster() {
+	private MasterData getDataforMaster(MonthlyDataFilter filter) {
 		MasterData data=new MasterData();
 		List<Brand> brandName = selectBrandforMaster();
 		List<Region>regionName=selectRegionforMaster();
 		List<RSName>rsName=selectRsNameForMaster();
 		List<ABMName>ABMName=selectABMNameForMaster();
+		
 		data.setBrand(brandName);
-		data.setRegion(regionName);
+		//data.setRegion(regionName);
 		data.setRsName(rsName);
 		data.setAbmName(ABMName);
+		if(!filter.getRegionList().isEmpty()|| !filter.getAbmName().isEmpty()) {
+			MasterData filterData= getFilterData(filter);
+			return filterData;
+		}
+		
 		return data;
 		
 	}
@@ -6319,36 +6328,40 @@ Calendar cal = Calendar.getInstance();
 	}
 	private List<RSName>selectRsNameForMaster(){
 		List<RSName> rsName= null;
-		String checkSql = "\r\n"
-				+ "SELECT DISTINCT \r\n"
-				+ "    MBROrders.RSName, \r\n"
-				+ "    MBROrders.Region, \r\n"
-				+ "    CASE\r\n"
-				+ "        WHEN ABMEMMUser.Name IS NOT NULL THEN ABMEMMUser.Name\r\n"
-				+ "        WHEN ABMKAMUser.Name IS NOT NULL THEN ABMKAMUser.Name\r\n"
-				+ "        ELSE 'No Name'  -- Optional, in case both are NULL\r\n"
-				+ "    END AS ABM_EMMName,  -- Changed alias to ABM_EMMName\r\n"
-				+ "    CASE\r\n"
-				+ "        WHEN ABMEMMUser.UserName IS NOT NULL THEN ABMEMMUser.UserName\r\n"
-				+ "        WHEN ABMKAMUser.UserName IS NOT NULL THEN ABMKAMUser.UserName\r\n"
-				+ "        ELSE 'No Name'  -- Optional, in case both are NULL\r\n"
-				+ "    END AS ABM_KAMName  -- Changed alias to ABM_KAMName\r\n"
-				+ "FROM \r\n"
-				+ "    MBROrders\r\n"
-				+ "LEFT JOIN \r\n"
-				+ "    MBRUsers AS ABMEMMUser\r\n"
-				+ "    ON MBROrders.ABMEMM = ABMEMMUser.UserName\r\n"
-				+ "LEFT JOIN \r\n"
-				+ "    MBRUsers AS ABMKAMUser\r\n"
-				+ "    ON MBROrders.ABMKAM = ABMKAMUser.UserName;";
+//		String checkSql = "\r\n"
+//				+ "SELECT DISTINCT \r\n"
+//				+ "    MBROrders.RSName, \r\n"
+//				+ "    MBROrders.Region, \r\n"
+//				+ "    CASE\r\n"
+//				+ "        WHEN ABMEMMUser.Name IS NOT NULL THEN ABMEMMUser.Name\r\n"
+//				+ "        WHEN ABMKAMUser.Name IS NOT NULL THEN ABMKAMUser.Name\r\n"
+//				+ "        ELSE 'No Name'  -- Optional, in case both are NULL\r\n"
+//				+ "    END AS ABM_EMMName,  -- Changed alias to ABM_EMMName\r\n"
+//				+ "    CASE\r\n"
+//				+ "        WHEN ABMEMMUser.UserName IS NOT NULL THEN ABMEMMUser.UserName\r\n"
+//				+ "        WHEN ABMKAMUser.UserName IS NOT NULL THEN ABMKAMUser.UserName\r\n"
+//				+ "        ELSE 'No Name'  -- Optional, in case both are NULL\r\n"
+//				+ "    END AS ABM_KAMName  -- Changed alias to ABM_KAMName\r\n"
+//				+ "FROM \r\n"
+//				+ "    MBROrders\r\n"
+//				+ "LEFT JOIN \r\n"
+//				+ "    MBRUsers AS ABMEMMUser\r\n"
+//				+ "    ON MBROrders.ABMEMM = ABMEMMUser.UserName\r\n"
+//				+ "LEFT JOIN \r\n"
+//				+ "    MBRUsers AS ABMKAMUser\r\n"
+//				+ "    ON MBROrders.ABMKAM = ABMKAMUser.UserName;";
+		
+		String checkSql = "SELECT Name, UserName, Region from MBRUsers where Desig_Id = 5";
+		
 		Query checkQuery =  entityManager.createNativeQuery(checkSql);
 		rsName=checkQuery.getResultList();
 		return rsName;
+		
 	}
 
 	private List<ABMName>selectABMNameForMaster(){
 		List<ABMName> ABMName= null;
-		String checkSql = "select UserName, Name, Region from MBRUsers where Desig_Id=7 or Desig_Id=6;";
+		String checkSql = "select UserName, Name, Region from MBRUsers (nolock) where Desig_Id=7 or Desig_Id=6;";
 		Query checkQuery =  entityManager.createNativeQuery(checkSql);
 		ABMName=checkQuery.getResultList();
 		return ABMName;
@@ -6364,43 +6377,73 @@ Calendar cal = Calendar.getInstance();
 	
 	
 	private List<OutputForMontlyFilter> getDataForMonthlyTrend(MonthlyDataFilter filter) {
-		List<OutputForMontlyFilter> filteredData=new ArrayList<>();
-		
-		String storedProcedureCall = "EXEC GetOrderSummary @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
-        
-        // Create a native query
-        Query query = entityManager.createNativeQuery(storedProcedureCall);
-        
-        // Set the parameters for the stored procedure call
-        query.setParameter("regionList", filter.getRegionList());  // @RegionList (e.g., 'EAST, WEST')
-        query.setParameter("startDate", filter.getStartDate());    // @StartDate (e.g., 20240601)
-        query.setParameter("endDate", filter.getEndDate());        // @EndDate (e.g., 20240630)
-        query.setParameter("brandList", filter.getBrandList());    // @BrandList (e.g., 'Titan')
-        query.setParameter("rsNameList", filter.getRsNameList());  // @RSNameList (e.g., '' or some value)
-        query.setParameter("abmName", filter.getAbmName());
-        query.setParameter("retailerType", filter.getRetailerType());        // Execute the query to invoke the stored procedure
-        try {
-        	List<Object[]> result = query.getResultList();
-        	//filteredData = (OutputForMontlyFilter) query.getSingleResult();
-        	
-        	for (Object[] row : result) {
-        	    // Assuming row contains values in the correct order for mapping
-        		OutputForMontlyFilter data= new OutputForMontlyFilter();
-        		data.setMonth((Integer) row[1]);
-        		data.setTotalRevenue((BigDecimal)row[2]);
-        		data.setTotalQTY((Integer) row[3]);
-        		data.setTotalRetailerCode((Integer) row[4]);
-        		filteredData.add(data);
-        	    // Now, filteredData is populated with values
-        	}
-        }
-        catch(Exception e) {
-        	e.printStackTrace();
-        }
-		
-		return filteredData;
+	    List<OutputForMontlyFilter> filteredData = new ArrayList<>();
+	    
+	    // Stored Procedure call
+	    String storedProcedureCall = "EXEC GetOrderSummary @RegionList = :regionList, " +
+	                                 "@StartDate = :startDate, @EndDate = :endDate, " +
+	                                 "@BrandList = :brandList, @RSNameList = :rsNameList, " +
+	                                 "@ABMName = :abmName, @RetailerType = :retailerType";
+	    
+	    // Create a native query
+	    Query query = entityManager.createNativeQuery(storedProcedureCall);
+	    
+	    // Format region list if necessary (assuming stored procedure expects it this way)
+	    String formattedRegionList = filter.getRegionList(); // 'EAST, WEST, NORTH, SOUTH 1, SOUTH 2'
+	    
+	    // Handling empty string parameters and setting them to NULL where needed
+	    String brandList = filter.getBrandList().isEmpty() ? null : filter.getBrandList();
+	    String rsNameList = filter.getRsNameList().isEmpty() ? null : filter.getRsNameList();
+	    String abmName = filter.getAbmName().isEmpty() ? null : filter.getAbmName();
+	    String retailerType = filter.getRetailerType().isEmpty() ? null : filter.getRetailerType();
 
+	    // Debugging/logging before executing
+	    System.out.println("Executing Stored Procedure: " + storedProcedureCall);
+	    System.out.println("Region List: " + formattedRegionList);
+	    System.out.println("Start Date: " + filter.getStartDate());
+	    System.out.println("End Date: " + filter.getEndDate());
+	    System.out.println("Brand List: " + brandList); // should be null if empty
+	    System.out.println("RS Name List: " + rsNameList); // should be null if empty
+	    System.out.println("ABM Name: " + abmName); // should be null if empty
+	    System.out.println("Retailer Type: " + retailerType); // should be null if empty
+
+	    // Set parameters for the stored procedure
+	    query.setParameter("regionList", formattedRegionList);
+	    query.setParameter("startDate", filter.getStartDate());
+	    query.setParameter("endDate", filter.getEndDate());
+	    query.setParameter("brandList", brandList);   // Pass NULL if empty
+	    query.setParameter("rsNameList", rsNameList); // Pass NULL if empty
+	    query.setParameter("abmName", abmName);       // Pass NULL if empty
+	    query.setParameter("retailerType", retailerType); // Pass NULL if empty
+
+	    try {
+	        List<Object[]> result = query.getResultList();
+	        
+	        // Map each row to OutputForMontlyFilter
+	        for (Object[] row : result) {
+	            OutputForMontlyFilter data = new OutputForMontlyFilter();
+	            
+	            // Ensure safe casting and row validation
+	            if (row.length >= 5) {
+	                data.setMonth((Integer) row[1]);
+	                data.setTotalRevenue((BigDecimal) row[2]);
+	                data.setTotalQTY((Integer) row[3]);
+	                data.setTotalRetailerCode((Integer) row[4]);
+	                filteredData.add(data);
+	            } else {
+	                System.err.println("Unexpected result format for row: " + Arrays.toString(row));
+	            }
+	        }
+	    } catch (Exception e) {
+	        // Handle the exception with better logging
+	        e.printStackTrace();
+	        // Optionally log more details about the exception, e.g., the parameters or query
+	    }
+
+	    return filteredData;
 	}
+
+
 
 	@Override
 	public List<Object> monthlyToalOrdaringData() {
@@ -6662,5 +6705,71 @@ Calendar cal = Calendar.getInstance();
 		
 		return outputDashboardGraphs;
 
+	}
+
+	@Override
+	public MasterData getFilterData(MonthlyDataFilter  data) {
+		List<RSName> rsName=new ArrayList<>();
+		List<ABMName> ABMName = new ArrayList<>(); // Make sure ABMName is initialized
+		
+		MasterData dataoutput = new MasterData();
+		
+		
+		List<String> regionList = Arrays.stream(data.getRegionList().split(","))
+                .map(String::trim)  // Trim spaces around each region
+                .collect(Collectors.toList());
+		
+		if (!data.getRegionList().isEmpty() && data.getAbmName().isEmpty()) {
+		    String checkSql = "SELECT Name, UserName FROM MBRUsers " +
+		                      "WHERE Region IN (:region) " + 
+		                      "AND (desig_id = 6 OR desig_id = 7)";
+		    Query checkQuery = entityManager.createNativeQuery(checkSql);
+		    checkQuery.setParameter("region", regionList);
+
+		    // Log the region list for debugging
+		    System.out.println("Region List: " + data.getRegionList());
+
+		    // Execute the query and get the result list
+		    List<Object[]> resultList = checkQuery.getResultList();
+
+		    // Process each result row to map to ABMName objects
+		    for (Object[] row : resultList) {
+		        ABMName abm = new ABMName();
+		        abm.setName((String) row[0]); // Assuming Name is the first column
+		        abm.setUserName((String) row[1]); // Assuming UserName is the second column
+
+		        ABMName.add(abm); // Add to the list
+		    }
+
+		    // Set the ABMName list into dataoutput
+		    dataoutput.setAbmName(ABMName);
+
+		    // Return the populated MasterData object
+		    return dataoutput;
+		}
+
+		else if(!data.getRegionList().isEmpty() && !data.getAbmName().isEmpty()) {
+			
+			String checksql= "SELECT Name, Region, UserName FROM MBRUsers WHERE Region IN (:region)"
+					+ "AND Desig_Id = 5 AND (ABMEMM = :ABMName OR ABMKAM = :ABMName);";
+			Query checkQuery =  entityManager.createNativeQuery(checksql);
+			checkQuery.setParameter("region", regionList);
+			checkQuery.setParameter("ABMName", data.getAbmName());
+			//rsName=checkQuery.getResultList();
+			
+			List<Object[]> resultList = checkQuery.getResultList();
+			for (Object[] row : resultList) {
+				RSName rsm = new RSName();
+				rsm.setRsName((String) row[0]); // Assuming Name is the first column
+				rsm.setRegion((String) row[1]); // Assuming UserName is the second column
+				rsm.setUserName((String) row[2]);
+
+				rsName.add(rsm); // Add to the list
+		    }
+
+			dataoutput.setRsName(rsName);
+			return dataoutput;
+		}
+		return dataoutput;	
 	}
 }

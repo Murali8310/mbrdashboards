@@ -62,6 +62,7 @@ import com.titan.stationary.bean.IndentMasterBean;
 import com.titan.stationary.bean.Product;
 import com.titan.stationary.bean.UserLoginBean;
 import com.titan.stationary.bean.smUserMasterBean;
+import com.titan.stationary.dto.InputFilterData;
 import com.titan.stationary.dto.MasterData;
 import com.titan.stationary.dto.MonthlyDataFilter;
 import com.titan.stationary.dto.OutputForMontlyFilter;
@@ -261,67 +262,58 @@ public class UserController {
 //			return "login";
 //		}
 //	}
-	
-	
 
-	    @RequestMapping(value = "loginSubmit", method = RequestMethod.POST)
-	    public Map<String, Object> loginSubmit(
-	            HttpServletRequest request,
-	            HttpServletResponse response,
-	            @RequestBody Map<String, String> loginData // Accepts raw JSON payload
-	    ) {
-	        HttpSession session = request.getSession();
-	        String value = (String) session.getAttribute("key");
+	@RequestMapping(value = "loginSubmit", method = RequestMethod.POST)
+	public Map<String, Object> loginSubmit(HttpServletRequest request, HttpServletResponse response,
+			@RequestBody Map<String, String> loginData // Accepts raw JSON payload
+	) {
+		HttpSession session = request.getSession();
+		String value = (String) session.getAttribute("key");
 
-	        String loginId = loginData.get("login_id");
-	        String encryptedPassword = loginData.get("password");
-	        String decryptedPassword = "";
-	        AesUtil aesUtil = new AesUtil(128, 1000);
-	        Map<String, Object> userMap = null;
+		String loginId = loginData.get("login_id");
+		String encryptedPassword = loginData.get("password");
+		String decryptedPassword = "";
+		AesUtil aesUtil = new AesUtil(128, 1000);
+		Map<String, Object> userMap = null;
 
-	        // Decrypt the password if it’s in the expected format
-	        if (encryptedPassword != null && encryptedPassword.split("::").length == 3) {
-	            decryptedPassword = aesUtil.decrypt(
-	                encryptedPassword.split("::")[1],
-	                encryptedPassword.split("::")[0],
-	                value,
-	                encryptedPassword.split("::")[2]
-	            );
-	        }
-	        
-	        UserLoginBean userLoginBean = new UserLoginBean();
-	        userLoginBean.setLogin_id(loginId);
-	        userLoginBean.setPassword(encryptedPassword);
+		// Decrypt the password if it’s in the expected format
+		if (encryptedPassword != null && encryptedPassword.split("::").length == 3) {
+			decryptedPassword = aesUtil.decrypt(encryptedPassword.split("::")[1], encryptedPassword.split("::")[0],
+					value, encryptedPassword.split("::")[2]);
+		}
 
-	        // Perform login validation
-	        userMap = (Map<String, Object>) userService.findloginuser(userLoginBean, encryptedPassword);
-	       // userMap = (Map<String, Object>) userService.findloginuser(loginId, decryptedPassword);
+		UserLoginBean userLoginBean = new UserLoginBean();
+		userLoginBean.setLogin_id(loginId);
+		userLoginBean.setPassword(encryptedPassword);
+
+		// Perform login validation
+		userMap = (Map<String, Object>) userService.findloginuser(userLoginBean, encryptedPassword);
+		// userMap = (Map<String, Object>) userService.findloginuser(loginId,
+		// decryptedPassword);
 //	        List<Object> accessStatus = userService.portalBlcokingMechanism(null);
 //	        Object blockAccessStatus = accessStatus != null && !accessStatus.isEmpty() ? accessStatus.get(0) : null;
 
-	        // Check login result
-	        if ("SUCCESS".equals(userMap.get("message"))) {
-	            // Set user attributes in session on successful login
-	            session.setAttribute("loginBean", loginData);
-	            session.setAttribute("userMap", userMap);
-	            session.setAttribute("user_id", userMap.get("user_id"));
-	            session.setAttribute("user_Name", userMap.get("user_Name"));
-	            session.setAttribute("email_id", userMap.get("email_id"));
-	            session.setAttribute("login_id", userMap.get("login_id"));
-	            session.setAttribute("role", userMap.get("role"));
-	            session.setAttribute("storeCode", userMap.get("storeCode"));
-	            session.setAttribute("accessRole", userMap.get("accessRole"));
-	           // session.setAttribute("blockaccess", blockAccessStatus);
+		// Check login result
+		if ("SUCCESS".equals(userMap.get("message"))) {
+			// Set user attributes in session on successful login
+			session.setAttribute("loginBean", loginData);
+			session.setAttribute("userMap", userMap);
+			session.setAttribute("user_id", userMap.get("user_id"));
+			session.setAttribute("user_Name", userMap.get("user_Name"));
+			session.setAttribute("email_id", userMap.get("email_id"));
+			session.setAttribute("login_id", userMap.get("login_id"));
+			session.setAttribute("role", userMap.get("role"));
+			session.setAttribute("storeCode", userMap.get("storeCode"));
+			session.setAttribute("accessRole", userMap.get("accessRole"));
+			// session.setAttribute("blockaccess", blockAccessStatus);
 
-	            return userMap;
-	        } else {
-	            // Set message in session and return to login page on failure
-	            session.setAttribute("MESSAGE", userMap.get("message"));
-	            return userMap;
-	        }
-	    }
-	
-
+			return userMap;
+		} else {
+			// Set message in session and return to login page on failure
+			session.setAttribute("MESSAGE", userMap.get("message"));
+			return userMap;
+		}
+	}
 
 	@RequestMapping(value = "manageByAdmin", method = RequestMethod.GET)
 	public ModelAndView manageByAdmin(HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -2752,9 +2744,9 @@ public class UserController {
 
 	}
 
-	@GetMapping(value = "GetMasterData")
+	@RequestMapping(value = "GetMasterData", method = RequestMethod.POST)
 	public MasterData GetMasterData(HttpServletRequest request, HttpServletResponse response,
-			RedirectAttributes redirect, Model model) {
+			RedirectAttributes redirect, Model model, @RequestBody MonthlyDataFilter filter) {
 		MasterData result = null;
 
 		HttpSession session = request.getSession();
@@ -2767,7 +2759,7 @@ public class UserController {
 //				//return new StringBuilder("Session is timeout, <a href='login' >click here</a> to login");
 //			}
 
-		result = userService.GetMasterData();
+		result = userService.GetMasterData(filter);
 		redirect.addFlashAttribute("MESSAGE", result);
 		model.addAttribute("MESSAGE", result);
 		return result;
@@ -2817,8 +2809,7 @@ public class UserController {
 		model.addAttribute("MESSAGE", result);
 		return result;
 	}
-	
-	
+
 	@RequestMapping(value = "RegionWiseMonthlyDistribution", method = RequestMethod.POST)
 	public List<OutputRegionWiseMonthlyDistribution> RegionWiseMonthlyDistribution(HttpServletRequest request,
 			HttpServletResponse response, RedirectAttributes redirect, Model model,
@@ -2841,8 +2832,6 @@ public class UserController {
 		return result;
 	}
 
-	
-	
 	@RequestMapping(value = "RegionWiseGrowthOverPreviousMonth", method = RequestMethod.POST)
 	public List<OutputRegionWiseGrowthOverPreviousMonth> RegionWiseGrowthOverPreviousMonth(HttpServletRequest request,
 			HttpServletResponse response, RedirectAttributes redirect, Model model,
@@ -2864,12 +2853,10 @@ public class UserController {
 		model.addAttribute("MESSAGE", result);
 		return result;
 	}
-	
-	
+
 	@RequestMapping(value = "dashboardTiles", method = RequestMethod.POST)
-	public List<OutputDashboardTiles> OutputDashboardTiles(HttpServletRequest request,
-			HttpServletResponse response, RedirectAttributes redirect, Model model,
-			@RequestBody MonthlyDataFilter filter) {
+	public List<OutputDashboardTiles> OutputDashboardTiles(HttpServletRequest request, HttpServletResponse response,
+			RedirectAttributes redirect, Model model, @RequestBody MonthlyDataFilter filter) {
 		List<OutputDashboardTiles> result = new ArrayList<>();
 
 		HttpSession session = request.getSession();
@@ -2887,12 +2874,10 @@ public class UserController {
 		model.addAttribute("MESSAGE", result);
 		return result;
 	}
-	
-	
+
 	@RequestMapping(value = "dashboardGraphs", method = RequestMethod.POST)
-	public List<OutputDashboardGraphs> OutputDashboardGraphs(HttpServletRequest request,
-			HttpServletResponse response, RedirectAttributes redirect, Model model,
-			@RequestBody MonthlyDataFilter filter) {
+	public List<OutputDashboardGraphs> OutputDashboardGraphs(HttpServletRequest request, HttpServletResponse response,
+			RedirectAttributes redirect, Model model, @RequestBody MonthlyDataFilter filter) {
 		List<OutputDashboardGraphs> result = new ArrayList<>();
 
 		HttpSession session = request.getSession();
@@ -2910,5 +2895,48 @@ public class UserController {
 		model.addAttribute("MESSAGE", result);
 		return result;
 	}
+
+//	@RequestMapping(value = "getFilterData", method = RequestMethod.POST)
+//	public MasterData getFilterData(HttpServletRequest request, HttpServletResponse response,
+//			RedirectAttributes redirect, Model model, @RequestBody InputFilterData data) {
+//		MasterData result = null;
+//
+//		HttpSession session = request.getSession();
+//		String loginId = "";
+////		try {
+////			Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+////			loginId = (String) userMap.get("login_id");
+////		} catch (Exception er) {
+////			er.printStackTrace();
+////			//return new StringBuilder("Session is timeout, <a href='login' >click here</a> to login");
+////		}
+//
+//		result = userService.getFilterData(data);
+//		redirect.addFlashAttribute("MESSAGE", result);
+//		model.addAttribute("MESSAGE", result);
+//		return result;
+//	}
 	
+	
+	@RequestMapping(value = "getFilterData", method = RequestMethod.POST)
+	public MasterData getFilterData(HttpServletRequest request, HttpServletResponse response,
+			RedirectAttributes redirect, Model model,  @RequestBody MonthlyDataFilter filter) {
+			MasterData result = null;
+
+		HttpSession session = request.getSession();
+		String loginId = "";
+//			try {
+//				Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+//				loginId = (String) userMap.get("login_id");
+//			} catch (Exception er) {
+//				er.printStackTrace();
+//				//return new StringBuilder("Session is timeout, <a href='login' >click here</a> to login");
+//			}
+
+		result = userService.getFilterData(filter);
+		redirect.addFlashAttribute("MESSAGE", result);
+		model.addAttribute("MESSAGE", result);
+		return result;
+	}
+
 }
