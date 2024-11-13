@@ -6306,7 +6306,7 @@ Calendar cal = Calendar.getInstance();
 	}
 	private List<Brand> selectBrandforMaster() {
 		List<Brand> brandName= null;
-		String checkSql = "SELECT * FROM MBRBrand";
+		String checkSql = "SELECT * FROM MBRBrand order by BrandName";
 		try {
 		Query checkQuery =  entityManager.createNativeQuery(checkSql);
 		brandName=checkQuery.getResultList();
@@ -6351,7 +6351,7 @@ Calendar cal = Calendar.getInstance();
 //				+ "    MBRUsers AS ABMKAMUser\r\n"
 //				+ "    ON MBROrders.ABMKAM = ABMKAMUser.UserName;";
 		
-		String checkSql = "SELECT Name, UserName, Region from MBRUsers where Desig_Id = 5";
+		String checkSql = "SELECT Name, UserName, Region from MBRUsers where Desig_Id = 5 order by Name";
 		
 		Query checkQuery =  entityManager.createNativeQuery(checkSql);
 		rsName=checkQuery.getResultList();
@@ -6361,7 +6361,7 @@ Calendar cal = Calendar.getInstance();
 
 	private List<ABMName>selectABMNameForMaster(){
 		List<ABMName> ABMName= null;
-		String checkSql = "select UserName, Name, Region from MBRUsers (nolock) where Desig_Id=7 or Desig_Id=6;";
+		String checkSql = "select UserName, Name, Region from MBRUsers (nolock) where Desig_Id=7 or Desig_Id=6 order by Name;";
 		Query checkQuery =  entityManager.createNativeQuery(checkSql);
 		ABMName=checkQuery.getResultList();
 		return ABMName;
@@ -6722,7 +6722,7 @@ Calendar cal = Calendar.getInstance();
 		if (!data.getRegionList().isEmpty() && data.getAbmName().isEmpty()) {
 		    String checkSql = "SELECT Name, UserName FROM MBRUsers " +
 		                      "WHERE Region IN (:region) " + 
-		                      "AND (desig_id = 6 OR desig_id = 7)";
+		                      "AND (desig_id = 6 OR desig_id = 7) order by Name";
 		    Query checkQuery = entityManager.createNativeQuery(checkSql);
 		    checkQuery.setParameter("region", regionList);
 
@@ -6750,8 +6750,8 @@ Calendar cal = Calendar.getInstance();
 
 		else if(!data.getRegionList().isEmpty() && !data.getAbmName().isEmpty()) {
 			
-			String checksql= "SELECT Name, Region, UserName FROM MBRUsers WHERE Region IN (:region)"
-					+ "AND Desig_Id = 5 AND (ABMEMM = :ABMName OR ABMKAM = :ABMName);";
+			String checksql= "SELECT Name, Region FROM MBRUsers WHERE Region IN (:region)"
+					+ "AND Desig_Id = 5 AND (ABMEMM = :ABMName OR ABMKAM = :ABMName) order by Name;";
 			Query checkQuery =  entityManager.createNativeQuery(checksql);
 			checkQuery.setParameter("region", regionList);
 			checkQuery.setParameter("ABMName", data.getAbmName());
@@ -6762,7 +6762,7 @@ Calendar cal = Calendar.getInstance();
 				RSName rsm = new RSName();
 				rsm.setRsName((String) row[0]); // Assuming Name is the first column
 				rsm.setRegion((String) row[1]); // Assuming UserName is the second column
-				rsm.setUserName((String) row[2]);
+				rsm.setUserName((String) row[1]);
 
 				rsName.add(rsm); // Add to the list
 		    }

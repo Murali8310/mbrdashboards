@@ -1,17 +1,19 @@
 ---------------------------- General Queries--------------------------------------
 
 use DB_MBR; 
-select * from MBRUsers where Desig_Id=7 or Desig_Id=6;
+select * from MBRUsers where Desig_Id=2 or Desig_Id=6;
 SELECT * FROM MBROrders order by OrderDate;
 select * from MBRDesignation;
 select * from MBRBrand;
 select * from ER_User_Master;
 select * from MBRUsers where Desig_Id=4 ;
-select * from MBRUsers where Desig_Id=6 ;
+select * from MBRUsers where Desig_Id=5 ;
 select COUNT(distinct ABMEMM) from MBROrders;
 select COUNT(distinct ABMEMM) from MBROrders;
 select COUNT(distinct ABMKAM) from MBROrders;
-EXEC sp_help 'MBROrders';
+
+select *,Name,ABMEMM, ABMKAM from MBRUsers where Region='SOUTH 1' and (desig_id= 6 or desig_id=7)
+EXEC sp_help 'MBRUsers';
 
 SELECT ABMEMM, ABMKAM, COUNT(*) AS TotalOrders, SUM(OrderQty) AS TotalAmount
 FROM MBROrders
@@ -221,9 +223,9 @@ BEGIN
     SUM(OrderQty) AS TotalOrderQty,
     COUNT(DISTINCT RetailerCode) AS DistinctRetailerCount
   FROM 
-    MBROrders (NOLOCK)
+    MBROrders  with (NOLOCK)
   WHERE 
-    OrderDate BETWEEN CAST(CAST(@StartDate AS CHAR(8)) AS nvarchar) AND CAST(CAST(@EndDate AS CHAR(8)) AS nvarchar)  -- Date comparison using BETWEEN
+    OrderDate BETWEEN CAST(CAST(@StartDate AS CHAR(8)) AS varchar) AND CAST(CAST(@EndDate AS CHAR(8)) AS varchar)  -- Date comparison using BETWEEN
 
     -- Filtering based on Region, Brand, RSName, ABMName, and RetailerType using JOINs or EXISTS
     AND (
@@ -253,6 +255,20 @@ BEGIN
     MONTH(OrderDate);
 END;
 
+
+
+EXEC GetOrderSummary
+		@RegionList = 'EAST, WEST, NORTH, SOUTH 1, SOUTH 2', -- Comma-separated list of regions
+		@StartDate = 20240401,         -- Start date in yyyymmdd format
+		@EndDate = 20241030,		   -- End date in yyyymmdd format
+		@BrandList ='',
+		@RSNameList ='',
+		@ABMName='',
+		@RetailerType='';
+
+
+
+		EXEC GetOrderSummary @RegionList = 'EAST, WEST, NORTH, SOUTH 1, SOUTH 2', @StartDate = '20240401', @EndDate = '20241001', @BrandList = '', @RSNameList = '', @ABMName = '', @RetailerType = '';
 
 
 EXEC GetOrderSummary
@@ -581,4 +597,5 @@ EXEC RegionWiseGrowthoverPreviousMonths
 	@RSNameList=''
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
