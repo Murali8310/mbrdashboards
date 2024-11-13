@@ -6740,10 +6740,10 @@ Calendar cal = Calendar.getInstance();
 //
 //		        ABMName.add(abm); // Add to the list
 //		    }
-
+		    rsName=selectRsNameForMaster();
 		    // Set the ABMName list into dataoutput
 		    dataoutput.setAbmName(resultList);
-
+		    dataoutput.setRsName(rsName);
 		    // Return the populated MasterData object
 		    return dataoutput;
 		}
@@ -6766,7 +6766,6 @@ Calendar cal = Calendar.getInstance();
 //
 //				rsName.add(rsm); // Add to the list
 //		    }
-
 			dataoutput.setRsName(resultList);
 			return dataoutput;
 		}
