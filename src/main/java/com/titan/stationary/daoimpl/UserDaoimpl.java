@@ -6730,19 +6730,19 @@ Calendar cal = Calendar.getInstance();
 		    System.out.println("Region List: " + data.getRegionList());
 
 		    // Execute the query and get the result list
-		    List<Object[]> resultList = checkQuery.getResultList();
+		    List<ABMName> resultList = checkQuery.getResultList();
 
 		    // Process each result row to map to ABMName objects
-		    for (Object[] row : resultList) {
-		        ABMName abm = new ABMName();
-		        abm.setName((String) row[0]); // Assuming Name is the first column
-		        abm.setUserName((String) row[1]); // Assuming UserName is the second column
-
-		        ABMName.add(abm); // Add to the list
-		    }
+//		    for (Object[] row : resultList) {
+//		        ABMName abm = new ABMName();
+//		        abm.setName((String) row[0]); // Assuming Name is the first column
+//		        abm.setUserName((String) row[1]); // Assuming UserName is the second column
+//
+//		        ABMName.add(abm); // Add to the list
+//		    }
 
 		    // Set the ABMName list into dataoutput
-		    dataoutput.setAbmName(ABMName);
+		    dataoutput.setAbmName(resultList);
 
 		    // Return the populated MasterData object
 		    return dataoutput;
@@ -6757,17 +6757,17 @@ Calendar cal = Calendar.getInstance();
 			checkQuery.setParameter("ABMName", data.getAbmName());
 			//rsName=checkQuery.getResultList();
 			
-			List<Object[]> resultList = checkQuery.getResultList();
-			for (Object[] row : resultList) {
-				RSName rsm = new RSName();
-				rsm.setRsName((String) row[0]); // Assuming Name is the first column
-				rsm.setRegion((String) row[1]); // Assuming UserName is the second column
-				rsm.setUserName((String) row[1]);
+			List<RSName> resultList = checkQuery.getResultList();
+//			for (Object[] row : resultList) {
+//				RSName rsm = new RSName();
+//				rsm.setRsName((String) row[0]); // Assuming Name is the first column
+//				rsm.setRegion((String) row[1]); // Assuming UserName is the second column
+//				rsm.setUserName((String) row[1]);
+//
+//				rsName.add(rsm); // Add to the list
+//		    }
 
-				rsName.add(rsm); // Add to the list
-		    }
-
-			dataoutput.setRsName(rsName);
+			dataoutput.setRsName(resultList);
 			return dataoutput;
 		}
 		return dataoutput;	
