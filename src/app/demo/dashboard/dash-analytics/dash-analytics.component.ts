@@ -1677,12 +1677,11 @@ export default class DashAnalyticsComponent {
 
         if (response && response.body && response.body.rsName && response.body.rsName.length > 0) {
           // Step 3: Transform the data with type assertion
-          const availableRSNames: Brand[] = response.body.rsName.map(([id, region,name,abmid]: [string, string,string,string]) => {
+          const availableRSNames: Brand[] = response.body.rsName.map(([name, userid,region]: [string, string,string,string]) => {
             return {
-              id: id, // Convert ID to a number
+              id: userid, // Convert ID to a number
               name: name,
               region:region,
-              abmid:abmid
               // Keep the name as is
             };
           });
@@ -2870,7 +2869,7 @@ getMasterDataForFilter(data:any){
     let payloadForMaster:any;
     if (data === 'search') {
       // Prepare comma-separated strings for each array
-      abmNameList = this.selectedAbmNames.map((item) => item.name).join(', ');
+      abmNameList = this.selectedAbmNames.map((item) => item.id).join(', ');
       brandList = this.selectedBrands.map((item) => item.name).join(', ');
       rsNameList = this.selectedRSNames.map((item) => item.name).join(', ');
       regionList = this.selectedRegions.map((item) => item.name).join(', ');
