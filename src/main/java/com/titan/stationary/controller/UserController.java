@@ -70,6 +70,7 @@ import com.titan.stationary.dto.OutputGrowthOverPreviousMonth;
 import com.titan.stationary.dto.OutputMonthlyOrdaringBehaviour;
 import com.titan.stationary.dto.OutputRegionWiseGrowthOverPreviousMonth;
 import com.titan.stationary.dto.OutputRegionWiseMonthlyDistribution;
+import com.titan.stationary.dto.OutputRegionWiseMonthlyDistributionNoofOrders;
 import com.titan.stationary.dto.OutputDashboardTiles;
 import com.titan.stationary.service.Userservice;
 import com.titan.stationary.dto.OutputDashboardGraphs;
@@ -2958,6 +2959,29 @@ public class UserController {
 //			}
 
 		result = userService.monthlyOrdaringBehaviour(filter);
+		redirect.addFlashAttribute("MESSAGE", result);
+		model.addAttribute("MESSAGE", result);
+		return result;
+	}
+	
+	
+	@RequestMapping(value = "regionWiseMonthlyDistributionNoofOrders", method = RequestMethod.POST)
+	public List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionNoofOrders(HttpServletRequest request,
+			HttpServletResponse response, RedirectAttributes redirect, Model model,
+			@RequestBody MonthlyDataFilter filter) {
+		List<OutputRegionWiseMonthlyDistributionNoofOrders> result = new ArrayList<>();
+
+		HttpSession session = request.getSession();
+		String loginId = "";
+//			try {
+//				Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+//				loginId = (String) userMap.get("login_id");
+//			} catch (Exception er) {
+//				er.printStackTrace();
+//				//return new StringBuilder("Session is timeout, <a href='login' >click here</a> to login");
+//			}
+
+		result = userService.regionWiseMonthlyDistributionNoofOrders(filter);
 		redirect.addFlashAttribute("MESSAGE", result);
 		model.addAttribute("MESSAGE", result);
 		return result;

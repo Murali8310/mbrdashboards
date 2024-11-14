@@ -80,6 +80,7 @@ import com.titan.stationary.dto.OutputGrowthOverPreviousMonth;
 import com.titan.stationary.dto.OutputMonthlyOrdaringBehaviour;
 import com.titan.stationary.dto.OutputRegionWiseGrowthOverPreviousMonth;
 import com.titan.stationary.dto.OutputRegionWiseMonthlyDistribution;
+import com.titan.stationary.dto.OutputRegionWiseMonthlyDistributionNoofOrders;
 import com.titan.stationary.security.AuthenticationService;
 import com.titan.util.PasswordUtils;
 import com.titan.util.Validations;
@@ -6813,5 +6814,46 @@ Calendar cal = Calendar.getInstance();
 		
 		return monthlyOrdaringBehaviourData;
 
+	}
+
+	@Override
+	public List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionNoofOrders(
+			MonthlyDataFilter filter) {
+		List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionData=new ArrayList<>();
+		String storedProcedureCall = "EXEC RegionWiseMonthlyDistributionNoofOrders @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
+        
+        // Create a native query
+        Query query = entityManager.createNativeQuery(storedProcedureCall);
+        
+        // Set the parameters for the stored procedure call
+        query.setParameter("regionList", filter.getRegionList());  // @RegionList (e.g., 'EAST, WEST')
+        query.setParameter("startDate", filter.getStartDate());    // @StartDate (e.g., 20240601)
+        query.setParameter("endDate", filter.getEndDate());        // @EndDate (e.g., 20240630)
+        query.setParameter("brandList", filter.getBrandList());    // @BrandList (e.g., 'Titan')
+        query.setParameter("rsNameList", filter.getRsNameList());  // @RSNameList (e.g., '' or some value)
+        query.setParameter("abmName", filter.getAbmName());
+        query.setParameter("retailerType", filter.getRetailerType());
+        // Execute the query to invoke the stored procedure
+        try {
+        	List<Object[]> result = query.getResultList();
+        	//filteredData = (OutputForMontlyFilter) query.getSingleResult();
+        	
+        	for (Object[] row : result) {
+        	    // Assuming row contains values in the correct order for mapping
+        		OutputRegionWiseMonthlyDistributionNoofOrders data= new OutputRegionWiseMonthlyDistributionNoofOrders();
+        		data.setYear((Integer) row[0]);
+        		data.setMonth((Integer) row[1]);
+        		data.setNoOfOrders((Integer) row[2]);
+        		data.setRegion( row[3].toString());
+        		//data.setNoOfOrdersPercentage((BigDecimal)row[4]);
+        	    // Now, filteredData is populated with values
+        		regionWiseMonthlyDistributionData.add(data);
+        	}
+        }
+        catch(Exception e) {
+        	e.printStackTrace();
+        }
+		
+		return regionWiseMonthlyDistributionData;
 	}
 }

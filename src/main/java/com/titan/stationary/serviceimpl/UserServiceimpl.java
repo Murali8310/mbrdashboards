@@ -44,6 +44,7 @@ import com.titan.stationary.dto.OutputGrowthOverPreviousMonth;
 import com.titan.stationary.dto.OutputMonthlyOrdaringBehaviour;
 import com.titan.stationary.dto.OutputRegionWiseGrowthOverPreviousMonth;
 import com.titan.stationary.dto.OutputRegionWiseMonthlyDistribution;
+import com.titan.stationary.dto.OutputRegionWiseMonthlyDistributionNoofOrders;
 import com.titan.stationary.service.Userservice;
 import com.titan.stationary.dto.OutputDashboardTiles;
 import com.titan.stationary.dto.OutputDashboardGraphs;
@@ -1157,6 +1158,12 @@ public class UserServiceimpl implements Userservice {
 		// TODO Auto-generated method stub
 		return userDao.monthlyOrdaringBehaviour(filter);
 	}
+
+	@Override
+	public List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionNoofOrders(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		return userDao.regionWiseMonthlyDistributionNoofOrders(filter);	
+		}
 
 
 }

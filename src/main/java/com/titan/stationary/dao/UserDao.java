@@ -28,6 +28,7 @@ import com.titan.stationary.dto.OutputGrowthOverPreviousMonth;
 import com.titan.stationary.dto.OutputMonthlyOrdaringBehaviour;
 import com.titan.stationary.dto.OutputRegionWiseGrowthOverPreviousMonth;
 import com.titan.stationary.dto.OutputRegionWiseMonthlyDistribution;
+import com.titan.stationary.dto.OutputRegionWiseMonthlyDistributionNoofOrders;
 
 @Repository
 public interface UserDao {
@@ -303,6 +304,10 @@ public interface UserDao {
 
 
 	List<OutputMonthlyOrdaringBehaviour> monthlyOrdaringBehaviour(MonthlyDataFilter filter);
+
+
+	List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionNoofOrders(
+			MonthlyDataFilter filter);
 
 
 
