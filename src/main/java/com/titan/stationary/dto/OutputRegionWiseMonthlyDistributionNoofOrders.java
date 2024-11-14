@@ -8,7 +8,7 @@ public class OutputRegionWiseMonthlyDistributionNoofOrders {
 	private Integer Month;
 	private String region;
 	private Integer noOfOrders;
-	private Integer noOfOrdersPercentage;
+	private BigDecimal noOfOrdersPercentage;
 	
 	public Integer getYear() {
 		return year;
@@ -22,7 +22,7 @@ public class OutputRegionWiseMonthlyDistributionNoofOrders {
 	public Integer getNoOfOrders() {
 		return noOfOrders;
 	}
-	public Integer getNoOfOrdersPercentage() {
+	public BigDecimal getNoOfOrdersPercentage() {
 		return noOfOrdersPercentage;
 	}
 	public void setYear(Integer year) {
@@ -37,7 +37,7 @@ public class OutputRegionWiseMonthlyDistributionNoofOrders {
 	public void setNoOfOrders(Integer noOfOrders) {
 		this.noOfOrders = noOfOrders;
 	}
-	public void setNoOfOrdersPercentage(Integer noOfOrdersPercentage) {
+	public void setNoOfOrdersPercentage(BigDecimal noOfOrdersPercentage) {
 		this.noOfOrdersPercentage = noOfOrdersPercentage;
 	}
 	

@@ -6846,7 +6846,7 @@ Calendar cal = Calendar.getInstance();
         		data.setMonth((Integer) row[1]);
         		data.setNoOfOrders((Integer) row[2]);
         		data.setRegion( row[3].toString());
-        		data.setNoOfOrdersPercentage((Integer)row[4]);
+        		data.setNoOfOrdersPercentage((BigDecimal)row[4]);
         	    // Now, filteredData is populated with values
         		regionWiseMonthlyDistributionData.add(data);
         	}

@@ -2919,12 +2919,11 @@ public class UserController {
 //		model.addAttribute("MESSAGE", result);
 //		return result;
 //	}
-	
-	
+
 	@RequestMapping(value = "getFilterData", method = RequestMethod.POST)
 	public MasterData getFilterData(HttpServletRequest request, HttpServletResponse response,
-			RedirectAttributes redirect, Model model,  @RequestBody MonthlyDataFilter filter) {
-			MasterData result = null;
+			RedirectAttributes redirect, Model model, @RequestBody MonthlyDataFilter filter) {
+		MasterData result = null;
 
 		HttpSession session = request.getSession();
 		String loginId = "";
@@ -2942,7 +2941,6 @@ public class UserController {
 		return result;
 	}
 
-	
 	@RequestMapping(value = "monthlyOrdaringBehaviour", method = RequestMethod.POST)
 	public List<OutputMonthlyOrdaringBehaviour> monthlyOrdaringBehaviour(HttpServletRequest request,
 			HttpServletResponse response, RedirectAttributes redirect, Model model,
@@ -2964,11 +2962,10 @@ public class UserController {
 		model.addAttribute("MESSAGE", result);
 		return result;
 	}
-	
-	
+
 	@RequestMapping(value = "regionWiseMonthlyDistributionNoofOrders", method = RequestMethod.POST)
-	public List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionNoofOrders(HttpServletRequest request,
-			HttpServletResponse response, RedirectAttributes redirect, Model model,
+	public List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionNoofOrders(
+			HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirect, Model model,
 			@RequestBody MonthlyDataFilter filter) {
 		List<OutputRegionWiseMonthlyDistributionNoofOrders> result = new ArrayList<>();
 
@@ -2987,9 +2984,7 @@ public class UserController {
 		model.addAttribute("MESSAGE", result);
 		return result;
 	}
-	
-	
-	
+
 	@RequestMapping(value = "regionWiseMonthlyAvgPerOrder", method = RequestMethod.POST)
 	public List<OutputRegionWiseMonthlyAvgPerOrder> regionWiseMonthlyAvgPerOrder(HttpServletRequest request,
 			HttpServletResponse response, RedirectAttributes redirect, Model model,
@@ -3011,5 +3006,5 @@ public class UserController {
 		model.addAttribute("MESSAGE", result);
 		return result;
 	}
-	
+
 }
