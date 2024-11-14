@@ -4,10 +4,12 @@ use DB_MBR;
 select * from MBRUsers where Desig_Id=2 or Desig_Id=6;
 SELECT * FROM MBROrders order by OrderDate;
 select * from MBRDesignation;
-select * from MBRBrand;
+select * from MBRBrand order by BrandName;
 select * from ER_User_Master;
 select * from MBRUsers where Desig_Id=4 ;
-select * from MBRUsers where Desig_Id=5 ;
+select * from MBRUsers where Desig_Id=5 order by Name  ;
+
+select UserName, Name, Region from MBRUsers (nolock) where Desig_Id=7 or Desig_Id=6 order by Name
 select COUNT(distinct ABMEMM) from MBROrders;
 select COUNT(distinct ABMEMM) from MBROrders;
 select COUNT(distinct ABMKAM) from MBROrders;
