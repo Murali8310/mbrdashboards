@@ -52,6 +52,22 @@ export const NavigationItems: NavigationItem[] = [
       }
     ]
   },
+  {
+    id: 'chart',
+    title: 'Chart',
+    type: 'group',
+    icon: 'icon-group',
+    children: [
+      {
+        id: '3',
+        title: 'Ordering Behaviour',
+        type: 'item',
+        url: '/charts',
+        classes: 'nav-item',
+        icon: 'fas fa-sort-amount-up'
+      }
+    ]
+  },
   
   // {
   //   id: 'ui-component',

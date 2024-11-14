@@ -24,8 +24,20 @@ public selectedData:any = '1';
 
   
 
-  GetMasterData(): Observable<any> {
-    return this.http.get<any>(environment.apiUrl + '/GetMasterData');
+  // GetMasterData(payload: any): Observable<any> {
+  //   return this.http.get<any>(environment.apiUrl + '/GetMasterData');
+  // }
+
+  public  GetMasterData(MonthlyToalOrdaringPayload?:any) {
+    return this.http
+      .post<any>(
+        `${environment.apiUrl}/GetMasterData`,
+        JSON.stringify(MonthlyToalOrdaringPayload),
+        {
+          headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+          observe: 'response',
+        }
+      );      
   }
 
   

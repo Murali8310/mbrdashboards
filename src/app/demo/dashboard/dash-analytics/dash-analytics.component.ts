@@ -151,11 +151,11 @@ export default class DashAnalyticsComponent {
   ];
 
   availableRegions: any = [
-    // { id: 1, name: 'East' },
-    // { id: 2, name: 'North' },
-    // { id: 3, name: 'South1' },
-    // { id: 4, name: 'South2' },
-    // { id: 5, name: 'West' }
+    { id: 1, name: 'East' },
+    { id: 2, name: 'North' },
+    { id: 3, name: 'South1' },
+    { id: 4, name: 'South2' },
+    { id: 5, name: 'West' }
   ];
   selectedRegions: { id: number; name: string }[] = [];
   isDropdownOpen = false;
@@ -599,185 +599,6 @@ export default class DashAnalyticsComponent {
   // life cycle event
   async ngOnInit() {
 
-    // this.budgetChartOptions = {
-    //   series: [
-    //     {
-    //       name: 'East',
-    //       group: 'retailers',
-    //       data: [44000, 55000, 41000, 67000, 22000, 43000]
-    //     },
-    //     {
-    //       name: 'Q1 Actual',
-    //       group: 'actual',
-    //       data: [48000, 50000, 40000, 65000, 25000, 40000]
-    //     },
-    //     {
-    //       name: 'North',
-    //       group: 'retailers',
-    //       data: [13000, 36000, 20000, 8000, 13000, 27000]
-    //     },
-    //     {
-    //       name: 'Q2 Actual',
-    //       group: 'actual',
-    //       data: [20000, 40000, 25000, 10000, 12000, 28000]
-    //     }
-    //   ],
-    //   chart: {
-    //     type: 'bar',
-    //     height: 350,
-    //     stacked: true
-    //   },
-    //   stroke: {
-    //     width: 1,
-    //     colors: ['#fff']
-    //   },
-    //   // dataLabels: {
-    //   //   formatter: (value) => {
-    //   //     return value / 1000 + 'K';
-    //   //   }
-    //   // },
-    //   plotOptions: {
-    //     bar: {
-    //       horizontal: false
-    //     }
-    //   },
-    //   xaxis: {
-    //     categories: [
-    //       'April',
-    //       'May',
-    //     ]
-    //   },
-    //   fill: {
-    //     opacity: 1
-    //   },
-    //   colors: ['#80c7fd', '#008FFB', '#80f1cb', '#00E396'],
-    //   yaxis: {
-    //     labels: {
-    //       formatter: (value) => {
-    //         return value / 1000 + 'K';
-    //       }
-    //     }
-    //   },
-    //   legend: {
-    //     position: 'top',
-    //     horizontalAlign: 'left'
-    //   }
-    // };
-
-    // this.budgetChartOptions = {
-    //   series: [
-    //     {
-    //       name: 'Retailers - East',
-    //       group: 'retailers',
-    //       data: [44000, 55000, 41000]
-    //     },
-    //     {
-    //       name: 'Qty - East',
-    //       group: 'qty',
-    //       data: [12000, 15000, 13000]
-    //     },
-    //     {
-    //       name: 'Value - East',
-    //       group: 'value',
-    //       data: [32000, 45000, 39000]
-    //     },
-    //     {
-    //       name: 'Retailers - South2',
-    //       group: 'retailers',
-    //       data: [38000, 50000, 40000]
-    //     },
-    //     {
-    //       name: 'Qty - South2',
-    //       group: 'qty',
-    //       data: [11000, 14000, 12500]
-    //     },
-    //     {
-    //       name: 'Value - South2',
-    //       group: 'value',
-    //       data: [31000, 42000, 37000]
-    //     },
-    //     {
-    //       name: 'Retailers - North',
-    //       group: 'retailers',
-    //       data: [46000, 52000, 44000]
-    //     },
-    //     {
-    //       name: 'Qty - North',
-    //       group: 'qty',
-    //       data: [15000, 18000, 16000]
-    //     },
-    //     {
-    //       name: 'Value - North',
-    //       group: 'value',
-    //       data: [35000, 49000, 42000]
-    //     },
-    //     {
-    //       name: 'Retailers - West',
-    //       group: 'retailers',
-    //       data: [42000, 48000, 43000]
-    //     },
-    //     {
-    //       name: 'Qty - West',
-    //       group: 'qty',
-    //       data: [13000, 16000, 15000]
-    //     },
-    //     {
-    //       name: 'Value - West',
-    //       group: 'value',
-    //       data: [33000, 46000, 40000]
-    //     },
-    //     {
-    //       name: 'Retailers - 2',
-    //       group: 'retailers',
-    //       data: [39000, 53000, 47000]
-    //     },
-    //     {
-    //       name: 'Qty - 2',
-    //       group: 'qty',
-    //       data: [14000, 17000, 14500]
-    //     },
-    //     {
-    //       name: 'Value - 2',
-    //       group: 'value',
-    //       data: [34000, 48000, 43000]
-    //     }
-    //   ],
-    //   chart: {
-    //     type: 'bar',
-    //     height: 350,
-    //     stacked: true
-    //   },
-    //   stroke: {
-    //     width: 1,
-    //     colors: ['#fff']
-    //   },
-    //   plotOptions: {
-    //     bar: {
-    //       horizontal: false
-    //     }
-    //   },
-    //   xaxis: {
-    //     categories: ['April', 'May', 'June']
-    //   },
-    //   fill: {
-    //     opacity: 1
-    //   },
-    //   colors: ['#80c7fd', '#008FFB', '#80f1cb', '#00E396', '#FF4560', '#775DD0', '#FEB019', '#FF9800', '#33B2DF', '#546E7A', '#D4526E', '#13D8AA', '#A5978B', '#4CAF50', '#D50000'],
-    //   yaxis: {
-    //     labels: {
-    //       formatter: (value:any) => {
-    //         return value / 1000 + 'K';
-    //       }
-    //     }
-    //   },
-    //   legend: {
-    //     position: 'top',
-    //     horizontalAlign: 'left'
-    //   }
-    // };
-    
-   
-    
     console.log('calling count')
     this.spinner.show();
     const GrowthOverPreviousMonthPayload :any = {
@@ -788,19 +609,6 @@ export default class DashAnalyticsComponent {
         "rsNameList": "",//// default casen ""
         "retailerType":"",
       };
-
-    // if (this.dashboardService.selectedData === '2') {
-    //   this.GetMasterData();
-    //   this.MonthlyToalOrdaring(GrowthOverPreviousMonthPayload);
-    //   this.GrowthOverPreviousMonth(GrowthOverPreviousMonthPayload);
-    // } else if (this.dashboardService.selectedData === '1') {
-    //   await this.dashBoardInitalDataFn();
-    // }
-    // this.isLoading = false;
-    // setTimeout(() => {
-    //   // Hide the spinner after the delay
-    //   this.spinner.hide();
-    // }, 3000);
   }
 
   // this is to get the searched data;
@@ -811,7 +619,7 @@ export default class DashAnalyticsComponent {
     let rsNameList: any = '';
     let regionList: any = '';
     let retailerTypeList: any = '';
-
+    let payloadForMaster:any;
     if (data === 'search') {
       // Prepare comma-separated strings for each array
       abmNameList = this.selectedAbmNames.map((item) => item.id).join(', ');
@@ -829,6 +637,10 @@ export default class DashAnalyticsComponent {
         abmName:abmNameList,
         retailerType:retailerTypeList,
       };
+      payloadForMaster = {
+        "regionList": regionList,
+        "abmName": abmNameList
+        };
     } else {
       MonthlyToalOrdaringPayload  = {
         "regionList": "EAST, WEST,NORTH,SOUTH 1,SOUTH 2",  /// default all regions 
@@ -839,19 +651,23 @@ export default class DashAnalyticsComponent {
           "abmName":"",
           "retailerType":""
         };
-
+        payloadForMaster = {
+          "regionList": "",
+          "abmName": ""
+          };
         this.selectedAbmNames = [];
         this.selectedBrands = [];
         this.selectedRSNames = [];
         this.selectedRegions = [];
         this.selectedRetailerTypes = [];
     }
-    this.GetMasterData();
-    this.MonthlyToalOrdaring(MonthlyToalOrdaringPayload);
-    this.GrowthOverPreviousMonth(MonthlyToalOrdaringPayload);
-    this.RegionWiseMonthlyDistribution(MonthlyToalOrdaringPayload);
-    this.RegionWiseGrowthOverPreviousMonth(MonthlyToalOrdaringPayload);
+  
+    this.GetMasterData(payloadForMaster,MonthlyToalOrdaringPayload);
+
+
+    
   }
+  
 
   cards = [
     {
@@ -1074,6 +890,7 @@ export default class DashAnalyticsComponent {
       (response) => {
         if (response && response.body) {
           this.spinner.hide();
+          this.GrowthOverPreviousMonth(MonthlyToalOrdaringPayload);
 
           response.body.forEach((item: any) => {
             // Push values to each series array
@@ -1354,6 +1171,7 @@ export default class DashAnalyticsComponent {
       (response) => {
         if (response && response.body) {
           this.spinner.hide();
+          this.RegionWiseMonthlyDistribution(MonthlyToalOrdaringPayload);
 
           response.body.forEach((item: any) => {
             // Push values to each series array
@@ -1565,6 +1383,7 @@ export default class DashAnalyticsComponent {
     } else {
       this.selectedRegions.push(region); // Add region if not selected
     }
+    this.getMasterDataForFilter('search');
 
     // to filter the abms based on the user selection.
     // const FilterAbms = this.availableAbmNames.filter((data: any) => 
@@ -1578,6 +1397,7 @@ export default class DashAnalyticsComponent {
   removeSelectedRegion(region: { id: number; name: string }, event: MouseEvent) {
     event.stopPropagation(); // Prevent dropdown from closing
     this.toggleRegionSelection(region); // Toggle selection
+    this.getMasterDataForFilter('search');
   }
 
   // Select or deselect all regions
@@ -1588,6 +1408,7 @@ export default class DashAnalyticsComponent {
     //   data.region && this.selectedRegions.some((selectedRegion: any) => selectedRegion.name === data.region)
     // );
     // this.availableAbmNames = FilterAbms;
+    this.getMasterDataForFilter('search');
   }
 
   // Check if all regions are selected
@@ -1661,6 +1482,9 @@ export default class DashAnalyticsComponent {
       this.selectedAbmNames.push(abm); // Add ABM name if not selected
     }
 
+    this.getMasterDataForFilter('search');
+
+
     // // to filter the abms based on the user selection.
     // const FilterRSNames = this.availableRSNames.filter((data: any) => 
     //   data.region && this.selectedAbmNames.some((selectedAbm: any) => selectedAbm.name === data.region)
@@ -1672,6 +1496,8 @@ export default class DashAnalyticsComponent {
   removeSelectedAbm(abm: { id: number; name: string }, event: MouseEvent) {
     event.stopPropagation(); // Prevent dropdown from closing
     this.toggleAbmSelection(abm); // Toggle selection
+    this.getMasterDataForFilter('search');
+
   }
 
   // Select or deselect all ABM names
@@ -1683,6 +1509,8 @@ export default class DashAnalyticsComponent {
       data.region && this.selectedAbmNames.some((selectedAbm: any) => selectedAbm.name === data.region)
     );
     this.availableRSNames = FilterRSNames;
+    this.getMasterDataForFilter('search');
+
   }
 
   // Check if all ABM names are selected
@@ -1818,14 +1646,17 @@ export default class DashAnalyticsComponent {
     return this.selectedBrands.length === this.availableBrands.length; // Return true if all Brands are selected
   }
 
-  GetMasterData(): void {
+  GetMasterData(payload:any,MonthlyToalOrdaringPayload?:any,isFromFilter?:any): void {
     // this.spinner.show();
-    this.dashboardService.GetMasterData().subscribe(
-      (response) => {
+    this.dashboardService.GetMasterData(payload).subscribe(
+      (response:any) => {
         // this.spinner.hide();
+        if(!isFromFilter){
+          this.MonthlyToalOrdaring(MonthlyToalOrdaringPayload);
+        }
 
-        if (response && response.region && response.region.length > 0) {
-          const availableRegions = response.region.map((region: any, index: any) => {
+        if (response && response.body && response.body.region && response.body.region.length > 0) {
+          const availableRegions = response.body.region.map((region: any, index: any) => {
             return {
               id: index + 1, // Assign unique IDs starting from 1
               name: region.replace(' ', '') // Replace space in 'SOUTH 1' and 'SOUTH 2' with empty string
@@ -1833,9 +1664,9 @@ export default class DashAnalyticsComponent {
           });
           this.availableRegions = availableRegions;
         }
-        if (response && response.brand && response.brand.length > 0) {
+        if (response && response.body&& response.body.brand && response.body.brand.length > 0) {
           // Step 3: Transform the data with type assertion
-          const availableBrands: Brand[] = response.brand.map(([id, name]: [string, string]) => {
+          const availableBrands: Brand[] = response.body.brand.map(([id, name]: [string, string]) => {
             return {
               id: parseInt(id), // Convert ID to a number
               name: name // Keep the name as is
@@ -1844,9 +1675,9 @@ export default class DashAnalyticsComponent {
           this.availableBrands = availableBrands;
         }
 
-        if (response && response.rsName && response.rsName.length > 0) {
+        if (response && response.body && response.body.rsName && response.body.rsName.length > 0) {
           // Step 3: Transform the data with type assertion
-          const availableRSNames: Brand[] = response.rsName.map(([id, region,name,abmid]: [string, string,string,string]) => {
+          const availableRSNames: Brand[] = response.body.rsName.map(([id, region,name,abmid]: [string, string,string,string]) => {
             return {
               id: id, // Convert ID to a number
               name: name,
@@ -1857,9 +1688,9 @@ export default class DashAnalyticsComponent {
           });
           this.availableRSNames = availableRSNames;
         }
-        if (response && response.abmName && response.abmName.length > 0) {
+        if (response &&response.body&& response.body.abmName && response.body.abmName.length > 0) {
           // Step 3: Transform the data with type assertion
-          const availableAbmNames: Brand[] = response.abmName.map(([id, name,region]: [string, string,string]) => {
+          const availableAbmNames: Brand[] = response.body.abmName.map(([id, name,region]: [string, string,string]) => {
             return {
               id: id, // Convert ID to a number
               name: name,// Keep the name as is
@@ -2573,7 +2404,7 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
       (response) => {
           if (response && response.body) {
               this.spinner.hide();
-
+              this.RegionWiseGrowthOverPreviousMonth(MonthlyTotalOrderingPayload);
               // Prepare categories based on unique months
               const uniqueMonths = [...new Set(response.body.map((item: any) => item.month))];
               uniqueMonths.forEach((month: any) => {
@@ -3027,5 +2858,44 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
     );
 };
 
+
+// This is to get the master data based in the selection.
+getMasterDataForFilter(data:any){
+  let MonthlyToalOrdaringPayload: any = {};
+    let abmNameList: any = '';
+    let brandList: any = '';
+    let rsNameList: any = '';
+    let regionList: any = '';
+    let retailerTypeList: any = '';
+    let payloadForMaster:any;
+    if (data === 'search') {
+      // Prepare comma-separated strings for each array
+      abmNameList = this.selectedAbmNames.map((item) => item.name).join(', ');
+      brandList = this.selectedBrands.map((item) => item.name).join(', ');
+      rsNameList = this.selectedRSNames.map((item) => item.name).join(', ');
+      regionList = this.selectedRegions.map((item) => item.name).join(', ');
+      retailerTypeList = this.selectedRetailerTypes.map((item) => item.name).join(', ');
+
+      MonthlyToalOrdaringPayload = {
+        regionList: regionList, /// default all regions
+        startDate: 20240401, /// default case start date of financial year in integer format
+        endDate: 202401030, ////  default case end date of financial year in integer format
+        brandList: brandList, //// default casen ""
+        rsNameList: rsNameList, //// default casen ""
+        abmName:abmNameList,
+        retailerType:retailerTypeList,
+      };
+      payloadForMaster = {
+        "regionList": regionList,
+        "abmName": abmNameList
+        };
+    } else {
+        payloadForMaster = {
+          "regionList": "",
+          "abmName": ""
+          };
+    }
+    this.GetMasterData(payloadForMaster,MonthlyToalOrdaringPayload,true);
+}
 
 }

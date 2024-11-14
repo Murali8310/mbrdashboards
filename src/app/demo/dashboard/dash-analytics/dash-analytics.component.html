@@ -3,6 +3,11 @@
 text-align: center;
 /* margin-top: 12px; */
 ">Total Ordering Overview Dashboard.</h4>
+
+<h4 *ngIf="dashboardService.selectedData === '3'" style="
+text-align: center;
+/* margin-top: 12px; */
+">Ordering Behavior Dashboard.</h4>
  <!-- order-card start -->
   <div *ngIf="dashboardService.selectedData === '1'" class="row"> 
  <div class="col-md-6 col-xl-2" *ngFor="let card of cards">
@@ -330,7 +335,7 @@ text-align: center;
     </div>
   </div>
   
-  <div class="col-xl-12 col-md-12">
+  <div class="col-xl-12 col-md-12" *ngIf="chartOptionsline">
     <app-card cardTitle="" [options]="false">
     <div id="chart">
       <apx-chart
@@ -352,7 +357,7 @@ text-align: center;
     </app-card>
   </div>
 
-  <div class="col-xl-12 col-md-12">
+  <div class="col-xl-12 col-md-12"  *ngIf="chartOptions">
     <app-card cardTitle="" [options]="false">
       
     <div id="chart2">
@@ -373,7 +378,7 @@ text-align: center;
     </div>
     </app-card>
   </div>
-  <div class="col-xl-12 col-md-12">
+  <div class="col-xl-12 col-md-12"  *ngIf="RegionWiseMonthlyDistibutionOptions">
     <app-card cardTitle="" [options]="false">
 
     <div id="chart2">
@@ -396,7 +401,7 @@ text-align: center;
     </app-card>
   </div>
   
-  <div class="col-xl-12 col-md-12">
+  <div class="col-xl-12 col-md-12"  *ngIf="RegionWiseGrowthOverPreviousMonthOptions">
     <app-card cardTitle="" [options]="false">
     <div id="chart2">
       <apx-chart
