@@ -20,6 +20,7 @@ import com.titan.stationary.dto.OutputDashboardGraphs;
 import com.titan.stationary.dto.OutputDashboardTiles;
 import com.titan.stationary.dto.OutputForMontlyFilter;
 import com.titan.stationary.dto.OutputGrowthOverPreviousMonth;
+import com.titan.stationary.dto.OutputMonthlyOrdaringBehaviour;
 import com.titan.stationary.dto.OutputRegionWiseGrowthOverPreviousMonth;
 import com.titan.stationary.dto.OutputRegionWiseMonthlyDistribution;
 
@@ -257,5 +258,8 @@ public interface Userservice {
 
 
 	MasterData getFilterData(MonthlyDataFilter filter);
+
+
+	List<OutputMonthlyOrdaringBehaviour> monthlyOrdaringBehaviour(MonthlyDataFilter filter);
 
 }

@@ -6720,7 +6720,7 @@ Calendar cal = Calendar.getInstance();
                 .collect(Collectors.toList());
 		
 		if (!data.getRegionList().isEmpty() && data.getAbmName().isEmpty()) {
-		    String checkSql = "SELECT Name, UserName FROM MBRUsers " +
+		    String checkSql = "SELECT UserName, Name, Region FROM MBRUsers " +
 		                      "WHERE Region IN (:region) " + 
 		                      "AND (desig_id = 6 OR desig_id = 7) order by Name";
 		    Query checkQuery = entityManager.createNativeQuery(checkSql);
@@ -6750,7 +6750,7 @@ Calendar cal = Calendar.getInstance();
 
 		else if(!data.getRegionList().isEmpty() && !data.getAbmName().isEmpty()) {
 			
-			String checksql= "SELECT Name, Region FROM MBRUsers WHERE Region IN (:region)"
+			String checksql= "SELECT Name, UserName, Region FROM MBRUsers WHERE Region IN (:region)"
 					+ "AND Desig_Id = 5 AND (ABMEMM = :ABMName OR ABMKAM = :ABMName) order by Name;";
 			Query checkQuery =  entityManager.createNativeQuery(checksql);
 			checkQuery.setParameter("region", regionList);
