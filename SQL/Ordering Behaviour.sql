@@ -1,7 +1,30 @@
 use DB_MBR; 
 
 select * from MBROrders;
-     -- Ensure results are ordered by Year and Month
+ select * from MBRUsers where UserName like '1425137'
+
+ SELECT 
+    YEAR(OrderDate) AS OrderYear,         -- Year of the order
+    MONTH(OrderDate) AS OrderMonth,       -- Month of the order
+    COUNT(DISTINCT OrderNo) AS DistinctOrderCount,  -- Count of distinct orders
+    SUM(OrderQty) * 1.0 / COUNT(DISTINCT OrderNo) AS AvgQtyPerOrder,  -- Avg quantity per order
+    SUM(TotalPrice) / COUNT(DISTINCT OrderNo) AS AvgValuePerOrder    -- Avg value per order
+FROM 
+    MBROrders
+WHERE 
+    OrderDate BETWEEN 20240101 AND 20241231  -- Date range for 2024 (integer format)
+    AND (
+        Region IN ('EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2')  -- Filter for specific regions
+    )
+	
+GROUP BY 
+    YEAR(OrderDate), 
+    MONTH(OrderDate)   -- Group by both Year and Month to get monthly data
+ORDER BY 
+    OrderYear, 
+    OrderMonth;    
+
+
 -------------------------------------------------------------------------------------------------------------------
 -----------------------Monthly ordaring Behaviour------------------------------
 
@@ -66,8 +89,8 @@ BEGIN
         OrderMonth; -- Order by Month
 END;
 
-	EXEC MonthlyOrdaringBehaviour
-		@RegionList = 'EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2', -- Comma-separated list of regions
+	EXEC	
+		@RegionList ='EAST, WEST, NORTH, SOUTH 1, SOUTH 2', -- Comma-separated list of regions
 		@StartDate = 20240401,         -- Start date in yyyymmdd format
 		@EndDate = 20241030,		   -- End date in yyyymmdd format
 		@BrandList ='',
@@ -78,23 +101,4 @@ END;
 
 
 
-		SELECT 
-    YEAR(OrderDate) AS OrderYear,         -- Year of the order
-    MONTH(OrderDate) AS OrderMonth,       -- Month of the order
-    COUNT(DISTINCT OrderNo) AS DistinctOrderCount,  -- Count of distinct orders
-    SUM(OrderQty) * 1.0 / COUNT(DISTINCT OrderNo) AS AvgQtyPerOrder,  -- Avg quantity per order
-    SUM(TotalPrice) / COUNT(DISTINCT OrderNo) AS AvgValuePerOrder    -- Avg value per order
-FROM 
-    MBROrders
-WHERE 
-    OrderDate BETWEEN 20240101 AND 20241231  -- Date range for 2024 (integer format)
-    AND (
-        Region IN ('EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2')  -- Filter for specific regions
-    )
-	
-GROUP BY 
-    YEAR(OrderDate), 
-    MONTH(OrderDate)   -- Group by both Year and Month to get monthly data
-ORDER BY 
-    OrderYear, 
-    OrderMonth;    
+		
