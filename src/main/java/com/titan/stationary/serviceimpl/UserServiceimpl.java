@@ -35,6 +35,7 @@ import com.titan.stationary.bean.PoEntryBean;
 import com.titan.stationary.bean.Product;
 import com.titan.stationary.bean.UserLoginBean;
 import com.titan.stationary.bean.productMasterbean;
+import com.titan.stationary.dto.OutputRegionWiseMonthlyAvgPerOrder;
 import com.titan.stationary.dao.UserDao;
 import com.titan.stationary.dto.InputFilterData;
 import com.titan.stationary.dto.MasterData;
@@ -1164,6 +1165,12 @@ public class UserServiceimpl implements Userservice {
 		// TODO Auto-generated method stub
 		return userDao.regionWiseMonthlyDistributionNoofOrders(filter);	
 		}
+
+	@Override
+	public List<OutputRegionWiseMonthlyAvgPerOrder> regionWiseMonthlyAvgPerOrder(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		return userDao.regionWiseMonthlyAvgPerOrder(filter);	
+	}
 
 
 }

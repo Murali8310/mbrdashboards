@@ -13,6 +13,7 @@ import com.titan.stationary.bean.IndentMasterBean;
 import com.titan.stationary.bean.Product;
 import com.titan.stationary.bean.UserLoginBean;
 import com.titan.stationary.bean.smUserMasterBean;
+import com.titan.stationary.dto.OutputRegionWiseMonthlyAvgPerOrder;
 import com.titan.stationary.dto.InputFilterData;
 import com.titan.stationary.dto.MasterData;
 import com.titan.stationary.dto.MonthlyDataFilter;
@@ -265,5 +266,8 @@ public interface Userservice {
 
 
 	List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionNoofOrders(MonthlyDataFilter filter);
+
+
+	List<OutputRegionWiseMonthlyAvgPerOrder> regionWiseMonthlyAvgPerOrder(MonthlyDataFilter filter);
 
 }
