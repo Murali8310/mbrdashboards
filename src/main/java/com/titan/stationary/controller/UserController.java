@@ -68,6 +68,7 @@ import com.titan.stationary.dto.MonthlyDataFilter;
 import com.titan.stationary.dto.OutputForMontlyFilter;
 import com.titan.stationary.dto.OutputGrowthOverPreviousMonth;
 import com.titan.stationary.dto.OutputMonthlyOrdaringBehaviour;
+import com.titan.stationary.dto.OutputPercentageofOrdersbyDayoftheMonth;
 import com.titan.stationary.dto.OutputRegionWiseGrowthOverPreviousMonth;
 import com.titan.stationary.dto.OutputRegionWiseMonthlyAvgPerOrder;
 import com.titan.stationary.dto.OutputRegionWiseMonthlyDistribution;
@@ -3002,6 +3003,27 @@ public class UserController {
 //			}
 
 		result = userService.regionWiseMonthlyAvgPerOrder(filter);
+		redirect.addFlashAttribute("MESSAGE", result);
+		model.addAttribute("MESSAGE", result);
+		return result;
+	}
+	
+	@RequestMapping(value = "percentageofOrdersbyDayoftheMonth", method = RequestMethod.POST)
+	public List<OutputPercentageofOrdersbyDayoftheMonth> percentageofOrdersbyDayoftheMonth(HttpServletRequest request, HttpServletResponse response,
+			RedirectAttributes redirect, Model model, @RequestBody MonthlyDataFilter filter) {
+		List<OutputPercentageofOrdersbyDayoftheMonth> result = new ArrayList<>();
+
+		HttpSession session = request.getSession();
+		String loginId = "";
+//			try {
+//				Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+//				loginId = (String) userMap.get("login_id");
+//			} catch (Exception er) {
+//				er.printStackTrace();
+//				//return new StringBuilder("Session is timeout, <a href='login' >click here</a> to login");
+//			}
+
+		result = userService.percentageofOrdersbyDayoftheMonth(filter);
 		redirect.addFlashAttribute("MESSAGE", result);
 		model.addAttribute("MESSAGE", result);
 		return result;

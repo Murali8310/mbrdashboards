@@ -78,6 +78,7 @@ import com.titan.stationary.dto.MonthlyDataFilter;
 import com.titan.stationary.dto.OutputForMontlyFilter;
 import com.titan.stationary.dto.OutputGrowthOverPreviousMonth;
 import com.titan.stationary.dto.OutputMonthlyOrdaringBehaviour;
+import com.titan.stationary.dto.OutputPercentageofOrdersbyDayoftheMonth;
 import com.titan.stationary.dto.OutputRegionWiseGrowthOverPreviousMonth;
 import com.titan.stationary.dto.OutputRegionWiseMonthlyAvgPerOrder;
 import com.titan.stationary.dto.OutputRegionWiseMonthlyDistribution;
@@ -6897,4 +6898,43 @@ Calendar cal = Calendar.getInstance();
 		
 		return regionWiseMonthlyAvgPerOrder;
 	}
+
+	@Override
+	public List<OutputPercentageofOrdersbyDayoftheMonth> percentageofOrdersbyDayoftheMonth(MonthlyDataFilter filter) {
+		List<OutputPercentageofOrdersbyDayoftheMonth> percentageofOrdersbyDayoftheMonth=new ArrayList<>();
+		String storedProcedureCall = "EXEC PercentageofOrdersbyDayoftheMonth @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
+        
+        // Create a native query
+        Query query = entityManager.createNativeQuery(storedProcedureCall);
+        
+        // Set the parameters for the stored procedure call
+        query.setParameter("regionList", filter.getRegionList());  // @RegionList (e.g., 'EAST, WEST')
+        query.setParameter("startDate", filter.getStartDate());    // @StartDate (e.g., 20240601)
+        query.setParameter("endDate", filter.getEndDate());        // @EndDate (e.g., 20240630)
+        query.setParameter("brandList", filter.getBrandList());    // @BrandList (e.g., 'Titan')
+        query.setParameter("rsNameList", filter.getRsNameList());  // @RSNameList (e.g., '' or some value)
+        query.setParameter("abmName", filter.getAbmName());
+        query.setParameter("retailerType", filter.getRetailerType());
+        // Execute the query to invoke the stored procedure
+        try {
+        	List<Object[]> result = query.getResultList();
+        	//filteredData = (OutputForMontlyFilter) query.getSingleResult();
+        	
+        	for (Object[] row : result) {
+        	    // Assuming row contains values in the correct order for mapping
+        		OutputPercentageofOrdersbyDayoftheMonth data= new OutputPercentageofOrdersbyDayoftheMonth();
+        		data.setDay((Integer) row[0]);
+        		data.setDistinctOrderCount((Integer) row[1]);
+        		data.setPercentageOfOrders((BigDecimal) row[2]);
+        	    // Now, filteredData is populated with values
+        		percentageofOrdersbyDayoftheMonth.add(data);
+        	}
+        }
+        catch(Exception e) {
+        	e.printStackTrace();
+        }
+		
+		return percentageofOrdersbyDayoftheMonth;
+	}
+
 }
