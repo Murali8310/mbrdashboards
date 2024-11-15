@@ -149,8 +149,9 @@ END;
 		@RetailerType='';
 
 
-----------------------------------------------------------------------------------------% of Orders by Weekday/Weekend -----------------------------------------------------------------------------------------------------------------
-CREATE PROCEDURE PercentageofOrdersbyWeekdayorWeekend
+----------------------------------------------------------------------------------------  % of Orders by Weekday/Weekend &&  % of Orders by Weekday/Weekend Monthly ----------------------------------------------------------------------------------------------------------------------
+
+	Alter PROCEDURE PercentageofOrdersbyWeekdayorWeekend
     @RegionList VARCHAR(MAX),    -- Comma-separated list of regions
     @StartDate INT,              -- Start date in yyyymmdd format (e.g., 20240601)
     @EndDate INT,                -- End date in yyyymmdd format (e.g., 20240630)
@@ -195,8 +196,9 @@ BEGIN
             )
         );
 
-    -- Select the percentage of orders for Weekdays and Weekends
+    -- Select the percentage of orders for Weekdays and Weekends by Month
     SELECT 
+        MONTH(OrderDate) AS OrderMonth,  -- Extract Month from OrderDate
         CASE 
             WHEN DATENAME(WEEKDAY, OrderDate) IN ('Saturday', 'Sunday') THEN 'Weekend'
             ELSE 'Weekday'
@@ -236,15 +238,17 @@ BEGIN
             )
         )
     GROUP BY
+        MONTH(OrderDate),  -- Group by Month of the order
         CASE 
             WHEN DATENAME(WEEKDAY, OrderDate) IN ('Saturday', 'Sunday') THEN 'Weekend'
             ELSE 'Weekday'
         END  -- Group by Weekday or Weekend
     ORDER BY
-        DayType; -- Order by Weekday/Weekend category
+        OrderMonth, DayType; -- Order by Month and then by Weekday/Weekend category
 END;
 
-	EXEC PercentageofOrdersbyWeekdayorWeekend
+    
+EXEC PercentageofOrdersbyWeekdayorWeekend
 		@RegionList ='EAST, WEST, NORTH, SOUTH 1, SOUTH 2', -- Comma-separated list of regions
 		@StartDate = 20240401,         -- Start date in yyyymmdd format
 		@EndDate = 20240430,		   -- End date in yyyymmdd format
@@ -253,8 +257,13 @@ END;
 		@ABMName='',
 		@RetailerType='';
 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    
 
 
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------------------% of Orders by Weekday/Weekend Region wise for selected Month-----------------------------------------------------------------------------
+
+
+
+--------------------------------------------------------------------------------------------------------------------% of Orders by Hour of the Day on week day weekend---------------------------------------------------------------------------------------

@@ -6792,9 +6792,10 @@ public class UserDaoimpl implements UserDao {
 			for (Object[] row : result) {
 				// Assuming row contains values in the correct order for mapping
 				OutputPercentageofOrdersbyWeekdayorWeekend data = new OutputPercentageofOrdersbyWeekdayorWeekend();
-				data.setDayType(row[0].toString());
-				data.setDistinctOrderCount((Integer) row[1]);
-				data.setPercentageOfOrders((BigDecimal) row[2]);
+				data.setMonth((Integer) row[0]);
+				data.setDayType(row[1].toString());
+				data.setDistinctOrderCount((Integer) row[2]);
+				data.setPercentageOfOrders((BigDecimal) row[3]);
 				// Now, filteredData is populated with values
 				percentageofOrdersbyWeekdayorWeekend.add(data);
 			}

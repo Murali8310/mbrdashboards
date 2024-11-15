@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 public class OutputPercentageofOrdersbyWeekdayorWeekend {
 
+	private Integer month;
 	private String dayType;
 	private Integer distinctOrderCount;
 	private BigDecimal percentageOfOrders;
@@ -25,6 +26,12 @@ public class OutputPercentageofOrdersbyWeekdayorWeekend {
 	}
 	public void setPercentageOfOrders(BigDecimal percentageOfOrders) {
 		this.percentageOfOrders = percentageOfOrders;
+	}
+	public Integer getMonth() {
+		return month;
+	}
+	public void setMonth(Integer month) {
+		this.month = month;
 	}
 	
 	
