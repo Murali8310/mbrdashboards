@@ -112,6 +112,31 @@ public selectedData:any = '1';
       );      
   }
 
+  public  RegionWiseMonthlyDistibutionOptionsFOrdBhFn(MonthlyToalOrdaringPayload?:any) {
+    return this.http
+      .post<any>(
+        `${environment.apiUrl}/regionWiseMonthlyDistributionNoofOrders`,
+        JSON.stringify(MonthlyToalOrdaringPayload),
+        {
+          headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+          observe: 'response',
+        }
+      );      
+  }
+
+  public  RegionWiseMonthlyAvgPerOrderFn(MonthlyToalOrdaringPayload?:any) {
+    return this.http
+      .post<any>(
+        `${environment.apiUrl}/regionWiseMonthlyAvgPerOrder`,
+        JSON.stringify(MonthlyToalOrdaringPayload),
+        {
+          headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+          observe: 'response',
+        }
+      );      
+  }
+
+
   /**
    * This is for geting the region wise growth over data.
    * @param MonthlyToalOrdaringPayload 
@@ -192,5 +217,19 @@ public selectedData:any = '1';
         }
       ); 
 } 
+
+
+// This is for getting the data for avg orders epr month.
+public  chartOptionslineForOrdBh(MonthlyToalOrdaringPayload?:any) {
+  return this.http
+    .post<any>(
+      `${environment.apiUrl}/monthlyOrdaringBehaviour`,
+      JSON.stringify(MonthlyToalOrdaringPayload),
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        observe: 'response',
+      }
+    );      
+}
   
 }

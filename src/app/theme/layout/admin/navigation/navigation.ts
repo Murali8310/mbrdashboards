@@ -64,7 +64,7 @@ export const NavigationItems: NavigationItem[] = [
         type: 'item',
         url: '/charts',
         classes: 'nav-item',
-        icon: 'fas fa-sort-amount-up'
+        icon: 'feather float-end icon-shopping-cart'
       }
     ]
   },

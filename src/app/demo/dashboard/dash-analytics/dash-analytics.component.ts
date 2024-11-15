@@ -11,7 +11,7 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { ApexGrid, ApexMarkers, ApexTitleSubtitle, NgApexchartsModule } from 'ng-apexcharts';
 import { ProductSaleComponent } from './product-sale/product-sale.component';
 declare var $: any; // Declare jQuery globally
-type DropdownFlag = 'isDropdownOpenForRetailer' | 'isDropdownOpenForRS' | 'isDropdownOpenForBrand' | 'isDropdownOpen' | 'isDropdownOpenForAbm';
+type DropdownFlag = 'isDropdownOpenForRetailer' | 'isDropdownOpenForRS' | 'isDropdownOpenForBrand' | 'isDropdownOpen' | 'isDropdownOpenForAbm' | 'isDropdownOpenForMonth';
 
 interface Brand {
   id: number;
@@ -95,10 +95,17 @@ export default class DashAnalyticsComponent {
   chartOptionsRegionwise!: ApexOptions;
   chartOptionsRegionwiseGrowth!: ApexOptions;
   regionWiseGrowthOptions!:ApexOptions;
-
   budgetChartOptions!:ApexOptions;
   RegionWiseMonthlyDistibutionOptions!:ApexOptions;
   RegionWiseGrowthOverPreviousMonthOptions!:ApexOptions;
+
+
+
+  // This is for menu id 3
+  chartOptionslineForOrdBh!: ApexOptions; // Change to ApexOptions
+  RegionWiseMonthlyDistibutionOptionsFOrdBh!: ApexOptions;
+  RegionWiseMonthlyAvgPerOrder!: ApexOptions;
+
   public appendClass: any;
 
 
@@ -131,6 +138,9 @@ export default class DashAnalyticsComponent {
     }
     if (this.isDropdownOpenForBrand) {
       this.isDropdownOpenForBrand = !this.isDropdownOpenForBrand;
+    }
+    if(this.isDropdownOpenForMonth){
+      this.isDropdownOpenForMonth = !this.isDropdownOpenForMonth;
     }
 
     
@@ -275,17 +285,43 @@ export default class DashAnalyticsComponent {
     // { id: 5, name: 'Brand E' }
   ];
 
+  availableMonths: any[] = [
+    { id: 1, name: 'January', code: 'JAN' },
+    { id: 2, name: 'February', code: 'FEB' },
+    { id: 3, name: 'March', code: 'MAR' },
+    { id: 4, name: 'April', code: 'APR' },
+    { id: 5, name: 'May', code: 'MAY' },
+    { id: 6, name: 'June', code: 'JUN' },
+    { id: 7, name: 'July', code: 'JUL' },
+    { id: 8, name: 'August', code: 'AUG' },
+    { id: 9, name: 'September', code: 'SEP' },
+    { id: 10, name: 'October', code: 'OCT' },
+    { id: 11, name: 'November', code: 'NOV' },
+    { id: 12, name: 'December', code: 'DEC' }
+  ];
+
+  // Filtered list for search functionality
+filteredMonthsList: any[] = [...this.availableMonths];
+selectedMonths: any[] = [];
+isDropdownOpenForMonth: boolean = false;
+areAllMonthsSelected: boolean = false;
+searchInputValueForMonth: string = '';
+
+
+
+
   // Holds selected brands
   selectedBrands: { id: number; name: string }[] = [];
+  
 
   // Control dropdown visibility
   isDropdownOpenForBrand = false;
-
   // Search input value
   searchInputValueForBrand = '';
 
   // Filtered brands based on search input
   filteredBrandsList = this.availableBrands;
+
   isLoading = false; // Start with loading state
 
   // constructor
@@ -296,319 +332,20 @@ export default class DashAnalyticsComponent {
     private route: ActivatedRoute
   ) {
 
-    this.regionWiseGrowthOptions = {
-      series: [
-        // Retailers group for 5 regions
-        {
-          name: "East Region",
-          group: "retailers",
-          data: [44000, 55000, 41000, 67000, 22000, 43000]
-        },
-        {
-          name: "North Region",
-          group: "retailers",
-          data: [13000, 36000, 20000, 8000, 13000, 27000]
-        },
-        {
-          name: "South 1 Region",
-          group: "retailers",
-          data: [13000, 36000, 20000, 8000, 13000, 27000]
-        },
-        {
-          name: "South 2 Region",
-          group: "retailers",
-          data: [13000, 36000, 20000, 8000, 13000, 27000]
-        },
-        {
-          name: "West Region",
-          group: "retailers",
-          data: [13000, 36000, 20000, 8000, 13000, 27000]
-        },
-    
-        // qty group for same 5 regions
-        {
-          name: "qty East Region",
-          group: "qty",
-          data: [20000, 40000, 25000, 10000, 12000, 28000]
-        },
-        {
-          name: "qty North Region",
-          group: "qty",
-          data: [20000, 40000, 25000, 10000, 12000, 28000]
-        },
-        {
-          name: "qty South 1 Region",
-          group: "qty",
-          data: [20000, 40000, 25000, 10000, 12000, 28000]
-        },
-        {
-          name: "qty South 2 Region",
-          group: "qty",
-          data: [20000, 40000, 25000, 10000, 12000, 28000]
-        },
-        {
-          name: "qty West Region",
-          group: "qty",
-          data: [20000, 40000, 25000, 10000, 12000, 28000]
-        },
-    
-        // value group for same 5 regions
-        {
-          name: "Value East Region",
-          group: "value",
-          data: [20000, 40000, 25000, 10000, 12000, 28000]
-        },
-        {
-          name: "Value North Region",
-          group: "value",
-          data: [20000, 40000, 25000, 10000, 12000, 28000]
-        },
-        {
-          name: "Value South 1 Region",
-          group: "value",
-          data: [20000, 40000, 25000, 10000, 12000, 28000]
-        },
-        {
-          name: "Value South 2 Region",
-          group: "value",
-          data: [20000, 40000, 25000, 10000, 12000, 28000]
-        },
-        {
-          name: "Value West Region",
-          group: "value",
-          data: [20000, 40000, 25000, 10000, 12000, 28000]
-        }
-      ],
-      chart: {
-        type: "bar",
-        height: 350,
-        stacked: true
-      },
-      stroke: {
-        width: 1,
-        colors: ["#fff"]
-      },
-      dataLabels: {
-        formatter: (val) => {
-          return Number(val) / 1000 + "K";
-        }
-      },
-      plotOptions: {
-        bar: {
-          horizontal: false
-        }
-      },
-      xaxis: {
-        categories: [
-          'April',
-          'May',
-          'June'
-        ]
-      },
-      fill: {
-        opacity: 1
-      },
-      colors: ["#80c7fd", "#008FFB", "#80f1cb", "#00E396"],
-      yaxis: {
-        labels: {
-          formatter: (val) => {
-            return val / 1000 + "K";
-          }
-        }
-      },
-      legend: {
-        position: "top",
-        horizontalAlign: "left"
-      }
-    };
-    
-    // const queryParams = (router.routerState.snapshot as RouterStateSnapshot).root.queryParams;
-    // const queryParamsKey = Object.keys(queryParams);
-    // if (queryParamsKey && queryParamsKey.includes('id')) {
-    //   this.dashboardService.selectedData = queryParams['id'];
-    // }
-
     this.route.queryParams.subscribe((params) => {
       this.dashboardService.selectedData = params['id'];
-      // console.log('Query parameter ID changed:', this.selectedId);
-      // Refresh or load data based on the new ID
-      // this.ngOnInit();
-      if(params['id'] === '1'){
+         if (params['id'] === '1') {
         this.dashBoardInitalDataFn();
-
-      }else if(params['id'] === '2'){
+      } else if (params['id']) {
         this.prepareSearchData('reset');
       }
     });
-
-    this.chartOptionsRegionwise = {
-      chart: {
-        type: 'bar',
-        height: 350,
-        toolbar: {
-          show: false // Optional: Hide toolbar if not needed
-        }
-      },
-      title: {
-        text: 'Region Wise Monthly Distibution.', // Chart title
-        align: 'center',
-        style: {
-          fontSize: '16px',
-          fontWeight: 'bold',
-          color: '#333'
-        }
-      },
-      series: [
-        {
-          name: 'Number of Retailers',
-          data: [120, 150, 130] // Example values for Number of Retailers
-        },
-        {
-          name: 'Quantity (k)',
-          data: [30, -25, 35] // Example values for Quantity
-        },
-        {
-          name: 'Value',
-          data: [100, -70, 80] // Example values for Value
-        }
-      ],
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: '50%'
-          // endingShape: "rounded"
-        }
-      },
-      dataLabels: {
-        enabled: true
-      },
-      stroke: {
-        show: true,
-        width: 2,
-        colors: ['transparent']
-      },
-      xaxis: {
-        categories: [
-          'Feb',
-          'Mar',
-          'Apr'
-          // "May",
-          // "Jun",
-          // "Jul",
-          // "Aug",
-          // "Sep",
-          // "Oct"
-        ]
-      },
-      yaxis: {
-        title: {
-          text: ' (Growth percentage)'
-        },
-        min: -100 // Set a minimum value for y-axis to accommodate negative values
-      },
-      fill: {
-        opacity: 1
-      },
-      tooltip: {
-        y: {
-          formatter: function (val) {
-            return '' + val + ' ';
-          }
-        }
-      }
-    };
-
-    this.chartOptionsRegionwiseGrowth = {
-      chart: {
-        type: 'bar',
-        height: 350,
-        toolbar: {
-          show: false // Optional: Hide toolbar if not needed
-        }
-      },
-      title: {
-        text: 'Region Wise Growth Over Previous Month.', // Chart title
-        align: 'center',
-        style: {
-          fontSize: '16px',
-          fontWeight: 'bold',
-          color: '#333'
-        }
-      },
-      series: [
-        {
-          name: 'Number of Retailers',
-          data: [120, 150, 130] // Example values for Number of Retailers
-        },
-        {
-          name: 'Quantity (k)',
-          data: [30, -25, 35] // Example values for Quantity
-        },
-        {
-          name: 'Value',
-          data: [100, -70, 80] // Example values for Value
-        }
-      ],
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: '50%'
-          // endingShape: "rounded"
-        }
-      },
-      dataLabels: {
-        enabled: true
-      },
-      stroke: {
-        show: true,
-        width: 2,
-        colors: ['transparent']
-      },
-      xaxis: {
-        categories: [
-          'Feb',
-          'Mar',
-          'Apr'
-          // "May",
-          // "Jun",
-          // "Jul",
-          // "Aug",
-          // "Sep",
-          // "Oct"
-        ]
-      },
-      yaxis: {
-        title: {
-          text: ' (Growth percentage)'
-        },
-        min: -100 // Set a minimum value for y-axis to accommodate negative values
-      },
-      fill: {
-        opacity: 1
-      },
-      tooltip: {
-        y: {
-          formatter: function (val) {
-            return '' + val + ' ';
-          }
-        }
-      }
-    };
   }
 
   // life cycle event
   async ngOnInit() {
-
     console.log('calling count')
     this.spinner.show();
-    const GrowthOverPreviousMonthPayload :any = {
-      "regionList": "EAST, WEST,NORTH,SOUTH 1,SOUTH 2",  /// default all regions 
-        "startDate":20240401,       /// default case start date of financial year in integer format
-        "endDate": 202401030,       ////  default case end date of financial year in integer format
-        "brandList": "",       //// default casen ""
-        "rsNameList": "",//// default casen ""
-        "retailerType":"",
-      };
   }
 
   // this is to get the searched data;
@@ -661,11 +398,7 @@ export default class DashAnalyticsComponent {
         this.selectedRegions = [];
         this.selectedRetailerTypes = [];
     }
-  
     this.GetMasterData(payloadForMaster,MonthlyToalOrdaringPayload);
-
-
-    
   }
   
 
@@ -774,7 +507,7 @@ export default class DashAnalyticsComponent {
         type: 'line'
       },
       dataLabels: {
-        enabled: false
+        enabled: true
       },
       stroke: {
         width: 5,
@@ -895,8 +628,8 @@ export default class DashAnalyticsComponent {
           response.body.forEach((item: any) => {
             // Push values to each series array
             retailersData.push(item.totalRetailerCode);
-            quantityData.push(item.totalQTY /1000);
-            valueData.push(item.totalRevenue / 10000000);
+            quantityData.push((item.totalQTY /1000).toFixed(2));
+            valueData.push((item.totalRevenue / 10000000).toFixed(2));
 
             // Get month name and add to categories
             categories.push(monthNames[item.month - 1]);
@@ -933,7 +666,7 @@ export default class DashAnalyticsComponent {
               type: 'line'
             },
             dataLabels: {
-              enabled: false
+              enabled: true
             },
             stroke: {
               width: 5,
@@ -991,7 +724,7 @@ export default class DashAnalyticsComponent {
                     return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
                   }
                 },
-                tickAmount: 4 // Adjust the number of ticks as necessary
+                tickAmount: 1 // Adjust the number of ticks as necessary
               },
               {
                 opposite: true, // Make this y-axis on the opposite side
@@ -1063,7 +796,7 @@ export default class DashAnalyticsComponent {
           this.chartOptions = {
             chart: {
               type: 'bar',
-              height: 350,
+              height: 400,
               toolbar: {
                 show: true,
                 tools: {
@@ -1081,7 +814,7 @@ export default class DashAnalyticsComponent {
               align: 'center',
               style: {
                 fontSize: '16px',
-                fontWeight: 'bold',
+                // fontWeight: 'bold',
                 color: '#333'
               }
             },
@@ -1109,12 +842,12 @@ export default class DashAnalyticsComponent {
             plotOptions: {
               bar: {
                 horizontal: false,
-                columnWidth: '50%'
+                columnWidth: '100%'
                 // endingShape: "rounded"
               }
             },
             dataLabels: {
-              enabled: false
+              enabled: true
             },
             stroke: {
               show: true,
@@ -1151,7 +884,7 @@ export default class DashAnalyticsComponent {
                     return '' + val; // Format for value
                   }
                 },
-                tickAmount: 4 // Adjust the number of ticks as necessary
+                tickAmount: 1 // Adjust the number of ticks as necessary
               },
             ],
             fill: {
@@ -1179,8 +912,8 @@ export default class DashAnalyticsComponent {
             // quantityData.push(item.orderGrowth);
             // valueData.push(item.priceGrowth);
             retailersData.push(item.retailerGrowth);
-            quantityData.push(item.orderGrowth / 1000); // Converts orderGrowth to thousands
-            valueData.push(item.priceGrowth / 10000000); // Converts priceGrowth to crores
+            quantityData.push((item.orderGrowth / 1000).toFixed(2)); // Converts orderGrowth to thousands
+            valueData.push((item.priceGrowth / 10000000).toFixed(2)); // Converts priceGrowth to crores
 
             // Get month name and add to categories
             categories.push(monthNames[item.month - 1]);
@@ -1189,7 +922,7 @@ export default class DashAnalyticsComponent {
           this.chartOptions = {
             chart: {
               type: 'bar',
-              height: 350,
+              height: 500,
               toolbar: {
                 show: true,
                 tools: {
@@ -1207,7 +940,6 @@ export default class DashAnalyticsComponent {
               align: 'center',
               style: {
                 fontSize: '16px',
-                fontWeight: 'bold',
                 color: '#333'
               }
             },
@@ -1217,7 +949,7 @@ export default class DashAnalyticsComponent {
                 const formattedValue = dataValue % 1 === 0 ? dataValue : dataValue.toFixed(2);
                 return val + ' - <strong>' + formattedValue + '</strong>';
               }
-            }, 
+            },
             series: [
               {
                 name: 'Number of Retailers',
@@ -1235,12 +967,19 @@ export default class DashAnalyticsComponent {
             plotOptions: {
               bar: {
                 horizontal: false,
-                columnWidth: '50%'
-                // endingShape: "rounded"
+                columnWidth: '100%',
+                dataLabels: {
+                  position: 'top'
+                }
               }
             },
             dataLabels: {
-              enabled: false
+              enabled: true,
+              offsetY: 30,
+              
+              style: {
+                fontSize: "10px"
+              }
             },
             stroke: {
               show: true,
@@ -1248,31 +987,25 @@ export default class DashAnalyticsComponent {
               colors: ['transparent']
             },
             xaxis: {
-              categories: categories
+              categories: categories // Your x-axis categories (months, or other)
             },
-            // yaxis: {
-            //   title: {
-            //     text: ' (Growth Value)'
-            //   },
-            //               // min: -100 // Set a minimum value for y-axis to accommodate negative values
-            // },
-
             yaxis: [
               {
                 title: {
                   text: ' (Growth Value)', // Left y-axis title
-                  style: {
-                    color: '#000000' // Change color as needed
-                  }
+                  // style: {
+                  //   color: '#000000' // Change color as needed
+                  // }
                 },
-                // min: 0, // Minimum value for left y-axis
+                min: 0, // Set minimum value for the y-axis
+                //max: 800, // Set maximum value for the y-axis (adjust as needed)
+                tickAmount: 4, // Adjust the number of ticks based on the range
                 labels: {
-                  formatter: function (val:any) {
-                    return '' + val; // Format for value
+                  formatter: function (val) {
+                    return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2); // Format the labels
                   }
-                },
-                tickAmount: 4 // Adjust the number of ticks as necessary
-              },
+                }
+              }
             ],
             fill: {
               opacity: 1
@@ -1280,13 +1013,13 @@ export default class DashAnalyticsComponent {
             tooltip: {
               y: {
                 formatter: function (val) {
-                  // return val.toFixed(2);
                   return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
-
                 }
               }
             }
           };
+          
+          
         }
         console.log('this is for checking');
       },
@@ -1652,7 +1385,12 @@ export default class DashAnalyticsComponent {
       (response:any) => {
         // this.spinner.hide();
         if(!isFromFilter){
-          this.MonthlyToalOrdaring(MonthlyToalOrdaringPayload);
+
+          if(this.dashboardService.selectedData === '2'){
+            this.MonthlyToalOrdaring(MonthlyToalOrdaringPayload);
+          } else if(this.dashboardService.selectedData === '3'){
+            this.chartOptionslineForOrdBhFn(MonthlyToalOrdaringPayload);
+          }
         }
 
         if (response && response.body && response.body.region && response.body.region.length > 0) {
@@ -1880,7 +1618,7 @@ export default class DashAnalyticsComponent {
               align: 'center',
               style: {
                 fontSize: '16px',
-                fontWeight: 'bold',
+                // fontWeight: 'bold',
                 color: '#333'
               }
             },
@@ -1939,386 +1677,6 @@ export default class DashAnalyticsComponent {
     );
   };
 
-//   public RegionWiseMonthlyDistribution = (MonthlyToalOrdaringPayload?: any) => {
-//     this.spinner.show();
-//           // Define month names for easy mapping
-//           const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-//           // Prepare data for each series
-//           const retailersData :any= [];
-//           const quantityData :any= [];
-//           const valueData:any = [];
-//           const categories: string[] = []; // This will hold the month names
-
-//           this.RegionWiseMonthlyDistibutionOptions = {
-//             series: [
-//               // Retailers group
-//               { name: 'Retailers - East', group: 'retailers', data: [44, 55, 41] },
-//               { name: 'Retailers - South1', group: 'retailers', data: [38, 50, 40] },
-//               { name: 'Retailers - South2', group: 'retailers', data: [38, 50, 40] },
-//               { name: 'Retailers - North', group: 'retailers', data: [46, 52, 44] },
-//               { name: 'Retailers - West', group: 'retailers', data: [42, 48, 43] },
-          
-//               // Qty group
-//               { name: 'Qty - East', group: 'qty', data: [12, 15, 13] },
-//               { name: 'Qty - South1', group: 'qty', data: [11, 14, 12.5] },
-//               { name: 'Qty - South2', group: 'qty', data: [11, 14, 12.5] },
-//               { name: 'Qty - North', group: 'qty', data: [15, 18, 16] },
-//               { name: 'Qty - West', group: 'qty', data: [13, 16, 15] },
-          
-//               // Value group
-//               { name: 'Value - East', group: 'value', data: [32, 45, 39] },
-//               { name: 'Value - South1', group: 'value', data: [31, 42, 37] },
-//               { name: 'Value - South2', group: 'value', data: [31, 42, 37] },
-//               { name: 'Value - North', group: 'value', data: [35, 49, 42] },
-//               { name: 'Value - West', group: 'value', data: [33, 46, 40] }
-//             ],
-//             title: {
-//               text: 'Region Wise Distibution Loading....', // Chart title
-//               align: 'center',
-//               style: {
-//                 fontSize: '16px',
-//                 fontWeight: 'bold',
-//                 color: '#333'
-//               }
-//             },
-//             yaxis: [
-//               {
-//                 title: {
-//                   text: '(Quantity) Loading...', // Left y-axis title
-//                   style: {
-//                     color: '#000000' // Change color as needed
-//                   }
-//                 },
-//                 // min: 0, // Minimum value for left y-axis
-//                 labels: {
-//                   formatter: function (val:any) {
-//                     return '' + val; // Format for value
-//                   }
-//                 },
-//                 tickAmount: 4 // Adjust the number of ticks as necessary
-//               },
-//             ],
-//             xaxis: {
-//               labels: {
-//                 trim: false
-//               },
-//               categories: ['April', 'May', 'June'],
-//               title: {
-//                 // text: 'Monthly Distribution Loading...', // Left y-axis title
-//                 style: {
-//                   color: '#000000' // Change color as needed
-//                 }
-//               },
-//             },
-//             dataLabels: {
-//               enabled: false
-//             },
-//             chart: {
-//               type: 'bar',
-//               height: 350,
-//               stacked: true
-//             },
-//             // xaxis: {
-//             //   categories: ['April', 'May', 'June']
-//             // },
-//             plotOptions: {
-//               bar: {
-//                 horizontal: false
-//               }
-//             },
-//             fill: {
-//               opacity: 1
-//             },
-//             colors: [
-//               '#80c7fd', '#008FFB', '#80f1cb', '#00E396', '#feb019',  // Retailers colors
-//               '#FF5733', '#FFBD33', '#C70039', '#900C3F', '#581845',  // Qty colors
-//               '#2ECC71', '#28B463', '#239B56', '#1D8348', '#186A3B'   // Value colors
-//             ],
-//             legend: {
-//               position: 'top',
-//               horizontalAlign: 'left'
-//             }
-//           };
-//     this.dashboardService.RegionWiseMonthlyDistribution(MonthlyToalOrdaringPayload).subscribe(
-//       (response) => {
-//         if (response && response.body) {
-//           this.spinner.hide();
-
-//           response.body.forEach((item: any) => {
-//             // Push values to each series array
-//             retailersData.push(item.totalRetailerCode);
-//             quantityData.push(item.totalQTY /1000);
-//             valueData.push(item.totalRevenue / 10000000);
-
-//             // Get month name and add to categories
-//             categories.push(monthNames[item.month - 1]);
-//           });
-
-//           // Sample input data array for multiple months (example for April, May, June)
-// const inputArray = [
-//   { month: 4, year: 2024, region: 'East', totalRevenue: 32000000, totalQTY: 13000, totalRetailerCode: 44 },
-//   { month: 4, year: 2024, region: 'South1', totalRevenue: 31000000, totalQTY: 12500, totalRetailerCode: 38 },
-//   { month: 4, year: 2024, region: 'South2', totalRevenue: 31000000, totalQTY: 12500, totalRetailerCode: 38 },
-//   { month: 4, year: 2024, region: 'North', totalRevenue: 35000000, totalQTY: 16000, totalRetailerCode: 46 },
-//   { month: 4, year: 2024, region: 'West', totalRevenue: 33000000, totalQTY: 15000, totalRetailerCode: 42 },
-//   { month: 5, year: 2024, region: 'East', totalRevenue: 34000000, totalQTY: 13500, totalRetailerCode: 45 },
-//   { month: 5, year: 2024, region: 'South1', totalRevenue: 32000000, totalQTY: 12700, totalRetailerCode: 39 },
-//   // ...additional entries for each month and region
-// ];
-
-// // Helper function to get unique months in the input array for x-axis categories
-// const getMonths = (data: any[]) => {
-//   const uniqueMonths = [...new Set(data.map(item => item.month))];
-//   return uniqueMonths.map(month => new Date(2024, month - 1).toLocaleString('default', { month: 'long' }));
-// };
-
-// // Function to prepare series data for each metric and region
-// const prepareSeriesData = (data: any[], metric: string, group: string) => {
-//   const regions = [...new Set(data.map(item => item.region))];
-//   return regions.map(region => {
-//     const regionData = data.filter(item => item.region === region);
-//     return {
-//       name: `${metric.charAt(0).toUpperCase() + metric.slice(1)} - ${region}`,
-//       group: group,
-//       data: regionData.map(item => item[metric])
-//     };
-//   });
-// };
-
-// // Initialize the chart configuration object
-// // this.RegionWiseMonthlyDistibutionOptions = {
-// //   series: [
-// //     ...prepareSeriesData(response.body, 'totalRetailerCode', 'retailers'),
-// //     ...prepareSeriesData(response.body, 'totalQTY', 'qty'),
-// //     ...prepareSeriesData(response.body, 'totalRevenue', 'value'),
-// //   ],
-// //   title: {
-// //     text: 'Region Wise Distribution',
-// //     align: 'center',
-// //     style: {
-// //       fontSize: '16px',
-// //       fontWeight: 'bold',
-// //       color: '#333'
-// //     }
-// //   },
-// //   dataLabels: {
-// //     enabled: false
-// //   },
-// //   chart: {
-// //     type: 'bar',
-// //     height: 350,
-// //     stacked: true
-// //   },
-// //   xaxis: {
-// //     labels: { trim: false },
-// //     categories: getMonths(inputArray),
-// //     title: {
-// //       style: { color: '#000000' }
-// //     },
-// //   },
-// //   plotOptions: {
-// //     bar: {
-// //       horizontal: false
-// //     }
-// //   },
-// //   fill: {
-// //     opacity: 1
-// //   },
-// //   colors: [
-// //     '#80c7fd', '#008FFB', '#80f1cb', '#00E396', '#feb019',  // Retailers colors
-// //     '#FF5733', '#FFBD33', '#C70039', '#900C3F', '#581845',  // Qty colors
-// //     '#2ECC71', '#28B463', '#239B56', '#1D8348', '#186A3B'   // Value colors
-// //   ],
-// //   legend: {
-// //     position: 'top',
-// //     horizontalAlign: 'left'
-// //   }
-// // };
-
-
-//           // this.RegionWiseMonthlyDistibutionOptions = {
-//           //   series: [
-//           //     // Retailers group
-//           //     { name: 'Retailers - East', group: 'retailers', data: [44, 55, 41] },
-//           //     { name: 'Retailers - South1', group: 'retailers', data: [38, 50, 40] },
-//           //     { name: 'Retailers - South2', group: 'retailers', data: [38, 50, 40] },
-//           //     { name: 'Retailers - North', group: 'retailers', data: [46, 52, 44] },
-//           //     { name: 'Retailers - West', group: 'retailers', data: [42, 48, 43] },
-          
-//           //     // Qty group
-//           //     { name: 'Qty - East', group: 'qty', data: [12, 15, 13] },
-//           //     { name: 'Qty - South1', group: 'qty', data: [11, 14, 12.5] },
-//           //     { name: 'Qty - South2', group: 'qty', data: [11, 14, 12.5] },
-//           //     { name: 'Qty - North', group: 'qty', data: [15, 18, 16] },
-//           //     { name: 'Qty - West', group: 'qty', data: [13, 16, 15] },
-          
-//           //     // Value group
-//           //     { name: 'Value - East', group: 'value', data: [32, 45, 39] },
-//           //     { name: 'Value - South1', group: 'value', data: [31, 42, 37] },
-//           //     { name: 'Value - South2', group: 'value', data: [31, 42, 37] },
-//           //     { name: 'Value - North', group: 'value', data: [35, 49, 42] },
-//           //     { name: 'Value - West', group: 'value', data: [33, 46, 40] }
-//           //   ],
-//           //   title: {
-//           //     text: 'Region Wise Distibution', // Chart title
-//           //     align: 'center',
-//           //     style: {
-//           //       fontSize: '16px',
-//           //       fontWeight: 'bold',
-//           //       color: '#333'
-//           //     }
-//           //   },
-//           //   dataLabels: {
-//           //     enabled: false
-//           //   },
-//           //   chart: {
-//           //     type: 'bar',
-//           //     height: 350,
-//           //     stacked: true
-//           //   },
-//           //   // xaxis: {
-//           //   //   categories: ['April', 'May', 'June']
-//           //   // },
-//           //   xaxis: {
-//           //     labels: {
-//           //       trim: false
-//           //     },
-//           //     categories: ['April', 'May', 'June'],
-//           //     title: {
-//           //       // text: 'Monthly Distribution Loading...', // Left y-axis title
-//           //       style: {
-//           //         color: '#000000' // Change color as needed
-//           //       }
-//           //     },
-//           //   },
-//           //   plotOptions: {
-//           //     bar: {
-//           //       horizontal: false
-//           //     }
-//           //   },
-//           //   fill: {
-//           //     opacity: 1
-//           //   },
-//           //   colors: [
-//           //     '#80c7fd', '#008FFB', '#80f1cb', '#00E396', '#feb019',  // Retailers colors
-//           //     '#FF5733', '#FFBD33', '#C70039', '#900C3F', '#581845',  // Qty colors
-//           //     '#2ECC71', '#28B463', '#239B56', '#1D8348', '#186A3B'   // Value colors
-//           //   ],
-//           //   legend: {
-//           //     position: 'top',
-//           //     horizontalAlign: 'left'
-//           //   }
-//           // };
-//         }
-//         console.log('this is for checking');
-//       },
-//       (error) => {
-//         // this.errorMessage = 'An error occurred during login';
-//         console.error('Login error:', error);
-//       }
-//     );
-//   };
-
-// public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
-//   this.spinner.show();
-//   const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-//   const categories: string[] = [];
-
-//   // Define chart options with placeholder series (to be updated dynamically)
-//   this.RegionWiseMonthlyDistibutionOptions = {
-//       series: [],
-//       title: {
-//           text: 'Region Wise Distribution Loading...',
-//           align: 'center',
-//           style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
-//       },
-//       yaxis: [{
-//           title: {
-//               text: '(Quantity) Loading...',
-//               style: { color: '#000000' }
-//           },
-//           labels: {
-//               formatter: (val: any) => '' + val
-//           },
-//           tickAmount: 4
-//       }],
-//       xaxis: {
-//           labels: { trim: false },
-//           categories: [],
-//           title: { style: { color: '#000000' } }
-//       },
-//       dataLabels: { enabled: false },
-//       chart: {
-//           type: 'bar',
-//           height: 350,
-//           stacked: true
-//       },
-//       plotOptions: { bar: { horizontal: false } },
-//       fill: { opacity: 1 },
-//       colors: [
-//           '#80c7fd', '#008FFB', '#80f1cb', '#00E396', '#feb019', // Retailers colors
-//           '#FF5733', '#FFBD33', '#C70039', '#900C3F', '#581845', // Qty colors
-//           '#2ECC71', '#28B463', '#239B56', '#1D8348', '#186A3B'  // Value colors
-//       ],
-//       legend: { position: 'top', horizontalAlign: 'left' }
-//   };
-
-//   this.dashboardService.RegionWiseMonthlyDistribution(MonthlyTotalOrderingPayload).subscribe(
-//       (response) => {
-//           if (response && response.body) {
-//               this.spinner.hide();
-
-//               // Prepare categories based on unique months
-//               const uniqueMonths = [...new Set(response.body.map((item: any) => item.month))];
-//               uniqueMonths.forEach((month: any) => {
-//                   categories.push(monthNames[month - 1]);
-//               });
-
-//               const south2Records = response.body.filter((record:any) => record.region === 'South2');
-
-
-//               // Prepare data series for each metric and region
-//               const prepareSeriesData = (data: any[], metric: string, group: string) => {
-//                   // const regions = [...new Set(data.map(item => item.region))];
-//                   const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
-                  
-//                   return regions.map(region => {
-//                       const regionData = data.filter(item => item.region === region);
-//                       return {
-//                           name: `${metric.charAt(0).toUpperCase() + metric.slice(1)} - ${region}`,
-//                           group: group,
-//                           data: regionData.map(item => {
-//                               if (metric === 'totalQTY') return item.totalQTY / 1000; // Adjust units
-//                               if (metric === 'totalRevenue') return item.totalRevenue / 10000000; // Adjust units
-//                               return item.totalRetailerCode;
-//                           })
-//                       };
-//                   });
-//               };
-
-//               // Update chart options with dynamic series and categories
-//               this.RegionWiseMonthlyDistibutionOptions = {
-//                   ...this.RegionWiseMonthlyDistibutionOptions,
-//                   series: [
-//                       ...prepareSeriesData(response.body, 'totalRetailerCode', 'retailers'),
-//                       ...prepareSeriesData(response.body, 'totalQTY', 'qty'),
-//                       ...prepareSeriesData(response.body, 'totalRevenue', 'value')
-//                   ],
-//                   xaxis: { ...this.RegionWiseMonthlyDistibutionOptions.xaxis, categories },
-//                   title: {
-//                     text: 'Region Wise Distribution',
-//                     align: 'center',
-//                     style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
-//                 },
-//               };
-//           }
-//       },
-//       (error) => {
-//           this.spinner.hide();
-//           console.error('Error fetching region-wise monthly distribution data:', error);
-//       }
-//   );
-// };
 public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
   this.spinner.show();
   const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -2352,7 +1710,7 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
     title: {
       text: 'Region Wise Distribution Loading...',
       align: 'center',
-      style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
+      // style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
     },
     yaxis: [
       {
@@ -2371,10 +1729,10 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
       categories: [],
       title: { style: { color: '#000000' } }
     },
-    dataLabels: { enabled: false },
+    dataLabels: { enabled: true },
     chart: {
       type: 'bar',
-      height: 350,
+      height: 400,
       stacked: true
     },
     plotOptions: { bar: { horizontal: false } },
@@ -2396,7 +1754,7 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
       '#1D8348',
       '#186A3B' // Value colors
     ],
-    legend: { position: 'top', horizontalAlign: 'left' }
+    legend: { position: 'right', horizontalAlign: 'left' }
   };
 
   this.dashboardService.RegionWiseMonthlyDistribution(MonthlyTotalOrderingPayload).subscribe(
@@ -2445,7 +1803,7 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
                   title: {
                     text: 'Region Wise Distribution',
                     align: 'center',
-                    style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
+                    // style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
                 },
                 yaxis: [{
                   title: {
@@ -2468,262 +1826,6 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
 };
 
 
-  // public RegionWiseGrowthOverPreviousMonth = (MonthlyToalOrdaringPayload?: any) => {
-  //   this.spinner.show();
-  //         // Define month names for easy mapping
-  //         const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  //         // Prepare data for each series
-  //         const retailersData :any= [];
-  //         const quantityData :any= [];
-  //         const valueData:any = [];
-  //         const categories: string[] = []; // This will hold the month names
-
-  //         // Define chart options with placeholder series (to be updated dynamically)
-  // this.RegionWiseGrowthOverPreviousMonthOptions = {
-  //   // series: [],
-  //   series: [
-  //     // Retailers group
-  //     { name: 'Retailers - East', group: 'retailers', data: [] },
-  //     { name: 'Retailers - South1', group: 'retailers', data: [] },
-  //     { name: 'Retailers - South2', group: 'retailers', data: [] },
-  //     { name: 'Retailers - North', group: 'retailers', data: [] },
-  //     { name: 'Retailers - West', group: 'retailers', data: [] },
-
-  //     // Qty group
-  //     { name: 'Qty - East', group: 'qty', data: [] },
-  //     { name: 'Qty - South1', group: 'qty', data: [] },
-  //     { name: 'Qty - South2', group: 'qty', data: [] },
-  //     { name: 'Qty - North', group: 'qty', data: [] },
-  //     { name: 'Qty - West', group: 'qty', data: [] },
-
-  //     // Value group
-  //     { name: 'Value - East', group: 'value', data: [] },
-  //     { name: 'Value - South1', group: 'value', data: [] },
-  //     { name: 'Value - South2', group: 'value', data: [] },
-  //     { name: 'Value - North', group: 'value', data: [] },
-  //     { name: 'Value - West', group: 'value', data: [] }
-  //   ],
-  //   title: {
-  //     text: 'Region Wise Distribution Loading...',
-  //     align: 'center',
-  //     style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
-  //   },
-  //   yaxis: [
-  //     {
-  //       title: {
-  //         text: '(Quantity) Loading...',
-  //         style: { color: '#000000' }
-  //       },
-  //       labels: {
-  //         formatter: (val: any) => '' + val
-  //       },
-  //       tickAmount: 4
-  //     }
-  //   ],
-  //   xaxis: {
-  //     labels: { trim: false },
-  //     categories: [],
-  //     title: { style: { color: '#000000' } }
-  //   },
-  //   dataLabels: { enabled: false },
-  //   chart: {
-  //     type: 'bar',
-  //     height: 350,
-  //     stacked: true
-  //   },
-  //   plotOptions: { bar: { horizontal: false } },
-  //   fill: { opacity: 1 },
-  //   colors: [
-  //     '#80c7fd',
-  //     '#008FFB',
-  //     '#80f1cb',
-  //     '#00E396',
-  //     '#feb019', // Retailers colors
-  //     '#FF5733',
-  //     '#FFBD33',
-  //     '#C70039',
-  //     '#900C3F',
-  //     '#581845', // Qty colors
-  //     '#2ECC71',
-  //     '#28B463',
-  //     '#239B56',
-  //     '#1D8348',
-  //     '#186A3B' // Value colors
-  //   ],
-  //   legend: { position: 'top', horizontalAlign: 'left' }
-  // };
-  //   this.dashboardService.RegionWiseGrowthOverPreviousMonth(MonthlyToalOrdaringPayload).subscribe(
-  //     (response) => {
-  //       // if (response && response.body) {
-  //       //   this.spinner.hide();
-
-  //       //   response.body.forEach((item: any) => {
-  //       //     // Push values to each series array
-  //       //     retailersData.push(item.totalRetailerCode);
-  //       //     quantityData.push(item.totalQTY /1000);
-  //       //     valueData.push(item.totalRevenue / 10000000);
-
-  //       //     // Get month name and add to categories
-  //       //     categories.push(monthNames[item.month - 1]);
-  //       //   });
-  //       //   this.RegionWiseGrowthOverPreviousMonthOptions = {
-  //       //     // series: [
-  //       //     //   // Retailers group
-  //       //     //   { name: 'Retailers - East', group: 'retailers', data: [44, 55, 41] },
-  //       //     //   { name: 'Retailers - South1', group: 'retailers', data: [38, 50, 40] },
-  //       //     //   { name: 'Retailers - South2', group: 'retailers', data: [38, 50, 40] },
-  //       //     //   { name: 'Retailers - North', group: 'retailers', data: [46, 52, 44] },
-  //       //     //   { name: 'Retailers - West', group: 'retailers', data: [42, 48, 43] },
-          
-  //       //     //   // Qty group
-  //       //     //   { name: 'Qty - East', group: 'qty', data: [12, 15, 13] },
-  //       //     //   { name: 'Qty - South1', group: 'qty', data: [11, 14, 12.5] },
-  //       //     //   { name: 'Qty - South2', group: 'qty', data: [11, 14, 12.5] },
-  //       //     //   { name: 'Qty - North', group: 'qty', data: [15, 18, 16] },
-  //       //     //   { name: 'Qty - West', group: 'qty', data: [13, 16, 15] },
-          
-  //       //     //   // Value group
-  //       //     //   { name: 'Value - East', group: 'value', data: [32, 45, 39] },
-  //       //     //   { name: 'Value - South1', group: 'value', data: [31, 42, 37] },
-  //       //     //   { name: 'Value - South2', group: 'value', data: [31, 42, 37] },
-  //       //     //   { name: 'Value - North', group: 'value', data: [35, 49, 42] },
-  //       //     //   { name: 'Value - West', group: 'value', data: [33, 46, 40] }
-  //       //     // ],
-            
-  //       //     title: {
-  //       //       text: 'Region Wise Growth Distibution', // Chart title
-  //       //       align: 'center',
-  //       //       style: {
-  //       //         fontSize: '16px',
-  //       //         fontWeight: 'bold',
-  //       //         color: '#333'
-  //       //       }
-  //       //     },
-  //       //     dataLabels: {
-  //       //       enabled: false
-  //       //     },
-  //       //     chart: {
-  //       //       type: 'bar',
-  //       //       height: 350,
-  //       //       stacked: true
-  //       //     },
-  //       //     xaxis: {
-  //       //       labels: {
-  //       //         trim: false
-  //       //       },
-  //       //       categories: ['April', 'May', 'June'],
-  //       //       title: {
-  //       //         // text: 'Monthly Distribution Loading...', // Left y-axis title
-  //       //         style: {
-  //       //           color: '#000000' // Change color as needed
-  //       //         }
-  //       //       },
-  //       //     },
-  //       //     // xaxis: {
-  //       //     //   categories: ['April', 'May', 'June']
-  //       //     // },
-  //       //     yaxis: [
-  //       //       {
-  //       //         title: {
-  //       //           text: '(Growth Value) Loading...', // Left y-axis title
-  //       //           style: {
-  //       //             color: '#000000' // Change color as needed
-  //       //           }
-  //       //         },
-  //       //         // min: 0, // Minimum value for left y-axis
-  //       //         labels: {
-  //       //           formatter: function (val:any) {
-  //       //             return '' + val; // Format for value
-  //       //           }
-  //       //         },
-  //       //         tickAmount: 4 // Adjust the number of ticks as necessary
-  //       //       },
-  //       //     ],
-  //       //     plotOptions: {
-  //       //       bar: {
-  //       //         horizontal: false
-  //       //       }
-  //       //     },
-  //       //     fill: {
-  //       //       opacity: 1
-  //       //     },
-  //       //     colors: [
-  //       //       '#80c7fd', '#008FFB', '#80f1cb', '#00E396', '#feb019',  // Retailers colors
-  //       //       '#FF5733', '#FFBD33', '#C70039', '#900C3F', '#581845',  // Qty colors
-  //       //       '#2ECC71', '#28B463', '#239B56', '#1D8348', '#186A3B'   // Value colors
-  //       //     ],
-  //       //     legend: {
-  //       //       position: 'top',
-  //       //       horizontalAlign: 'left'
-  //       //     }
-  //       //   };
-  //       // }
-  //       console.log('this is for checking');
-  //       if (response && response.body) {
-  //         this.spinner.hide();
-
-  //         // Prepare categories based on unique months
-  //         const uniqueMonths = [...new Set(response.body.map((item: any) => item.month))];
-  //         uniqueMonths.forEach((month: any) => {
-  //             categories.push(monthNames[month - 1]);
-  //         });
-
-  //         // Prepare data series for each metric and region
-  //         const prepareSeriesData = (data: any[], metric: string, group: string) => {
-  //             const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
-  //             const metricLabels: { [key: string]: string } = {
-  //                 totalRetailerCode: 'Total Retailers',
-  //                 totalQTY: 'Total Qty (K)',
-  //                 totalRevenue: 'Total Value (Cr)'
-  //             };
-
-  //             return regions.map(region => {
-  //                 const regionData = data.filter(item => item.region === region);
-  //                 return {
-  //                     name: `${metricLabels[metric]} - ${region}`,
-  //                     group: group,
-  //                     data: regionData.map(item => {
-  //                         if (metric === 'orderGrowth') return (item.orderGrowth / 1000).toFixed(2); // Adjust units
-  //                         if (metric === 'priceGrowth') return (item.priceGrowth / 10000000).toFixed(2) // Adjust units
-  //                         return item.retailerGrowth;
-  //                     })
-  //                 };
-  //             });
-  //         };
-
-  //         // Update chart options with dynamic series and categories
-  //         this.RegionWiseGrowthOverPreviousMonthOptions = {
-  //             ...this.RegionWiseGrowthOverPreviousMonthOptions,
-  //             series: [
-  //                 ...prepareSeriesData(response.body, 'retailerGrowth', 'retailers'),
-  //                 ...prepareSeriesData(response.body, 'orderGrowth', 'qty'),
-  //                 ...prepareSeriesData(response.body, 'priceGrowth', 'value')
-  //             ],
-  //             xaxis: { ...this.RegionWiseGrowthOverPreviousMonthOptions.xaxis, categories },
-  //             title: {
-  //               text: 'Region Wise Growth',
-  //               align: 'center',
-  //               style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
-  //           },
-  //           yaxis: [{
-  //             title: {
-  //                 text: '(Quantity)',
-  //                 style: { color: '#000000' }
-  //             },
-  //             labels: {
-  //                 formatter: (val: any) => '' + val
-  //             },
-  //             tickAmount: 4
-  //         }],
-  //         };
-  //     }
-  //     },
-  //     (error) => {
-  //       // this.errorMessage = 'An error occurred during login';
-  //       console.error('Login error:', error);
-  //     }
-  //   );
-  // };
   public RegionWiseGrowthOverPreviousMonth = (MonthlyToalOrdaringPayload?: any) => {
     this.spinner.show();
 
@@ -2755,7 +1857,7 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
         title: {
             text: 'Region Wise Growth Loading...',
             align: 'center',
-            style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
+            // style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
         },
         yaxis: [
             {
@@ -2774,7 +1876,7 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
             categories: [],
             title: { style: { color: '#000000' } }
         },
-        dataLabels: { enabled: false },
+        dataLabels: { enabled: true },
         chart: {
             type: 'bar',
             height: 350,
@@ -2787,7 +1889,7 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
             '#FF5733', '#FFBD33', '#C70039', '#900C3F', '#581845',
             '#2ECC71', '#28B463', '#239B56', '#1D8348', '#186A3B'
         ],
-        legend: { position: 'top', horizontalAlign: 'left' }
+        legend: { position: 'right', horizontalAlign: 'left' }
     };
 
     this.dashboardService.RegionWiseGrowthOverPreviousMonth(MonthlyToalOrdaringPayload).subscribe(
@@ -2836,7 +1938,7 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
                     title: {
                         text: 'Region Wise Growth',
                         align: 'center',
-                        style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
+                        // style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
                     },
                     yaxis: [{
                         title: {
@@ -2895,6 +1997,637 @@ getMasterDataForFilter(data:any){
           };
     }
     this.GetMasterData(payloadForMaster,MonthlyToalOrdaringPayload,true);
+}
+
+
+
+// this is to get the monthly avg qty,value and orders.
+public chartOptionslineForOrdBhFn = (MonthlyToalOrdaringPayload?: any) => {
+  this.spinner.show();
+        // Define month names for easy mapping
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        // Prepare data for each series
+        const retailersData :any= [];
+        const quantityData :any= [];
+        const valueData:any = [];
+        const categories: string[] = []; // This will hold the month names
+
+  this.chartOptionslineForOrdBh = {
+    series: [
+         {
+        name: 'No Of Orders.',
+        data: retailersData // Extracts totalRetailerCode values
+      },
+      {
+        name: 'Avg Qty Per Order. (k)',
+        data: quantityData // Extracts totalQTY values
+      },
+      {
+        name: 'Avg Value Per Order. (Cr)',
+        data: valueData // Extracts totalRevenue values
+      }
+    ],
+    chart: {
+      height: 350,
+      type: 'line'
+    },
+    dataLabels: {
+      enabled: true
+    },
+    stroke: {
+      width: 5,
+      curve: 'smooth', // Smooth curve for the line chart
+      dashArray: [0, 8, 5] // Different dash arrays for each line
+    },
+    title: {
+      text: 'Monthly Orders Trend Loading...',
+      align: 'center'
+    },
+    // subtitle: {
+    //   text: 'No of Re-retailers, Value, and Qty',
+    //   align: 'center',
+    //   style: {
+    //     fontSize: '14px',
+    //     color: '#666'
+    //   }
+    // },
+    // legend: {
+    //   tooltipHoverFormatter: function (val, opts) {
+    //     return val + ' - <strong>' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + '</strong>';
+    //   }
+    // },
+    legend: {
+      tooltipHoverFormatter: function (val, opts) {
+        const dataValue = opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex];
+        const formattedValue = dataValue % 1 === 0 ? dataValue : dataValue.toFixed(2);
+        return val + ' - <strong>' + formattedValue + '</strong>';
+      }
+    },            
+    markers: {
+      size: 5, // Size of markers on the line
+      hover: {
+        sizeOffset: 6
+      }
+    },
+    xaxis: {
+      labels: {
+        trim: false
+      },
+      categories: categories,
+      title: {
+        text: 'Monthly Orders Trend Loading...', // Left y-axis title
+        style: {
+          color: '#000000' // Change color as needed
+        }
+      },
+    },
+    yaxis: [
+      {
+        title: {
+          text: 'Quantity (K) Loading...', // Left y-axis title
+          style: {
+            color: '#000000' // Change color as needed
+          }
+        },
+        min: 0, // Minimum value for left y-axis
+        labels: {
+          formatter: function (val) {
+            // return '' + val; // Format for value
+            return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
+          }
+        },
+        tickAmount: 4 // Adjust the number of ticks as necessary
+      },
+      {
+        opposite: true, // Make this y-axis on the opposite side
+        title: {
+          text: 'Value (Cr)', // Right y-axis title
+          style: {
+            color: '#000000' // Change color as needed
+          }
+        },
+         labels: {
+          formatter: function (val) {
+            // return '' + val; // Format for value
+            return val.toFixed(0);
+          }
+        },
+        min: 0, // Minimum value for right y-axis
+        tickAmount: 4 // Adjust the number of ticks as necessary
+      }
+    ],
+    tooltip: {
+      shared: true, // Show shared tooltip
+      intersect: false,
+      y: [
+        {
+          title: {
+            formatter: function (val) {
+              return val;
+            }
+          }
+        },
+        {
+          title: {
+            formatter: function (val) {
+              return val;
+            }
+          }
+        },
+        {
+          title: {
+            formatter: function (val) {
+              return  val; // Format for value
+            }
+          }
+        }
+      ]
+    }
+  };
+  this.dashboardService.chartOptionslineForOrdBh(MonthlyToalOrdaringPayload).subscribe(
+    (response) => {
+      if (response && response.body) {
+        this.spinner.hide();
+        this.RegionWiseMonthlyDistibutionOptionsFOrdBhFn(MonthlyToalOrdaringPayload);
+        response.body.forEach((item: any) => {
+          // Push values to each series array
+          retailersData.push(item.noOforders);
+          quantityData.push((item.avgQtyPerOrder /1000).toFixed(2));
+          valueData.push((item.avgValuePerOrder / 10000000).toFixed(2));
+
+          // Get month name and add to categories
+          categories.push(monthNames[item.month - 1]);
+        });
+        this.chartOptionslineForOrdBh = {
+          series: [
+            {
+              name: 'No Of Orders.',
+              data: retailersData // Extracts totalRetailerCode values
+            },
+            {
+              name: 'Avg Qty Per Order. (k)',
+              data: quantityData // Extracts totalQTY values
+            },
+            {
+              name: 'Avg Value Per Order. (Cr)',
+              data: valueData // Extracts totalRevenue values
+            }
+          ],
+          chart: {
+            height: 350,
+            type: 'line'
+          },
+          dataLabels: {
+            enabled: true
+          },
+          stroke: {
+            width: 5,
+            curve: 'smooth', // Smooth curve for the line chart
+            dashArray: [0, 8, 5] // Different dash arrays for each line
+          },
+          title: {
+            text: 'Monthly Orders Trend.',
+            align: 'center'
+          },
+          // subtitle: {
+          //   text: 'No of Re-retailers, Value, and Qty',
+          //   align: 'center',
+          //   style: {
+          //     fontSize: '14px',
+          //     color: '#666'
+          //   }
+          // },
+          // legend: {
+          //   tooltipHoverFormatter: function (val, opts) {
+          //     return val + ' - <strong>' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + '</strong>';
+          //   }
+          // },
+          legend: {
+            tooltipHoverFormatter: function (val, opts) {
+              const dataValue = opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex];
+              const formattedValue = dataValue % 1 === 0 ? dataValue : dataValue.toFixed(2);
+              return val + ' - <strong>' + formattedValue + '</strong>';
+            }
+          },            
+          markers: {
+            size: 5, // Size of markers on the line
+            hover: {
+              sizeOffset: 6
+            }
+          },
+          xaxis: {
+            labels: {
+              trim: false
+            },
+            categories: categories
+          },
+          yaxis: [
+            {
+              title: {
+                text: ' Avg Quantity Per Order (K)', // Left y-axis title
+                style: {
+                  color: '#000000' // Change color as needed
+                }
+              },
+              min: 0, // Minimum value for left y-axis
+              labels: {
+                formatter: function (val) {
+                  // return '' + val; // Format for value
+                  return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
+                }
+              },
+              tickAmount: 4 // Adjust the number of ticks as necessary
+            },
+            {
+              opposite: true, // Make this y-axis on the opposite side
+              title: {
+                text: 'Avg Value Per Order (Cr)', // Right y-axis title
+                style: {
+                  color: '#000000' // Change color as needed
+                }
+              },
+               labels: {
+                formatter: function (val) {
+                  // return '' + val; // Format for value
+                  return val.toFixed(0);
+                }
+              },
+              min: 0, // Minimum value for right y-axis
+              tickAmount: 4 // Adjust the number of ticks as necessary
+            }
+          ],
+          tooltip: {
+            shared: true, // Show shared tooltip
+            intersect: false,
+            y: [
+              {
+                title: {
+                  formatter: function (val) {
+                    return val;
+                  }
+                }
+              },
+              {
+                title: {
+                  formatter: function (val) {
+                    return val;
+                  }
+                }
+              },
+              {
+                title: {
+                  formatter: function (val) {
+                    return  val; // Format for value
+                  }
+                }
+              }
+            ]
+          }
+        };
+      }
+      console.log('this is for checking');
+    },
+    (error) => {
+      // this.errorMessage = 'An error occurred during login';
+      console.error('Login error:', error);
+    }
+  );
+};
+
+
+public RegionWiseMonthlyDistibutionOptionsFOrdBhFn = (MonthlyTotalOrderingPayload?: any) => {
+  this.spinner.show();
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const categories: string[] = [];
+
+  // Define chart options with placeholder series (to be updated dynamically)
+  this.RegionWiseMonthlyDistibutionOptionsFOrdBh = {
+    // series: [],
+    series: [
+      // Retailers group
+      { name: 'No Of Orders - East', group: 'retailers', data: [] },
+      { name: 'No Of Orders - South1', group: 'retailers', data: [] },
+      { name: 'No Of Orders - South2', group: 'retailers', data: [] },
+      { name: 'No Of Orders - North', group: 'retailers', data: [] },
+      { name: 'No Of Orders - West', group: 'retailers', data: [] },
+
+      // // Qty group
+      // { name: 'Qty - East', group: 'qty', data: [] },
+      // { name: 'Qty - South1', group: 'qty', data: [] },
+      // { name: 'Qty - South2', group: 'qty', data: [] },
+      // { name: 'Qty - North', group: 'qty', data: [] },
+      // { name: 'Qty - West', group: 'qty', data: [] },
+
+      // // Value group
+      // { name: 'Value - East', group: 'value', data: [] },
+      // { name: 'Value - South1', group: 'value', data: [] },
+      // { name: 'Value - South2', group: 'value', data: [] },
+      // { name: 'Value - North', group: 'value', data: [] },
+      // { name: 'Value - West', group: 'value', data: [] }
+    ],
+    title: {
+      text: 'Region Wise Monthly Distribution - No Of Orders Loading...',
+      align: 'center',
+      // style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
+    },
+    yaxis: [
+      {
+        title: {
+          text: '(No Of Orders) Loading...',
+          style: { color: '#000000' }
+        },
+        labels: {
+          formatter: (val: any) => '' + val
+        },
+        tickAmount: 4
+      }
+    ],
+    xaxis: {
+      labels: { trim: false },
+      categories: [],
+      title: { style: { color: '#000000' } }
+    },
+    dataLabels: { enabled: true },
+    chart: {
+      type: 'bar',
+      height: 350,
+      stacked: true
+    },
+    plotOptions: { bar: { horizontal: false } },
+    fill: { opacity: 1 },
+    colors: [
+      '#80c7fd',
+      '#008FFB',
+      '#80f1cb',
+      '#00E396',
+      '#feb019', // Retailers colors
+      '#FF5733',
+      '#FFBD33',
+      '#C70039',
+      '#900C3F',
+      '#581845', // Qty colors
+      '#2ECC71',
+      '#28B463',
+      '#239B56',
+      '#1D8348',
+      '#186A3B' // Value colors
+    ],
+    legend: { position: 'top', horizontalAlign: 'left' }
+  };
+
+  this.dashboardService.RegionWiseMonthlyDistibutionOptionsFOrdBhFn(MonthlyTotalOrderingPayload).subscribe(
+      (response) => {
+          if (response && response.body) {
+              this.spinner.hide();
+              this.RegionWiseMonthlyAvgPerOrderFn(MonthlyTotalOrderingPayload);
+              // Prepare categories based on unique months
+              const uniqueMonths = [...new Set(response.body.map((item: any) => item.month))];
+              uniqueMonths.forEach((month: any) => {
+                  categories.push(monthNames[month - 1]);
+              });
+
+              // Prepare data series for each metric and region
+              const prepareSeriesData = (data: any[], metric: string, group: string) => {
+                  const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
+                  const metricLabels: { [key: string]: string } = {
+                      totalRetailerCode: 'No Of Orders %',
+                      totalQTY: 'Total Qty (K)',
+                      totalRevenue: 'Total Value (Cr)'
+                  };
+
+                  return regions.map(region => {
+                      const regionData = data.filter(item => item.region === region);
+                      return {
+                          name: `${metricLabels[metric]} - ${region}`,
+                          group: group,
+                          data: regionData.map(item => {
+                              if (metric === 'totalQTY') return (item.totalQTY / 1000).toFixed(2); // Adjust units
+                              if (metric === 'totalRevenue') return (item.totalRevenue / 10000000).toFixed(2) // Adjust units
+                              return item.noOfOrdersPercentage.toFixed(2);
+                          })
+                      };
+                  });
+              };
+
+              // Update chart options with dynamic series and categories
+              this.RegionWiseMonthlyDistibutionOptionsFOrdBh = {
+                  ...this.RegionWiseMonthlyDistibutionOptionsFOrdBh,
+                  series: [
+                      ...prepareSeriesData(response.body, 'totalRetailerCode', 'No Of Orders'),
+                      // ...prepareSeriesData(response.body, 'totalQTY', 'qty'),
+                      // ...prepareSeriesData(response.body, 'totalRevenue', 'value')
+                  ],
+                  xaxis: { ...this.RegionWiseMonthlyDistibutionOptionsFOrdBh.xaxis, categories },
+                  title: {
+                    text: 'Region Wise Monthly Distribution - No Of Orders.',
+                    align: 'center',
+                    // style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
+                },
+                yaxis: [{
+                  title: {
+                      text: '(No Of Orders)',
+                      style: { color: '#000000' }
+                  },
+                  labels: {
+                      formatter: (val: any) => '' + val
+                  },
+                  tickAmount: 4
+              }],
+              };
+          }
+      },
+      (error) => {
+          this.spinner.hide();
+          console.error('Error fetching region-wise monthly distribution data:', error);
+      }
+  );
+};
+
+
+public RegionWiseMonthlyAvgPerOrderFn = (MonthlyTotalOrderingPayload?: any) => {
+  this.spinner.show();
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const categories: string[] = [];
+
+  // Define chart options with placeholder series (to be updated dynamically)
+  this.RegionWiseMonthlyAvgPerOrder = {
+    // series: [],
+    series: [
+      // Retailers group
+      { name: 'Avg Oty Per Order - East', group: 'retailers', data: [] },
+      { name: 'Avg Oty Per Order - South1', group: 'retailers', data: [] },
+      { name: 'Avg Oty Per Order - South2', group: 'retailers', data: [] },
+      { name: 'Avg Oty Per Order - North', group: 'retailers', data: [] },
+      { name: 'Avg Oty Per Order - West', group: 'retailers', data: [] },
+
+      // Qty group
+      { name: 'Avg Value Per Order - East', group: 'qty', data: [] },
+      { name: 'Avg Value Per Order - South1', group: 'qty', data: [] },
+      { name: 'Avg Value Per Order - South2', group: 'qty', data: [] },
+      { name: 'Avg Value Per Order - North', group: 'qty', data: [] },
+      { name: 'Avg Value Per Order - West', group: 'qty', data: [] },
+
+      // // Value group
+      // { name: 'Value - East', group: 'value', data: [] },
+      // { name: 'Value - South1', group: 'value', data: [] },
+      // { name: 'Value - South2', group: 'value', data: [] },
+      // { name: 'Value - North', group: 'value', data: [] },
+      // { name: 'Value - West', group: 'value', data: [] }
+    ],
+    title: {
+      text: 'Region Wise Monthly Avg Per Order Loading...',
+      align: 'center',
+      // style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
+    },
+    yaxis: [
+      {
+        title: {
+          text: '(Avg Oty Per Order) Loading...',
+          style: { color: '#000000' }
+        },
+        labels: {
+          formatter: (val: any) => '' + val
+        },
+        tickAmount: 4
+      }
+    ],
+    xaxis: {
+      labels: { trim: false },
+      categories: [],
+      title: { style: { color: '#000000' } }
+    },
+    dataLabels: { enabled: true },
+    chart: {
+      type: 'bar',
+      height: 350,
+      stacked: true
+    },
+    plotOptions: { bar: { horizontal: false } },
+    fill: { opacity: 1 },
+    colors: [
+      '#80c7fd',
+      '#008FFB',
+      '#80f1cb',
+      '#00E396',
+      '#feb019', // Retailers colors
+      '#FF5733',
+      '#FFBD33',
+      '#C70039',
+      '#900C3F',
+      '#581845', // Qty colors
+      '#2ECC71',
+      '#28B463',
+      '#239B56',
+      '#1D8348',
+      '#186A3B' // Value colors
+    ],
+    legend: { position: 'top', horizontalAlign: 'left' }
+  };
+
+  this.dashboardService.RegionWiseMonthlyAvgPerOrderFn(MonthlyTotalOrderingPayload).subscribe(
+      (response) => {
+          if (response && response.body) {
+              this.spinner.hide();
+              // this.RegionWiseGrowthOverPreviousMonth(MonthlyTotalOrderingPayload);
+              // Prepare categories based on unique months
+              const uniqueMonths = [...new Set(response.body.map((item: any) => item.month))];
+              uniqueMonths.forEach((month: any) => {
+                  categories.push(monthNames[month - 1]);
+              });
+
+              // Prepare data series for each metric and region
+              const prepareSeriesData = (data: any[], metric: string, group: string) => {
+                  const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
+                  const metricLabels: { [key: string]: string } = {
+                      totalRetailerCode: 'No Of Orders %',
+                      totalQTY: 'Avg Oty Per Order (K)',
+                      totalRevenue: 'Avg Value Per Order (Cr)'
+                  };
+
+                  return regions.map(region => {
+                      const regionData = data.filter(item => item.region === region);
+                      return {
+                          name: `${metricLabels[metric]} - ${region}`,
+                          group: group,
+                          data: regionData.map(item => {
+                              if (metric === 'avgQtyPerOrder') return (item.avgQtyPerOrder / 1000).toFixed(2); // Adjust units
+                              if (metric === 'avgPricePerOrder') return (item.avgPricePerOrder / 10000000).toFixed(2) // Adjust units
+                              return item.noOfOrdersPercentage;
+                          })
+                      };
+                  });
+              };
+
+              // Update chart options with dynamic series and categories
+              this.RegionWiseMonthlyAvgPerOrder = {
+                  ...this.RegionWiseMonthlyAvgPerOrder,
+                  series: [
+                      // ...prepareSeriesData(response.body, 'totalRetailerCode', 'No Of Orders'),
+                      ...prepareSeriesData(response.body, 'avgQtyPerOrder', 'qty'),
+                      ...prepareSeriesData(response.body, 'avgPricePerOrder', 'value')
+                  ],
+                  xaxis: { ...this.RegionWiseMonthlyAvgPerOrder.xaxis, categories },
+                  title: {
+                    text: 'Region Wise Monthly Avg Per Order.',
+                    align: 'center',
+                    // style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
+                },
+                yaxis: [{
+                  title: {
+                      text: '(Avg Oty Per Order)',
+                      style: { color: '#000000' }
+                  },
+                  labels: {
+                      formatter: (val: any) => '' + val
+                  },
+                  tickAmount: 4
+              }],
+              };
+          }
+      },
+      (error) => {
+          this.spinner.hide();
+          console.error('Error fetching region-wise monthly distribution data:', error);
+      }
+  );
+};
+
+
+toggleDropdownVisibilityForMonth() {
+  this.isDropdownOpenForMonth = !this.isDropdownOpenForMonth;
+}
+
+toggleMonthSelection(month: any) {
+  if (this.selectedMonths.includes(month)) {
+    this.selectedMonths = this.selectedMonths.filter(m => m.id !== month.id);
+  } else {
+    this.selectedMonths.push(month);
+  }
+  this.areAllMonthsSelected = this.selectedMonths.length === this.availableMonths.length;
+}
+
+removeSelectedMonth(month: any, event: Event) {
+  event.stopPropagation();
+  this.selectedMonths = this.selectedMonths.filter(m => m.id !== month.id);
+  this.areAllMonthsSelected = this.selectedMonths.length === this.availableMonths.length;
+}
+
+toggleAllMonthSelection(event: any) {
+  if (event.target.checked) {
+    this.selectedMonths = [...this.availableMonths];
+    this.areAllMonthsSelected = true;
+  } else {
+    this.selectedMonths = [];
+    this.areAllMonthsSelected = false;
+  }
+}
+
+filterAvailableMonths() {
+  const searchValue = this.searchInputValueForMonth.toLowerCase();
+  this.filteredMonthsList = this.availableMonths.filter(month =>
+    month.name.toLowerCase().includes(searchValue)
+  );
 }
 
 }
