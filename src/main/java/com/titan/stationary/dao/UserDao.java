@@ -27,6 +27,7 @@ import com.titan.stationary.dto.OutputForMontlyFilter;
 import com.titan.stationary.dto.OutputGrowthOverPreviousMonth;
 import com.titan.stationary.dto.OutputMonthlyOrdaringBehaviour;
 import com.titan.stationary.dto.OutputPercentageofOrdersbyDayoftheMonth;
+import com.titan.stationary.dto.OutputPercentageofOrdersbyWeekdayorWeekend;
 import com.titan.stationary.dto.OutputRegionWiseGrowthOverPreviousMonth;
 import com.titan.stationary.dto.OutputRegionWiseMonthlyAvgPerOrder;
 import com.titan.stationary.dto.OutputRegionWiseMonthlyDistribution;
@@ -316,6 +317,9 @@ public interface UserDao {
 
 
 	List<OutputPercentageofOrdersbyDayoftheMonth> percentageofOrdersbyDayoftheMonth(MonthlyDataFilter filter);
+
+
+	List<OutputPercentageofOrdersbyWeekdayorWeekend> percentageofOrdersbyWeekdayorWeekend(MonthlyDataFilter filter);
 
 
 

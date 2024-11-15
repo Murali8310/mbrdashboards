@@ -79,6 +79,7 @@ import com.titan.stationary.dto.OutputForMontlyFilter;
 import com.titan.stationary.dto.OutputGrowthOverPreviousMonth;
 import com.titan.stationary.dto.OutputMonthlyOrdaringBehaviour;
 import com.titan.stationary.dto.OutputPercentageofOrdersbyDayoftheMonth;
+import com.titan.stationary.dto.OutputPercentageofOrdersbyWeekdayorWeekend;
 import com.titan.stationary.dto.OutputRegionWiseGrowthOverPreviousMonth;
 import com.titan.stationary.dto.OutputRegionWiseMonthlyAvgPerOrder;
 import com.titan.stationary.dto.OutputRegionWiseMonthlyDistribution;
@@ -87,7 +88,7 @@ import com.titan.stationary.security.AuthenticationService;
 import com.titan.util.PasswordUtils;
 import com.titan.util.Validations;
 import com.titan.stationary.model.user.*;
-import com.titan.stationary.dto.OutputDashboardTiles; 
+import com.titan.stationary.dto.OutputDashboardTiles;
 import com.titan.stationary.dto.OutputDashboardGraphs;
 
 @Repository
@@ -267,13 +268,10 @@ public class UserDaoimpl implements UserDao {
 //		}
 //		return userVal;
 //	}
-	
-	
-	
-	
+
 	@Override
 	public Map<String, Object> findloginuser(UserLoginBean userLogin, String passwords) {
- 
+
 		int loginFlag = 1;
 		Map<String, Object> userVal = new LinkedHashMap<String, Object>();
 		System.out.println("userselection" + userLogin.getUser_selection());
@@ -283,61 +281,58 @@ public class UserDaoimpl implements UserDao {
 			int len = userLogin.getLogin_id().toString().trim().length();
 			loginId = userLogin.getLogin_id().toString().trim().substring(0, len - 3);
 		}
- 
-		
-		
-			if (userLogin.getLogin_id().toString().trim().endsWith("ccc")) {
-				isAuthenticated = true;
-			} else {
-				 String userEmail = "";
-				//String usernameDB = "";
-				// String Username = "";
-				 
-				 if (passwords == null || passwords.isEmpty()) {
-			            userVal.put("message", "Please enter the password.");
-			            return userVal;
-			     }
-				String getEmpCode = "SELECT top 1 email_id FROM ER_User_Master where Status = 1 and login_id=:login_id"; // Doubt
-				Query getempcoded = entityManager.createNativeQuery(getEmpCode);
-				getempcoded.setParameter("login_id", userLogin.getLogin_id().toString().trim());
-				try {
-					userEmail = (String) getempcoded.getSingleResult();
-					// if (userLogin.getPassword().equalsIgnoreCase(passworddec)) {
-					//if (loginId.equalsIgnoreCase(usernameDB)) {
-						isAuthenticated = authenticationService.authenticateWithLdap(userEmail, passwords);
-					//}
-				} catch (NoResultException no) {
-					userVal.put("message", "User is not available in portal, Pls contact to Portal admin.");
-				}
+
+		if (userLogin.getLogin_id().toString().trim().endsWith("ccc")) {
+			isAuthenticated = true;
+		} else {
+			String userEmail = "";
+			// String usernameDB = "";
+			// String Username = "";
+
+			if (passwords == null || passwords.isEmpty()) {
+				userVal.put("message", "Please enter the password.");
+				return userVal;
 			}
-			if (!isAuthenticated) {
-				userVal.put("message", "Username/Password is not correct");
-			} else {
-				String getUsersDetails = "SELECT User_id,User_Name,email_id,login_id,userAccess"
-						+ " FROM ER_User_Master WHERE login_id=:login_id ";
-				Query getUsersDetailsQuery = entityManager.createNativeQuery(getUsersDetails);
-				getUsersDetailsQuery.setParameter("login_id", loginId);
-				List<Object[]> usersDetailsList = getUsersDetailsQuery.getResultList();
-				if (usersDetailsList.size() > 0) {
-					for (Iterator iterator = usersDetailsList.iterator(); iterator.hasNext();) {
-						Object[] obj = (Object[]) iterator.next();
-						userVal.put("message", "SUCCESS");
-						userVal.put("user_id", obj[0].toString());
-						userVal.put("user_Name", obj[1].toString());
-						userVal.put("email_id", obj[2].toString());
-						userVal.put("login_id", obj[3].toString());
-						userVal.put("role", "Buyer");
-						userVal.put("accessRole", obj[4].toString());
- 
-						loginFlag = 0;
-					}
-				} else {
-					userVal.put("message", "Admin detail is not available in portal, Pls contact to Portal admin.");
-				}
+			String getEmpCode = "SELECT top 1 email_id FROM ER_User_Master where Status = 1 and login_id=:login_id"; // Doubt
+			Query getempcoded = entityManager.createNativeQuery(getEmpCode);
+			getempcoded.setParameter("login_id", userLogin.getLogin_id().toString().trim());
+			try {
+				userEmail = (String) getempcoded.getSingleResult();
+				// if (userLogin.getPassword().equalsIgnoreCase(passworddec)) {
+				// if (loginId.equalsIgnoreCase(usernameDB)) {
+				isAuthenticated = authenticationService.authenticateWithLdap(userEmail, passwords);
+				// }
+			} catch (NoResultException no) {
+				userVal.put("message", "User is not available in portal, Pls contact to Portal admin.");
 			}
+		}
+		if (!isAuthenticated) {
+			userVal.put("message", "Username/Password is not correct");
+		} else {
+			String getUsersDetails = "SELECT User_id,User_Name,email_id,login_id,userAccess"
+					+ " FROM ER_User_Master WHERE login_id=:login_id ";
+			Query getUsersDetailsQuery = entityManager.createNativeQuery(getUsersDetails);
+			getUsersDetailsQuery.setParameter("login_id", loginId);
+			List<Object[]> usersDetailsList = getUsersDetailsQuery.getResultList();
+			if (usersDetailsList.size() > 0) {
+				for (Iterator iterator = usersDetailsList.iterator(); iterator.hasNext();) {
+					Object[] obj = (Object[]) iterator.next();
+					userVal.put("message", "SUCCESS");
+					userVal.put("user_id", obj[0].toString());
+					userVal.put("user_Name", obj[1].toString());
+					userVal.put("email_id", obj[2].toString());
+					userVal.put("login_id", obj[3].toString());
+					userVal.put("role", "Buyer");
+					userVal.put("accessRole", obj[4].toString());
+
+					loginFlag = 0;
+				}
+			} else {
+				userVal.put("message", "Admin detail is not available in portal, Pls contact to Portal admin.");
+			}
+		}
 		return userVal;
 	}
-
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -573,9 +568,6 @@ public class UserDaoimpl implements UserDao {
 	 * getindentManagerDetials; }
 	 */
 
-	
-	
-	
 	/**
 	 * Gokul Get All Products for catelogue page
 	 */
@@ -611,7 +603,7 @@ public class UserDaoimpl implements UserDao {
 
 		Query selectQuery = entityManager.createNativeQuery(
 				"select DISTINCT CATEGORY,CATORDERS from PRODUCT_MASTER WHERE  CATEGORY <> '' GROUP BY CATEGORY,CATORDERS ORDER BY CATORDERS ASC");
-		try {	
+		try {
 			getCategoryList = selectQuery.getResultList();
 		} catch (HibernateException e) {
 
@@ -690,11 +682,11 @@ public class UserDaoimpl implements UserDao {
 		String formattedDate = dateFormat.format(cal.getTime());
 
 		int cFY = Integer.valueOf(yearfromCal);
-		
+
 		if (getMonthNumber(MonthText) < 4) {
 			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
-		 yearfromCal = String.valueOf(cFY);
-		    System.out.println("yearfromCal"+yearfromCal);
+			yearfromCal = String.valueOf(cFY);
+			System.out.println("yearfromCal" + yearfromCal);
 		}
 		Query checkIndentEntry = entityManager.createNativeQuery(
 				"select count(DOC_NUMBER) from Indent_Transaction where year=:year and month=:month and cost_center=:cost_center");
@@ -894,30 +886,27 @@ public class UserDaoimpl implements UserDao {
 	 * 
 	 * return OrderIdString; }
 	 */
-	
-	
-	public String getIndenttransactionId(String UserID, String yearfromCal, String monthFromCal) {
-	    int cFY = Integer.valueOf(yearfromCal);
-	    int cFM = Integer.valueOf(monthFromCal);
-	    int maxOrderID_DB = 0;
-	    String OrderIdString = "";
 
-	    Query queryToGetMaximumOrderId = entityManager.createNativeQuery(
-	            "SELECT ISNULL(MAX(CAST(SUBSTRING(DOC_NUMBER, 11, LEN(DOC_NUMBER) - 10) AS INT)), 0) FROM Indent_Transaction");
- 
-	    try {
-	        maxOrderID_DB = (int) queryToGetMaximumOrderId.getSingleResult();
-	        OrderIdString = String.format("%05d", maxOrderID_DB + 1); 
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        e.getCause();
-	    }
- 
-	   
-	    OrderIdString = UserID + cFY + cFM + OrderIdString;
- 
-	   
-	    return OrderIdString;
+	public String getIndenttransactionId(String UserID, String yearfromCal, String monthFromCal) {
+		int cFY = Integer.valueOf(yearfromCal);
+		int cFM = Integer.valueOf(monthFromCal);
+		int maxOrderID_DB = 0;
+		String OrderIdString = "";
+
+		Query queryToGetMaximumOrderId = entityManager.createNativeQuery(
+				"SELECT ISNULL(MAX(CAST(SUBSTRING(DOC_NUMBER, 11, LEN(DOC_NUMBER) - 10) AS INT)), 0) FROM Indent_Transaction");
+
+		try {
+			maxOrderID_DB = (int) queryToGetMaximumOrderId.getSingleResult();
+			OrderIdString = String.format("%05d", maxOrderID_DB + 1);
+		} catch (Exception e) {
+			e.printStackTrace();
+			e.getCause();
+		}
+
+		OrderIdString = UserID + cFY + cFM + OrderIdString;
+
+		return OrderIdString;
 	}
 
 	/*
@@ -933,43 +922,37 @@ public class UserDaoimpl implements UserDao {
 		String yearfromCal = year_Date.format(cal.getTime());
 		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
 		String Month = month.format(cal.getTime());
-		
+
 		int cFY = Integer.valueOf(yearfromCal);
 		if (getMonthNumber(Month) < 4) {
 			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
-		 yearfromCal = String.valueOf(cFY);
-		    System.out.println("yearfromCal"+yearfromCal);
+			yearfromCal = String.valueOf(cFY);
+			System.out.println("yearfromCal" + yearfromCal);
 		}
 		List<Object> IndentList;
-		//Query selectQuery = entityManager.createNativeQuery(
-			//	"SELECT DISTINCT DOC_NUMBER,format(DOC_DATE,'dd-MMM-yyy') DOC_DATE,im.LMSID,CONCAT(UPPER(SUBSTRING(STATus, 1, 1)), LOWER(SUBSTRING(STATus, 2, LEN(STATus)))) AS STATUS FROM Indent_Transaction it "
-				//		+ " left join INDENT_MANAGER im on it.CREATEDBY = im.LMSID where Cost_Center =:costcenter and it.month=:Month and it.year=:year");
-		
+		// Query selectQuery = entityManager.createNativeQuery(
+		// "SELECT DISTINCT DOC_NUMBER,format(DOC_DATE,'dd-MMM-yyy')
+		// DOC_DATE,im.LMSID,CONCAT(UPPER(SUBSTRING(STATus, 1, 1)),
+		// LOWER(SUBSTRING(STATus, 2, LEN(STATus)))) AS STATUS FROM Indent_Transaction
+		// it "
+		// + " left join INDENT_MANAGER im on it.CREATEDBY = im.LMSID where Cost_Center
+		// =:costcenter and it.month=:Month and it.year=:year");
+
 //		Query selectQuery = entityManager.createNativeQuery(
 //				"SELECT DISTINCT DOC_NUMBER,format(DOC_DATE,'dd-MMM-yyy') DOC_DATE,im.LMSID,CONCAT(UPPER(SUBSTRING(STATus, 1, 1)), LOWER(SUBSTRING(STATus, 2, LEN(STATus)))) AS STATUS FROM Indent_Transaction it "
 //						+ " left join INDENT_MANAGER im on it.CREATEDBY = im.LMSID where Cost_Center =:costcenter and it.month=:Month and it.year=:year");
 
-		
-		Query selectQuery = entityManager.createNativeQuery(
-				"SELECT\n"
+		Query selectQuery = entityManager.createNativeQuery("SELECT\n"
 				+ "		DOC_NUMBER,SUM(TOTAL_USER_QTY * UnitPrice) AS IndentAmount,\n"
-				+ "		 FORMAT(DOC_DATE, 'dd-MMM-yyyy') AS DOC_DATE,\n"
-				+ "		    im.LMSID,\n"
+				+ "		 FORMAT(DOC_DATE, 'dd-MMM-yyyy') AS DOC_DATE,\n" + "		    im.LMSID,\n"
 				+ "		    CONCAT(UPPER(SUBSTRING(STATus, 1, 1)), LOWER(SUBSTRING(STATus, 2, LEN(STATus)))) AS STATUS\n"
-				+ "		FROM\n"
-				+ "		    Indent_Transaction it\n"
-				+ "		    LEFT JOIN INDENT_MANAGER im ON it.CREATEDBY = im.LMSID\n"
-				+ "		WHERE\n"
-				+ "		    Cost_Center = :costcenter\n"
-				+ "		    AND it.month = :Month\n"
-				+ "		    AND it.year = :year\n"
-				+ "		GROUP BY\n"
-				+ "		    DOC_NUMBER,\n"
-				+ "		    FORMAT(DOC_DATE, 'dd-MMM-yyyy'),\n"
-				+ "		    im.LMSID,\n"
+				+ "		FROM\n" + "		    Indent_Transaction it\n"
+				+ "		    LEFT JOIN INDENT_MANAGER im ON it.CREATEDBY = im.LMSID\n" + "		WHERE\n"
+				+ "		    Cost_Center = :costcenter\n" + "		    AND it.month = :Month\n"
+				+ "		    AND it.year = :year\n" + "		GROUP BY\n" + "		    DOC_NUMBER,\n"
+				+ "		    FORMAT(DOC_DATE, 'dd-MMM-yyyy'),\n" + "		    im.LMSID,\n"
 				+ "		    CONCAT(UPPER(SUBSTRING(STATus, 1, 1)), LOWER(SUBSTRING(STATus, 2, LEN(STATus))))");
 
-		
 		selectQuery.setParameter("Month", Month);
 		;
 		selectQuery.setParameter("year", yearfromCal);
@@ -1011,8 +994,8 @@ public class UserDaoimpl implements UserDao {
 		int cFY = Integer.valueOf(yearfromCal);
 		if (getMonthNumber(MonthText) < 4) {
 			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
-		 yearfromCal = String.valueOf(cFY);
-		    System.out.println("yearfromCal"+yearfromCal);
+			yearfromCal = String.valueOf(cFY);
+			System.out.println("yearfromCal" + yearfromCal);
 		}
 
 		Query checkIndentTransaction = entityManager.createNativeQuery(
@@ -1050,7 +1033,7 @@ public class UserDaoimpl implements UserDao {
 									+ " set TOTAL_USER_QTY = :TOTAL_USER_QTY ," + " BUYER_QTY = :TOTAL_USER_QTY ,"
 									+ " Value =:total," + "	Created_date = :Created_date "
 									+ " where year=:YEAR and month=:MONTH and cost_center=:COST_CENTER "
-									//+ " and tempId=:DOC_NUMBER and ITEM=:ITEM");
+									// + " and tempId=:DOC_NUMBER and ITEM=:ITEM");
 									+ " and tempId=:DOC_NUMBER and PROD_NUMBER=:ITEM");
 					updatetempIndenttransaction.setParameter("DOC_NUMBER", id);
 					updatetempIndenttransaction.setParameter("total", totalString);
@@ -1059,7 +1042,8 @@ public class UserDaoimpl implements UserDao {
 					updatetempIndenttransaction.setParameter("COST_CENTER", userId);
 					updatetempIndenttransaction.setParameter("YEAR", cFY);
 					updatetempIndenttransaction.setParameter("ITEM", products[i].getProductID());
-					//updatetempIndenttransaction.setParameter("ITEM", products[i].getProductName());
+					// updatetempIndenttransaction.setParameter("ITEM",
+					// products[i].getProductName());
 					updatetempIndenttransaction.setParameter("TOTAL_USER_QTY",
 							Integer.valueOf(products[i].getQuantity()));
 
@@ -1230,12 +1214,12 @@ public class UserDaoimpl implements UserDao {
 		String yearfromCal = year_Date.format(cal.getTime());
 		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
 		String Month = month.format(cal.getTime());
-		
+
 		int cFY = Integer.valueOf(yearfromCal);
 		if (getMonthNumber(Month) < 4) {
 			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
-		 yearfromCal = String.valueOf(cFY);
-		    System.out.println("yearfromCal"+yearfromCal);
+			yearfromCal = String.valueOf(cFY);
+			System.out.println("yearfromCal" + yearfromCal);
 		}
 		List<String> getProductsByIndent;
 
@@ -1290,8 +1274,8 @@ public class UserDaoimpl implements UserDao {
 		int cFY = Integer.valueOf(yearfromCal);
 		if (getMonthNumber(MonthText) < 4) {
 			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
-		 yearfromCal = String.valueOf(cFY);
-		    System.out.println("yearfromCal"+yearfromCal);
+			yearfromCal = String.valueOf(cFY);
+			System.out.println("yearfromCal" + yearfromCal);
 		}
 		Query checkIndentEntry = entityManager.createNativeQuery(
 				"select count(DOC_NUMBER) from indent_Transaction where year=:year and month=:month and cost_center=:cost_center");
@@ -1815,9 +1799,9 @@ public class UserDaoimpl implements UserDao {
 		int cFY = Integer.parseInt(yearfromCal);
 		if (getMonthNumber(MonthText) < 4) {
 			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
-		 yearfromCal = String.valueOf(cFY);
-		 currentYearForPoEntry = year_Date.format(cal.getTime());
-		    System.out.println("yearfromCal"+yearfromCal);
+			yearfromCal = String.valueOf(cFY);
+			currentYearForPoEntry = year_Date.format(cal.getTime());
+			System.out.println("yearfromCal" + yearfromCal);
 		}
 //		Query selectQuery = entityManager.createNativeQuery(
 //				" SELECT bm.ccid,bm.Year,bm.CostCenterDescription,bm.BudValueRsL,(bm.BudValueRsL-((\n"
@@ -1891,80 +1875,71 @@ public class UserDaoimpl implements UserDao {
 //						+ " GROUP BY bm.ccid,bm.Year,bm.CostCenterDescription,POAmount,bm.BudValueRsL,bm.April,bm.MaY,bm.june,bm.July, bm.August,bm.September,\n"
 //						+ "bm.October,bm.November,bm.December,January,February,March\n" + "");
 
-		Query selectQuery = entityManager.createNativeQuery("SELECT bm.ccid,bm.Year,bm.CostCenterDescription,bm.BudValueRsL,(bm.BudValueRsL-((\n"
-				+ "CASE WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) \n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june, 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) +ISNULL(bm.July, 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.April, 0) + ISNULL(bm.MaY, 0) +ISNULL( bm.june, 0) + ISNULL(bm.July, 0) + ISNULL(bm.August , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'march' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)+ ISNULL(bm.March , 0)\n"
-				+ "END) + isnull(sum(poe.POAmount),0) + isnull(sum(poforCurYr.POAmount),0)) ) as BalanceValue,\n"
-				+ "(((\n"
-				+ "CASE WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) \n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june, 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) +ISNULL(bm.July, 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.April, 0) + ISNULL(bm.MaY, 0) +ISNULL( bm.june, 0) + ISNULL(bm.July, 0) + ISNULL(bm.August , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'march' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)+ ISNULL(bm.March , 0)\n"
-				+ "END) \n"
-				+ "+ isnull(sum(poe.POAmount),0) + isnull(sum(poforCurYr.POAmount),0)\n"
-				+ "\n"
-				+ ")) as cumulative_indent,\n"
-				+ "(CASE\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.may , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.june  , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.July  , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.August, 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.September , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.October , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.November , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.December, 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.January, 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.February, 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'march' THEN ISNULL(bm.March, 0)\n"
-				+ "END) AS currentIndentValue,\n"
-				+ "(BudValueRsL/12)-((CASE\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.may , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.june  , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.July  , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.August, 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.September , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.October , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.November , 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.December, 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.January, 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.February, 0)\n"
-				+ "WHEN DATENAME(MONTH, GETDATE()) = 'march' THEN ISNULL(bm.March, 0)\n"
-				+ "END) + isnull(sum(poe.POAmount),0))  AS Month_Balance,\n"
-				+ "(\n"
-				+ "        SELECT SUM(BUYER_QTY) \n"
-				+ "        FROM Indent_Transaction \n"
-				+ "        WHERE COST_CENTER = :userId \n"
-				+ "        AND MONTH =:MonthText	\n"
-				+ "    ) AS BuyerQuantity\n"
-				+ "FROM BUDGET_MASTER bm \n"
-				+ "left join PO_Entry poe on poe.COST_CENTER=bm.CCID AND POE.Year=BM.Year and poe.MONTHNUMBER > 3 \n"
-				+ "AND poe.MONTHNUMBER <=:decemberMOnthNum  \n"
-				+ "left join PO_Entry poforCurYr on poforCurYr.COST_CENTER=bm.CCID AND poforCurYr.Year=:currentYearForPoEntry\n"
-				+ "AND poforCurYr.MONTHNUMBER <=:poforCurYr \n"
-				+ "WHERE CCID=:userId AND bm.YEAR=:year\n"
-				+ " GROUP BY bm.ccid,bm.Year,bm.CostCenterDescription,bm.BudValueRsL,bm.April,bm.MaY,bm.june,bm.July, bm.August,bm.September,\n"
-				+ "bm.October,bm.November,bm.December,January,February,March");
-		
+		Query selectQuery = entityManager
+				.createNativeQuery("SELECT bm.ccid,bm.Year,bm.CostCenterDescription,bm.BudValueRsL,(bm.BudValueRsL-((\n"
+						+ "CASE WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) \n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june, 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) +ISNULL(bm.July, 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.April, 0) + ISNULL(bm.MaY, 0) +ISNULL( bm.june, 0) + ISNULL(bm.July, 0) + ISNULL(bm.August , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'march' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)+ ISNULL(bm.March , 0)\n"
+						+ "END) + isnull(sum(poe.POAmount),0) + isnull(sum(poforCurYr.POAmount),0)) ) as BalanceValue,\n"
+						+ "(((\n" + "CASE WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) \n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june, 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) +ISNULL(bm.July, 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.April, 0) + ISNULL(bm.MaY, 0) +ISNULL( bm.june, 0) + ISNULL(bm.July, 0) + ISNULL(bm.August , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'march' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August , 0)+ ISNULL(bm.September , 0)+ ISNULL(bm.October , 0)+ ISNULL(bm.November , 0)+ ISNULL(bm.December , 0)+ ISNULL(bm.January , 0)+ ISNULL(bm.February , 0)+ ISNULL(bm.March , 0)\n"
+						+ "END) \n" + "+ isnull(sum(poe.POAmount),0) + isnull(sum(poforCurYr.POAmount),0)\n" + "\n"
+						+ ")) as cumulative_indent,\n" + "(CASE\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.may , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.june  , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.July  , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.August, 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.September , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.October , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.November , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.December, 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.January, 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.February, 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'march' THEN ISNULL(bm.March, 0)\n"
+						+ "END) AS currentIndentValue,\n" + "(BudValueRsL/12)-((CASE\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'April' THEN ISNULL(bm.April , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'May' THEN ISNULL(bm.may , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'June' THEN ISNULL(bm.june  , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'July' THEN ISNULL(bm.July  , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'August' THEN ISNULL(bm.August, 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'September' THEN ISNULL(bm.September , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'October' THEN ISNULL(bm.October , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'November' THEN ISNULL(bm.November , 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'December' THEN ISNULL(bm.December, 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.January, 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.February, 0)\n"
+						+ "WHEN DATENAME(MONTH, GETDATE()) = 'march' THEN ISNULL(bm.March, 0)\n"
+						+ "END) + isnull(sum(poe.POAmount),0))  AS Month_Balance,\n" + "(\n"
+						+ "        SELECT SUM(BUYER_QTY) \n" + "        FROM Indent_Transaction \n"
+						+ "        WHERE COST_CENTER = :userId \n" + "        AND MONTH =:MonthText	\n"
+						+ "    ) AS BuyerQuantity\n" + "FROM BUDGET_MASTER bm \n"
+						+ "left join PO_Entry poe on poe.COST_CENTER=bm.CCID AND POE.Year=BM.Year and poe.MONTHNUMBER > 3 \n"
+						+ "AND poe.MONTHNUMBER <=:decemberMOnthNum  \n"
+						+ "left join PO_Entry poforCurYr on poforCurYr.COST_CENTER=bm.CCID AND poforCurYr.Year=:currentYearForPoEntry\n"
+						+ "AND poforCurYr.MONTHNUMBER <=:poforCurYr \n" + "WHERE CCID=:userId AND bm.YEAR=:year\n"
+						+ " GROUP BY bm.ccid,bm.Year,bm.CostCenterDescription,bm.BudValueRsL,bm.April,bm.MaY,bm.june,bm.July, bm.August,bm.September,\n"
+						+ "bm.October,bm.November,bm.December,January,February,March");
+
 		selectQuery.setParameter("userId", userId);
 		selectQuery.setParameter("decemberMOnthNum", getMonthNumber(MonthText));
 		selectQuery.setParameter("poforCurYr", getMonthNumber(MonthText));
@@ -2031,11 +2006,10 @@ public class UserDaoimpl implements UserDao {
 				"select DISTINCT pm.PRODUCT_NUMBER,pm.PROD_NAME,pm.PROD_DESC,pm.MAKE,pm.ucp,pm.uom,  tcit.COST_CENTER, "
 						+ "isnull(tcit.TOTAL_USER_QTY,0) as quantity,tcit.DOC_NUMBER from PRODUCT_MASTER pm "
 						+ "left join TEMP_Indent_Transaction tcit on pm.PROD_NAME = tcit.item and COST_CENTER=:userId "
-						+ " where category IN( :category) AND NOT EXISTS (\n"
-						+ "        SELECT 1\n"
+						+ " where category IN( :category) AND NOT EXISTS (\n" + "        SELECT 1\n"
 						+ "        FROM Indent_Transaction tit\n"
-						+ "        WHERE pm.PROD_NAME = tit.item and COST_CENTER = :userId\n"
-						+ "    )  " + "order by quantity desc ");
+						+ "        WHERE pm.PROD_NAME = tit.item and COST_CENTER = :userId\n" + "    )  "
+						+ "order by quantity desc ");
 		List<String> brandList = Arrays.asList(categoryArray);
 		selectQuery.setParameter("category", brandList);
 		selectQuery.setParameter("userId", userId);
@@ -2081,8 +2055,8 @@ public class UserDaoimpl implements UserDao {
 		int cFY = Integer.valueOf(yearfromCal);
 		if (getMonthNumber(MonthText) < 4) {
 			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
-		 yearfromCal = String.valueOf(cFY);
-		    System.out.println("yearfromCal"+yearfromCal);
+			yearfromCal = String.valueOf(cFY);
+			System.out.println("yearfromCal" + yearfromCal);
 		}
 
 //			 Query checkIndentTransaction = entityManager.
@@ -2245,8 +2219,8 @@ public class UserDaoimpl implements UserDao {
 		int cFY = Integer.valueOf(yearfromCal);
 		if (getMonthNumber(MonthText) < 4) {
 			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
-		 yearfromCal = String.valueOf(cFY);
-		    System.out.println("yearfromCal"+yearfromCal);
+			yearfromCal = String.valueOf(cFY);
+			System.out.println("yearfromCal" + yearfromCal);
 		}
 		Query gettempID = entityManager.createNativeQuery(
 				"select DISTINCT DOC_NUMBER from temp_indent_Transaction where year=:year and month=:month and cost_center=:cost_center");
@@ -2327,8 +2301,8 @@ public class UserDaoimpl implements UserDao {
 		int cFY = Integer.valueOf(yearfromCal);
 		if (getMonthNumber(MonthText) < 4) {
 			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
-		 yearfromCal = String.valueOf(cFY);
-		    System.out.println("yearfromCal"+yearfromCal+MonthText);
+			yearfromCal = String.valueOf(cFY);
+			System.out.println("yearfromCal" + yearfromCal + MonthText);
 		}
 		String finalcc = getAllIndentedCostCenters(yearfromCal, Month);
 
@@ -2336,56 +2310,32 @@ public class UserDaoimpl implements UserDao {
 		if (finalcc.length() == 2) {
 			return getAllUserDetails;
 		}
-		
+
 		String costCenterParams = finalcc; // Example
 		String[] costCenters = costCenterParams.split(",");
 		StringBuilder stringBuilder = new StringBuilder();
 
 		for (String costCenter : costCenters) {
-		    stringBuilder.append("MAX(").append(costCenter.trim()).append(") AS ").append(costCenter.trim()).append(", ");
+			stringBuilder.append("MAX(").append(costCenter.trim()).append(") AS ").append(costCenter.trim())
+					.append(", ");
 		}
 
 		// Remove the trailing comma and space
 		String result = stringBuilder.substring(0, stringBuilder.length() - 2);
 		System.out.println(result);
-		
-		Query getresultlist = entityManager.createNativeQuery(
-				"SELECT " +
-                "PROD_NAME, " +
-                "MAX(MAKE) AS MAKE, " +
-                "MAX(UOM) AS UOM, " +
-                result + ", " +
-                "MAX(ucp) AS ucp, " +
-                "MAX(MoqQty) AS MoqQty, " +
-                "MAX(MoqValue) AS MoqValue, " +
-                "MAX(BalanceTMTQTy) AS BalanceTMTQTy, " +
-                "MAX(BalanceTMTValue) AS BalanceTMTValue " +
-           "FROM (" +
-                "SELECT " +
-                    "PROD_NAME, " +
-                    "ISNULL(MAKE, '') AS MAKE, " +
-                    "UOM, " +
-                    "COST_CENTER, " +
-                    "ISNULL(BUYER_QTY, 0) AS cost_value, " +
-                    "ucp, " +
-                    "MoqQty, " +
-                    "MoqValue, " +
-                    "BalanceTMTQTy, " +
-                    "BalanceTMTValue " +
-                "FROM PRODUCT_MASTER pm " +
-                "LEFT JOIN Indent_Transaction it ON pm.PROD_NAME = it.ITEM " +
-                "WHERE COST_CENTER IS NOT NULL " +
-                      "AND month = :Month " +
-                      "AND year = :Year " +
-            ") AS src " +
-           "PIVOT (" +
-                "MAX(cost_value) " +
-                "FOR COST_CENTER IN (" + costCenterParams + ") " +
-           ") AS pivottable " +
-           "GROUP BY PROD_NAME " +
-           "ORDER BY PROD_NAME DESC;");
 
-       getresultlist.setParameter("Month", Month);
+		Query getresultlist = entityManager.createNativeQuery("SELECT " + "PROD_NAME, " + "MAX(MAKE) AS MAKE, "
+				+ "MAX(UOM) AS UOM, " + result + ", " + "MAX(ucp) AS ucp, " + "MAX(MoqQty) AS MoqQty, "
+				+ "MAX(MoqValue) AS MoqValue, " + "MAX(BalanceTMTQTy) AS BalanceTMTQTy, "
+				+ "MAX(BalanceTMTValue) AS BalanceTMTValue " + "FROM (" + "SELECT " + "PROD_NAME, "
+				+ "ISNULL(MAKE, '') AS MAKE, " + "UOM, " + "COST_CENTER, " + "ISNULL(BUYER_QTY, 0) AS cost_value, "
+				+ "ucp, " + "MoqQty, " + "MoqValue, " + "BalanceTMTQTy, " + "BalanceTMTValue "
+				+ "FROM PRODUCT_MASTER pm " + "LEFT JOIN Indent_Transaction it ON pm.PROD_NAME = it.ITEM "
+				+ "WHERE COST_CENTER IS NOT NULL " + "AND month = :Month " + "AND year = :Year " + ") AS src "
+				+ "PIVOT (" + "MAX(cost_value) " + "FOR COST_CENTER IN (" + costCenterParams + ") " + ") AS pivottable "
+				+ "GROUP BY PROD_NAME " + "ORDER BY PROD_NAME DESC;");
+
+		getresultlist.setParameter("Month", Month);
 		getresultlist.setParameter("Year", Year);
 
 		try {
@@ -2646,7 +2596,7 @@ public class UserDaoimpl implements UserDao {
 	 */
 
 	@Override
-	public List<Object> getBuyerFooterList(String Year, String Month,String yearfromCal1) {
+	public List<Object> getBuyerFooterList(String Year, String Month, String yearfromCal1) {
 		List<Object> BuyerFooterList = null;
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat year_Date = new SimpleDateFormat("YYYY");
@@ -2657,8 +2607,8 @@ public class UserDaoimpl implements UserDao {
 		int cFY = Integer.valueOf(yearfromCal);
 		if (getMonthNumber(MonthText) < 4) {
 			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
-		 yearfromCal = String.valueOf(cFY);
-		    System.out.println("yearfromCal"+yearfromCal);
+			yearfromCal = String.valueOf(cFY);
+			System.out.println("yearfromCal" + yearfromCal);
 		}
 		String finalcc = getAllIndentedCostCenters(yearfromCal, Month);
 		System.out.println("BuyerListfinalcc" + finalcc.length() + finalcc);
@@ -2707,20 +2657,17 @@ public class UserDaoimpl implements UserDao {
 				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) +ISNULL( bm.june,0) + ISNULL(bm.July ,0)+ ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November,0)+ISNULL(bm.December, 0)\n"
 				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) +ISNULL( bm.june,0) +ISNULL( bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November,0)+ISNULL(bm.December,0)+ISNULL(bm.January, 0)\n"
 				+ "				 ELSE ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November,0) +ISNULL(bm.December,0)+ISNULL(bm.January,0) +ISNULL(bm.February, 0) END) + (isnull(sum(BUYER_QTY*UnitPrice),0)+isnull(SAPBILL,0)"
-				+ "+  ISNULL((\n"
-				+ "            CASE \n"
-				+ "                WHEN "+getMonthNumber(MonthText)+" > 3 AND "+getMonthNumber(MonthText)+" < 12 THEN \n"
-				+ "                    (SELECT SUM(po.poamount)\n"
-				+ "                     FROM PO_Entry po\n"
-				+ "                     WHERE po.COST_CENTER = bm.ccid AND po.MONTHNUMBER > 3 AND po.MONTHNUMBER <= "+getMonthNumber(MonthText)+")\n"
-				+ "                WHEN "+getMonthNumber(MonthText)+" <= 3 THEN \n"
-				+ "                    (SELECT SUM(po.poamount)\n"
+				+ "+  ISNULL((\n" + "            CASE \n" + "                WHEN " + getMonthNumber(MonthText)
+				+ " > 3 AND " + getMonthNumber(MonthText) + " < 12 THEN \n"
+				+ "                    (SELECT SUM(po.poamount)\n" + "                     FROM PO_Entry po\n"
+				+ "                     WHERE po.COST_CENTER = bm.ccid AND po.MONTHNUMBER > 3 AND po.MONTHNUMBER <= "
+				+ getMonthNumber(MonthText) + ")\n" + "                WHEN " + getMonthNumber(MonthText)
+				+ " <= 3 THEN \n" + "                    (SELECT SUM(po.poamount)\n"
 				+ "                     FROM PO_Entry po\n"
 				+ "                     WHERE po.COST_CENTER = bm.ccid AND \n"
 				+ "                           ((po.MONTHNUMBER > 3 AND po.MONTHNUMBER <= 12 AND po.YEAR = bm.YEAR - 1) OR \n"
-				+ "                            (po.MONTHNUMBER <= "+getMonthNumber(MonthText)+" AND po.YEAR = bm.YEAR)))\n"
-				+ "                ELSE 0\n"
-				+ "            END\n"
+				+ "                            (po.MONTHNUMBER <= " + getMonthNumber(MonthText)
+				+ " AND po.YEAR = bm.YEAR)))\n" + "                ELSE 0\n" + "            END\n"
 				+ "        ), 0)) AS cumulative_budget"
 				+ "				 FROM BUDGET_MASTER bm LEFT JOIN Indent_Transaction it ON bm.ccid = it.cost_center and it.YEAR=:YEAR and MONTH=:MonthText\n"
 				+ "				 GrOUP BY SAPBILL, bm.ccid,bm.Year,bm.CostCenterDescription,bm.BudValueRsL,bm.April,bm.MaY,bm.june,bm.July,bm.August,bm.September,bm.October,bm.November,bm.December,January,February ) AS SourceTable\n"
@@ -2739,20 +2686,17 @@ public class UserDaoimpl implements UserDao {
 				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'January' THEN ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November,0)+ISNULL(bm.December, 0)\n"
 				+ "				 WHEN DATENAME(MONTH, GETDATE()) = 'february' THEN ISNULL(bm.April,0) +ISNULL( bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November,0)+ISNULL(bm.December,0)+ISNULL(bm.January, 0)\n"
 				+ "				 ELSE ISNULL(bm.April,0) + ISNULL(bm.MaY,0) + ISNULL(bm.june,0) + ISNULL(bm.July,0) + ISNULL(bm.August,0) +ISNULL(bm.September,0) + ISNULL(bm.October,0) +ISNULL(bm.November,0) +ISNULL(bm.December,0)+ISNULL(bm.January,0) +ISNULL(bm.February, 0) END) + (isnull(sum(BUYER_QTY*UnitPrice),0)+isnull(SAPBILL,0)+ISNULL((\n"
-				+ "            CASE \n"
-				+ "                WHEN "+getMonthNumber(MonthText)+" > 3 AND "+getMonthNumber(MonthText)+" < 12 THEN \n"
-				+ "                    (SELECT SUM(po.poamount)\n"
+				+ "            CASE \n" + "                WHEN " + getMonthNumber(MonthText) + " > 3 AND "
+				+ getMonthNumber(MonthText) + " < 12 THEN \n" + "                    (SELECT SUM(po.poamount)\n"
 				+ "                     FROM PO_Entry po\n"
-				+ "                     WHERE po.COST_CENTER = bm.ccid AND po.MONTHNUMBER > 3 AND po.MONTHNUMBER <= "+getMonthNumber(MonthText)+")\n"
-				+ "                WHEN "+getMonthNumber(MonthText)+" <= 3 THEN \n"
-				+ "                    (SELECT SUM(po.poamount)\n"
+				+ "                     WHERE po.COST_CENTER = bm.ccid AND po.MONTHNUMBER > 3 AND po.MONTHNUMBER <= "
+				+ getMonthNumber(MonthText) + ")\n" + "                WHEN " + getMonthNumber(MonthText)
+				+ " <= 3 THEN \n" + "                    (SELECT SUM(po.poamount)\n"
 				+ "                     FROM PO_Entry po\n"
 				+ "                     WHERE po.COST_CENTER = bm.ccid AND \n"
 				+ "                           ((po.MONTHNUMBER > 3 AND po.MONTHNUMBER <= 12 AND po.YEAR = bm.YEAR - 1) OR \n"
-				+ "                            (po.MONTHNUMBER <= "+getMonthNumber(MonthText)+" AND po.YEAR = bm.YEAR)))\n"
-				+ "                ELSE 0\n"
-				+ "            END\n"
-				+ "        ), 0)))\n"
+				+ "                            (po.MONTHNUMBER <= " + getMonthNumber(MonthText)
+				+ " AND po.YEAR = bm.YEAR)))\n" + "                ELSE 0\n" + "            END\n" + "        ), 0)))\n"
 				+ "				 AS cumulative_budget\n"
 				+ "				 FROM BUDGET_MASTER bm LEFT JOIN Indent_Transaction it ON bm.ccid = it.cost_center and it.YEAR=:YEAR and MONTH=:MonthText\n"
 				+ "				 GrOUP BY SAPBILL, bm.ccid,bm.Year,bm.CostCenterDescription,bm.BudValueRsL,bm.April,bm.MaY,bm.june,bm.July,bm.August,bm.September,bm.October,bm.November,bm.December,January,February ) AS SourceTable\n"
@@ -2761,7 +2705,6 @@ public class UserDaoimpl implements UserDao {
 		getresultlist.setParameter("MonthText", Month);
 		getresultlist.setParameter("YEAR", Year);
 		getresultlist.setParameter("yearfromCal1", yearfromCal1);
-
 
 		try {
 			BuyerFooterList = getresultlist.getResultList();
@@ -2800,8 +2743,8 @@ public class UserDaoimpl implements UserDao {
 		int cFY = Integer.valueOf(yearfromCal);
 		if (getMonthNumber(MonthText) < 4) {
 			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
-		 yearfromCal = String.valueOf(cFY);
-		    System.out.println("yearfromCal"+yearfromCal);
+			yearfromCal = String.valueOf(cFY);
+			System.out.println("yearfromCal" + yearfromCal);
 		}
 		// String stringValue = products[i].getProductPrice();
 		// stringValue = stringValue.replaceAll("[₹\\s]", "");
@@ -3066,7 +3009,7 @@ public class UserDaoimpl implements UserDao {
 	 */
 	public void senduserMail(IndentMasterBean IndentMasterBean, String loginID, String password) {
 		try {
-			//String smtpHostServer = "smtp-relay.gmail.com";
+			// String smtpHostServer = "smtp-relay.gmail.com";
 			String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
 
 			Properties props = System.getProperties();
@@ -3121,8 +3064,8 @@ public class UserDaoimpl implements UserDao {
 			if (specalChar) {
 				return messBuilder
 						.append("Cost centre " + Budgetmasterbean.getCCID() + "  column has invalid character.");
-			} 
-	//			else if (Budgetmasterbean.getCCID().isEmpty()) {
+			}
+			// else if (Budgetmasterbean.getCCID().isEmpty()) {
 //				return messBuilder
 //						.append("cost center field is manadatory.");
 //			}
@@ -3167,8 +3110,7 @@ public class UserDaoimpl implements UserDao {
 						.append("BudValueRsL " + Budgetmasterbean.getBudValueRsL() + " column has invalid character.");
 			}
 			if (specalChar) {
-				return messBuilder
-						.append("Email " + Budgetmasterbean.getEmail() + " column has invalid character.");
+				return messBuilder.append("Email " + Budgetmasterbean.getEmail() + " column has invalid character.");
 			}
 
 		}
@@ -3194,78 +3136,53 @@ public class UserDaoimpl implements UserDao {
 				// String animals_list[] = animals.split(",");
 				// String animal1 = animals_list[0];
 				// System.out.println("array" + animal1);
-				
-				
+
 				boolean isCCidExists = checkccidExists(abmUserMaster.getCCID(), abmUserMaster.getYear());
-		        if (isCCidExists) {
-		        	response = "Cost Cenete ID " + abmUserMaster.getCCID() + " already exists.";
-		            return response;
-		        }
-				
-				 String ccid = abmUserMaster.getCCID();
-				    // Check if storeCode is empty, and skip the iteration if true
-				    if (ccid == null || ccid.isEmpty()) {
-				    	response = "Uploaded successfully";
-				    	continue;
-				    }
-				    /**
-					 * Here we are validating whether the cost center is already available in indent manager or not.
-					 */
-					
-					String ccidExistanceSQL = "SELECT COUNT(*) FROM INDENT_MANAGER WHERE EmpCode=:CCID";
-					Query ccidExistanceQuery = entityManager.createNativeQuery(ccidExistanceSQL);
-					ccidExistanceQuery.setParameter("CCID", abmUserMaster.getCCID());
-					int isccidExistance = (int) ccidExistanceQuery.getSingleResult();
-					
-					if (isccidExistance == 0) {
-						Query insetIntoIndentManager = entityManager.createNativeQuery("INSERT INTO INDENT_MANAGER (EmpCode,\n"
-								+ "    Password,\n"
-								+ "    EmpName,\n"
-								+ "    StoreCode,\n"
-								+ "    MobileNumber,\n"
-								+ "    DateOfJoin,\n"
-								+ "    dateofleaving,\n"
-								+ "    isactive,\n"
-								+ "    changedBy,\n"
-								+ "    Changedon,\n"
-								+ "    CreatedBY,\n"
-								+ "    CreatedOn,\n"
-								+ "    LMSID,\n"
-								+ "    Email,\n"
-								+ "    abm,\n"
-								+ "    region\n"
-								+ ")\n"
-								+ "VALUES (\n"
-								+ "    :EmpCode,\n"
-								+ "    :Password,\n"
-								+ "    :EmpName,\n"
-								+ "    :StoreCode,\n"
-								+ "    :MobileNumber,\n"
-								+ "    NULL,\n"
-								+ "    NULL,\n"
-								+ "    1, \n"
-								+ "    :CreatedBy,\n"
-								+ "    NULL,\n"
-								+ "    :CreatedBy,\n"
-								+ "    :CreatedOn,\n"
-								+ "    :CCID,\n"
-								+ "    :CostEmail,\n"
-								+ "    NULL,\n"
-								+ "    :region\n"
-								+ ")");
-						insetIntoIndentManager.setParameter("CCID", abmUserMaster.getCCID());
-						insetIntoIndentManager.setParameter("EmpCode", abmUserMaster.getCCID());
-						insetIntoIndentManager.setParameter("Password", "GH7Yz0xddaPTsXa01bcc4w==");
-						insetIntoIndentManager.setParameter("EmpName",abmUserMaster.getCostOwner());
-						insetIntoIndentManager.setParameter("StoreCode",abmUserMaster.getDepartment());
-						insetIntoIndentManager.setParameter("MobileNumber",null);
-						//insetIntoIndentManager.setParameter("MobileNumber",null);
-						insetIntoIndentManager.setParameter("CreatedBy", loginId);
-						insetIntoIndentManager.setParameter("CreatedOn", new Date());
-						insetIntoIndentManager.setParameter("CostEmail", abmUserMaster.getEmail());
-						insetIntoIndentManager.setParameter("region", "Indent Manager");
-						insetIntoIndentManager.executeUpdate();
-					}
+				if (isCCidExists) {
+					response = "Cost Cenete ID " + abmUserMaster.getCCID() + " already exists.";
+					return response;
+				}
+
+				String ccid = abmUserMaster.getCCID();
+				// Check if storeCode is empty, and skip the iteration if true
+				if (ccid == null || ccid.isEmpty()) {
+					response = "Uploaded successfully";
+					continue;
+				}
+				/**
+				 * Here we are validating whether the cost center is already available in indent
+				 * manager or not.
+				 */
+
+				String ccidExistanceSQL = "SELECT COUNT(*) FROM INDENT_MANAGER WHERE EmpCode=:CCID";
+				Query ccidExistanceQuery = entityManager.createNativeQuery(ccidExistanceSQL);
+				ccidExistanceQuery.setParameter("CCID", abmUserMaster.getCCID());
+				int isccidExistance = (int) ccidExistanceQuery.getSingleResult();
+
+				if (isccidExistance == 0) {
+					Query insetIntoIndentManager = entityManager.createNativeQuery(
+							"INSERT INTO INDENT_MANAGER (EmpCode,\n" + "    Password,\n" + "    EmpName,\n"
+									+ "    StoreCode,\n" + "    MobileNumber,\n" + "    DateOfJoin,\n"
+									+ "    dateofleaving,\n" + "    isactive,\n" + "    changedBy,\n"
+									+ "    Changedon,\n" + "    CreatedBY,\n" + "    CreatedOn,\n" + "    LMSID,\n"
+									+ "    Email,\n" + "    abm,\n" + "    region\n" + ")\n" + "VALUES (\n"
+									+ "    :EmpCode,\n" + "    :Password,\n" + "    :EmpName,\n" + "    :StoreCode,\n"
+									+ "    :MobileNumber,\n" + "    NULL,\n" + "    NULL,\n" + "    1, \n"
+									+ "    :CreatedBy,\n" + "    NULL,\n" + "    :CreatedBy,\n" + "    :CreatedOn,\n"
+									+ "    :CCID,\n" + "    :CostEmail,\n" + "    NULL,\n" + "    :region\n" + ")");
+					insetIntoIndentManager.setParameter("CCID", abmUserMaster.getCCID());
+					insetIntoIndentManager.setParameter("EmpCode", abmUserMaster.getCCID());
+					insetIntoIndentManager.setParameter("Password", "GH7Yz0xddaPTsXa01bcc4w==");
+					insetIntoIndentManager.setParameter("EmpName", abmUserMaster.getCostOwner());
+					insetIntoIndentManager.setParameter("StoreCode", abmUserMaster.getDepartment());
+					insetIntoIndentManager.setParameter("MobileNumber", null);
+					// insetIntoIndentManager.setParameter("MobileNumber",null);
+					insetIntoIndentManager.setParameter("CreatedBy", loginId);
+					insetIntoIndentManager.setParameter("CreatedOn", new Date());
+					insetIntoIndentManager.setParameter("CostEmail", abmUserMaster.getEmail());
+					insetIntoIndentManager.setParameter("region", "Indent Manager");
+					insetIntoIndentManager.executeUpdate();
+				}
 				System.out.println("array" + abmUserMaster.getYear() + abmUserMaster.getGL() + abmUserMaster.getCCID());
 				Query insertabmuser = entityManager.createNativeQuery(
 						"Insert Into BUDGET_MASTER (CCID,Year,CostCenterDescription,GL,GLDescription,Location,CostOwner,"
@@ -3300,21 +3217,21 @@ public class UserDaoimpl implements UserDao {
 		}
 		return response;
 	}
-	
+
 	/**
 	 * This method is used to verify the duplicates available in budget master.
+	 * 
 	 * @param empCode
 	 * @return
 	 */
-	private boolean checkccidExists(String ccid,String year) {
-	    String empCodeExistenceSQL = "SELECT COUNT(*) FROM budget_master WHERE ccid =:ccid and  year =:year";
-	    Query empCodeExistenceQuery = entityManager.createNativeQuery(empCodeExistenceSQL);
-	    empCodeExistenceQuery.setParameter("ccid", ccid);
-	    empCodeExistenceQuery.setParameter("year", year);
-	    int empCodeCount = ((Number) empCodeExistenceQuery.getSingleResult()).intValue();
-	    return empCodeCount > 0;
+	private boolean checkccidExists(String ccid, String year) {
+		String empCodeExistenceSQL = "SELECT COUNT(*) FROM budget_master WHERE ccid =:ccid and  year =:year";
+		Query empCodeExistenceQuery = entityManager.createNativeQuery(empCodeExistenceSQL);
+		empCodeExistenceQuery.setParameter("ccid", ccid);
+		empCodeExistenceQuery.setParameter("year", year);
+		int empCodeCount = ((Number) empCodeExistenceQuery.getSingleResult()).intValue();
+		return empCodeCount > 0;
 	}
-	
 
 	@Override
 	public StringBuilder insertExcelholidayMaster(List<HolidayMasterBean> abmDetailList, String loginId) {
@@ -3336,15 +3253,15 @@ public class UserDaoimpl implements UserDao {
 			}
 			specalChar = Validations.validation(HolidayMasterBean.getOccasion());
 			if (specalChar) {
-				return messBuilder.append(
-						"Occasion " + HolidayMasterBean.getOccasion() + " column has invalid character.");
+				return messBuilder
+						.append("Occasion " + HolidayMasterBean.getOccasion() + " column has invalid character.");
 			}
 			specalChar = Validations.validation(HolidayMasterBean.getOccasion());
 
 			specalChar = Validations.validation(HolidayMasterBean.getActivestatus());
 			if (specalChar) {
-				return messBuilder
-						.append("Active Status " + HolidayMasterBean.getActivestatus() + " column has invalid character.");
+				return messBuilder.append(
+						"Active Status " + HolidayMasterBean.getActivestatus() + " column has invalid character.");
 			}
 //			specalChar = Validations.validation(HolidayMasterBean.getCostcentre());
 //			if (specalChar) {
@@ -3354,8 +3271,7 @@ public class UserDaoimpl implements UserDao {
 
 			specalChar = Validations.validation(HolidayMasterBean.getYear());
 			if (specalChar) {
-				return messBuilder
-						.append("Year " + HolidayMasterBean.getYear() + " column has invalid character.");
+				return messBuilder.append("Year " + HolidayMasterBean.getYear() + " column has invalid character.");
 			}
 			/*
 			 * specalChar = Validations.validation(HolidayMasterBean.getBudValueRsL()); if
@@ -3398,12 +3314,12 @@ public class UserDaoimpl implements UserDao {
 					System.out.println("array" + abmUserMaster.getHoliday_date() + abmUserMaster.getHoliday_day()
 							+ abmUserMaster.getOccasion());
 
-								boolean isHolidayduplicated = checkholidayDateDuplication(formattedHolidayDate);
+					boolean isHolidayduplicated = checkholidayDateDuplication(formattedHolidayDate);
 
-							        if (isHolidayduplicated) {
-							        	response = formattedHolidayDate +" already exists.";
-							            return response;
-							        }
+					if (isHolidayduplicated) {
+						response = formattedHolidayDate + " already exists.";
+						return response;
+					}
 					Query insertabmuser = entityManager.createNativeQuery(
 							"Insert Into Holiday_Master (Holiday_date,Holiday_day,Occasion,Activestatus,Costcentre,Year,"
 									+ "CreatedBy,CreatedOn,ModifiedBy,ModifiedOn,holidaymonth)"
@@ -3443,21 +3359,21 @@ public class UserDaoimpl implements UserDao {
 		return response;
 	}
 
-	
 	/**
 	 * This method is used to validate the duplicate dates.
+	 * 
 	 * @param empCode
 	 * @return
 	 */
 	private boolean checkholidayDateDuplication(String formattedDate) {
-	    String empCodeExistenceSQL = "SELECT COUNT(*) FROM holiday_master WHERE holiday_date =:formattedDate";
-	    Query empCodeExistenceQuery = entityManager.createNativeQuery(empCodeExistenceSQL);
-	    empCodeExistenceQuery.setParameter("formattedDate", formattedDate);
-	    int empCodeCount = ((Number) empCodeExistenceQuery.getSingleResult()).intValue();
-	    return empCodeCount > 0;
+		String empCodeExistenceSQL = "SELECT COUNT(*) FROM holiday_master WHERE holiday_date =:formattedDate";
+		Query empCodeExistenceQuery = entityManager.createNativeQuery(empCodeExistenceSQL);
+		empCodeExistenceQuery.setParameter("formattedDate", formattedDate);
+		int empCodeCount = ((Number) empCodeExistenceQuery.getSingleResult()).intValue();
+		return empCodeCount > 0;
 
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Object> getAllindentDetails() {
@@ -3472,8 +3388,8 @@ public class UserDaoimpl implements UserDao {
 		int cFY = Integer.valueOf(yearfromCal);
 		if (getMonthNumber(MonthText) < 4) {
 			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
-		 yearfromCal = String.valueOf(cFY);
-		    System.out.println("yearfromCal"+yearfromCal);
+			yearfromCal = String.valueOf(cFY);
+			System.out.println("yearfromCal" + yearfromCal);
 		}
 		Query selectQuery = entityManager.createNativeQuery(
 				"select DOC_NUMBER,COST_CENTER,ITEM,DEPARTMENT,TOTAL_USER_QTY,DOC_DATE,VALUE,MONTH,YEAR,STATUS,\n"
@@ -3527,8 +3443,8 @@ public class UserDaoimpl implements UserDao {
 		int cFY = Integer.valueOf(yearfromCal);
 		if (getMonthNumber(MonthText) < 4) {
 			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
-		 yearfromCal = String.valueOf(cFY);
-		    System.out.println("yearfromCal"+yearfromCal);
+			yearfromCal = String.valueOf(cFY);
+			System.out.println("yearfromCal" + yearfromCal);
 		}
 		List<Object> BuyerFooterList = null;
 		String finalcc = getAllIndentedCostCenters(yearfromCal, MonthText);
@@ -3537,8 +3453,7 @@ public class UserDaoimpl implements UserDao {
 			return BuyerFooterList;
 		}
 		Query getresultlist = entityManager.createNativeQuery("    SELECT 'Indent val. by stn portal' title," + finalcc
-				+ " FROM\r\n"
-				+ " (SELECT CCID, isnull(sum(buyer_qty*UnitPrice),0) indent FROM BUDGET_MASTER bm\r\n"
+				+ " FROM\r\n" + " (SELECT CCID, isnull(sum(buyer_qty*UnitPrice),0) indent FROM BUDGET_MASTER bm\r\n"
 				+ " left join Indent_Transaction it on bm.CCID= it.COST_CENTER\r\n"
 				+ " and it.MONTH =  format(GETDATE(),'MMMMMMMMMMMMMMMM') and it.YEAR=:yearfromCal and BUYER_CONFIRMATION=1 group by  CCID) AS SourceTable\r\n"
 				+ " PIVOT( MAX(indent)  FOR CCID IN (" + finalcc + ")) AS PivotTable3 ");
@@ -3582,8 +3497,8 @@ public class UserDaoimpl implements UserDao {
 		int cFY = Integer.valueOf(yearfromCal);
 		if (getMonthNumber(MonthText) < 4) {
 			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
-		 yearfromCal = String.valueOf(cFY);
-		    System.out.println("yearfromCal"+yearfromCal);
+			yearfromCal = String.valueOf(cFY);
+			System.out.println("yearfromCal" + yearfromCal);
 		}
 		int n = products.length;
 		for (int i = 0; i < n; i++) {
@@ -3683,8 +3598,8 @@ public class UserDaoimpl implements UserDao {
 		int cFY = Integer.valueOf(yearfromCal);
 		if (getMonthNumber(MonthText) < 4) {
 			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
-		 yearfromCal = String.valueOf(cFY);
-		    System.out.println("yearfromCal"+yearfromCal);
+			yearfromCal = String.valueOf(cFY);
+			System.out.println("yearfromCal" + yearfromCal);
 		}
 		List<Object> getAllUserDetails = null;
 		String finalcc = getAllIndentedCostCenters(yearfromCal, MonthText);
@@ -3693,19 +3608,19 @@ public class UserDaoimpl implements UserDao {
 			return getAllUserDetails;
 		}
 
-		
 		String costCenterParams = finalcc; // Example
 		String[] costCenters = costCenterParams.split(",");
 		StringBuilder stringBuilder = new StringBuilder();
 
 		for (String costCenter : costCenters) {
-		    stringBuilder.append("MAX(").append(costCenter.trim()).append(") AS ").append(costCenter.trim()).append(", ");
+			stringBuilder.append("MAX(").append(costCenter.trim()).append(") AS ").append(costCenter.trim())
+					.append(", ");
 		}
 
 		// Remove the trailing comma and space
 		String result = stringBuilder.substring(0, stringBuilder.length() - 2);
 		System.out.println(result);
-		
+
 		/*
 		 * Query getCostCenter = entityManager.
 		 * createNativeQuery("select STUFF((SELECT DISTINCT ',[' + COST_CENTER + ']' " +
@@ -3722,7 +3637,7 @@ public class UserDaoimpl implements UserDao {
 				+ "		) AS src\n" + "		PIVOT (MAX(cost_value)\n" + "		FOR COST_CENTER IN (" + finalcc
 				+ ")) AS pivottable\n" + "		order by PROD_NAME desc");
 		getresultlist.setParameter("yearfromCal", yearfromCal);
-		
+
 		try {
 			getAllUserDetails = getresultlist.getResultList();
 
@@ -3756,8 +3671,8 @@ public class UserDaoimpl implements UserDao {
 		int cFY = Integer.valueOf(yearfromCal);
 		if (getMonthNumber(MonthText) < 4) {
 			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
-		 yearfromCal = String.valueOf(cFY);
-		    System.out.println("yearfromCal"+yearfromCal);
+			yearfromCal = String.valueOf(cFY);
+			System.out.println("yearfromCal" + yearfromCal);
 		}
 		Query selectQuery = entityManager.createNativeQuery(
 				"select DOC_NUMBER,COST_CENTER,ITEM,DEPARTMENT,TOTAL_USER_QTY,DOC_DATE,VALUE,MONTH,YEAR,STATUS,\n"
@@ -3807,8 +3722,8 @@ public class UserDaoimpl implements UserDao {
 	public void sendpasswordMail(String email, String email_id, String user_Name, String pwd, String newPwd,
 			String login_id) {
 		try {
-			//String smtpHostServer = "smtp-relay.gmail.com";
-			
+			// String smtpHostServer = "smtp-relay.gmail.com";
+
 			String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
 			Properties props = System.getProperties();
 			props.put("mail.smtp.host", smtpHostServer);
@@ -3971,8 +3886,8 @@ public class UserDaoimpl implements UserDao {
 		String yearfromCal = cFY;
 		if (getMonthNumber(MonthText) < 4) {
 			cFY1 = cFY1 - 1; // If the month is before April, subtract 1 from the year
-		 yearfromCal  = String.valueOf(cFY1);
-		    System.out.println("yearfromCal"+yearfromCal);
+			yearfromCal = String.valueOf(cFY1);
+			System.out.println("yearfromCal" + yearfromCal);
 		}
 		getintentID.setParameter("year", yearfromCal);
 		getintentID.setParameter("month", MonthText);
@@ -3985,12 +3900,12 @@ public class UserDaoimpl implements UserDao {
 		}
 //		return "For the month of " + MonthText + " an Indent has already been generated: " + id
 //				+ " for this cost center " + userId + " and please modify the indent in the indent list menu.";
-		
-	return "Indent is already generated for this cost center in current month. please modify the indent in the indent list.";
+
+		return "Indent is already generated for this cost center in current month. please modify the indent in the indent list.";
 
 	}
 
-	public String sendToVendor(Map<String, Object> payload,String loginId) {
+	public String sendToVendor(Map<String, Object> payload, String loginId) {
 		String r = "";
 
 		Calendar cal = Calendar.getInstance();
@@ -4003,266 +3918,262 @@ public class UserDaoimpl implements UserDao {
 		int cFY = Integer.valueOf(yearfromCal);
 		if (getMonthNumber(MonthText) < 4) {
 			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
-		 yearfromCal = String.valueOf(cFY);
-		    System.out.println("yearfromCal"+yearfromCal);
+			yearfromCal = String.valueOf(cFY);
+			System.out.println("yearfromCal" + yearfromCal);
 		}
-		
-		Query getCClist = entityManager.createNativeQuery("select email_id from ER_User_Master where login_id  =:loginId UNION SELECT email_id FROM ER_User_Master WHERE userAccess = 1");
-		Query getName = entityManager.createNativeQuery("select User_Name from ER_User_Master where login_id  =:loginId");
+
+		Query getCClist = entityManager.createNativeQuery(
+				"select email_id from ER_User_Master where login_id  =:loginId UNION SELECT email_id FROM ER_User_Master WHERE userAccess = 1");
+		Query getName = entityManager
+				.createNativeQuery("select User_Name from ER_User_Master where login_id  =:loginId");
 		getCClist.setParameter("loginId", loginId);
 		getName.setParameter("loginId", loginId);
 		String buyerName = (String) getName.getSingleResult();
 		List<String> getBuyerName = getName.getResultList();
 		List<String> CCList = getCClist.getResultList();
-		//CCList.add("tgo@titan.co.in");
-
+		// CCList.add("tgo@titan.co.in");
 
 		try {
 			String finalcc = getAllIndentedCostCenters(yearfromCal, MonthText);
 			finalcc = finalcc.replace("[", "").replace("]", "");
-			
-			
-			
+
 			Object[] keys = payload.keySet().toArray();
-	        Object[] values = payload.values().toArray();
-	        
-	        if (keys.length > 1 && values.length > 1) {
-	            String secondKey = keys[2].toString();
-	            Object vendorsListObject = values[2];
-	            if (vendorsListObject instanceof List) {
-	                // Cast `vendorsListObject` to a list of maps (assuming each vendor is represented by a map)
-	                List<Map<String, Object>> vendorsList = (List<Map<String, Object>>) vendorsListObject;
+			Object[] values = payload.values().toArray();
 
-	                // Iterate over the list of vendors
-	                for (Map<String, Object> vendor : vendorsList) {
-	                    String vendorName = (String) vendor.get("vendorName");
-	            		Query getVendorMailID = entityManager.createNativeQuery("select distinct emailID from PRODUCT_MASTER where MAKE =:vendorName");
-	            		getVendorMailID.setParameter("vendorName", vendorName);
-	            		String vendorMailId = (String) getVendorMailID.getSingleResult();
+			if (keys.length > 1 && values.length > 1) {
+				String secondKey = keys[2].toString();
+				Object vendorsListObject = values[2];
+				if (vendorsListObject instanceof List) {
+					// Cast `vendorsListObject` to a list of maps (assuming each vendor is
+					// represented by a map)
+					List<Map<String, Object>> vendorsList = (List<Map<String, Object>>) vendorsListObject;
 
-	              
-	                    List<ArrayList<Object>> vendorData = (List<ArrayList<Object>>) vendor.get("data");
-	                    String[] costCentersArray = finalcc.split(",");
-	                    
-	                    
-	        			// Create headers array including "Sl No", "Material description", "UOM", individual cost centers, and "Total Qty"
-	        			List<String> headersList = new ArrayList<>();
-	        			headersList.add("Sl No");
-	        			headersList.add("Material description");
-	        			headersList.add("UOM");
-	        			headersList.addAll(Arrays.asList(costCentersArray)); // Add individual cost centers
-	        			headersList.add("Total Qty");
+					// Iterate over the list of vendors
+					for (Map<String, Object> vendor : vendorsList) {
+						String vendorName = (String) vendor.get("vendorName");
+						Query getVendorMailID = entityManager.createNativeQuery(
+								"select distinct emailID from PRODUCT_MASTER where MAKE =:vendorName");
+						getVendorMailID.setParameter("vendorName", vendorName);
+						String vendorMailId = (String) getVendorMailID.getSingleResult();
 
-	        			// Convert the list to an array
-	        			Object[] headers = headersList.toArray();
-	        			Map<String, List<Object>> indentData = new HashMap<>();
+						List<ArrayList<Object>> vendorData = (List<ArrayList<Object>>) vendor.get("data");
+						String[] costCentersArray = finalcc.split(",");
 
-	        				Workbook workbook = new XSSFWorkbook();
-	        				Sheet sheet = workbook.createSheet("DataTable");
-	        				
-	        				  // Create a cell style for headers
-	        		        CellStyle headerStyle = workbook.createCellStyle();
-	        		        Font headerFont = workbook.createFont();
-	        		        headerFont.setBold(true);
-	        		        headerFont.setColor(IndexedColors.WHITE.getIndex()); // Set text color to white
-	        		        headerStyle.setFont(headerFont);
-	        		        headerStyle.setAlignment(HorizontalAlignment.CENTER);
-	        		        headerStyle.setFillForegroundColor(IndexedColors.BLUE_GREY.getIndex()); // Set background color
-	        		        headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+						// Create headers array including "Sl No", "Material description", "UOM",
+						// individual cost centers, and "Total Qty"
+						List<String> headersList = new ArrayList<>();
+						headersList.add("Sl No");
+						headersList.add("Material description");
+						headersList.add("UOM");
+						headersList.addAll(Arrays.asList(costCentersArray)); // Add individual cost centers
+						headersList.add("Total Qty");
 
-	        				
-	        		     // Get the current date
-	        		        Date currentDate = new Date();
+						// Convert the list to an array
+						Object[] headers = headersList.toArray();
+						Map<String, List<Object>> indentData = new HashMap<>();
 
-	        		        // Create a SimpleDateFormat object with the desired date format
-	        		        SimpleDateFormat sdf = new SimpleDateFormat("MMMM_yyyy");
+						Workbook workbook = new XSSFWorkbook();
+						Sheet sheet = workbook.createSheet("DataTable");
 
-	        		        // Format the current date using the SimpleDateFormat object
-	        		        String formattedDate = sdf.format(currentDate);
+						// Create a cell style for headers
+						CellStyle headerStyle = workbook.createCellStyle();
+						Font headerFont = workbook.createFont();
+						headerFont.setBold(true);
+						headerFont.setColor(IndexedColors.WHITE.getIndex()); // Set text color to white
+						headerStyle.setFont(headerFont);
+						headerStyle.setAlignment(HorizontalAlignment.CENTER);
+						headerStyle.setFillForegroundColor(IndexedColors.BLUE_GREY.getIndex()); // Set background color
+						headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
-	        		        
-	        		        
-	        		     // Insert headers into the sheet
-	        		        Row headerRow1 = sheet.createRow(0);
+						// Get the current date
+						Date currentDate = new Date();
 
-	        		        // Add "STATIONERY REQUIREMENTS 27-03-2024" spanning two cells
-	        		        Cell firstCell = headerRow1.createCell(0);
-	        		        firstCell.setCellValue("Stationery_Requirements_" + formattedDate);
-	        		        firstCell.setCellStyle(headerStyle); // Apply header style
-	        		        
-	        		        // Merge the cells
-	        		        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, headers.length - 1));
+						// Create a SimpleDateFormat object with the desired date format
+						SimpleDateFormat sdf = new SimpleDateFormat("MMMM_yyyy");
 
-	        		        // Adjust column width
-	        		        sheet.autoSizeColumn(0); // Auto-size first column width
-	        		        sheet.autoSizeColumn(1); // Auto-size second column width
+						// Format the current date using the SimpleDateFormat object
+						String formattedDate = sdf.format(currentDate);
 
-	        		        
-	        				Row headerRow = sheet.createRow(2);
-	        				
-	        				for (int i = 0; i < headers.length; i++) {
-	        				    Cell cell = headerRow.createCell(i);
-	        				    cell.setCellValue(String.valueOf(headers[i]));
-	        				    cell.setCellStyle(headerStyle); // Apply header style
-	        		            sheet.autoSizeColumn(i); // Auto-size column width
-	        				}
-	        					
-	        				  // Auto-size columns
-	        		        for (int i = 0; i < headers.length; i++) {
-	        		            sheet.autoSizeColumn(i);
-	        		        }
-	        				// Insert data into the sheet
-	        				int rowNum = 3; // Start from the second row (index 1) after headers
-	        				
-	        				
-	        				
-	        				// Assuming vendorData is a List<Object[]> containing data for each vendor
-	        				// Assuming rowDataList is a List<Object[]> containing the data to be inserted into the sheet
-	        				int serialNumber = 1; // Initialize serial number
+						// Insert headers into the sheet
+						Row headerRow1 = sheet.createRow(0);
 
-	        				// Initialize an array to store the sum of each numeric column
-	        				double[] columnSum = new double[vendorData.get(0).size()];
+						// Add "STATIONERY REQUIREMENTS 27-03-2024" spanning two cells
+						Cell firstCell = headerRow1.createCell(0);
+						firstCell.setCellValue("Stationery_Requirements_" + formattedDate);
+						firstCell.setCellStyle(headerStyle); // Apply header style
 
-	        				// Iterate over each row in vendorData
-	        				for (List<Object> rowData : vendorData) {
-	        				    Row row = sheet.createRow(rowNum++);
-	        				    int cellNum = 0; // Reset cell number for each row
-	        				    Cell cell = row.createCell(cellNum++); // First cell for serial number
-	        				    cell.setCellValue(serialNumber++); // Insert serial number
-	        				    sheet.autoSizeColumn(cellNum);
-	        				    // Iterate over each cell in the rowData
-	        				    for (Object cellData : rowData) {
-	        				        cell = row.createCell(cellNum++);
-	        				        if (cellData instanceof String) {
-	        				            String cellString = (String) cellData;
-	        				            try {
-	        				                double value = Double.parseDouble(cellString);
-	        				                cell.setCellValue(value);
-	        				                // Accumulate the sum for double values
-	        				                columnSum[cellNum - 2] += value; // Subtract 2 to adjust for the serial number column
-	        				            } catch (NumberFormatException e) {
-	        				                // Handle non-numeric string values
-	        				                cell.setCellValue(cellString); // Set string value directly
-	        				            }
-	        				        } else if (cellData instanceof Double) {
-	        				            double value = (Double) cellData;
-	        				            cell.setCellValue(value);
-	        				            // Accumulate the sum for double values
-	        				            columnSum[cellNum - 2] += value; // Subtract 2 to adjust for the serial number column
-	        				        } else if (cellData instanceof Integer) {
-	        				            int value = (Integer) cellData;
-	        				            cell.setCellValue(value);
-	        				            // Accumulate the sum for integer values
-	        				            columnSum[cellNum - 2] += value; // Subtract 2 to adjust for the serial number column
-	        				        } else {
-	        				            // Handle empty or non-numeric cells
-	        				            cell.setCellValue(""); // Empty cell value
-	        				        }
-	        				    }
-	        				}
+						// Merge the cells
+						sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, headers.length - 1));
 
-	        				// Create the last row for the sums
-	        				Row sumRow = sheet.createRow(rowNum++);
-	        				sumRow.createCell(0);
-    				        Cell sumCell = sumRow.createCell(0);
-	        				 sumCell.setCellValue(""); 
+						// Adjust column width
+						sheet.autoSizeColumn(0); // Auto-size first column width
+						sheet.autoSizeColumn(1); // Auto-size second column width
 
-	        				for (int i = 0; i < columnSum.length; i++) {
-	        				    if (i == 0) {
-	        				        // Skip setting value in the first cell (for the label)
-	        				        sumRow.createCell(i);
-	        				        Cell sumCell1 = sumRow.createCell(i + 1);
-	        				        sumCell1.setCellValue("Total Qty"); 
-	        				    } else {
-	        				        Cell sumCell1 = sumRow.createCell(i +1);
-	        				        if (Double.compare(columnSum[i], 0.0) != 0.0) {
-	        				        	sumCell1.setCellValue(columnSum[i]); // Insert sum for the corresponding column
-	        				        } else {
-	        				        	sumCell1.setCellValue("");
-	        				        }
+						Row headerRow = sheet.createRow(2);
+
+						for (int i = 0; i < headers.length; i++) {
+							Cell cell = headerRow.createCell(i);
+							cell.setCellValue(String.valueOf(headers[i]));
+							cell.setCellStyle(headerStyle); // Apply header style
+							sheet.autoSizeColumn(i); // Auto-size column width
+						}
+
+						// Auto-size columns
+						for (int i = 0; i < headers.length; i++) {
+							sheet.autoSizeColumn(i);
+						}
+						// Insert data into the sheet
+						int rowNum = 3; // Start from the second row (index 1) after headers
+
+						// Assuming vendorData is a List<Object[]> containing data for each vendor
+						// Assuming rowDataList is a List<Object[]> containing the data to be inserted
+						// into the sheet
+						int serialNumber = 1; // Initialize serial number
+
+						// Initialize an array to store the sum of each numeric column
+						double[] columnSum = new double[vendorData.get(0).size()];
+
+						// Iterate over each row in vendorData
+						for (List<Object> rowData : vendorData) {
+							Row row = sheet.createRow(rowNum++);
+							int cellNum = 0; // Reset cell number for each row
+							Cell cell = row.createCell(cellNum++); // First cell for serial number
+							cell.setCellValue(serialNumber++); // Insert serial number
+							sheet.autoSizeColumn(cellNum);
+							// Iterate over each cell in the rowData
+							for (Object cellData : rowData) {
+								cell = row.createCell(cellNum++);
+								if (cellData instanceof String) {
+									String cellString = (String) cellData;
+									try {
+										double value = Double.parseDouble(cellString);
+										cell.setCellValue(value);
+										// Accumulate the sum for double values
+										columnSum[cellNum - 2] += value; // Subtract 2 to adjust for the serial number
+																			// column
+									} catch (NumberFormatException e) {
+										// Handle non-numeric string values
+										cell.setCellValue(cellString); // Set string value directly
+									}
+								} else if (cellData instanceof Double) {
+									double value = (Double) cellData;
+									cell.setCellValue(value);
+									// Accumulate the sum for double values
+									columnSum[cellNum - 2] += value; // Subtract 2 to adjust for the serial number
+																		// column
+								} else if (cellData instanceof Integer) {
+									int value = (Integer) cellData;
+									cell.setCellValue(value);
+									// Accumulate the sum for integer values
+									columnSum[cellNum - 2] += value; // Subtract 2 to adjust for the serial number
+																		// column
+								} else {
+									// Handle empty or non-numeric cells
+									cell.setCellValue(""); // Empty cell value
+								}
+							}
+						}
+
+						// Create the last row for the sums
+						Row sumRow = sheet.createRow(rowNum++);
+						sumRow.createCell(0);
+						Cell sumCell = sumRow.createCell(0);
+						sumCell.setCellValue("");
+
+						for (int i = 0; i < columnSum.length; i++) {
+							if (i == 0) {
+								// Skip setting value in the first cell (for the label)
+								sumRow.createCell(i);
+								Cell sumCell1 = sumRow.createCell(i + 1);
+								sumCell1.setCellValue("Total Qty");
+							} else {
+								Cell sumCell1 = sumRow.createCell(i + 1);
+								if (Double.compare(columnSum[i], 0.0) != 0.0) {
+									sumCell1.setCellValue(columnSum[i]); // Insert sum for the corresponding column
+								} else {
+									sumCell1.setCellValue("");
+								}
 //	        				        sumCell1.setCellValue(columnSum[i]); // Insert sum for the corresponding column
-	        				    }
-	        				}
-	        				
-	        				  // Apply border style only to content
-	        		        CellStyle contentStyle = workbook.createCellStyle();
-	        		        contentStyle.setBorderTop(BorderStyle.THIN);
-	        		        contentStyle.setBorderBottom(BorderStyle.THIN);
-	        		        contentStyle.setBorderLeft(BorderStyle.THIN);
-	        		        contentStyle.setBorderRight(BorderStyle.THIN);
-	        		        for (Row row : sheet) {
-	        		            for (Cell cell : row) {
-	        		                if (cell.getRowIndex() > 0) {
-	        		                    cell.setCellStyle(contentStyle);
-	        		                }
-	        		            }
-	        		        }
+							}
+						}
 
+						// Apply border style only to content
+						CellStyle contentStyle = workbook.createCellStyle();
+						contentStyle.setBorderTop(BorderStyle.THIN);
+						contentStyle.setBorderBottom(BorderStyle.THIN);
+						contentStyle.setBorderLeft(BorderStyle.THIN);
+						contentStyle.setBorderRight(BorderStyle.THIN);
+						for (Row row : sheet) {
+							for (Cell cell : row) {
+								if (cell.getRowIndex() > 0) {
+									cell.setCellStyle(contentStyle);
+								}
+							}
+						}
 
-		        		     // Create a SimpleDateFormat object with the desired date format
-		        		        SimpleDateFormat sdf1 = new SimpleDateFormat("MMMM_yyyy");
+						// Create a SimpleDateFormat object with the desired date format
+						SimpleDateFormat sdf1 = new SimpleDateFormat("MMMM_yyyy");
 
-		        		        // Format the current date using the SimpleDateFormat object
-		        		        String formattedDate1 = sdf1.format(currentDate);
+						// Format the current date using the SimpleDateFormat object
+						String formattedDate1 = sdf1.format(currentDate);
 
+						File excelFile = File.createTempFile("Stationery_Requirements_" + formattedDate1, ".xlsx");
+						FileOutputStream fileOut = new FileOutputStream(excelFile);
+						workbook.write(fileOut);
+						fileOut.close();
+						String filePath = excelFile.getAbsolutePath();
+						System.out.println("File Path: " + filePath);
 
-		        		    File excelFile = File.createTempFile("Stationery_Requirements_"+ formattedDate1, ".xlsx");
-	        				FileOutputStream fileOut = new FileOutputStream(excelFile);
-	        				workbook.write(fileOut);
-	        				fileOut.close();
-	        				String filePath = excelFile.getAbsolutePath();
-	        				System.out.println("File Path: " + filePath);
-	        				
-	        				
-	        				String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
-	        				Properties props = System.getProperties();
-	        				props.put("mail.smtp.host", smtpHostServer);
-	        				props.put("mail.smtp.port", "25");
-	        				Session session = Session.getInstance(props, null);
-	        				System.out.println(session);
-	        				MimeMessage msg = new MimeMessage(session);
-	        				msg.setFrom(
-	        						new InternetAddress("noreply_stationary@titan.co.in", "No Reply-stationary Employee Portal"));
-	        				//msg.setReplyTo(InternetAddress.parse(key, false));
-	        				msg.setSubject("Stationery_Requirements_"+ formattedDate1);
+						String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
+						Properties props = System.getProperties();
+						props.put("mail.smtp.host", smtpHostServer);
+						props.put("mail.smtp.port", "25");
+						Session session = Session.getInstance(props, null);
+						System.out.println(session);
+						MimeMessage msg = new MimeMessage(session);
+						msg.setFrom(new InternetAddress("noreply_stationary@titan.co.in",
+								"No Reply-stationary Employee Portal"));
+						// msg.setReplyTo(InternetAddress.parse(key, false));
+						msg.setSubject("Stationery_Requirements_" + formattedDate1);
 
-	        				MimeMultipart multipart = new MimeMultipart();
+						MimeMultipart multipart = new MimeMultipart();
 
-	        				MimeBodyPart textPart = new MimeBodyPart();
-	        				textPart.setText("Dear Sir / Madam,\n\n" + "Pl. find attached the consolidated list of stationery items for the current month.\n"
-	        						+ "\nRequest you to arrange all the stationery items and deliver the same in individual packings (cost center-wise) as per the attached list. Do mention the Purchase order number in the invoices.\n\n"
-	        						+ "Double check the brand and qty. before delivery for on-time inward and payment.\n\n"
-	        						+ "Inward will happen only if complete items are received at our facility in the same brands and qty. which are ordered. Request to check and validate the same before effecting delivery.\n\n\n"
-	        						+ "Regards,\n\n" + buyerName + "\n" + "Sourcing Dept.\n" + "Watches and Wearables Div\n"+"Titan Company Ltd.\n");
-	        				multipart.addBodyPart(textPart);
+						MimeBodyPart textPart = new MimeBodyPart();
+						textPart.setText("Dear Sir / Madam,\n\n"
+								+ "Pl. find attached the consolidated list of stationery items for the current month.\n"
+								+ "\nRequest you to arrange all the stationery items and deliver the same in individual packings (cost center-wise) as per the attached list. Do mention the Purchase order number in the invoices.\n\n"
+								+ "Double check the brand and qty. before delivery for on-time inward and payment.\n\n"
+								+ "Inward will happen only if complete items are received at our facility in the same brands and qty. which are ordered. Request to check and validate the same before effecting delivery.\n\n\n"
+								+ "Regards,\n\n" + buyerName + "\n" + "Sourcing Dept.\n" + "Watches and Wearables Div\n"
+								+ "Titan Company Ltd.\n");
+						multipart.addBodyPart(textPart);
 
-	        				System.out.println("Email Body:\n");
-	        				MimeBodyPart excelAttachment = new MimeBodyPart();
-	        				DataSource source = new FileDataSource(excelFile.getAbsolutePath());
-	        				excelAttachment.setDataHandler(new DataHandler(source));
-	        				excelAttachment.setFileName(excelFile.getName());
-	        				multipart.addBodyPart(excelAttachment);
-	        				msg.setContent(multipart);
-	        				msg.setSentDate(new Date());
-	        				  // Adding multiple recipients
+						System.out.println("Email Body:\n");
+						MimeBodyPart excelAttachment = new MimeBodyPart();
+						DataSource source = new FileDataSource(excelFile.getAbsolutePath());
+						excelAttachment.setDataHandler(new DataHandler(source));
+						excelAttachment.setFileName(excelFile.getName());
+						multipart.addBodyPart(excelAttachment);
+						msg.setContent(multipart);
+						msg.setSentDate(new Date());
+						// Adding multiple recipients
 //	        	            for (String email : emailList) {
-	        	                msg.addRecipient(Message.RecipientType.TO, new InternetAddress(vendorMailId));
-	        	                String emailBody = msg.getContent().toString();
+						msg.addRecipient(Message.RecipientType.TO, new InternetAddress(vendorMailId));
+						String emailBody = msg.getContent().toString();
 //	        	            }
-	        	            for (String ccMail : CCList) {
-	        	                msg.addRecipient(Message.RecipientType.CC, new InternetAddress(ccMail));
-	        	            }
-        	               // msg.addRecipient(Message.RecipientType.BCC, new InternetAddress("nirajprasad@titan.co.in,masinenikrishnasai@titan.co.in,harsha_vardhan@titan.co.in,muralicr@titan.co.in,sanjeevi@titan.co.in"));
+						for (String ccMail : CCList) {
+							msg.addRecipient(Message.RecipientType.CC, new InternetAddress(ccMail));
+						}
+						// msg.addRecipient(Message.RecipientType.BCC, new
+						// InternetAddress("nirajprasad@titan.co.in,masinenikrishnasai@titan.co.in,harsha_vardhan@titan.co.in,muralicr@titan.co.in,sanjeevi@titan.co.in"));
 
-	        	          
-	        				Transport.send(msg);
+						Transport.send(msg);
 
-	                }
-	            }
-	        }
+					}
+				}
+			}
 			r = "Email Sent Successfully!";
 
-			
 		}
 
 		catch (Exception e) {
@@ -4337,7 +4248,7 @@ public class UserDaoimpl implements UserDao {
 
 			query.setParameter("MONTH", Month);
 			query.setParameter("YEAR", yearfromCal);
-			
+
 			response = query.getResultList();
 		}
 		return response;
@@ -4377,256 +4288,246 @@ public class UserDaoimpl implements UserDao {
 		int cFY = Integer.valueOf(yearfromCal);
 		if (getMonthNumber(MonthText) < 4) {
 			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
-		 yearfromCal = String.valueOf(cFY);
-		    System.out.println("yearfromCal"+yearfromCal);
+			yearfromCal = String.valueOf(cFY);
+			System.out.println("yearfromCal" + yearfromCal);
 		}
 
-		Query getCClist = entityManager.createNativeQuery("select Emailid from ABM_MASTER where EmpCode=:loginId UNION SELECT email_id FROM ER_User_Master WHERE userAccess = 1");
+		Query getCClist = entityManager.createNativeQuery(
+				"select Emailid from ABM_MASTER where EmpCode=:loginId UNION SELECT email_id FROM ER_User_Master WHERE userAccess = 1");
 		Query getName = entityManager.createNativeQuery("select Name from ABM_MASTER where EmpCode=:loginId");
 		getCClist.setParameter("loginId", loginId);
 		getName.setParameter("loginId", loginId);
 		String buyerName = (String) getName.getSingleResult();
 		List<String> getBuyerName = getName.getResultList();
 		List<String> CCList = getCClist.getResultList();
-		//CCList.add("tgo@titan.co.in");
+		// CCList.add("tgo@titan.co.in");
 		CCList.add("nagarajun@titan.co.in");
-		
 
 		try {
 			String finalcc = getAllIndentedCostCenters(yearfromCal, MonthText);
 			finalcc = finalcc.replace("[", "").replace("]", "");
-			
+
 			Object[] keys = payload.keySet().toArray();
-	        Object[] values = payload.values().toArray();
-	        
-	        if (keys.length > 1 && values.length > 1) {
-	            String secondKey = keys[2].toString();
-	            Object vendorsListObject = values[2];
-	            if (vendorsListObject instanceof List) {
-	                // Cast `vendorsListObject` to a list of maps (assuming each vendor is represented by a map)
+			Object[] values = payload.values().toArray();
+
+			if (keys.length > 1 && values.length > 1) {
+				String secondKey = keys[2].toString();
+				Object vendorsListObject = values[2];
+				if (vendorsListObject instanceof List) {
+					// Cast `vendorsListObject` to a list of maps (assuming each vendor is
+					// represented by a map)
 //	                List<Map<String, Object>> vendorsList = (List<Map<String, Object>>) vendorsListObject;
-	                
-	        			// Create headers array including "Sl No", "Material description", "UOM", individual cost centers, and "Total Qty"
-	        			List<String> headersList = new ArrayList<>();
-	        			headersList.add("Sl No");
-	        			headersList.add("Material description");
-	        			headersList.add("UOM");
-	        			headersList.add("Total Qty");
 
-	        			// Convert the list to an array
-	        			Object[] headers = headersList.toArray();
-	        			Map<String, List<Object>> indentData = new HashMap<>();
+					// Create headers array including "Sl No", "Material description", "UOM",
+					// individual cost centers, and "Total Qty"
+					List<String> headersList = new ArrayList<>();
+					headersList.add("Sl No");
+					headersList.add("Material description");
+					headersList.add("UOM");
+					headersList.add("Total Qty");
 
-	        				Workbook workbook = new XSSFWorkbook();
-	        				Sheet sheet = workbook.createSheet("DataTable");
-	        				
-	        				
-	        				
-	        				
+					// Convert the list to an array
+					Object[] headers = headersList.toArray();
+					Map<String, List<Object>> indentData = new HashMap<>();
 
-	        				  // Create a cell style for headers
-	        		        CellStyle headerStyle = workbook.createCellStyle();
-	        		        Font headerFont = workbook.createFont();
-	        		        headerFont.setBold(true);
-	        		        headerFont.setColor(IndexedColors.WHITE.getIndex()); // Set text color to white
-	        		        headerStyle.setFont(headerFont);
-	        		        headerStyle.setAlignment(HorizontalAlignment.CENTER);
-	        		        headerStyle.setFillForegroundColor(IndexedColors.BLUE_GREY.getIndex()); // Set background color
-	        		        headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+					Workbook workbook = new XSSFWorkbook();
+					Sheet sheet = workbook.createSheet("DataTable");
 
-	        				
-	        		     // Get the current date
-	        		        Date currentDate = new Date();
+					// Create a cell style for headers
+					CellStyle headerStyle = workbook.createCellStyle();
+					Font headerFont = workbook.createFont();
+					headerFont.setBold(true);
+					headerFont.setColor(IndexedColors.WHITE.getIndex()); // Set text color to white
+					headerStyle.setFont(headerFont);
+					headerStyle.setAlignment(HorizontalAlignment.CENTER);
+					headerStyle.setFillForegroundColor(IndexedColors.BLUE_GREY.getIndex()); // Set background color
+					headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
-	        		        // Create a SimpleDateFormat object with the desired date format
-	        		        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+					// Get the current date
+					Date currentDate = new Date();
 
-	        		        // Format the current date using the SimpleDateFormat object
-	        		        String formattedDate = sdf.format(currentDate);
+					// Create a SimpleDateFormat object with the desired date format
+					SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
-	        		        
-	        		        
-	        		     // Insert headers into the sheet
-	        		        Row headerRow1 = sheet.createRow(0);
+					// Format the current date using the SimpleDateFormat object
+					String formattedDate = sdf.format(currentDate);
 
-	        		        // Add "STATIONERY REQUIREMENTS 27-03-2024" spanning two cells
-	        		        Cell firstCell = headerRow1.createCell(0);
-	        		        firstCell.setCellValue("STATIONERY REQUIREMENTS " + formattedDate);
-	        		        firstCell.setCellStyle(headerStyle); // Apply header style
-	        		        
-	        		        // Merge the cells
-	        		        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, headers.length - 1));
+					// Insert headers into the sheet
+					Row headerRow1 = sheet.createRow(0);
 
-	        		        // Adjust column width
-	        		        sheet.autoSizeColumn(0); // Auto-size first column width
-	        		        sheet.autoSizeColumn(1); // Auto-size second column width
+					// Add "STATIONERY REQUIREMENTS 27-03-2024" spanning two cells
+					Cell firstCell = headerRow1.createCell(0);
+					firstCell.setCellValue("STATIONERY REQUIREMENTS " + formattedDate);
+					firstCell.setCellStyle(headerStyle); // Apply header style
 
-	        		        
-	        				// Insert headers into the sheet
-	        				
-	        				Row headerRow = sheet.createRow(2);
-	        				for (int i = 0; i < headers.length; i++) {
-	        				    Cell cell = headerRow.createCell(i);
-	        				    cell.setCellValue(String.valueOf(headers[i]));
-	        				}
-	        				
-	        				  // Auto-size columns
-	        		        for (int i = 0; i < headers.length; i++) {
-	        		            sheet.autoSizeColumn(i);
-	        		        }
-	        		        
-	        				// Insert data into the sheet
-	        				int rowNum = 3; // Start from the second row (index 1) after headers
-	        				
-	        				
-	        				
-	        				// Assuming vendorData is a List<Object[]> containing data for each vendor
-	        				// Assuming rowDataList is a List<Object[]> containing the data to be inserted into the sheet
-	        				int serialNumber = 1; // Initialize serial number
-	        				List<List<Object>> vendorsList = (List<List<Object>>) vendorsListObject;
+					// Merge the cells
+					sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, headers.length - 1));
 
-	        				// Initialize an array to store the sum of each numeric column
-	        				double[] columnSum = new double[vendorsList.get(0).size()];
+					// Adjust column width
+					sheet.autoSizeColumn(0); // Auto-size first column width
+					sheet.autoSizeColumn(1); // Auto-size second column width
 
+					// Insert headers into the sheet
 
-	        				for (List<Object> rowData : vendorsList) {
-	        				    Row row = sheet.createRow(rowNum++);
-	        				    int cellNum = 0; // Reset cell number for each row
-	        				    Cell cell = row.createCell(cellNum++); // First cell for serial number
-	        				    cell.setCellValue(serialNumber++); // Insert serial number
-	        				    sheet.autoSizeColumn(cellNum);
-	        				    // Iterate over each cell in the rowData
-	        				    for (Object cellData : rowData) {
-	        				        cell = row.createCell(cellNum++);
-	        				        if (cellData instanceof String) {
-	        				            String cellString = (String) cellData;
-	        				            try {
-	        				                double value = Double.parseDouble(cellString);
-	        				                cell.setCellValue(value);
-	        				                // Accumulate the sum for double values
-	        				                columnSum[cellNum - 2] += value; // Subtract 2 to adjust for the serial number column
-	        				            } catch (NumberFormatException e) {
-	        				                // Handle non-numeric string values
-	        				                cell.setCellValue(cellString); // Set string value directly
-	        				            }
-	        				        } else if (cellData instanceof Double) {
-	        				            double value = (Double) cellData;
-	        				            cell.setCellValue(value);
-	        				            // Accumulate the sum for double values
-	        				            columnSum[cellNum - 2] += value; // Subtract 2 to adjust for the serial number column
-	        				        } else if (cellData instanceof Integer) {
-	        				            int value = (Integer) cellData;
-	        				            cell.setCellValue(value);
-	        				            // Accumulate the sum for integer values
-	        				            columnSum[cellNum - 2] += value; // Subtract 2 to adjust for the serial number column
-	        				        } else {
-	        				            // Handle empty or non-numeric cells
-	        				            cell.setCellValue(""); // Empty cell value
-	        				        }
-	        				    }
-	        				}
-	        				
-	        				// Create the last row for the sums
-	        				Row sumRow = sheet.createRow(rowNum++);
-	        				sumRow.createCell(0);
-    				        Cell sumCell = sumRow.createCell(0);
-	        				 sumCell.setCellValue(""); 
+					Row headerRow = sheet.createRow(2);
+					for (int i = 0; i < headers.length; i++) {
+						Cell cell = headerRow.createCell(i);
+						cell.setCellValue(String.valueOf(headers[i]));
+					}
 
-	        				for (int i = 0; i < columnSum.length; i++) {
-	        				    if (i == 0) {
-	        				        // Skip setting value in the first cell (for the label)
-	        				        sumRow.createCell(i);
-	        				        Cell sumCell1 = sumRow.createCell(i + 1);
-	        				        sumCell1.setCellValue("Total Qty"); 
-	        				    } else {
-	        				        Cell sumCell1 = sumRow.createCell(i +1);
-	        				        if (Double.compare(columnSum[i], 0.0) != 0.0) {
-	        				        	sumCell1.setCellValue(columnSum[i]); // Insert sum for the corresponding column
-	        				        } else {
-	        				        	sumCell1.setCellValue("");
-	        				        }
+					// Auto-size columns
+					for (int i = 0; i < headers.length; i++) {
+						sheet.autoSizeColumn(i);
+					}
+
+					// Insert data into the sheet
+					int rowNum = 3; // Start from the second row (index 1) after headers
+
+					// Assuming vendorData is a List<Object[]> containing data for each vendor
+					// Assuming rowDataList is a List<Object[]> containing the data to be inserted
+					// into the sheet
+					int serialNumber = 1; // Initialize serial number
+					List<List<Object>> vendorsList = (List<List<Object>>) vendorsListObject;
+
+					// Initialize an array to store the sum of each numeric column
+					double[] columnSum = new double[vendorsList.get(0).size()];
+
+					for (List<Object> rowData : vendorsList) {
+						Row row = sheet.createRow(rowNum++);
+						int cellNum = 0; // Reset cell number for each row
+						Cell cell = row.createCell(cellNum++); // First cell for serial number
+						cell.setCellValue(serialNumber++); // Insert serial number
+						sheet.autoSizeColumn(cellNum);
+						// Iterate over each cell in the rowData
+						for (Object cellData : rowData) {
+							cell = row.createCell(cellNum++);
+							if (cellData instanceof String) {
+								String cellString = (String) cellData;
+								try {
+									double value = Double.parseDouble(cellString);
+									cell.setCellValue(value);
+									// Accumulate the sum for double values
+									columnSum[cellNum - 2] += value; // Subtract 2 to adjust for the serial number
+																		// column
+								} catch (NumberFormatException e) {
+									// Handle non-numeric string values
+									cell.setCellValue(cellString); // Set string value directly
+								}
+							} else if (cellData instanceof Double) {
+								double value = (Double) cellData;
+								cell.setCellValue(value);
+								// Accumulate the sum for double values
+								columnSum[cellNum - 2] += value; // Subtract 2 to adjust for the serial number column
+							} else if (cellData instanceof Integer) {
+								int value = (Integer) cellData;
+								cell.setCellValue(value);
+								// Accumulate the sum for integer values
+								columnSum[cellNum - 2] += value; // Subtract 2 to adjust for the serial number column
+							} else {
+								// Handle empty or non-numeric cells
+								cell.setCellValue(""); // Empty cell value
+							}
+						}
+					}
+
+					// Create the last row for the sums
+					Row sumRow = sheet.createRow(rowNum++);
+					sumRow.createCell(0);
+					Cell sumCell = sumRow.createCell(0);
+					sumCell.setCellValue("");
+
+					for (int i = 0; i < columnSum.length; i++) {
+						if (i == 0) {
+							// Skip setting value in the first cell (for the label)
+							sumRow.createCell(i);
+							Cell sumCell1 = sumRow.createCell(i + 1);
+							sumCell1.setCellValue("Total Qty");
+						} else {
+							Cell sumCell1 = sumRow.createCell(i + 1);
+							if (Double.compare(columnSum[i], 0.0) != 0.0) {
+								sumCell1.setCellValue(columnSum[i]); // Insert sum for the corresponding column
+							} else {
+								sumCell1.setCellValue("");
+							}
 //	        				        sumCell1.setCellValue(columnSum[i]); // Insert sum for the corresponding column
-	        				    }
-	        				}
+						}
+					}
 
-	        				
-	        				  // Apply border style only to content
-	        		        CellStyle contentStyle = workbook.createCellStyle();
-	        		        contentStyle.setBorderTop(BorderStyle.THIN);
-	        		        contentStyle.setBorderBottom(BorderStyle.THIN);
-	        		        contentStyle.setBorderLeft(BorderStyle.THIN);
-	        		        contentStyle.setBorderRight(BorderStyle.THIN);
-	        		        for (Row row : sheet) {
-	        		            for (Cell cell : row) {
-	        		                if (cell.getRowIndex() > 0) {
-	        		                    cell.setCellStyle(contentStyle);
-	        		                }
-	        		            }
-	        		        }
+					// Apply border style only to content
+					CellStyle contentStyle = workbook.createCellStyle();
+					contentStyle.setBorderTop(BorderStyle.THIN);
+					contentStyle.setBorderBottom(BorderStyle.THIN);
+					contentStyle.setBorderLeft(BorderStyle.THIN);
+					contentStyle.setBorderRight(BorderStyle.THIN);
+					for (Row row : sheet) {
+						for (Cell cell : row) {
+							if (cell.getRowIndex() > 0) {
+								cell.setCellStyle(contentStyle);
+							}
+						}
+					}
 
-	        		        
-	        		     // Create a SimpleDateFormat object with the desired date format
-	        		        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+					// Create a SimpleDateFormat object with the desired date format
+					SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
 
-	        		        // Format the current date using the SimpleDateFormat object
-	        		        String formattedDate1 = sdf1.format(currentDate);
+					// Format the current date using the SimpleDateFormat object
+					String formattedDate1 = sdf1.format(currentDate);
 
+					File excelFile = File.createTempFile("Stationery_Recipt_" + formattedDate1, ".xlsx");
+					FileOutputStream fileOut = new FileOutputStream(excelFile);
+					workbook.write(fileOut);
+					fileOut.close();
+					String filePath = excelFile.getAbsolutePath();
+					System.out.println("File Path: " + filePath);
 
-	        				File excelFile = File.createTempFile("Stationery_Recipt_"+ formattedDate1, ".xlsx");
-	        				FileOutputStream fileOut = new FileOutputStream(excelFile);
-	        				workbook.write(fileOut);
-	        				fileOut.close();
-	        				String filePath = excelFile.getAbsolutePath();
-	        				System.out.println("File Path: " + filePath);
-	        				
-	        				
-	        				String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
-	        				Properties props = System.getProperties();
-	        				props.put("mail.smtp.host", smtpHostServer);
-	        				props.put("mail.smtp.port", "25");
-	        				Session session = Session.getInstance(props, null);
-	        				System.out.println(session);
-	        				MimeMessage msg = new MimeMessage(session);
-	        				msg.setFrom(
-	        						new InternetAddress("noreply_stationary@titan.co.in", "No Reply-stationary Employee Portal"));
-	        				//msg.setReplyTo(InternetAddress.parse(key, false));
-	        				msg.setSubject(": Receipt and certification of Stationery items for inwarding.");
+					String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
+					Properties props = System.getProperties();
+					props.put("mail.smtp.host", smtpHostServer);
+					props.put("mail.smtp.port", "25");
+					Session session = Session.getInstance(props, null);
+					System.out.println(session);
+					MimeMessage msg = new MimeMessage(session);
+					msg.setFrom(new InternetAddress("noreply_stationary@titan.co.in",
+							"No Reply-stationary Employee Portal"));
+					// msg.setReplyTo(InternetAddress.parse(key, false));
+					msg.setSubject(": Receipt and certification of Stationery items for inwarding.");
 
-	        				MimeMultipart multipart = new MimeMultipart();
+					MimeMultipart multipart = new MimeMultipart();
 
-	        				MimeBodyPart textPart = new MimeBodyPart();
-	        				textPart.setText("Dear Sir / Madam,\n\n" + "Pl. find attached the list of stationery items received and accepted at our end for the current month.\n"
-	        						+ "\nRequest to inward the same and confirm back to us for distributing the stationeries to the respective depts.\n\n"
-	        						+ "Original invoice document will reach you at the earliest.\n\n"
-	        						+ "Inward will happen only if complete items are received at our facility in the same brands and qty. which are ordered. Request to check and validate the same before effecting delivery.\n\n\n"
-	        						+ "Regards,\n\n" + "Distribution team (Tray Mgmt Team).\n");
-	        				multipart.addBodyPart(textPart);
+					MimeBodyPart textPart = new MimeBodyPart();
+					textPart.setText("Dear Sir / Madam,\n\n"
+							+ "Pl. find attached the list of stationery items received and accepted at our end for the current month.\n"
+							+ "\nRequest to inward the same and confirm back to us for distributing the stationeries to the respective depts.\n\n"
+							+ "Original invoice document will reach you at the earliest.\n\n"
+							+ "Inward will happen only if complete items are received at our facility in the same brands and qty. which are ordered. Request to check and validate the same before effecting delivery.\n\n\n"
+							+ "Regards,\n\n" + "Distribution team (Tray Mgmt Team).\n");
+					multipart.addBodyPart(textPart);
 
-	        				System.out.println("Email Body:\n");
-	        				MimeBodyPart excelAttachment = new MimeBodyPart();
-	        				DataSource source = new FileDataSource(excelFile.getAbsolutePath());
-	        				excelAttachment.setDataHandler(new DataHandler(source));
-	        				excelAttachment.setFileName(excelFile.getName());
-	        				multipart.addBodyPart(excelAttachment);
-	        				msg.setContent(multipart);
-	        				msg.setSentDate(new Date());
-	        				  // Adding multiple recipients
+					System.out.println("Email Body:\n");
+					MimeBodyPart excelAttachment = new MimeBodyPart();
+					DataSource source = new FileDataSource(excelFile.getAbsolutePath());
+					excelAttachment.setDataHandler(new DataHandler(source));
+					excelAttachment.setFileName(excelFile.getName());
+					multipart.addBodyPart(excelAttachment);
+					msg.setContent(multipart);
+					msg.setSentDate(new Date());
+					// Adding multiple recipients
 //	        	            for (String email : emailList) {
-	        	                msg.addRecipient(Message.RecipientType.TO, new InternetAddress("murugesan@titan.co.in"));
-	        	                String emailBody = msg.getContent().toString();
+					msg.addRecipient(Message.RecipientType.TO, new InternetAddress("murugesan@titan.co.in"));
+					String emailBody = msg.getContent().toString();
 //	        	            }
-	        	            for (String ccMail : CCList) {
-	        	                msg.addRecipient(Message.RecipientType.CC, new InternetAddress(ccMail));
-	        	            }
-        	              //  msg.addRecipient(Message.RecipientType.BCC, new InternetAddress("nirajprasad@titan.co.in,masinenikrishnasai@titan.co.in,harsha_vardhan@titan.co.in,muralicr@titan.co.in,sanjeevi@titan.co.in"));
+					for (String ccMail : CCList) {
+						msg.addRecipient(Message.RecipientType.CC, new InternetAddress(ccMail));
+					}
+					// msg.addRecipient(Message.RecipientType.BCC, new
+					// InternetAddress("nirajprasad@titan.co.in,masinenikrishnasai@titan.co.in,harsha_vardhan@titan.co.in,muralicr@titan.co.in,sanjeevi@titan.co.in"));
 
-	        	          
-	        				Transport.send(msg);
+					Transport.send(msg);
 
 //	                }
-	            }
-	        }
-			
+				}
+			}
+
 			r = "Email Sent Successfully!";
 
 		}
@@ -4913,19 +4814,20 @@ public class UserDaoimpl implements UserDao {
 		SimpleDateFormat year_Date = new SimpleDateFormat("YYYY");
 		String yearfromCal = year_Date.format(cal.getTime());
 
-		//SimpleDateFormat month_Date = new SimpleDateFormat("MM");
+		// SimpleDateFormat month_Date = new SimpleDateFormat("MM");
 		// String monthFromCal = month_Date.format(cal.getTime());
-		//String monthFromCal = String.format("%02d", Integer.parseInt(month_Date.format(cal.getTime())));
+		// String monthFromCal = String.format("%02d",
+		// Integer.parseInt(month_Date.format(cal.getTime())));
 
 		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
 		String MonthText = month.format(cal.getTime());
 		int cFY = Integer.valueOf(yearfromCal);
 		if (getMonthNumber(MonthText) < 4) {
 			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
-		 yearfromCal = String.valueOf(cFY);
-		    System.out.println("yearfromCal"+yearfromCal);
+			yearfromCal = String.valueOf(cFY);
+			System.out.println("yearfromCal" + yearfromCal);
 		}
-		
+
 		List<String> allheadrers2 = getAllHeadersList(yearfromCal, MonthText);
 
 		String yearfromCal1 = year_Date.format(cal.getTime());
@@ -4943,17 +4845,16 @@ public class UserDaoimpl implements UserDao {
 		allheadrers.add("Unit Price(Rs)");
 		allheadrers.add("Stock At TMT (QTY)");
 		allheadrers.add("STK Val(Rs)");
-		
 
 		try {
 			Query getemailID = entityManager.createNativeQuery("select DISTINCT emailID from PRODUCT_MASTER ");
 			List<String> emailIDPoduct = (List<String>) getemailID.getResultList();
 
-			List<Object> BuyerList = getBuyerIndentList(yearfromCal, MonthText); // List of arrays, each array represents a row
-			List<Object> footerList = getBuyerFooterList(yearfromCal, MonthText,yearfromCal1);
+			List<Object> BuyerList = getBuyerIndentList(yearfromCal, MonthText); // List of arrays, each array
+																					// represents a row
+			List<Object> footerList = getBuyerFooterList(yearfromCal, MonthText, yearfromCal1);
 			// Each list represents a row
-			
-			
+
 			Workbook workbook = new XSSFWorkbook();
 			Sheet sheet = workbook.createSheet("Buyer");
 			Row headerRow = sheet.createRow(0);
@@ -4963,58 +4864,57 @@ public class UserDaoimpl implements UserDao {
 				cell.setCellValue(allheadrers.get(colIdx));
 			}
 
-			 int rowIndex = 1; // Start from the second row
-	            for (Object obj : BuyerList) {
-	                Row row = sheet.createRow(rowIndex++);
-	                Object[] rowData = (Object[]) obj;
-	                for (int j = 0; j < rowData.length; j++) {
-	                    Cell cell = row.createCell(j);
-	                    // Replace null values with 0
-	                    String cellValue = rowData[j] != null ? String.valueOf(rowData[j]) : "0";
-	                    cell.setCellValue(cellValue);
-	                }
-	            }
+			int rowIndex = 1; // Start from the second row
+			for (Object obj : BuyerList) {
+				Row row = sheet.createRow(rowIndex++);
+				Object[] rowData = (Object[]) obj;
+				for (int j = 0; j < rowData.length; j++) {
+					Cell cell = row.createCell(j);
+					// Replace null values with 0
+					String cellValue = rowData[j] != null ? String.valueOf(rowData[j]) : "0";
+					cell.setCellValue(cellValue);
+				}
+			}
 
-	            // Insert an empty row between buyer data and footer
-	            sheet.createRow(rowIndex++);
+			// Insert an empty row between buyer data and footer
+			sheet.createRow(rowIndex++);
 
-	         // Insert footer data
-	            for (Object obj : footerList) {
-	                Row row = sheet.createRow(rowIndex++);
-	                Object[] rowData = (Object[]) obj;
-	                
-	                // Create a new array with increased size
-	                Object[] modifiedRowData = new Object[rowData.length + 2];
-	                
-	                // Copy values from original rowData to modifiedRowData
-	                System.arraycopy(rowData, 0, modifiedRowData, 0, 1); // Copy the first value
-	                
-	                // Insert two empty strings
-	                modifiedRowData[1] = ""; // Empty string
-	                modifiedRowData[2] = ""; // Empty string
-	                
-	                // Copy the rest of the values
-	                System.arraycopy(rowData, 1, modifiedRowData, 3, rowData.length - 1);
+			// Insert footer data
+			for (Object obj : footerList) {
+				Row row = sheet.createRow(rowIndex++);
+				Object[] rowData = (Object[]) obj;
 
-	                // Populate the cells
-	                for (int j = 0; j < modifiedRowData.length; j++) {
-	                    Cell cell = row.createCell(j);
-	                    // Replace null values with 0
-	                    String cellValue = modifiedRowData[j] != null ? String.valueOf(modifiedRowData[j]) : "0";
-	                    cell.setCellValue(cellValue);
-	                }
-	            }
+				// Create a new array with increased size
+				Object[] modifiedRowData = new Object[rowData.length + 2];
+
+				// Copy values from original rowData to modifiedRowData
+				System.arraycopy(rowData, 0, modifiedRowData, 0, 1); // Copy the first value
+
+				// Insert two empty strings
+				modifiedRowData[1] = ""; // Empty string
+				modifiedRowData[2] = ""; // Empty string
+
+				// Copy the rest of the values
+				System.arraycopy(rowData, 1, modifiedRowData, 3, rowData.length - 1);
+
+				// Populate the cells
+				for (int j = 0; j < modifiedRowData.length; j++) {
+					Cell cell = row.createCell(j);
+					// Replace null values with 0
+					String cellValue = modifiedRowData[j] != null ? String.valueOf(modifiedRowData[j]) : "0";
+					cell.setCellValue(cellValue);
+				}
+			}
 
 			File excelFile = File.createTempFile("all indenter data", ".xlsx");
 			FileOutputStream fileOut = new FileOutputStream(excelFile);
 			workbook.write(fileOut);
 			fileOut.close();
-			
+
 			String filePath = excelFile.getAbsolutePath();
 			System.out.println("File Path: " + filePath);
-			
 
-			//String smtpHostServer = "smtp-relay.gmail.com";
+			// String smtpHostServer = "smtp-relay.gmail.com";
 			String smtpHostServer = "titan-co-in.mail.protection.outlook.com";
 
 			Properties props = System.getProperties();
@@ -5045,7 +4945,7 @@ public class UserDaoimpl implements UserDao {
 				multipart.addBodyPart(excelAttachment);
 				msg.setContent(multipart);
 				msg.setSentDate(new Date());
-				 msg.addRecipient(Message.RecipientType.TO, new InternetAddress("muralicr@titan.co.in"));
+				msg.addRecipient(Message.RecipientType.TO, new InternetAddress("muralicr@titan.co.in"));
 //				msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail, false));
 				Transport.send(msg);
 			}
@@ -5531,12 +5431,12 @@ public class UserDaoimpl implements UserDao {
 		}
 
 	}
-	
+
 	@Override
 	public String ccCreationSave(String CCID, String Year, String COSTCENTERDESC, String GL, String GLDESC,
-			String LOCATION, String Department,String CCowner, String YEARLYBUDGET, String loginId,String COSTEMAIL) {
+			String LOCATION, String Department, String CCowner, String YEARLYBUDGET, String loginId, String COSTEMAIL) {
 		String permitNumber = "";
-		System.out.println("ccowner"+CCowner);
+		System.out.println("ccowner" + CCowner);
 		try {
 
 			System.out.println("Product is already available." + CCID);
@@ -5547,65 +5447,39 @@ public class UserDaoimpl implements UserDao {
 			labelExistanceQuery.setParameter("Year", Year);
 			int isExistance = (int) labelExistanceQuery.getSingleResult();
 
-			
 			/**
-			 * Here we are validating whether the cost center is already available in indent manager or not.
+			 * Here we are validating whether the cost center is already available in indent
+			 * manager or not.
 			 */
-			
+
 			String ccidExistanceSQL = "SELECT COUNT(*) FROM INDENT_MANAGER WHERE EmpCode=:CCID";
 			Query ccidExistanceQuery = entityManager.createNativeQuery(ccidExistanceSQL);
 			ccidExistanceQuery.setParameter("CCID", CCID);
 			int isccidExistance = (int) ccidExistanceQuery.getSingleResult();
-			
+
 			if (isccidExistance == 0) {
 				Query insetIntoIndentManager = entityManager.createNativeQuery("INSERT INTO INDENT_MANAGER (EmpCode,\n"
-						+ "    Password,\n"
-						+ "    EmpName,\n"
-						+ "    StoreCode,\n"
-						+ "    MobileNumber,\n"
-						+ "    DateOfJoin,\n"
-						+ "    dateofleaving,\n"
-						+ "    isactive,\n"
-						+ "    changedBy,\n"
-						+ "    Changedon,\n"
-						+ "    CreatedBY,\n"
-						+ "    CreatedOn,\n"
-						+ "    LMSID,\n"
-						+ "    Email,\n"
-						+ "    abm,\n"
-						+ "    region\n"
-						+ ")\n"
-						+ "VALUES (\n"
-						+ "    :EmpCode,\n"
-						+ "    :Password,\n"
-						+ "    :EmpName,\n"
-						+ "    :StoreCode,\n"
-						+ "    :MobileNumber,\n"
-						+ "    NULL,\n"
-						+ "    NULL,\n"
-						+ "    1, \n"
-						+ "    :CreatedBy,\n"
-						+ "    NULL,\n"
-						+ "    :CreatedBy,\n"
-						+ "    :CreatedOn,\n"
-						+ "    :CCID,\n"
-						+ "    :CostEmail,\n"
-						+ "    NULL,\n"
-						+ "    :region\n"
+						+ "    Password,\n" + "    EmpName,\n" + "    StoreCode,\n" + "    MobileNumber,\n"
+						+ "    DateOfJoin,\n" + "    dateofleaving,\n" + "    isactive,\n" + "    changedBy,\n"
+						+ "    Changedon,\n" + "    CreatedBY,\n" + "    CreatedOn,\n" + "    LMSID,\n" + "    Email,\n"
+						+ "    abm,\n" + "    region\n" + ")\n" + "VALUES (\n" + "    :EmpCode,\n" + "    :Password,\n"
+						+ "    :EmpName,\n" + "    :StoreCode,\n" + "    :MobileNumber,\n" + "    NULL,\n"
+						+ "    NULL,\n" + "    1, \n" + "    :CreatedBy,\n" + "    NULL,\n" + "    :CreatedBy,\n"
+						+ "    :CreatedOn,\n" + "    :CCID,\n" + "    :CostEmail,\n" + "    NULL,\n" + "    :region\n"
 						+ ")");
 				insetIntoIndentManager.setParameter("CCID", CCID);
 				insetIntoIndentManager.setParameter("EmpCode", CCID);
 				insetIntoIndentManager.setParameter("Password", "GH7Yz0xddaPTsXa01bcc4w==");
-				insetIntoIndentManager.setParameter("EmpName",CCowner);
-				insetIntoIndentManager.setParameter("StoreCode",Department);
-				insetIntoIndentManager.setParameter("MobileNumber",null);
-				//insetIntoIndentManager.setParameter("MobileNumber",null);
+				insetIntoIndentManager.setParameter("EmpName", CCowner);
+				insetIntoIndentManager.setParameter("StoreCode", Department);
+				insetIntoIndentManager.setParameter("MobileNumber", null);
+				// insetIntoIndentManager.setParameter("MobileNumber",null);
 				insetIntoIndentManager.setParameter("CreatedBy", loginId);
 				insetIntoIndentManager.setParameter("CreatedOn", new Date());
 				insetIntoIndentManager.setParameter("CostEmail", COSTEMAIL);
 				insetIntoIndentManager.setParameter("region", "Indent Manager");
 				insetIntoIndentManager.executeUpdate();
-			}	
+			}
 			if (isExistance != 0) {
 				return "cost center : " + CCID + " is already available for this year : " + Year;
 			} else {
@@ -5646,12 +5520,11 @@ public class UserDaoimpl implements UserDao {
 
 	}
 
-	
-	  public static int getMonthNumber(String monthName) {
-	        Month month = Month.valueOf(monthName.toUpperCase());
-	        return month.getValue();
-	    }
-	  
+	public static int getMonthNumber(String monthName) {
+		Month month = Month.valueOf(monthName.toUpperCase());
+		return month.getValue();
+	}
+
 	@Override
 	public String poEntryCreationSave(String Year, String Month, String CostCenter, String PoAmount, String loginId) {
 		try {
@@ -5677,8 +5550,8 @@ public class UserDaoimpl implements UserDao {
 				System.out.println("Product is already Month after available." + CostCenter);
 				insertInitiatePoEntryData.setParameter("CreatedBy", loginId);
 				insertInitiatePoEntryData.setParameter("CreatedOn", new Date());
-			    int monthNumber = getMonthNumber(Month);
-			    insertInitiatePoEntryData.setParameter("MONTHNUMBER", monthNumber);
+				int monthNumber = getMonthNumber(Month);
+				insertInitiatePoEntryData.setParameter("MONTHNUMBER", monthNumber);
 				int insertInitiatePoEntryStatus = 0;
 				insertInitiatePoEntryStatus = insertInitiatePoEntryData.executeUpdate();
 				return "Budget created sucessfully";
@@ -5825,8 +5698,7 @@ public class UserDaoimpl implements UserDao {
 			}
 			specalChar = Validations.validation(productMasterbean.getPrice());
 			if (specalChar) {
-				return messBuilder
-						.append("price " + productMasterbean.getPrice() + " column has invalid character.");
+				return messBuilder.append("price " + productMasterbean.getPrice() + " column has invalid character.");
 			}
 
 			specalChar = Validations.validation(productMasterbean.getUOM());
@@ -5840,30 +5712,30 @@ public class UserDaoimpl implements UserDao {
 			}
 
 			boolean isproductDuplicated = validateDuplicationforProduct(productMasterbean.getProductid());
-	        if (isproductDuplicated) {
-	            return messBuilder.append(productMasterbean.getProductid() + " is already available");
-	        }
-			
+			if (isproductDuplicated) {
+				return messBuilder.append(productMasterbean.getProductid() + " is already available");
+			}
+
 		}
 		messBuilder.append(insertProductMasterData(abmDetailList, loginId));
 
 		return messBuilder;
 	}
-	
-	
+
 	/***
 	 * This method is used to check the duplicate enntries in excel sheet.
+	 * 
 	 * @param month
 	 * @param year
 	 * @param CCid
 	 * @return
 	 */
 	private boolean validateDuplicationforProduct(String product_number) {
-	    String empCodeExistenceSQL = "select COUNT(*) from PRODUCT_MASTER where product_number =:product_number";
-	    Query empCodeExistenceQuery = entityManager.createNativeQuery(empCodeExistenceSQL);
-	    empCodeExistenceQuery.setParameter("product_number",product_number );
-	    int empCodeCount = ((Number) empCodeExistenceQuery.getSingleResult()).intValue();
-	    return empCodeCount > 0;
+		String empCodeExistenceSQL = "select COUNT(*) from PRODUCT_MASTER where product_number =:product_number";
+		Query empCodeExistenceQuery = entityManager.createNativeQuery(empCodeExistenceSQL);
+		empCodeExistenceQuery.setParameter("product_number", product_number);
+		int empCodeCount = ((Number) empCodeExistenceQuery.getSingleResult()).intValue();
+		return empCodeCount > 0;
 	}
 
 	private String insertProductMasterData(List<productMasterbean> abmDetailList, String loginId) {
@@ -5872,7 +5744,6 @@ public class UserDaoimpl implements UserDao {
 
 			for (int j = 0; j < abmDetailList.size(); j++) {
 				productMasterbean abmUserMaster = abmDetailList.get(j);
-				
 
 				String getcateId = "SELECT CATORDERS FROM PRODUCT_MASTER WHERE CATEGORY=:Category";
 				Query cateId = entityManager.createNativeQuery(getcateId);
@@ -5946,8 +5817,7 @@ public class UserDaoimpl implements UserDao {
 		}
 		return getPoEntryList;
 	}
-	
-	
+
 	/**
 	 * @author Murali chari - 22-11-2023 Used by excel poentry master upload
 	 */
@@ -5959,82 +5829,80 @@ public class UserDaoimpl implements UserDao {
 		for (Iterator iterator = PoEntryBeanList.iterator(); iterator.hasNext();) {
 			PoEntryBean poEntryBean = (PoEntryBean) iterator.next();
 			boolean specalChar = Validations.validation(poEntryBean.getCCID());
-			
+
 			if (specalChar) {
-				return messBuilder
-						.append("Cost centre " + poEntryBean.getCCID() + "  column has invalid character.");
+				return messBuilder.append("Cost centre " + poEntryBean.getCCID() + "  column has invalid character.");
 			}
-			
-			
+
 			specalChar = Validations.validation(poEntryBean.getYear());
 			if (specalChar) {
 				return messBuilder.append("Year " + poEntryBean.getYear() + "  column has invalid character.");
 			}
-			
-			
+
 			specalChar = Validations.validation(poEntryBean.getPOAmount());
 			if (specalChar) {
 				return messBuilder.append("GL " + poEntryBean.getPOAmount() + " column has invalid character.");
 			}
-			
-			
+
 			specalChar = Validations.validation(poEntryBean.getMonth());
 			if (specalChar) {
-				return messBuilder.append(
-						"GLDescription " + poEntryBean.getMonth() + " column has invalid character.");
+				return messBuilder.append("GLDescription " + poEntryBean.getMonth() + " column has invalid character.");
 			}
-			
-			boolean empCodeExists = validateDuplication(poEntryBean.getMonth(), poEntryBean.getYear(), poEntryBean.getCCID());
-	        if (empCodeExists) {
-	            return messBuilder.append(poEntryBean.getCCID() + "is already created for the month"+ poEntryBean.getMonth() + " and for the year"+poEntryBean.getYear()+"<br>");
-	        }
-	        boolean isCCICExistsInBudgetmaster = isCCICExistsInBudgetmaster( poEntryBean.getCCID());
-	        if (!isCCICExistsInBudgetmaster) {
-	            return messBuilder.append("The Cost Center "+poEntryBean.getCCID() + " is not Created");
-	        }
+
+			boolean empCodeExists = validateDuplication(poEntryBean.getMonth(), poEntryBean.getYear(),
+					poEntryBean.getCCID());
+			if (empCodeExists) {
+				return messBuilder.append(poEntryBean.getCCID() + "is already created for the month"
+						+ poEntryBean.getMonth() + " and for the year" + poEntryBean.getYear() + "<br>");
+			}
+			boolean isCCICExistsInBudgetmaster = isCCICExistsInBudgetmaster(poEntryBean.getCCID());
+			if (!isCCICExistsInBudgetmaster) {
+				return messBuilder.append("The Cost Center " + poEntryBean.getCCID() + " is not Created");
+			}
 		}
 		messBuilder.append(insertPoEntryData(PoEntryBeanList, loginId));
 
 		return messBuilder;
 	}
-	
+
 	/***
 	 * This method is used to check the duplicate enntries in excel sheet.
+	 * 
 	 * @param month
 	 * @param year
 	 * @param CCid
 	 * @return
 	 */
-	private boolean validateDuplication(String month,String year, String CCid) {
-	    String empCodeExistenceSQL = "select COUNT(*) from PO_Entry where Year=:year and COST_CENTER=:ccid and MONTH=:month";
-	    Query empCodeExistenceQuery = entityManager.createNativeQuery(empCodeExistenceSQL);
-	    empCodeExistenceQuery.setParameter("year",year );
-	    empCodeExistenceQuery.setParameter("ccid", CCid);
-	    empCodeExistenceQuery.setParameter("month", month);
-	    int empCodeCount = ((Number) empCodeExistenceQuery.getSingleResult()).intValue();
-	    return empCodeCount > 0;
+	private boolean validateDuplication(String month, String year, String CCid) {
+		String empCodeExistenceSQL = "select COUNT(*) from PO_Entry where Year=:year and COST_CENTER=:ccid and MONTH=:month";
+		Query empCodeExistenceQuery = entityManager.createNativeQuery(empCodeExistenceSQL);
+		empCodeExistenceQuery.setParameter("year", year);
+		empCodeExistenceQuery.setParameter("ccid", CCid);
+		empCodeExistenceQuery.setParameter("month", month);
+		int empCodeCount = ((Number) empCodeExistenceQuery.getSingleResult()).intValue();
+		return empCodeCount > 0;
 	}
-	
+
 	/**
 	 * THis method is used to check the whether cost center is valid or not.
+	 * 
 	 * @param CCid
 	 * @return
 	 */
 	private boolean isCCICExistsInBudgetmaster(String CCid) {
-	    try {
-	        String emailExistenceSQL = "select COUNT(*) from BUDGET_MASTER where CCID=:ccid";
-	        Query emailExistenceQuery = entityManager.createNativeQuery(emailExistenceSQL);
-	        emailExistenceQuery.setParameter("ccid", CCid);
+		try {
+			String emailExistenceSQL = "select COUNT(*) from BUDGET_MASTER where CCID=:ccid";
+			Query emailExistenceQuery = entityManager.createNativeQuery(emailExistenceSQL);
+			emailExistenceQuery.setParameter("ccid", CCid);
 
- 
-	        int count = ((Number) emailExistenceQuery.getSingleResult()).intValue();
-	        return count > 0;
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return false;
-	    }
+			int count = ((Number) emailExistenceQuery.getSingleResult()).intValue();
+			return count > 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-	
+
 	/**
 	 * Used by excel PoEntry upload
 	 * 
@@ -6053,10 +5921,11 @@ public class UserDaoimpl implements UserDao {
 				// String animals_list[] = animals.split(",");
 				// String animal1 = animals_list[0];
 				// System.out.println("array" + animal1);
-				System.out.println("arrayeeee" + poEntryMaster.getYear() + poEntryMaster.getMonth() + poEntryMaster.getCCID());
+				System.out.println(
+						"arrayeeee" + poEntryMaster.getYear() + poEntryMaster.getMonth() + poEntryMaster.getCCID());
 				Query insertPoEntry = entityManager.createNativeQuery(
 						"Insert Into PO_Entry (Year,cost_Center,Month,poamount,CreatedBy,CreatedOn,monthnumber)\n"
-						+ "VALUES(:Year,:CCID,:MONTH,:POAMOUNT,:CreatedBy,:CreatedOn,:monthNumner)");
+								+ "VALUES(:Year,:CCID,:MONTH,:POAMOUNT,:CreatedBy,:CreatedOn,:monthNumner)");
 				insertPoEntry.setParameter("CCID", poEntryMaster.getCCID());
 				insertPoEntry.setParameter("Year", poEntryMaster.getYear());
 				insertPoEntry.setParameter("POAMOUNT", poEntryMaster.getPOAmount());
@@ -6078,14 +5947,14 @@ public class UserDaoimpl implements UserDao {
 		}
 		return response;
 	}
-	
+
 	@Override
 	public String productValidation(String ProductID, String loginId) {
 		String permitNumber = "";
 		try {
 			String labelExistanceSQL = "SELECT COUNT(*) FROM PRODUCT_MASTER WHERE PRODUCT_NUMBER=:ProductID";
 			Query labelExistanceQuery = entityManager.createNativeQuery(labelExistanceSQL);
-  			labelExistanceQuery.setParameter("ProductID", ProductID);
+			labelExistanceQuery.setParameter("ProductID", ProductID);
 			int isExistance = (int) labelExistanceQuery.getSingleResult();
 			if (isExistance != 0) {
 				return "Product is already available.";
@@ -6096,7 +5965,7 @@ public class UserDaoimpl implements UserDao {
 		}
 		return "product is not available";
 	}
-	
+
 	@Override
 	public String ccValidation(String CCID, String loginId) {
 		String permitNumber = "";
@@ -6107,8 +5976,8 @@ public class UserDaoimpl implements UserDao {
 		try {
 			String labelExistanceSQL = "SELECT COUNT(*) FROM BUDGET_MASTER WHERE CCID=:CCID and year=:YEAR";
 			Query labelExistanceQuery = entityManager.createNativeQuery(labelExistanceSQL);
-  			labelExistanceQuery.setParameter("CCID", CCID);
-  			labelExistanceQuery.setParameter("YEAR", cFY);
+			labelExistanceQuery.setParameter("CCID", CCID);
+			labelExistanceQuery.setParameter("YEAR", cFY);
 			int isExistance = (int) labelExistanceQuery.getSingleResult();
 			if (isExistance != 0) {
 				return "CCID is already available.";
@@ -6119,8 +5988,7 @@ public class UserDaoimpl implements UserDao {
 		}
 		return "CCID is not available";
 	}
-	
-	
+
 	/**
 	 * @author 832044_CNST4 murali chari.
 	 */
@@ -6130,15 +5998,14 @@ public class UserDaoimpl implements UserDao {
 
 		List<Object> getDesignationDetails;
 
-Calendar cal = Calendar.getInstance();
+		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat year_Date = new SimpleDateFormat("YYYY");
 		String yearfromCal = year_Date.format(cal.getTime());
 
 		int cFY = Integer.valueOf(yearfromCal);
-		Query selectQuery = entityManager.createNativeQuery("SELECT CCID "
-				+ "    FROM BUDGET_MASTER \n");
-			//	+ "    WHERE year=:YEAR and (BUDVALUERSL = '' OR BUDVALUERSL IS NULL)");
-	//	selectQuery.setParameter("YEAR", cFY);
+		Query selectQuery = entityManager.createNativeQuery("SELECT CCID " + "    FROM BUDGET_MASTER \n");
+		// + " WHERE year=:YEAR and (BUDVALUERSL = '' OR BUDVALUERSL IS NULL)");
+		// selectQuery.setParameter("YEAR", cFY);
 		try {
 			getDesignationDetails = selectQuery.getResultList();
 		} catch (HibernateException e) {
@@ -6148,7 +6015,7 @@ Calendar cal = Calendar.getInstance();
 		}
 		return getDesignationDetails;
 	}
-	
+
 	@Override
 	public List<Object> getBuyerIndentListForvendor(String Year, String Month) {
 		Calendar cal = Calendar.getInstance();
@@ -6164,8 +6031,8 @@ Calendar cal = Calendar.getInstance();
 		int cFY = Integer.valueOf(yearfromCal);
 		if (getMonthNumber(MonthText) < 4) {
 			cFY = cFY - 1; // If the month is before April, subtract 1 from the year
-		 yearfromCal = String.valueOf(cFY);
-		    System.out.println("yearfromCal"+yearfromCal+MonthText);
+			yearfromCal = String.valueOf(cFY);
+			System.out.println("yearfromCal" + yearfromCal + MonthText);
 		}
 		String finalcc = getAllIndentedCostCenters(yearfromCal, Month);
 
@@ -6173,19 +6040,15 @@ Calendar cal = Calendar.getInstance();
 		if (finalcc.length() == 2) {
 			return getAllUserDetails;
 		}
-		Query getresultlist = entityManager.createNativeQuery(
-				"sELECT \n"
+		Query getresultlist = entityManager.createNativeQuery("sELECT \n"
 				+ " ROW_NUMBER() OVER (ORDER BY PROD_NAME DESC) AS 'Sl No',\n"
-				+ "PROD_NAME as 'Material description', UOM,"+ finalcc +",TOTAL_USER_QTY as 'TOTAL QTY'\n"
+				+ "PROD_NAME as 'Material description', UOM," + finalcc + ",TOTAL_USER_QTY as 'TOTAL QTY'\n"
 				+ "		FROM (\n"
 				+ "		SELECT PROD_NAME, UOM, COST_CENTER, ISNULL(BUYER_QTY , 0) AS cost_value,ucp,TOTAL_USER_QTY\n"
-				+ "		FROM PRODUCT_MASTER pm \n"
-				+ "		left join Indent_Transaction it on pm.PROD_NAME=it.ITEM\n"
+				+ "		FROM PRODUCT_MASTER pm \n" + "		left join Indent_Transaction it on pm.PROD_NAME=it.ITEM\n"
 				+ "		WHERE COST_CENTER IS NOT NULL and month=:Month and year=:Year\n"
-				+ "		GROUP BY PROD_NAME, UOM, COST_CENTER,BUYER_QTY,ucp,TOTAL_USER_QTY\n"
-				+ "		) AS src\n"
-				+ "		PIVOT (MAX(cost_value)\n"
-				+ "		FOR COST_CENTER IN ("+ finalcc+")) AS pivottable\n"
+				+ "		GROUP BY PROD_NAME, UOM, COST_CENTER,BUYER_QTY,ucp,TOTAL_USER_QTY\n" + "		) AS src\n"
+				+ "		PIVOT (MAX(cost_value)\n" + "		FOR COST_CENTER IN (" + finalcc + ")) AS pivottable\n"
 				+ "		order by PROD_NAME desc");
 
 		getresultlist.setParameter("Month", Month);
@@ -6201,8 +6064,7 @@ Calendar cal = Calendar.getInstance();
 		}
 		return getAllUserDetails;
 	}
-	
-	
+
 	@Override
 	public List<String> getAllHeadersList(String Year, String Month) {
 
@@ -6221,8 +6083,7 @@ Calendar cal = Calendar.getInstance();
 		}
 		return getAllUserDetails;
 	}
-	
-	
+
 	/**
 	 * Gokul Get budget details
 	 */
@@ -6237,11 +6098,12 @@ Calendar cal = Calendar.getInstance();
 		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
 		String MonthText = month.format(cal.getTime());
 		int cFY = Integer.parseInt(yearfromCal);
-		
-		Query selectQuery = entityManager.createNativeQuery("select holiday_date,Holiday_day from Holiday_Master where Year =:Year and Holidaymonth =:monthNumner");
+
+		Query selectQuery = entityManager.createNativeQuery(
+				"select holiday_date,Holiday_day from Holiday_Master where Year =:Year and Holidaymonth =:monthNumner");
 		selectQuery.setParameter("monthNumner", getMonthNumber(MonthText));
 		selectQuery.setParameter("Year", cFY);
-		
+
 		try {
 			getBudgetDetails = selectQuery.getResultList();
 		} catch (HibernateException e) {
@@ -6266,11 +6128,10 @@ Calendar cal = Calendar.getInstance();
 		SimpleDateFormat month = new SimpleDateFormat("MMMMMMMMMM");
 		String MonthText = month.format(cal.getTime());
 		int cFY = Integer.parseInt(yearfromCal);
-		
-		Query selectQuery = entityManager.createNativeQuery("\n"
-				+ " SELECT value\n"
-				+ "FROM ISCM_ACCESS  where allow = 'portalBlcokingMechanism';");
-			try {
+
+		Query selectQuery = entityManager.createNativeQuery(
+				"\n" + " SELECT value\n" + "FROM ISCM_ACCESS  where allow = 'portalBlcokingMechanism';");
+		try {
 			getBudgetDetails = selectQuery.getResultList();
 		} catch (HibernateException e) {
 
@@ -6279,59 +6140,60 @@ Calendar cal = Calendar.getInstance();
 		}
 		return getBudgetDetails;
 	}
-	
+
 	@Override
 	public MasterData GetMasterData(MonthlyDataFilter filter) {
 		// TODO Auto-generated method stub
 		MasterData result = getDataforMaster(filter);
-		
+
 		return result;
-		
+
 	}
-	
+
 	private MasterData getDataforMaster(MonthlyDataFilter filter) {
-		MasterData data=new MasterData();
+		MasterData data = new MasterData();
 		List<Brand> brandName = selectBrandforMaster();
-		List<Region>regionName=selectRegionforMaster();
-		List<RSName>rsName=selectRsNameForMaster();
-		List<ABMName>ABMName=selectABMNameForMaster();
-		
+		List<Region> regionName = selectRegionforMaster();
+		List<RSName> rsName = selectRsNameForMaster();
+		List<ABMName> ABMName = selectABMNameForMaster();
+
 		data.setBrand(brandName);
-		//data.setRegion(regionName);
+		// data.setRegion(regionName);
 		data.setRsName(rsName);
 		data.setAbmName(ABMName);
-		if(!filter.getRegionList().isEmpty()|| !filter.getAbmName().isEmpty()) {
-			MasterData filterData= getFilterData(filter);
+		if (!filter.getRegionList().isEmpty() || !filter.getAbmName().isEmpty()) {
+			MasterData filterData = getFilterData(filter);
 			return filterData;
 		}
-		
+
 		return data;
-		
+
 	}
+
 	private List<Brand> selectBrandforMaster() {
-		List<Brand> brandName= null;
+		List<Brand> brandName = null;
 		String checkSql = "SELECT * FROM MBRBrand order by BrandName";
 		try {
-		Query checkQuery =  entityManager.createNativeQuery(checkSql);
-		brandName=checkQuery.getResultList();
-		}
-		catch(Exception e) {
+			Query checkQuery = entityManager.createNativeQuery(checkSql);
+			brandName = checkQuery.getResultList();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return brandName;
-		
+
 	}
-	
+
 	private List<Region> selectRegionforMaster() {
-		List<Region> regionName= null;
+		List<Region> regionName = null;
 		String checkSql = "select distinct (Region) from MBROrders;";
-		Query checkQuery =  entityManager.createNativeQuery(checkSql);
-		regionName=checkQuery.getResultList();
+		Query checkQuery = entityManager.createNativeQuery(checkSql);
+		regionName = checkQuery.getResultList();
 		return regionName;
-		
+
 	}
-	private List<RSName>selectRsNameForMaster(){
-		List<RSName> rsName= null;
+
+	private List<RSName> selectRsNameForMaster() {
+		List<RSName> rsName = null;
 //		String checkSql = "\r\n"
 //				+ "SELECT DISTINCT \r\n"
 //				+ "    MBROrders.RSName, \r\n"
@@ -6354,100 +6216,100 @@ Calendar cal = Calendar.getInstance();
 //				+ "LEFT JOIN \r\n"
 //				+ "    MBRUsers AS ABMKAMUser\r\n"
 //				+ "    ON MBROrders.ABMKAM = ABMKAMUser.UserName;";
-		
+
 		String checkSql = "SELECT Name, UserName, Region from MBRUsers where Desig_Id = 5 order by Name";
-		
-		Query checkQuery =  entityManager.createNativeQuery(checkSql);
-		rsName=checkQuery.getResultList();
+
+		Query checkQuery = entityManager.createNativeQuery(checkSql);
+		rsName = checkQuery.getResultList();
 		return rsName;
-		
+
 	}
 
-	private List<ABMName>selectABMNameForMaster(){
-		List<ABMName> ABMName= null;
+	private List<ABMName> selectABMNameForMaster() {
+		List<ABMName> ABMName = null;
 		String checkSql = "select UserName, Name, Region from MBRUsers (nolock) where Desig_Id=7 or Desig_Id=6 order by Name;";
-		Query checkQuery =  entityManager.createNativeQuery(checkSql);
-		ABMName=checkQuery.getResultList();
+		Query checkQuery = entityManager.createNativeQuery(checkSql);
+		ABMName = checkQuery.getResultList();
 		return ABMName;
 	}
+
 	@Override
 	public List<OutputForMontlyFilter> MonthlyTrend(MonthlyDataFilter filter) {
 		// TODO Auto-generated method stub
-		List<OutputForMontlyFilter> result=new ArrayList<>();
-		result =getDataForMonthlyTrend(filter);
+		List<OutputForMontlyFilter> result = new ArrayList<>();
+		result = getDataForMonthlyTrend(filter);
 		return result;
-		
+
 	}
-	
-	
+
 	private List<OutputForMontlyFilter> getDataForMonthlyTrend(MonthlyDataFilter filter) {
-	    List<OutputForMontlyFilter> filteredData = new ArrayList<>();
-	    
-	    // Stored Procedure call
-	    String storedProcedureCall = "EXEC GetOrderSummary @RegionList = :regionList, " +
-	                                 "@StartDate = :startDate, @EndDate = :endDate, " +
-	                                 "@BrandList = :brandList, @RSNameList = :rsNameList, " +
-	                                 "@ABMName = :abmName, @RetailerType = :retailerType";
-	    
-	    // Create a native query
-	    Query query = entityManager.createNativeQuery(storedProcedureCall);
-	    
-	    // Format region list if necessary (assuming stored procedure expects it this way)
-	    String formattedRegionList = filter.getRegionList(); // 'EAST, WEST, NORTH, SOUTH 1, SOUTH 2'
-	    
-	    // Handling empty string parameters and setting them to NULL where needed
-	    String brandList = filter.getBrandList().isEmpty() ? null : filter.getBrandList();
-	    String rsNameList = filter.getRsNameList().isEmpty() ? null : filter.getRsNameList();
-	    String abmName = filter.getAbmName().isEmpty() ? null : filter.getAbmName();
-	    String retailerType = filter.getRetailerType().isEmpty() ? null : filter.getRetailerType();
+		List<OutputForMontlyFilter> filteredData = new ArrayList<>();
 
-	    // Debugging/logging before executing
-	    System.out.println("Executing Stored Procedure: " + storedProcedureCall);
-	    System.out.println("Region List: " + formattedRegionList);
-	    System.out.println("Start Date: " + filter.getStartDate());
-	    System.out.println("End Date: " + filter.getEndDate());
-	    System.out.println("Brand List: " + brandList); // should be null if empty
-	    System.out.println("RS Name List: " + rsNameList); // should be null if empty
-	    System.out.println("ABM Name: " + abmName); // should be null if empty
-	    System.out.println("Retailer Type: " + retailerType); // should be null if empty
+		// Stored Procedure call
+		String storedProcedureCall = "EXEC GetOrderSummary @RegionList = :regionList, "
+				+ "@StartDate = :startDate, @EndDate = :endDate, "
+				+ "@BrandList = :brandList, @RSNameList = :rsNameList, "
+				+ "@ABMName = :abmName, @RetailerType = :retailerType";
 
-	    // Set parameters for the stored procedure
-	    query.setParameter("regionList", formattedRegionList);
-	    query.setParameter("startDate", filter.getStartDate());
-	    query.setParameter("endDate", filter.getEndDate());
-	    query.setParameter("brandList", brandList);   // Pass NULL if empty
-	    query.setParameter("rsNameList", rsNameList); // Pass NULL if empty
-	    query.setParameter("abmName", abmName);       // Pass NULL if empty
-	    query.setParameter("retailerType", retailerType); // Pass NULL if empty
+		// Create a native query
+		Query query = entityManager.createNativeQuery(storedProcedureCall);
 
-	    try {
-	        List<Object[]> result = query.getResultList();
-	        
-	        // Map each row to OutputForMontlyFilter
-	        for (Object[] row : result) {
-	            OutputForMontlyFilter data = new OutputForMontlyFilter();
-	            
-	            // Ensure safe casting and row validation
-	            if (row.length >= 5) {
-	                data.setMonth((Integer) row[1]);
-	                data.setTotalRevenue((BigDecimal) row[2]);
-	                data.setTotalQTY((Integer) row[3]);
-	                data.setTotalRetailerCode((Integer) row[4]);
-	                filteredData.add(data);
-	            } else {
-	                System.err.println("Unexpected result format for row: " + Arrays.toString(row));
-	            }
-	        }
-	    } catch (Exception e) {
-	        // Handle the exception with better logging
-	        e.printStackTrace();
-	        // Optionally log more details about the exception, e.g., the parameters or query
-	    }
+		// Format region list if necessary (assuming stored procedure expects it this
+		// way)
+		String formattedRegionList = filter.getRegionList(); // 'EAST, WEST, NORTH, SOUTH 1, SOUTH 2'
 
-	    return filteredData;
+		// Handling empty string parameters and setting them to NULL where needed
+		String brandList = filter.getBrandList().isEmpty() ? null : filter.getBrandList();
+		String rsNameList = filter.getRsNameList().isEmpty() ? null : filter.getRsNameList();
+		String abmName = filter.getAbmName().isEmpty() ? null : filter.getAbmName();
+		String retailerType = filter.getRetailerType().isEmpty() ? null : filter.getRetailerType();
+
+		// Debugging/logging before executing
+		System.out.println("Executing Stored Procedure: " + storedProcedureCall);
+		System.out.println("Region List: " + formattedRegionList);
+		System.out.println("Start Date: " + filter.getStartDate());
+		System.out.println("End Date: " + filter.getEndDate());
+		System.out.println("Brand List: " + brandList); // should be null if empty
+		System.out.println("RS Name List: " + rsNameList); // should be null if empty
+		System.out.println("ABM Name: " + abmName); // should be null if empty
+		System.out.println("Retailer Type: " + retailerType); // should be null if empty
+
+		// Set parameters for the stored procedure
+		query.setParameter("regionList", formattedRegionList);
+		query.setParameter("startDate", filter.getStartDate());
+		query.setParameter("endDate", filter.getEndDate());
+		query.setParameter("brandList", brandList); // Pass NULL if empty
+		query.setParameter("rsNameList", rsNameList); // Pass NULL if empty
+		query.setParameter("abmName", abmName); // Pass NULL if empty
+		query.setParameter("retailerType", retailerType); // Pass NULL if empty
+
+		try {
+			List<Object[]> result = query.getResultList();
+
+			// Map each row to OutputForMontlyFilter
+			for (Object[] row : result) {
+				OutputForMontlyFilter data = new OutputForMontlyFilter();
+
+				// Ensure safe casting and row validation
+				if (row.length >= 5) {
+					data.setMonth((Integer) row[1]);
+					data.setTotalRevenue((BigDecimal) row[2]);
+					data.setTotalQTY((Integer) row[3]);
+					data.setTotalRetailerCode((Integer) row[4]);
+					filteredData.add(data);
+				} else {
+					System.err.println("Unexpected result format for row: " + Arrays.toString(row));
+				}
+			}
+		} catch (Exception e) {
+			// Handle the exception with better logging
+			e.printStackTrace();
+			// Optionally log more details about the exception, e.g., the parameters or
+			// query
+		}
+
+		return filteredData;
 	}
-
-
 
 	@Override
 	public List<Object> monthlyToalOrdaringData() {
@@ -6457,92 +6319,89 @@ Calendar cal = Calendar.getInstance();
 
 	@Override
 	public List<OutputGrowthOverPreviousMonth> GrowthOverPreviousMonth(MonthlyDataFilter filter) {
-		List<OutputGrowthOverPreviousMonth> growthOverPreviousMonthData=new ArrayList<>();
+		List<OutputGrowthOverPreviousMonth> growthOverPreviousMonthData = new ArrayList<>();
 		String storedProcedureCall = "EXEC GrowthOverPreviousMonth @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
-        
-        // Create a native query
-        Query query = entityManager.createNativeQuery(storedProcedureCall);
-        
-        // Set the parameters for the stored procedure call
-        query.setParameter("regionList", filter.getRegionList());  // @RegionList (e.g., 'EAST, WEST')
-        query.setParameter("startDate", filter.getStartDate());    // @StartDate (e.g., 20240601)
-        query.setParameter("endDate", filter.getEndDate());        // @EndDate (e.g., 20240630)
-        query.setParameter("brandList", filter.getBrandList());    // @BrandList (e.g., 'Titan')
-        query.setParameter("rsNameList", filter.getRsNameList());  // @RSNameList (e.g., '' or some value)
-        query.setParameter("abmName", filter.getAbmName());
-        query.setParameter("retailerType", filter.getRetailerType());
 
-        // Execute the query to invoke the stored procedure
-        try {
-        	List<Object[]> result = query.getResultList();
-        	//filteredData = (OutputForMontlyFilter) query.getSingleResult();
-        	
-        	for (Object[] row : result) {
-        	    // Assuming row contains values in the correct order for mapping
-        		OutputGrowthOverPreviousMonth data= new OutputGrowthOverPreviousMonth();
-        		data.setYear((Integer) row[0]);
-        		data.setMonth((Integer) row[1]);
-        		data.setTotalRevenue((BigDecimal)row[2]);
-        		data.setTotalQTY((Integer) row[3]);
-        		data.setTotalRetailerCode((Integer) row[4]);
-        		data.setRetailerGrowthPercentage((BigDecimal)row[5]);
-        		data.setPriceGrowth((BigDecimal)row[6]);
-        		data.setOrderGrowth((Integer)row[7]);
-        		data.setRetailerGrowth((Integer)row[8]);
-        		data.setPriceGrowthPercentage((BigDecimal)row[9]);
-        		data.setOrderQtyGrowthPercentage((BigDecimal)row[10]);
-        		
-        		
-        		growthOverPreviousMonthData.add(data);
-        	    // Now, filteredData is populated with values
-        	}
-        }
-        catch(Exception e) {
-        	e.printStackTrace();
-        }
-		
+		// Create a native query
+		Query query = entityManager.createNativeQuery(storedProcedureCall);
+
+		// Set the parameters for the stored procedure call
+		query.setParameter("regionList", filter.getRegionList()); // @RegionList (e.g., 'EAST, WEST')
+		query.setParameter("startDate", filter.getStartDate()); // @StartDate (e.g., 20240601)
+		query.setParameter("endDate", filter.getEndDate()); // @EndDate (e.g., 20240630)
+		query.setParameter("brandList", filter.getBrandList()); // @BrandList (e.g., 'Titan')
+		query.setParameter("rsNameList", filter.getRsNameList()); // @RSNameList (e.g., '' or some value)
+		query.setParameter("abmName", filter.getAbmName());
+		query.setParameter("retailerType", filter.getRetailerType());
+
+		// Execute the query to invoke the stored procedure
+		try {
+			List<Object[]> result = query.getResultList();
+			// filteredData = (OutputForMontlyFilter) query.getSingleResult();
+
+			for (Object[] row : result) {
+				// Assuming row contains values in the correct order for mapping
+				OutputGrowthOverPreviousMonth data = new OutputGrowthOverPreviousMonth();
+				data.setYear((Integer) row[0]);
+				data.setMonth((Integer) row[1]);
+				data.setTotalRevenue((BigDecimal) row[2]);
+				data.setTotalQTY((Integer) row[3]);
+				data.setTotalRetailerCode((Integer) row[4]);
+				data.setRetailerGrowthPercentage((BigDecimal) row[5]);
+				data.setPriceGrowth((BigDecimal) row[6]);
+				data.setOrderGrowth((Integer) row[7]);
+				data.setRetailerGrowth((Integer) row[8]);
+				data.setPriceGrowthPercentage((BigDecimal) row[9]);
+				data.setOrderQtyGrowthPercentage((BigDecimal) row[10]);
+
+				growthOverPreviousMonthData.add(data);
+				// Now, filteredData is populated with values
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return growthOverPreviousMonthData;
 
 	}
 
 	@Override
 	public List<OutputRegionWiseMonthlyDistribution> RegionWiseMonthlyDistribution(MonthlyDataFilter filter) {
-		List<OutputRegionWiseMonthlyDistribution> regionWiseMonthlyDistributionData=new ArrayList<>();
+		List<OutputRegionWiseMonthlyDistribution> regionWiseMonthlyDistributionData = new ArrayList<>();
 		String storedProcedureCall = "EXEC RegionWiseMonthlyDistribution @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType ";
-        
-        // Create a native query
-        Query query = entityManager.createNativeQuery(storedProcedureCall);
-        
-        // Set the parameters for the stored procedure call
-        query.setParameter("regionList", filter.getRegionList());  // @RegionList (e.g., 'EAST, WEST')
-        query.setParameter("startDate", filter.getStartDate());    // @StartDate (e.g., 20240601)
-        query.setParameter("endDate", filter.getEndDate());        // @EndDate (e.g., 20240630)
-        query.setParameter("brandList", filter.getBrandList());    // @BrandList (e.g., 'Titan')
-        query.setParameter("rsNameList", filter.getRsNameList());  // @RSNameList (e.g., '' or some value)
-        query.setParameter("abmName", filter.getAbmName());
-        query.setParameter("retailerType", filter.getRetailerType());
-        // Execute the query to invoke the stored procedure
-        try {
-        	List<Object[]> result = query.getResultList();
-        	//filteredData = (OutputForMontlyFilter) query.getSingleResult();
-        	
-        	for (Object[] row : result) {
-        	    // Assuming row contains values in the correct order for mapping
-        		OutputRegionWiseMonthlyDistribution data= new OutputRegionWiseMonthlyDistribution();
-        		data.setYear((Integer) row[0]);
-        		data.setMonth((Integer) row[1]);
-        		data.setTotalRevenue((BigDecimal)row[2]);
-        		data.setTotalQTY((Integer) row[3]);
-        		data.setTotalRetailerCode((Integer) row[4]);
-        		data.setRegion(row[5].toString());
-        		regionWiseMonthlyDistributionData.add(data);
-        	    // Now, filteredData is populated with values
-        	}
-        }
-        catch(Exception e) {
-        	e.printStackTrace();
-        }
-		
+
+		// Create a native query
+		Query query = entityManager.createNativeQuery(storedProcedureCall);
+
+		// Set the parameters for the stored procedure call
+		query.setParameter("regionList", filter.getRegionList()); // @RegionList (e.g., 'EAST, WEST')
+		query.setParameter("startDate", filter.getStartDate()); // @StartDate (e.g., 20240601)
+		query.setParameter("endDate", filter.getEndDate()); // @EndDate (e.g., 20240630)
+		query.setParameter("brandList", filter.getBrandList()); // @BrandList (e.g., 'Titan')
+		query.setParameter("rsNameList", filter.getRsNameList()); // @RSNameList (e.g., '' or some value)
+		query.setParameter("abmName", filter.getAbmName());
+		query.setParameter("retailerType", filter.getRetailerType());
+		// Execute the query to invoke the stored procedure
+		try {
+			List<Object[]> result = query.getResultList();
+			// filteredData = (OutputForMontlyFilter) query.getSingleResult();
+
+			for (Object[] row : result) {
+				// Assuming row contains values in the correct order for mapping
+				OutputRegionWiseMonthlyDistribution data = new OutputRegionWiseMonthlyDistribution();
+				data.setYear((Integer) row[0]);
+				data.setMonth((Integer) row[1]);
+				data.setTotalRevenue((BigDecimal) row[2]);
+				data.setTotalQTY((Integer) row[3]);
+				data.setTotalRetailerCode((Integer) row[4]);
+				data.setRegion(row[5].toString());
+				regionWiseMonthlyDistributionData.add(data);
+				// Now, filteredData is populated with values
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return regionWiseMonthlyDistributionData;
 
 	}
@@ -6550,48 +6409,47 @@ Calendar cal = Calendar.getInstance();
 	@Override
 	public List<OutputRegionWiseGrowthOverPreviousMonth> RegionWiseGrowthOverPreviousMonth(MonthlyDataFilter filter) {
 		// TODO Auto-generated method stub
-		List<OutputRegionWiseGrowthOverPreviousMonth> regionWiseMonthlyGrowthData=new ArrayList<>();
+		List<OutputRegionWiseGrowthOverPreviousMonth> regionWiseMonthlyGrowthData = new ArrayList<>();
 		String storedProcedureCall = "EXEC RegionWiseGrowthoverPreviousMonths @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
-        
-        // Create a native query
-        Query query = entityManager.createNativeQuery(storedProcedureCall);
-        
-        // Set the parameters for the stored procedure call
-        query.setParameter("regionList", filter.getRegionList());  // @RegionList (e.g., 'EAST, WEST')
-        query.setParameter("startDate", filter.getStartDate());    // @StartDate (e.g., 20240601)
-        query.setParameter("endDate", filter.getEndDate());        // @EndDate (e.g., 20240630)
-        query.setParameter("brandList", filter.getBrandList());    // @BrandList (e.g., 'Titan')
-        query.setParameter("rsNameList", filter.getRsNameList());  // @RSNameList (e.g., '' or some value)
-        query.setParameter("abmName", filter.getAbmName());
-        query.setParameter("retailerType", filter.getRetailerType());
-        // Execute the query to invoke the stored procedure
-        try {
-        	List<Object[]> result = query.getResultList();
-        	//filteredData = (OutputForMontlyFilter) query.getSingleResult();
-        	
-        	for (Object[] row : result) {
-        	    // Assuming row contains values in the correct order for mapping
-        		OutputRegionWiseGrowthOverPreviousMonth data= new OutputRegionWiseGrowthOverPreviousMonth();
-        		data.setYear((Integer) row[0]);
-        		data.setMonth((Integer) row[1]);
-        		data.setRegion(row[2].toString());
-        		data.setTotalRevenue((BigDecimal)row[3]);
-        		data.setTotalQTY((Integer) row[4]);
-        		data.setTotalRetailerCode((Integer) row[5]);
-        		data.setPriceGrowthPercentage((BigDecimal)row[6]);
-        		data.setOrderQtyGrowthPercentage((BigDecimal)row[7]);
-        		data.setRetailerGrowthPercentage((BigDecimal)row[8]);
-        		data.setPriceGrowth((BigDecimal)row[9]);
-        		data.setOrderGrowth((Integer) row[10]);
-        		data.setRetailerGrowth((Integer) row[11]);
-        		regionWiseMonthlyGrowthData.add(data);
-        	    // Now, filteredData is populated with values
-        	}
-        }
-        catch(Exception e) {
-        	e.printStackTrace();
-        }
-		
+
+		// Create a native query
+		Query query = entityManager.createNativeQuery(storedProcedureCall);
+
+		// Set the parameters for the stored procedure call
+		query.setParameter("regionList", filter.getRegionList()); // @RegionList (e.g., 'EAST, WEST')
+		query.setParameter("startDate", filter.getStartDate()); // @StartDate (e.g., 20240601)
+		query.setParameter("endDate", filter.getEndDate()); // @EndDate (e.g., 20240630)
+		query.setParameter("brandList", filter.getBrandList()); // @BrandList (e.g., 'Titan')
+		query.setParameter("rsNameList", filter.getRsNameList()); // @RSNameList (e.g., '' or some value)
+		query.setParameter("abmName", filter.getAbmName());
+		query.setParameter("retailerType", filter.getRetailerType());
+		// Execute the query to invoke the stored procedure
+		try {
+			List<Object[]> result = query.getResultList();
+			// filteredData = (OutputForMontlyFilter) query.getSingleResult();
+
+			for (Object[] row : result) {
+				// Assuming row contains values in the correct order for mapping
+				OutputRegionWiseGrowthOverPreviousMonth data = new OutputRegionWiseGrowthOverPreviousMonth();
+				data.setYear((Integer) row[0]);
+				data.setMonth((Integer) row[1]);
+				data.setRegion(row[2].toString());
+				data.setTotalRevenue((BigDecimal) row[3]);
+				data.setTotalQTY((Integer) row[4]);
+				data.setTotalRetailerCode((Integer) row[5]);
+				data.setPriceGrowthPercentage((BigDecimal) row[6]);
+				data.setOrderQtyGrowthPercentage((BigDecimal) row[7]);
+				data.setRetailerGrowthPercentage((BigDecimal) row[8]);
+				data.setPriceGrowth((BigDecimal) row[9]);
+				data.setOrderGrowth((Integer) row[10]);
+				data.setRetailerGrowth((Integer) row[11]);
+				regionWiseMonthlyGrowthData.add(data);
+				// Now, filteredData is populated with values
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return regionWiseMonthlyGrowthData;
 
 	}
@@ -6599,60 +6457,47 @@ Calendar cal = Calendar.getInstance();
 	@Override
 	public List<OutputDashboardTiles> OutputDashboardTiles(MonthlyDataFilter filter) {
 		// TODO Auto-generated method stub
-		List<OutputDashboardTiles> outputDashboardTiles=new ArrayList<>();
-		String checkQuery = "SELECT \r\n"
-				+ "    -- Extract Year and Month to group by month\r\n"
-				+ "    YEAR(OrderDate) AS Year,\r\n"
-				+ "    MONTH(OrderDate) AS Month,\r\n"
-				+ "    SUM(TotalPrice) AS OrderValue,\r\n"
-				+ "    SUM(OrderQty) AS TotalOrder,\r\n"
-				+ "    COUNT(DISTINCT OrderNo) AS OrderQty,\r\n"
-				+ "    COUNT(DISTINCT RetailerCode) AS Dealers,\r\n"
-				+ "    Region\r\n"
-				+ "FROM \r\n"
-				+ "    MBROrders\r\n"
-				+ "WHERE \r\n"
+		List<OutputDashboardTiles> outputDashboardTiles = new ArrayList<>();
+		String checkQuery = "SELECT \r\n" + "    -- Extract Year and Month to group by month\r\n"
+				+ "    YEAR(OrderDate) AS Year,\r\n" + "    MONTH(OrderDate) AS Month,\r\n"
+				+ "    SUM(TotalPrice) AS OrderValue,\r\n" + "    SUM(OrderQty) AS TotalOrder,\r\n"
+				+ "    COUNT(DISTINCT OrderNo) AS OrderQty,\r\n" + "    COUNT(DISTINCT RetailerCode) AS Dealers,\r\n"
+				+ "    Region\r\n" + "FROM \r\n" + "    MBROrders\r\n" + "WHERE \r\n"
 				+ "    CONVERT(VARCHAR, OrderDate, 112) >= :startDate    -- Compare OrderDate with StartDate\r\n"
-				+ "    AND CONVERT(VARCHAR, OrderDate, 112) <= :endDate \r\n"
-				+ "GROUP BY\r\n"
-				+ "    YEAR(OrderDate),\r\n"
-				+ "    MONTH(OrderDate),\r\n"
-				+ "    Region\r\n"
-				+ "ORDER BY\r\n"
-				+ "    YEAR(OrderDate),\r\n"
-				+ "    MONTH(OrderDate);";
-        
-        // Create a native query
-        Query query = entityManager.createNativeQuery(checkQuery);
-        
-        // Set the parameters for the stored procedure call
-        query.setParameter("startDate", filter.getStartDate());    // @StartDate (e.g., 20240601)
-        query.setParameter("endDate", filter.getEndDate());        // @EndDate (e.g., 20240630)
-         // @RSNameList (e.g., '' or some value)
+				+ "    AND CONVERT(VARCHAR, OrderDate, 112) <= :endDate \r\n" + "GROUP BY\r\n"
+				+ "    YEAR(OrderDate),\r\n" + "    MONTH(OrderDate),\r\n" + "    Region\r\n" + "ORDER BY\r\n"
+				+ "    YEAR(OrderDate),\r\n" + "    MONTH(OrderDate);";
 
-        // Execute the query to invoke the stored procedure
-        try {
-        	List<Object[]> result = query.getResultList();
-        	//filteredData = (OutputForMontlyFilter) query.getSingleResult();
-        	
-        	for (Object[] row : result) {
-        	    // Assuming row contains values in the correct order for mapping
-        		OutputDashboardTiles data= new OutputDashboardTiles();
-        		data.setYear((Integer) row[0]);
-        		data.setMonth((Integer) row[1]);
-        		data.setOrderValue((BigDecimal) row[2]);
-        		data.setTotalOrder((Integer) row[3]);
-        		data.setOrderQuentity((Integer) row[4]);
-        		data.setDelears((Integer) row[5]);
-        		data.setRegion(row[6].toString());
-        		outputDashboardTiles.add(data);
-        	    // Now, filteredData is populated with values
-        	}
-        }
-        catch(Exception e) {
-        	e.printStackTrace();
-        }
-		
+		// Create a native query
+		Query query = entityManager.createNativeQuery(checkQuery);
+
+		// Set the parameters for the stored procedure call
+		query.setParameter("startDate", filter.getStartDate()); // @StartDate (e.g., 20240601)
+		query.setParameter("endDate", filter.getEndDate()); // @EndDate (e.g., 20240630)
+		// @RSNameList (e.g., '' or some value)
+
+		// Execute the query to invoke the stored procedure
+		try {
+			List<Object[]> result = query.getResultList();
+			// filteredData = (OutputForMontlyFilter) query.getSingleResult();
+
+			for (Object[] row : result) {
+				// Assuming row contains values in the correct order for mapping
+				OutputDashboardTiles data = new OutputDashboardTiles();
+				data.setYear((Integer) row[0]);
+				data.setMonth((Integer) row[1]);
+				data.setOrderValue((BigDecimal) row[2]);
+				data.setTotalOrder((Integer) row[3]);
+				data.setOrderQuentity((Integer) row[4]);
+				data.setDelears((Integer) row[5]);
+				data.setRegion(row[6].toString());
+				outputDashboardTiles.add(data);
+				// Now, filteredData is populated with values
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return outputDashboardTiles;
 
 	}
@@ -6660,83 +6505,71 @@ Calendar cal = Calendar.getInstance();
 	@Override
 	public List<OutputDashboardGraphs> OutputDashboardGraphs(MonthlyDataFilter filter) {
 		// TODO Auto-generated method stub
-		List<OutputDashboardGraphs> outputDashboardGraphs=new ArrayList<>();
-		String checkQuery ="SELECT \r\n"
-				+ "        -- Extract Year and Month to group by month\r\n"
-				+ "        YEAR(OrderDate) AS Year,\r\n"
-				+ "        MONTH(OrderDate) AS Month,\r\n"
-				+ "        SUM(TotalPrice) AS OrderValue,\r\n"
-				+ "        SUM(OrderQty) AS TotalOrder\r\n"
-				+ "    FROM \r\n"
-				+ "        MBROrders\r\n"
-				+ "	Where \r\n"
+		List<OutputDashboardGraphs> outputDashboardGraphs = new ArrayList<>();
+		String checkQuery = "SELECT \r\n" + "        -- Extract Year and Month to group by month\r\n"
+				+ "        YEAR(OrderDate) AS Year,\r\n" + "        MONTH(OrderDate) AS Month,\r\n"
+				+ "        SUM(TotalPrice) AS OrderValue,\r\n" + "        SUM(OrderQty) AS TotalOrder\r\n"
+				+ "    FROM \r\n" + "        MBROrders\r\n" + "	Where \r\n"
 				+ "			CONVERT(VARCHAR, OrderDate, 112) >= :startDate                        -- Compare OrderDate with StartDate\r\n"
-				+ "            AND CONVERT(VARCHAR, OrderDate, 112) <= :endDate\r\n"
-				+ "	Group BY\r\n"
-				+ "	 YEAR(OrderDate),\r\n"
-				+ "        MONTH(OrderDate)\r\n"
-				+ "    ORDER BY\r\n"
-				+ "        YEAR(OrderDate),\r\n"
-				+ "        MONTH(OrderDate);";
-        
-        // Create a native query
-        Query query = entityManager.createNativeQuery(checkQuery);
-        
-        // Set the parameters for the stored procedure call
-        query.setParameter("startDate", filter.getStartDate());    // @StartDate (e.g., 20240601)
-        query.setParameter("endDate", filter.getEndDate());        // @EndDate (e.g., 20240630)
-         // @RSNameList (e.g., '' or some value)
+				+ "            AND CONVERT(VARCHAR, OrderDate, 112) <= :endDate\r\n" + "	Group BY\r\n"
+				+ "	 YEAR(OrderDate),\r\n" + "        MONTH(OrderDate)\r\n" + "    ORDER BY\r\n"
+				+ "        YEAR(OrderDate),\r\n" + "        MONTH(OrderDate);";
 
-        // Execute the query to invoke the stored procedure
-        try {
-        	List<Object[]> result = query.getResultList();
-        	//filteredData = (OutputForMontlyFilter) query.getSingleResult();
-        	
-        	for (Object[] row : result) {
-        	    // Assuming row contains values in the correct order for mapping
-        		OutputDashboardGraphs data= new OutputDashboardGraphs();
-        		data.setYear((Integer) row[0]);
-        		data.setMonth((Integer) row[1]);
-        		data.setOrderValue((BigDecimal) row[2]);
-        		data.setTotalOrder((Integer) row[3]);
-        		outputDashboardGraphs.add(data);
-        	    // Now, filteredData is populated with values
-        	}
-        }
-        catch(Exception e) {
-        	e.printStackTrace();
-        }
-		
+		// Create a native query
+		Query query = entityManager.createNativeQuery(checkQuery);
+
+		// Set the parameters for the stored procedure call
+		query.setParameter("startDate", filter.getStartDate()); // @StartDate (e.g., 20240601)
+		query.setParameter("endDate", filter.getEndDate()); // @EndDate (e.g., 20240630)
+		// @RSNameList (e.g., '' or some value)
+
+		// Execute the query to invoke the stored procedure
+		try {
+			List<Object[]> result = query.getResultList();
+			// filteredData = (OutputForMontlyFilter) query.getSingleResult();
+
+			for (Object[] row : result) {
+				// Assuming row contains values in the correct order for mapping
+				OutputDashboardGraphs data = new OutputDashboardGraphs();
+				data.setYear((Integer) row[0]);
+				data.setMonth((Integer) row[1]);
+				data.setOrderValue((BigDecimal) row[2]);
+				data.setTotalOrder((Integer) row[3]);
+				outputDashboardGraphs.add(data);
+				// Now, filteredData is populated with values
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return outputDashboardGraphs;
 
 	}
 
 	@Override
-	public MasterData getFilterData(MonthlyDataFilter  data) {
-		List<RSName> rsName=new ArrayList<>();
+	public MasterData getFilterData(MonthlyDataFilter data) {
+		List<RSName> rsName = new ArrayList<>();
 		List<ABMName> ABMName = new ArrayList<>(); // Make sure ABMName is initialized
-		
+
 		MasterData dataoutput = new MasterData();
-		
-		
-		List<String> regionList = Arrays.stream(data.getRegionList().split(","))
-                .map(String::trim)  // Trim spaces around each region
-                .collect(Collectors.toList());
-		
+
+		List<String> regionList = Arrays.stream(data.getRegionList().split(",")).map(String::trim) // Trim spaces around
+																									// each region
+				.collect(Collectors.toList());
+
 		if (!data.getRegionList().isEmpty() && data.getAbmName().isEmpty()) {
-		    String checkSql = "SELECT UserName, Name, Region FROM MBRUsers " +
-		                      "WHERE Region IN (:region) " + 
-		                      "AND (desig_id = 6 OR desig_id = 7) order by Name";
-		    Query checkQuery = entityManager.createNativeQuery(checkSql);
-		    checkQuery.setParameter("region", regionList);
+			String checkSql = "SELECT UserName, Name, Region FROM MBRUsers " + "WHERE Region IN (:region) "
+					+ "AND (desig_id = 6 OR desig_id = 7) order by Name";
+			Query checkQuery = entityManager.createNativeQuery(checkSql);
+			checkQuery.setParameter("region", regionList);
 
-		    // Log the region list for debugging
-		    System.out.println("Region List: " + data.getRegionList());
+			// Log the region list for debugging
+			System.out.println("Region List: " + data.getRegionList());
 
-		    // Execute the query and get the result list
-		    List<ABMName> resultList = checkQuery.getResultList();
+			// Execute the query and get the result list
+			List<ABMName> resultList = checkQuery.getResultList();
 
-		    // Process each result row to map to ABMName objects
+			// Process each result row to map to ABMName objects
 //		    for (Object[] row : resultList) {
 //		        ABMName abm = new ABMName();
 //		        abm.setName((String) row[0]); // Assuming Name is the first column
@@ -6744,23 +6577,23 @@ Calendar cal = Calendar.getInstance();
 //
 //		        ABMName.add(abm); // Add to the list
 //		    }
-		    rsName=selectRsNameForMaster();
-		    // Set the ABMName list into dataoutput
-		    dataoutput.setAbmName(resultList);
-		    dataoutput.setRsName(rsName);
-		    // Return the populated MasterData object
-		    return dataoutput;
+			rsName = selectRsNameForMaster();
+			// Set the ABMName list into dataoutput
+			dataoutput.setAbmName(resultList);
+			dataoutput.setRsName(rsName);
+			// Return the populated MasterData object
+			return dataoutput;
 		}
 
-		else if(!data.getRegionList().isEmpty() && !data.getAbmName().isEmpty()) {
-			
-			String checksql= "SELECT Name, UserName, Region FROM MBRUsers WHERE Region IN (:region)"
+		else if (!data.getRegionList().isEmpty() && !data.getAbmName().isEmpty()) {
+
+			String checksql = "SELECT Name, UserName, Region FROM MBRUsers WHERE Region IN (:region)"
 					+ "AND Desig_Id = 5 AND (ABMEMM = :ABMName OR ABMKAM = :ABMName) order by Name;";
-			Query checkQuery =  entityManager.createNativeQuery(checksql);
+			Query checkQuery = entityManager.createNativeQuery(checksql);
 			checkQuery.setParameter("region", regionList);
 			checkQuery.setParameter("ABMName", data.getAbmName());
-			//rsName=checkQuery.getResultList();
-			
+			// rsName=checkQuery.getResultList();
+
 			List<RSName> resultList = checkQuery.getResultList();
 //			for (Object[] row : resultList) {
 //				RSName rsm = new RSName();
@@ -6773,47 +6606,46 @@ Calendar cal = Calendar.getInstance();
 			dataoutput.setRsName(resultList);
 			return dataoutput;
 		}
-		return dataoutput;	
+		return dataoutput;
 	}
 
 	@Override
 	public List<OutputMonthlyOrdaringBehaviour> monthlyOrdaringBehaviour(MonthlyDataFilter filter) {
 		// TODO Auto-generated method stub
-		List<OutputMonthlyOrdaringBehaviour> monthlyOrdaringBehaviourData=new ArrayList<>();
+		List<OutputMonthlyOrdaringBehaviour> monthlyOrdaringBehaviourData = new ArrayList<>();
 		String storedProcedureCall = "EXEC MonthlyOrdaringBehaviour @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
-        
-        // Create a native query
-        Query query = entityManager.createNativeQuery(storedProcedureCall);
-        
-        // Set the parameters for the stored procedure call
-        query.setParameter("regionList", filter.getRegionList());  // @RegionList (e.g., 'EAST, WEST')
-        query.setParameter("startDate", filter.getStartDate());    // @StartDate (e.g., 20240601)
-        query.setParameter("endDate", filter.getEndDate());        // @EndDate (e.g., 20240630)
-        query.setParameter("brandList", filter.getBrandList());    // @BrandList (e.g., 'Titan')
-        query.setParameter("rsNameList", filter.getRsNameList());  // @RSNameList (e.g., '' or some value)
-        query.setParameter("abmName", filter.getAbmName());
-        query.setParameter("retailerType", filter.getRetailerType());
-        // Execute the query to invoke the stored procedure
-        try {
-        	List<Object[]> result = query.getResultList();
-        	//filteredData = (OutputForMontlyFilter) query.getSingleResult();
-        	
-        	for (Object[] row : result) {
-        	    // Assuming row contains values in the correct order for mapping
-        		OutputMonthlyOrdaringBehaviour data= new OutputMonthlyOrdaringBehaviour();
-        		data.setYear((Integer) row[0]);
-        		data.setMonth((Integer) row[1]);
-        		data.setNoOforders((Integer) row[2]);
-        		data.setAvgQtyPerOrder((BigDecimal)row[3]);
-        		data.setAvgValuePerOrder((BigDecimal)row[4]);
-        		monthlyOrdaringBehaviourData.add(data);
-        	    // Now, filteredData is populated with values
-        	}
-        }
-        catch(Exception e) {
-        	e.printStackTrace();
-        }
-		
+
+		// Create a native query
+		Query query = entityManager.createNativeQuery(storedProcedureCall);
+
+		// Set the parameters for the stored procedure call
+		query.setParameter("regionList", filter.getRegionList()); // @RegionList (e.g., 'EAST, WEST')
+		query.setParameter("startDate", filter.getStartDate()); // @StartDate (e.g., 20240601)
+		query.setParameter("endDate", filter.getEndDate()); // @EndDate (e.g., 20240630)
+		query.setParameter("brandList", filter.getBrandList()); // @BrandList (e.g., 'Titan')
+		query.setParameter("rsNameList", filter.getRsNameList()); // @RSNameList (e.g., '' or some value)
+		query.setParameter("abmName", filter.getAbmName());
+		query.setParameter("retailerType", filter.getRetailerType());
+		// Execute the query to invoke the stored procedure
+		try {
+			List<Object[]> result = query.getResultList();
+			// filteredData = (OutputForMontlyFilter) query.getSingleResult();
+
+			for (Object[] row : result) {
+				// Assuming row contains values in the correct order for mapping
+				OutputMonthlyOrdaringBehaviour data = new OutputMonthlyOrdaringBehaviour();
+				data.setYear((Integer) row[0]);
+				data.setMonth((Integer) row[1]);
+				data.setNoOforders((Integer) row[2]);
+				data.setAvgQtyPerOrder((BigDecimal) row[3]);
+				data.setAvgValuePerOrder((BigDecimal) row[4]);
+				monthlyOrdaringBehaviourData.add(data);
+				// Now, filteredData is populated with values
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return monthlyOrdaringBehaviourData;
 
 	}
@@ -6821,120 +6653,155 @@ Calendar cal = Calendar.getInstance();
 	@Override
 	public List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionNoofOrders(
 			MonthlyDataFilter filter) {
-		List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionData=new ArrayList<>();
+		List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionData = new ArrayList<>();
 		String storedProcedureCall = "EXEC RegionWiseMonthlyDistributionNoofOrders @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
-        
-        // Create a native query
-        Query query = entityManager.createNativeQuery(storedProcedureCall);
-        
-        // Set the parameters for the stored procedure call
-        query.setParameter("regionList", filter.getRegionList());  // @RegionList (e.g., 'EAST, WEST')
-        query.setParameter("startDate", filter.getStartDate());    // @StartDate (e.g., 20240601)
-        query.setParameter("endDate", filter.getEndDate());        // @EndDate (e.g., 20240630)
-        query.setParameter("brandList", filter.getBrandList());    // @BrandList (e.g., 'Titan')
-        query.setParameter("rsNameList", filter.getRsNameList());  // @RSNameList (e.g., '' or some value)
-        query.setParameter("abmName", filter.getAbmName());
-        query.setParameter("retailerType", filter.getRetailerType());
-        // Execute the query to invoke the stored procedure
-        try {
-        	List<Object[]> result = query.getResultList();
-        	//filteredData = (OutputForMontlyFilter) query.getSingleResult();
-        	
-        	for (Object[] row : result) {
-        	    // Assuming row contains values in the correct order for mapping
-        		OutputRegionWiseMonthlyDistributionNoofOrders data= new OutputRegionWiseMonthlyDistributionNoofOrders();
-        		data.setYear((Integer) row[0]);
-        		data.setMonth((Integer) row[1]);
-        		data.setNoOfOrders((Integer) row[2]);
-        		data.setRegion( row[3].toString());
-        		data.setNoOfOrdersPercentage((BigDecimal)row[4]);
-        	    // Now, filteredData is populated with values
-        		regionWiseMonthlyDistributionData.add(data);
-        	}
-        }
-        catch(Exception e) {
-        	e.printStackTrace();
-        }
-		
+
+		// Create a native query
+		Query query = entityManager.createNativeQuery(storedProcedureCall);
+
+		// Set the parameters for the stored procedure call
+		query.setParameter("regionList", filter.getRegionList()); // @RegionList (e.g., 'EAST, WEST')
+		query.setParameter("startDate", filter.getStartDate()); // @StartDate (e.g., 20240601)
+		query.setParameter("endDate", filter.getEndDate()); // @EndDate (e.g., 20240630)
+		query.setParameter("brandList", filter.getBrandList()); // @BrandList (e.g., 'Titan')
+		query.setParameter("rsNameList", filter.getRsNameList()); // @RSNameList (e.g., '' or some value)
+		query.setParameter("abmName", filter.getAbmName());
+		query.setParameter("retailerType", filter.getRetailerType());
+		// Execute the query to invoke the stored procedure
+		try {
+			List<Object[]> result = query.getResultList();
+			// filteredData = (OutputForMontlyFilter) query.getSingleResult();
+
+			for (Object[] row : result) {
+				// Assuming row contains values in the correct order for mapping
+				OutputRegionWiseMonthlyDistributionNoofOrders data = new OutputRegionWiseMonthlyDistributionNoofOrders();
+				data.setYear((Integer) row[0]);
+				data.setMonth((Integer) row[1]);
+				data.setNoOfOrders((Integer) row[2]);
+				data.setRegion(row[3].toString());
+				data.setNoOfOrdersPercentage((BigDecimal) row[4]);
+				// Now, filteredData is populated with values
+				regionWiseMonthlyDistributionData.add(data);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return regionWiseMonthlyDistributionData;
 	}
 
 	@Override
 	public List<OutputRegionWiseMonthlyAvgPerOrder> regionWiseMonthlyAvgPerOrder(MonthlyDataFilter filter) {
-		List<OutputRegionWiseMonthlyAvgPerOrder> regionWiseMonthlyAvgPerOrder=new ArrayList<>();
+		List<OutputRegionWiseMonthlyAvgPerOrder> regionWiseMonthlyAvgPerOrder = new ArrayList<>();
 		String storedProcedureCall = "EXEC RegionWiseMonthlyAvgPerOrder @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
-        
-        // Create a native query
-        Query query = entityManager.createNativeQuery(storedProcedureCall);
-        
-        // Set the parameters for the stored procedure call
-        query.setParameter("regionList", filter.getRegionList());  // @RegionList (e.g., 'EAST, WEST')
-        query.setParameter("startDate", filter.getStartDate());    // @StartDate (e.g., 20240601)
-        query.setParameter("endDate", filter.getEndDate());        // @EndDate (e.g., 20240630)
-        query.setParameter("brandList", filter.getBrandList());    // @BrandList (e.g., 'Titan')
-        query.setParameter("rsNameList", filter.getRsNameList());  // @RSNameList (e.g., '' or some value)
-        query.setParameter("abmName", filter.getAbmName());
-        query.setParameter("retailerType", filter.getRetailerType());
-        // Execute the query to invoke the stored procedure
-        try {
-        	List<Object[]> result = query.getResultList();
-        	//filteredData = (OutputForMontlyFilter) query.getSingleResult();
-        	
-        	for (Object[] row : result) {
-        	    // Assuming row contains values in the correct order for mapping
-        		OutputRegionWiseMonthlyAvgPerOrder data= new OutputRegionWiseMonthlyAvgPerOrder();
-        		data.setYear((Integer) row[0]);
-        		data.setMonth((Integer) row[1]);
-        		data.setAvgQtyPerOrder((Integer) row[2]);
-        		data.setAvgPricePerOrder((BigDecimal)row[3]);
-        		data.setRegion(row[4].toString());
-        	    // Now, filteredData is populated with values
-        		regionWiseMonthlyAvgPerOrder.add(data);
-        	}
-        }
-        catch(Exception e) {
-        	e.printStackTrace();
-        }
-		
+
+		// Create a native query
+		Query query = entityManager.createNativeQuery(storedProcedureCall);
+
+		// Set the parameters for the stored procedure call
+		query.setParameter("regionList", filter.getRegionList()); // @RegionList (e.g., 'EAST, WEST')
+		query.setParameter("startDate", filter.getStartDate()); // @StartDate (e.g., 20240601)
+		query.setParameter("endDate", filter.getEndDate()); // @EndDate (e.g., 20240630)
+		query.setParameter("brandList", filter.getBrandList()); // @BrandList (e.g., 'Titan')
+		query.setParameter("rsNameList", filter.getRsNameList()); // @RSNameList (e.g., '' or some value)
+		query.setParameter("abmName", filter.getAbmName());
+		query.setParameter("retailerType", filter.getRetailerType());
+		// Execute the query to invoke the stored procedure
+		try {
+			List<Object[]> result = query.getResultList();
+			// filteredData = (OutputForMontlyFilter) query.getSingleResult();
+
+			for (Object[] row : result) {
+				// Assuming row contains values in the correct order for mapping
+				OutputRegionWiseMonthlyAvgPerOrder data = new OutputRegionWiseMonthlyAvgPerOrder();
+				data.setYear((Integer) row[0]);
+				data.setMonth((Integer) row[1]);
+				data.setAvgQtyPerOrder((Integer) row[2]);
+				data.setAvgPricePerOrder((BigDecimal) row[3]);
+				data.setRegion(row[4].toString());
+				// Now, filteredData is populated with values
+				regionWiseMonthlyAvgPerOrder.add(data);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return regionWiseMonthlyAvgPerOrder;
 	}
 
 	@Override
 	public List<OutputPercentageofOrdersbyDayoftheMonth> percentageofOrdersbyDayoftheMonth(MonthlyDataFilter filter) {
-		List<OutputPercentageofOrdersbyDayoftheMonth> percentageofOrdersbyDayoftheMonth=new ArrayList<>();
+		List<OutputPercentageofOrdersbyDayoftheMonth> percentageofOrdersbyDayoftheMonth = new ArrayList<>();
 		String storedProcedureCall = "EXEC PercentageofOrdersbyDayoftheMonth @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
-        
-        // Create a native query
-        Query query = entityManager.createNativeQuery(storedProcedureCall);
-        
-        // Set the parameters for the stored procedure call
-        query.setParameter("regionList", filter.getRegionList());  // @RegionList (e.g., 'EAST, WEST')
-        query.setParameter("startDate", filter.getStartDate());    // @StartDate (e.g., 20240601)
-        query.setParameter("endDate", filter.getEndDate());        // @EndDate (e.g., 20240630)
-        query.setParameter("brandList", filter.getBrandList());    // @BrandList (e.g., 'Titan')
-        query.setParameter("rsNameList", filter.getRsNameList());  // @RSNameList (e.g., '' or some value)
-        query.setParameter("abmName", filter.getAbmName());
-        query.setParameter("retailerType", filter.getRetailerType());
-        // Execute the query to invoke the stored procedure
-        try {
-        	List<Object[]> result = query.getResultList();
-        	//filteredData = (OutputForMontlyFilter) query.getSingleResult();
-        	
-        	for (Object[] row : result) {
-        	    // Assuming row contains values in the correct order for mapping
-        		OutputPercentageofOrdersbyDayoftheMonth data= new OutputPercentageofOrdersbyDayoftheMonth();
-        		data.setDay((Integer) row[0]);
-        		data.setDistinctOrderCount((Integer) row[1]);
-        		data.setPercentageOfOrders((BigDecimal) row[2]);
-        	    // Now, filteredData is populated with values
-        		percentageofOrdersbyDayoftheMonth.add(data);
-        	}
-        }
-        catch(Exception e) {
-        	e.printStackTrace();
-        }
-		
+
+		// Create a native query
+		Query query = entityManager.createNativeQuery(storedProcedureCall);
+
+		// Set the parameters for the stored procedure call
+		query.setParameter("regionList", filter.getRegionList()); // @RegionList (e.g., 'EAST, WEST')
+		query.setParameter("startDate", filter.getStartDate()); // @StartDate (e.g., 20240601)
+		query.setParameter("endDate", filter.getEndDate()); // @EndDate (e.g., 20240630)
+		query.setParameter("brandList", filter.getBrandList()); // @BrandList (e.g., 'Titan')
+		query.setParameter("rsNameList", filter.getRsNameList()); // @RSNameList (e.g., '' or some value)
+		query.setParameter("abmName", filter.getAbmName());
+		query.setParameter("retailerType", filter.getRetailerType());
+		// Execute the query to invoke the stored procedure
+		try {
+			List<Object[]> result = query.getResultList();
+			// filteredData = (OutputForMontlyFilter) query.getSingleResult();
+
+			for (Object[] row : result) {
+				// Assuming row contains values in the correct order for mapping
+				OutputPercentageofOrdersbyDayoftheMonth data = new OutputPercentageofOrdersbyDayoftheMonth();
+				data.setDay((Integer) row[0]);
+				data.setDistinctOrderCount((Integer) row[1]);
+				data.setPercentageOfOrders((BigDecimal) row[2]);
+				// Now, filteredData is populated with values
+				percentageofOrdersbyDayoftheMonth.add(data);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return percentageofOrdersbyDayoftheMonth;
 	}
 
+	@Override
+	public List<OutputPercentageofOrdersbyWeekdayorWeekend> percentageofOrdersbyWeekdayorWeekend(
+			MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		List<OutputPercentageofOrdersbyWeekdayorWeekend> percentageofOrdersbyWeekdayorWeekend = new ArrayList<>();
+		String storedProcedureCall = "EXEC PercentageofOrdersbyWeekdayorWeekend @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
+
+		// Create a native query
+		Query query = entityManager.createNativeQuery(storedProcedureCall);
+
+		// Set the parameters for the stored procedure call
+		query.setParameter("regionList", filter.getRegionList()); // @RegionList (e.g., 'EAST, WEST')
+		query.setParameter("startDate", filter.getStartDate()); // @StartDate (e.g., 20240601)
+		query.setParameter("endDate", filter.getEndDate()); // @EndDate (e.g., 20240630)
+		query.setParameter("brandList", filter.getBrandList()); // @BrandList (e.g., 'Titan')
+		query.setParameter("rsNameList", filter.getRsNameList()); // @RSNameList (e.g., '' or some value)
+		query.setParameter("abmName", filter.getAbmName());
+		query.setParameter("retailerType", filter.getRetailerType());
+		// Execute the query to invoke the stored procedure
+		try {
+			List<Object[]> result = query.getResultList();
+			// filteredData = (OutputForMontlyFilter) query.getSingleResult();
+
+			for (Object[] row : result) {
+				// Assuming row contains values in the correct order for mapping
+				OutputPercentageofOrdersbyWeekdayorWeekend data = new OutputPercentageofOrdersbyWeekdayorWeekend();
+				data.setDayType(row[0].toString());
+				data.setDistinctOrderCount((Integer) row[1]);
+				data.setPercentageOfOrders((BigDecimal) row[2]);
+				// Now, filteredData is populated with values
+				percentageofOrdersbyWeekdayorWeekend.add(data);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return percentageofOrdersbyWeekdayorWeekend;
+	}
 }
