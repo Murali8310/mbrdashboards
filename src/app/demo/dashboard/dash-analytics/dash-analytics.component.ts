@@ -350,6 +350,7 @@ searchInputValueForMonth: string = '';
 
   // this is to get the searched data;
   public prepareSearchData(data: any) {
+    this.resetChartOptions();
     let MonthlyToalOrdaringPayload: any = {};
     let abmNameList: any = '';
     let brandList: any = '';
@@ -546,7 +547,8 @@ searchInputValueForMonth: string = '';
       },
       xaxis: {
         labels: {
-          trim: false
+          // trim: false,
+          show: false
         },
         categories: categories,
         title: {
@@ -566,6 +568,7 @@ searchInputValueForMonth: string = '';
           },
           min: 0, // Minimum value for left y-axis
           labels: {
+            show:false,
             formatter: function (val) {
               // return '' + val; // Format for value
               return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
@@ -573,23 +576,24 @@ searchInputValueForMonth: string = '';
           },
           tickAmount: 4 // Adjust the number of ticks as necessary
         },
-        {
-          opposite: true, // Make this y-axis on the opposite side
-          title: {
-            text: 'Value (Cr)', // Right y-axis title
-            style: {
-              color: '#000000' // Change color as needed
-            }
-          },
-           labels: {
-            formatter: function (val) {
-              // return '' + val; // Format for value
-              return val.toFixed(0);
-            }
-          },
-          min: 0, // Minimum value for right y-axis
-          tickAmount: 4 // Adjust the number of ticks as necessary
-        }
+        // {
+        //   opposite: true, // Make this y-axis on the opposite side
+        //   title: {
+        //     text: 'Value (Cr)', // Right y-axis title
+        //     style: {
+        //       color: '#000000' // Change color as needed
+        //     }
+        //   },
+        //    labels: {
+        //     show: false,
+        //     formatter: function (val) {
+        //       // return '' + val; // Format for value
+        //       return val.toFixed(0);
+        //     }
+        //   },
+        //   min: 0, // Minimum value for right y-axis
+        //   tickAmount: 4 // Adjust the number of ticks as necessary
+        // }
       ],
       tooltip: {
         shared: true, // Show shared tooltip
@@ -627,34 +631,371 @@ searchInputValueForMonth: string = '';
 
           response.body.forEach((item: any) => {
             // Push values to each series array
-            retailersData.push(item.totalRetailerCode);
-            quantityData.push((item.totalQTY /1000).toFixed(2));
-            valueData.push((item.totalRevenue / 10000000).toFixed(2));
+            retailersData.push(item.totalRetailerCode/100);
+            quantityData.push(item.totalQTY /10000);
+            valueData.push(item.totalRevenue / 10000000);
+            //   retailersData.push((item.totalRetailerCode).toFixed(2));
+            // quantityData.push((item.totalQTY /10000000).toFixed(2));
+            // valueData.push((item.totalRevenue / 10000000).toFixed(2));
 
             // Get month name and add to categories
             categories.push(monthNames[item.month - 1]);
           });
+          // this.chartOptionsline = {
+          //   series: [
+          //     // {
+          //     //   name: 'Retailers',
+          //     //   data: [120, 150, 130] // Example data for Retailers over 3 months
+          //     // },
+          //     // {
+          //     //   name: 'Quantity (k)',
+          //     //   data: [30, 25, 35] // Example data for Quantity over 3 months
+          //     // },
+          //     // {
+          //     //   name: 'Value',
+          //     //   data: [100, 70, 80] // Example data for Value over 3 months (in thousands)
+          //     // }
+          //     {
+          //       name: 'Quantity (k)',
+          //       data: quantityData // Extracts totalQTY values
+          //     },
+          //     {
+          //       name: 'Retailers',
+          //       data: retailersData // Extracts totalRetailerCode values
+          //     },
+             
+          //     {
+          //       name: 'Value (Cr)',
+          //       data: valueData // Extracts totalRevenue values
+          //     }
+          //   ],
+          //   chart: {
+          //     height: 500,
+          //     type: 'line',
+          //   },
+          //   dataLabels: {
+          //     enabled: true
+          //   },
+          //   stroke: {
+          //     width: 5,
+          //     curve: 'smooth', // Smooth curve for the line chart
+          //     dashArray: [0, 8, 5] // Different dash arrays for each line
+          //   },
+          //   title: {
+          //     text: 'Monthly Trend',
+          //     align: 'center'
+          //   },
+          //   // subtitle: {
+          //   //   text: 'No of Re-retailers, Value, and Qty',
+          //   //   align: 'center',
+          //   //   style: {
+          //   //     fontSize: '14px',
+          //   //     color: '#666'
+          //   //   }
+          //   // },
+          //   // legend: {
+          //   //   tooltipHoverFormatter: function (val, opts) {
+          //   //     return val + ' - <strong>' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + '</strong>';
+          //   //   }
+          //   // },
+          //   legend: {
+          //     tooltipHoverFormatter: function (val, opts) {
+          //       const dataValue = opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex];
+          //       const formattedValue = dataValue % 1 === 0 ? dataValue : dataValue.toFixed(2);
+          //       return val + ' - <strong>' + formattedValue + '</strong>';
+          //     }
+          //   },            
+          //   markers: {
+          //     size: 5, // Size of markers on the line
+          //     hover: {
+          //       sizeOffset: 6
+          //     }
+          //   },
+          //   xaxis: {
+          //     labels: {
+          //       trim: false
+          //     },
+          //     categories: categories
+          //   },
+          //   yaxis: [
+          //     {
+          //       title: {
+          //         text: 'Quantity (K)', // Left y-axis title
+          //         style: {
+          //           color: '#000000' // Change color as needed
+          //         }
+          //       },
+          //       min: 0, // Minimum value for left y-axis
+          //       labels: {
+          //         formatter: function (val) {
+          //           // return '' + val; // Format for value
+          //           return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
+          //         }
+          //       },
+          //       tickAmount: 5 // Adjust the number of ticks as necessary
+          //     },
+
+          //     { // Make this y-axis on the opposite side
+          //       opposite: true,
+          //       title: {
+          //         text: 'Value (Cr)', // Right y-axis title
+          //         style: {
+          //           color: '#000000' // Change color as needed
+          //         }
+          //       },
+          //        labels: {
+          //         formatter: function (val) {
+          //           // return '' + val; // Format for value
+          //           return val.toFixed(0);
+          //         }
+          //       },
+          //       min: 0, // Minimum value for right y-axis
+          //       tickAmount: 5 // Adjust the number of ticks as necessary
+          //     }
+          //   ],
+          //   tooltip: {
+          //     shared: true, // Show shared tooltip
+          //     intersect: false,
+          //     y: [
+          //       {
+          //         title: {
+          //           formatter: function (val) {
+          //             return val;
+          //           }
+          //         }
+          //       },
+          //       {
+          //         title: {
+          //           formatter: function (val) {
+          //             return val;
+          //           }
+          //         }
+          //       },
+          //       {
+          //         title: {
+          //           formatter: function (val) {
+          //             return  val; // Format for value
+          //           }
+          //         }
+          //       }
+          //     ]
+          //   }
+          // };
+      
+      // this is for single y -axis data c
+      
+          // this.chartOptionsline = {
+          //   series: [
+          //     {
+          //       name: 'Quantity (k)',
+          //       data: quantityData // Extracts totalQTY values
+          //     },
+          //     {
+          //       name: 'Retailers',
+          //       data: retailersData // Extracts totalRetailerCode values
+          //     },
+          //     {
+          //       name: 'Value (Cr)',
+          //       data: valueData // Extracts totalRevenue values
+          //     }
+          //   ],
+          //   chart: {
+          //     height: 500,
+          //     type: 'line',
+          //   },
+          //   dataLabels: {
+          //     enabled: true
+          //   },
+          //   stroke: {
+          //     width: 5,
+          //     curve: 'smooth',
+          //     dashArray: [0, 8, 5]
+          //   },
+          //   title: {
+          //     text: 'Monthly Trend',
+          //     align: 'center'
+          //   },
+          //   legend: {
+          //     tooltipHoverFormatter: function (val, opts) {
+          //       const dataValue = opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex];
+          //       const formattedValue = dataValue % 1 === 0 ? dataValue : dataValue.toFixed(2);
+          //       return val + ' - <strong>' + formattedValue + '</strong>';
+          //     }
+          //   },
+          //   markers: {
+          //     size: 5,
+          //     hover: {
+          //       sizeOffset: 6
+          //     }
+          //   },
+          //   xaxis: {
+          //     labels: {
+          //       trim: false
+          //     },
+          //     categories: categories
+          //   },
+          //   yaxis: {
+          //     title: {
+          //       text: 'Values', // Generic title for combined y-axis
+          //       style: {
+          //         color: '#000000'
+          //       }
+          //     },
+          //     min: 0,
+          //     labels: {
+          //       formatter: function (val) {
+          //         return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
+          //       }
+          //     },
+          //     tickAmount: 3
+          //   },
+          //   tooltip: {
+          //     shared: true,
+          //     intersect: false,
+          //     y: [
+          //       {
+          //         title: {
+          //           formatter: function (val) {
+          //             return val;
+          //           }
+          //         }
+          //       },
+          //       {
+          //         title: {
+          //           formatter: function (val) {
+          //             return val;
+          //           }
+          //         }
+          //       },
+          //       {
+          //         title: {
+          //           formatter: function (val) {
+          //             return val;
+          //           }
+          //         }
+          //       }
+          //     ]
+          //   }
+          // };
+          
+          // this.chartOptionsline = {
+          //   series: [
+          //     {
+          //       name: 'Quantity (k)',
+          //       data: quantityData // Extracts totalQTY values
+          //     },
+          //     {
+          //       name: 'Retailers',
+          //       data: retailersData // Extracts totalRetailerCode values
+          //     },
+          //     {
+          //       name: 'Value (Cr)',
+          //       data: valueData // Extracts totalRevenue values
+          //     }
+          //   ],
+          //   chart: {
+          //     height: 500,
+          //     type: 'line',
+          //   },
+          //   dataLabels: {
+          //     enabled: true,
+          //   offsetX: -5,
+          //   offsetY: -5,  // Move labels slightly to the right of the y-axis
+          //     style: {
+          //       fontSize: '10px',
+          //     },
+          //     background: {
+          //       enabled: true,
+          //       foreColor: '#000000'
+          //     }
+          //   },
+          //   stroke: {
+          //     width: 5,
+          //     curve: 'smooth',
+          //     dashArray: [0, 8, 5]
+          //   },
+          //   title: {
+          //     text: 'Monthly Trend',
+          //     align: 'center'
+          //   },
+          //   legend: {
+          //     tooltipHoverFormatter: function (val, opts) {
+          //       let dataValue = opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex];
+          //       if(val == 'Quantity (k)'){
+          //         dataValue = dataValue*10;
+          //       }else if(val == 'Retailers'){
+          //         dataValue = dataValue*100;
+          //       }
+          //       const formattedValue = dataValue % 1 === 0 ? dataValue : dataValue.toFixed(2);
+          //       return val + ' - <strong>' + formattedValue + '</strong>';
+          //     }
+          //   },
+          //   markers: {
+          //     size: 5,
+          //     hover: {
+          //       sizeOffset: 6
+          //     }
+          //   },
+          //   xaxis: {
+          //     labels: {
+          //       trim: false
+          //     },
+          //     categories: categories
+          //   },
+          //   yaxis: {
+          //     title: {
+          //       text: 'Values',
+          //       style: {
+          //         color: '#000000'
+          //       }
+          //     },
+          //     min: 0,
+          //     labels: {
+          //       formatter: function (val) {
+          //         return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
+          //       },
+          //       offsetX: -20, // Move y-axis labels slightly to avoid overlap
+          //     },
+          //     tickAmount: 3
+          //   },
+          //   tooltip: {
+          //     shared: true,
+          //     intersect: false,
+          //     y: [
+          //       {
+          //         title: {
+          //           formatter: function (val) {
+          //             return val;
+          //           }
+          //         }
+          //       },
+          //       {
+          //         title: {
+          //           formatter: function (val) {
+          //             return val;
+          //           }
+          //         }
+          //       },
+          //       {
+          //         title: {
+          //           formatter: function (val) {
+          //             return val;
+          //           }
+          //         }
+          //       }
+          //     ]
+          //   }
+          // };
+          
           this.chartOptionsline = {
             series: [
-              // {
-              //   name: 'Retailers',
-              //   data: [120, 150, 130] // Example data for Retailers over 3 months
-              // },
-              // {
-              //   name: 'Quantity (k)',
-              //   data: [30, 25, 35] // Example data for Quantity over 3 months
-              // },
-              // {
-              //   name: 'Value',
-              //   data: [100, 70, 80] // Example data for Value over 3 months (in thousands)
-              // }
-              {
-                name: 'Retailers',
-                data: retailersData // Extracts totalRetailerCode values
-              },
               {
                 name: 'Quantity (k)',
                 data: quantityData // Extracts totalQTY values
+              },
+              {
+                name: 'Retailers',
+                data: retailersData // Extracts totalRetailerCode values
               },
               {
                 name: 'Value (Cr)',
@@ -662,43 +1003,55 @@ searchInputValueForMonth: string = '';
               }
             ],
             chart: {
-              height: 350,
-              type: 'line'
+              height: 500,
+              type: 'line',
             },
             dataLabels: {
-              enabled: true
+              enabled: true,
+              offsetX: -5,
+              offsetY: -5,
+              style: {
+                fontSize: '10px',
+              },
+              background: {
+                enabled: true,
+                foreColor: '#000000'
+              },
+              formatter: function (val:any, { seriesIndex, w }) {
+                // Apply custom scaling to data labels based on series name
+                const seriesName = w.config.series[seriesIndex].name;
+                if (seriesName === 'Quantity (k)') {
+                  return (val * 10).toFixed(2);  // Scale Quantity by 10
+                } else if (seriesName === 'Retailers') {
+                  return (val * 100);  // Scale Retailers by 100
+                }
+                return val.toFixed(2);  // No scaling for other series
+              }
             },
             stroke: {
               width: 5,
-              curve: 'smooth', // Smooth curve for the line chart
-              dashArray: [0, 8, 5] // Different dash arrays for each line
+              curve: 'smooth',
+              dashArray: [0, 8, 5]
             },
             title: {
               text: 'Monthly Trend',
               align: 'center'
             },
-            // subtitle: {
-            //   text: 'No of Re-retailers, Value, and Qty',
-            //   align: 'center',
-            //   style: {
-            //     fontSize: '14px',
-            //     color: '#666'
-            //   }
-            // },
-            // legend: {
-            //   tooltipHoverFormatter: function (val, opts) {
-            //     return val + ' - <strong>' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + '</strong>';
-            //   }
-            // },
             legend: {
               tooltipHoverFormatter: function (val, opts) {
-                const dataValue = opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex];
+                // Apply custom scaling in the legend tooltip
+                let dataValue = opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex];
+                if (val === 'Quantity (k)') {
+                  dataValue = dataValue * 10;
+                } else if (val === 'Retailers') {
+                  dataValue = dataValue * 100;
+                }
                 const formattedValue = dataValue % 1 === 0 ? dataValue : dataValue.toFixed(2);
                 return val + ' - <strong>' + formattedValue + '</strong>';
               }
-            },            
+            },
             markers: {
-              size: 5, // Size of markers on the line
+              size: 5,
               hover: {
                 sizeOffset: 6
               }
@@ -709,69 +1062,41 @@ searchInputValueForMonth: string = '';
               },
               categories: categories
             },
-            yaxis: [
-              {
-                title: {
-                  text: 'Quantity (K)', // Left y-axis title
-                  style: {
-                    color: '#000000' // Change color as needed
-                  }
-                },
-                min: 0, // Minimum value for left y-axis
-                labels: {
-                  formatter: function (val) {
-                    // return '' + val; // Format for value
-                    return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
-                  }
-                },
-                tickAmount: 1 // Adjust the number of ticks as necessary
-              },
-              {
-                opposite: true, // Make this y-axis on the opposite side
-                title: {
-                  text: 'Value (Cr)', // Right y-axis title
-                  style: {
-                    color: '#000000' // Change color as needed
-                  }
-                },
-                 labels: {
-                  formatter: function (val) {
-                    // return '' + val; // Format for value
-                    return val.toFixed(0);
-                  }
-                },
-                min: 0, // Minimum value for right y-axis
-                tickAmount: 4 // Adjust the number of ticks as necessary
-              }
-            ],
-            tooltip: {
-              shared: true, // Show shared tooltip
-              intersect: false,
-              y: [
-                {
-                  title: {
-                    formatter: function (val) {
-                      return val;
-                    }
-                  }
-                },
-                {
-                  title: {
-                    formatter: function (val) {
-                      return val;
-                    }
-                  }
-                },
-                {
-                  title: {
-                    formatter: function (val) {
-                      return  val; // Format for value
-                    }
-                  }
+            yaxis: {
+              title: {
+                text: 'Values',
+                style: {
+                  color: '#000000'
                 }
-              ]
+              },
+              min: 0,
+              labels: {
+                formatter: function (val) {
+                  return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
+                },
+                offsetX: -20
+              },
+              tickAmount: 3
+            },
+            tooltip: {
+              shared: true,
+              intersect: false,
+              y: {
+                formatter: function (value, { series, seriesIndex }) {
+                  // Apply scaling based on series name in the tooltip
+                  const seriesName = series[seriesIndex].name;
+                  if (seriesIndex === 0) {
+                    return (value * 10).toFixed(2);
+                  } else if (seriesIndex === 1) {
+                    return (value * 100).toFixed(0);
+                  }
+                  return value.toFixed(2);
+                }
+              }
             }
           };
+          
+          
         }
         console.log('this is for checking');
       },
@@ -842,12 +1167,16 @@ searchInputValueForMonth: string = '';
             plotOptions: {
               bar: {
                 horizontal: false,
-                columnWidth: '100%'
+                columnWidth: '80%'
                 // endingShape: "rounded"
               }
             },
             dataLabels: {
-              enabled: true
+              enabled: true,
+              background: {
+                enabled: true,
+                foreColor: '#000000'
+              },
             },
             stroke: {
               show: true,
@@ -862,6 +1191,10 @@ searchInputValueForMonth: string = '';
                   color: '#000000' // Change color as needed
                 }
               },
+              labels: {
+                // trim: false,
+                show: false
+              },
             },
             // yaxis: {
             //   title: {
@@ -871,6 +1204,7 @@ searchInputValueForMonth: string = '';
             // },
 
             yaxis: [
+             
               {
                 title: {
                   text: '(Growth Value) Loading...', // Left y-axis title
@@ -880,6 +1214,7 @@ searchInputValueForMonth: string = '';
                 },
                 // min: 0, // Minimum value for left y-axis
                 labels: {
+                  show:false,
                   formatter: function (val:any) {
                     return '' + val; // Format for value
                   }
@@ -921,6 +1256,9 @@ searchInputValueForMonth: string = '';
 
           this.chartOptions = {
             chart: {
+              zoom: {
+                enabled: true
+              },
               type: 'bar',
               height: 500,
               toolbar: {
@@ -932,7 +1270,7 @@ searchInputValueForMonth: string = '';
                   pan: true,            // Enable panning
                   reset: true           // Reset zoom and pan to the initial state
                 },
-                autoSelected: 'zoom'    // Set default tool to zoom
+                // autoSelected: 'zoom'    // Set default tool to zoom
               }
             },
             title: {
@@ -956,18 +1294,19 @@ searchInputValueForMonth: string = '';
                 data: retailersData // Example values for Number of Retailers
               },
               {
+                name: 'Value (Cr)',
+                data: valueData // Example values for Value
+              },
+              {
                 name: 'Quantity (k)',
                 data: quantityData // Example values for Quantity
               },
-              {
-                name: 'Value (Cr)',
-                data: valueData // Example values for Value
-              }
+             
             ],
             plotOptions: {
               bar: {
                 horizontal: false,
-                columnWidth: '100%',
+                columnWidth: '80%',
                 dataLabels: {
                   position: 'top'
                 }
@@ -975,11 +1314,13 @@ searchInputValueForMonth: string = '';
             },
             dataLabels: {
               enabled: true,
-              offsetY: 30,
+              //  offsetY: -10,
               
               style: {
-                fontSize: "10px"
-              }
+                fontSize: "10px",
+                colors: ['#000000'] 
+              },
+              
             },
             stroke: {
               show: true,
@@ -991,20 +1332,21 @@ searchInputValueForMonth: string = '';
             },
             yaxis: [
               {
+                floating: false,
                 title: {
                   text: ' (Growth Value)', // Left y-axis title
                   // style: {
                   //   color: '#000000' // Change color as needed
                   // }
                 },
-                min: 0, // Set minimum value for the y-axis
+                // min: 0, // Set minimum value for the y-axis
                 //max: 800, // Set maximum value for the y-axis (adjust as needed)
                 tickAmount: 4, // Adjust the number of ticks based on the range
-                labels: {
-                  formatter: function (val) {
-                    return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2); // Format the labels
-                  }
-                }
+                 labels: {
+                   formatter: function (val) {
+                     return val.toFixed(0);
+                   }
+                 }
               }
             ],
             fill: {
@@ -1719,17 +2061,23 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
           style: { color: '#000000' }
         },
         labels: {
+          show:false,
           formatter: (val: any) => '' + val
         },
         tickAmount: 4
       }
     ],
     xaxis: {
-      labels: { trim: false },
+      labels: { trim: false,show:false },
       categories: [],
       title: { style: { color: '#000000' } }
     },
-    dataLabels: { enabled: true },
+    dataLabels: { enabled: true ,
+      style: {
+        fontSize: "10px",
+        colors: ['#000000'] 
+      },
+    },
     chart: {
       type: 'bar',
       height: 400,
@@ -1866,17 +2214,21 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
                     style: { color: '#000000' }
                 },
                 labels: {
+                  show:false,
                     formatter: (val: any) => '' + val
                 },
                 tickAmount: 4
             }
         ],
         xaxis: {
-            labels: { trim: false },
+            labels: { trim: false ,show:false},
             categories: [],
             title: { style: { color: '#000000' } }
         },
-        dataLabels: { enabled: true },
+        dataLabels: { enabled: true,  style: {
+          fontSize: "10px",
+          colors: ['#000000'] 
+        }, },
         chart: {
             type: 'bar',
             height: 350,
@@ -2099,23 +2451,23 @@ public chartOptionslineForOrdBhFn = (MonthlyToalOrdaringPayload?: any) => {
         },
         tickAmount: 4 // Adjust the number of ticks as necessary
       },
-      {
-        opposite: true, // Make this y-axis on the opposite side
-        title: {
-          text: 'Value (Cr)', // Right y-axis title
-          style: {
-            color: '#000000' // Change color as needed
-          }
-        },
-         labels: {
-          formatter: function (val) {
-            // return '' + val; // Format for value
-            return val.toFixed(0);
-          }
-        },
-        min: 0, // Minimum value for right y-axis
-        tickAmount: 4 // Adjust the number of ticks as necessary
-      }
+      // {
+      //   opposite: false, // Make this y-axis on the opposite side
+      //   title: {
+      //     text: 'Value (Cr)', // Right y-axis title
+      //     style: {
+      //       color: '#000000' // Change color as needed
+      //     }
+      //   },
+      //    labels: {
+      //     formatter: function (val) {
+      //       // return '' + val; // Format for value
+      //       return val.toFixed(0);
+      //     }
+      //   },
+      //   min: 0, // Minimum value for right y-axis
+      //   tickAmount: 4 // Adjust the number of ticks as necessary
+      // }
     ],
     tooltip: {
       shared: true, // Show shared tooltip
@@ -2152,25 +2504,151 @@ public chartOptionslineForOrdBhFn = (MonthlyToalOrdaringPayload?: any) => {
         this.RegionWiseMonthlyDistibutionOptionsFOrdBhFn(MonthlyToalOrdaringPayload);
         response.body.forEach((item: any) => {
           // Push values to each series array
-          retailersData.push(item.noOforders);
-          quantityData.push((item.avgQtyPerOrder /1000).toFixed(2));
-          valueData.push((item.avgValuePerOrder / 10000000).toFixed(2));
+          retailersData.push(item.noOforders/100);
+          quantityData.push((item.avgQtyPerOrder));
+          valueData.push((item.avgValuePerOrder / 1000));
 
           // Get month name and add to categories
           categories.push(monthNames[item.month - 1]);
         });
+        // this.chartOptionslineForOrdBh = {
+        //   series: [
+        //     {
+        //       name: 'No Of Orders.',
+        //       data: retailersData // Extracts totalRetailerCode values
+        //     },
+        //     {
+        //       name: 'Avg Qty Per Order. (k)',
+        //       data: quantityData // Extracts totalQTY values
+        //     },
+        //     {
+        //       name: 'Avg Value Per Order. (Cr)',
+        //       data: valueData // Extracts totalRevenue values
+        //     }
+        //   ],
+        //   chart: {
+        //     height: 350,
+        //     type: 'line'
+        //   },
+        //   dataLabels: {
+        //     enabled: true
+        //   },
+        //   stroke: {
+        //     width: 5,
+        //     curve: 'smooth', // Smooth curve for the line chart
+        //     dashArray: [0, 8, 5] // Different dash arrays for each line
+        //   },
+        //   title: {
+        //     text: 'Monthly Orders Trend.',
+        //     align: 'center'
+        //   },
+        //   // subtitle: {
+        //   //   text: 'No of Re-retailers, Value, and Qty',
+        //   //   align: 'center',
+        //   //   style: {
+        //   //     fontSize: '14px',
+        //   //     color: '#666'
+        //   //   }
+        //   // },
+        //   // legend: {
+        //   //   tooltipHoverFormatter: function (val, opts) {
+        //   //     return val + ' - <strong>' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + '</strong>';
+        //   //   }
+        //   // },
+        //   legend: {
+        //     tooltipHoverFormatter: function (val, opts) {
+        //       const dataValue = opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex];
+        //       const formattedValue = dataValue % 1 === 0 ? dataValue : dataValue.toFixed(2);
+        //       return val + ' - <strong>' + formattedValue + '</strong>';
+        //     }
+        //   },            
+        //   markers: {
+        //     size: 5, // Size of markers on the line
+        //     hover: {
+        //       sizeOffset: 6
+        //     }
+        //   },
+        //   xaxis: {
+        //     labels: {
+        //       trim: false
+        //     },
+        //     categories: categories
+        //   },
+        //   yaxis: [
+        //     {
+        //       title: {
+        //         text: ' Avg Quantity Per Order (K)', // Left y-axis title
+        //         style: {
+        //           color: '#000000' // Change color as needed
+        //         }
+        //       },
+        //       min: 0, // Minimum value for left y-axis
+        //       labels: {
+        //         formatter: function (val) {
+        //           // return '' + val; // Format for value
+        //           return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
+        //         }
+        //       },
+        //       tickAmount: 4 // Adjust the number of ticks as necessary
+        //     },
+        //     {
+        //       opposite: true, // Make this y-axis on the opposite side
+        //       title: {
+        //         text: 'Avg Value Per Order (Cr)', // Right y-axis title
+        //         style: {
+        //           color: '#000000' // Change color as needed
+        //         }
+        //       },
+        //        labels: {
+        //         formatter: function (val) {
+        //           // return '' + val; // Format for value
+        //           return val.toFixed(0);
+        //         }
+        //       },
+        //       min: 0, // Minimum value for right y-axis
+        //       tickAmount: 4 // Adjust the number of ticks as necessary
+        //     }
+        //   ],
+        //   tooltip: {
+        //     shared: true, // Show shared tooltip
+        //     intersect: false,
+        //     y: [
+        //       {
+        //         title: {
+        //           formatter: function (val) {
+        //             return val;
+        //           }
+        //         }
+        //       },
+        //       {
+        //         title: {
+        //           formatter: function (val) {
+        //             return val;
+        //           }
+        //         }
+        //       },
+        //       {
+        //         title: {
+        //           formatter: function (val) {
+        //             return  val; // Format for value
+        //           }
+        //         }
+        //       }
+        //     ]
+        //   }
+        // };
         this.chartOptionslineForOrdBh = {
           series: [
             {
-              name: 'No Of Orders.',
+              name: 'No Of Orders',
               data: retailersData // Extracts totalRetailerCode values
             },
             {
-              name: 'Avg Qty Per Order. (k)',
+              name: 'Avg Qty Per Order',
               data: quantityData // Extracts totalQTY values
             },
             {
-              name: 'Avg Value Per Order. (Cr)',
+              name: 'Avg Value Per Order (k)',
               data: valueData // Extracts totalRevenue values
             }
           ],
@@ -2179,39 +2657,55 @@ public chartOptionslineForOrdBhFn = (MonthlyToalOrdaringPayload?: any) => {
             type: 'line'
           },
           dataLabels: {
-            enabled: true
+            enabled: true,
+            offsetX: -5,
+            offsetY: -5,
+            style: {
+              fontSize: '10px',
+            },
+            background: {
+              enabled: true,
+              foreColor: '#000000'
+            },
+            formatter: function (val:any, { seriesIndex, w }) {
+              const seriesName = w.config.series[seriesIndex].name;
+              if (val === 'Avg Value Per Order (K)') {
+                val = val * 1000;
+             }  else if (seriesName === 'No Of Orders') {
+                return (val * 100).toFixed(0); // Scale No Of Orders by 100
+              }
+              if (val === 'Avg Qty Per Order') {
+                val = val.toFixed(0);
+              }
+              return val.toFixed(2); // No scaling for Avg Value
+            }
           },
           stroke: {
             width: 5,
-            curve: 'smooth', // Smooth curve for the line chart
-            dashArray: [0, 8, 5] // Different dash arrays for each line
+            curve: 'smooth',
+            dashArray: [0, 8, 5]
           },
           title: {
-            text: 'Monthly Orders Trend.',
+            text: 'Monthly Orders Trend',
             align: 'center'
           },
-          // subtitle: {
-          //   text: 'No of Re-retailers, Value, and Qty',
-          //   align: 'center',
-          //   style: {
-          //     fontSize: '14px',
-          //     color: '#666'
-          //   }
-          // },
-          // legend: {
-          //   tooltipHoverFormatter: function (val, opts) {
-          //     return val + ' - <strong>' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + '</strong>';
-          //   }
-          // },
           legend: {
             tooltipHoverFormatter: function (val, opts) {
-              const dataValue = opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex];
+              let dataValue = opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex];
+              if (val === 'Avg Value Per Order (K)') {
+                 dataValue = dataValue * 1000;
+              } else if (val === 'No Of Orders') {
+                dataValue = (dataValue * 100).toFixed(0);
+              }
               const formattedValue = dataValue % 1 === 0 ? dataValue : dataValue.toFixed(2);
+              if (val === 'Avg Qty Per Order') {
+                dataValue = dataValue.toFixed(0);
+              }
               return val + ' - <strong>' + formattedValue + '</strong>';
             }
-          },            
+          },
           markers: {
-            size: 5, // Size of markers on the line
+            size: 5,
             hover: {
               sizeOffset: 6
             }
@@ -2222,69 +2716,41 @@ public chartOptionslineForOrdBhFn = (MonthlyToalOrdaringPayload?: any) => {
             },
             categories: categories
           },
-          yaxis: [
-            {
-              title: {
-                text: ' Avg Quantity Per Order (K)', // Left y-axis title
-                style: {
-                  color: '#000000' // Change color as needed
-                }
-              },
-              min: 0, // Minimum value for left y-axis
-              labels: {
-                formatter: function (val) {
-                  // return '' + val; // Format for value
-                  return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
-                }
-              },
-              tickAmount: 4 // Adjust the number of ticks as necessary
-            },
-            {
-              opposite: true, // Make this y-axis on the opposite side
-              title: {
-                text: 'Avg Value Per Order (Cr)', // Right y-axis title
-                style: {
-                  color: '#000000' // Change color as needed
-                }
-              },
-               labels: {
-                formatter: function (val) {
-                  // return '' + val; // Format for value
-                  return val.toFixed(0);
-                }
-              },
-              min: 0, // Minimum value for right y-axis
-              tickAmount: 4 // Adjust the number of ticks as necessary
-            }
-          ],
-          tooltip: {
-            shared: true, // Show shared tooltip
-            intersect: false,
-            y: [
-              {
-                title: {
-                  formatter: function (val) {
-                    return val;
-                  }
-                }
-              },
-              {
-                title: {
-                  formatter: function (val) {
-                    return val;
-                  }
-                }
-              },
-              {
-                title: {
-                  formatter: function (val) {
-                    return  val; // Format for value
-                  }
-                }
+          yaxis: {
+            title: {
+              text: 'Values',
+              style: {
+                color: '#000000'
               }
-            ]
+            },
+            min: 0,
+            labels: {
+              formatter: function (val) {
+                return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
+              },
+              offsetX: -20
+            },
+            tickAmount: 4
+          },
+          tooltip: {
+            shared: true,
+            intersect: false,
+            y: {
+              formatter: function (value:any, { series, seriesIndex }) {
+                const seriesName = series[seriesIndex].name;
+                if (value === 'Avg Value Per Order (k)') {
+                  value = value * 1000;
+               }  else if (seriesIndex === 0) {
+                  return (value * 100).toFixed(0);
+                }
+
+                return value.toFixed(2);
+              }
+            }
           }
         };
+        
+        
       }
       console.log('this is for checking');
     },
@@ -2348,7 +2814,7 @@ public RegionWiseMonthlyDistibutionOptionsFOrdBhFn = (MonthlyTotalOrderingPayloa
       categories: [],
       title: { style: { color: '#000000' } }
     },
-    dataLabels: { enabled: true },
+    dataLabels: { enabled: false },
     chart: {
       type: 'bar',
       height: 350,
@@ -2402,7 +2868,7 @@ public RegionWiseMonthlyDistibutionOptionsFOrdBhFn = (MonthlyTotalOrderingPayloa
                           name: `${metricLabels[metric]} - ${region}`,
                           group: group,
                           data: regionData.map(item => {
-                              if (metric === 'totalQTY') return (item.totalQTY / 1000).toFixed(2); // Adjust units
+                              if (metric === 'totalQTY') return (item.totalQTY / 10).toFixed(0); // Adjust units
                               if (metric === 'totalRevenue') return (item.totalRevenue / 10000000).toFixed(2) // Adjust units
                               return item.noOfOrdersPercentage.toFixed(2);
                           })
@@ -2445,6 +2911,154 @@ public RegionWiseMonthlyDistibutionOptionsFOrdBhFn = (MonthlyTotalOrderingPayloa
 };
 
 
+// public RegionWiseMonthlyAvgPerOrderFn = (MonthlyTotalOrderingPayload?: any) => {
+//   this.spinner.show();
+//   const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+//   const categories: string[] = [];
+
+//   // Define chart options with placeholder series (to be updated dynamically)
+//   this.RegionWiseMonthlyAvgPerOrder = {
+//     // series: [],
+//     series: [
+//       // Retailers group
+//       { name: 'Avg Oty Per Order - East', group: 'retailers', data: [] },
+//       { name: 'Avg Oty Per Order - South1', group: 'retailers', data: [] },
+//       { name: 'Avg Oty Per Order - South2', group: 'retailers', data: [] },
+//       { name: 'Avg Oty Per Order - North', group: 'retailers', data: [] },
+//       { name: 'Avg Oty Per Order - West', group: 'retailers', data: [] },
+
+//       // Qty group
+//       { name: 'Avg Value Per Order - East', group: 'qty', data: [] },
+//       { name: 'Avg Value Per Order - South1', group: 'qty', data: [] },
+//       { name: 'Avg Value Per Order - South2', group: 'qty', data: [] },
+//       { name: 'Avg Value Per Order - North', group: 'qty', data: [] },
+//       { name: 'Avg Value Per Order - West', group: 'qty', data: [] },
+
+//       // // Value group
+//       // { name: 'Value - East', group: 'value', data: [] },
+//       // { name: 'Value - South1', group: 'value', data: [] },
+//       // { name: 'Value - South2', group: 'value', data: [] },
+//       // { name: 'Value - North', group: 'value', data: [] },
+//       // { name: 'Value - West', group: 'value', data: [] }
+//     ],
+//     title: {
+//       text: 'Region Wise Monthly Avg Per Order Loading...',
+//       align: 'center',
+//       // style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
+//     },
+//     yaxis: [
+//       {
+//         title: {
+//           text: '(Avg Oty Per Order) Loading...',
+//           style: { color: '#000000' }
+//         },
+//         labels: {
+//           formatter: (val: any) => '' + val
+//         },
+//         tickAmount: 4
+//       }
+//     ],
+//     xaxis: {
+//       labels: { trim: false },
+//       categories: [],
+//       title: { style: { color: '#000000' } }
+//     },
+//     dataLabels: { enabled: true },
+//     chart: {
+//       type: 'bar',
+//       height: 350,
+//       stacked: true
+//     },
+//     plotOptions: { bar: { horizontal: false } },
+//     fill: { opacity: 1 },
+//     colors: [
+//       '#80c7fd',
+//       '#008FFB',
+//       '#80f1cb',
+//       '#00E396',
+//       '#feb019', // Retailers colors
+//       '#FF5733',
+//       '#FFBD33',
+//       '#C70039',
+//       '#900C3F',
+//       '#581845', // Qty colors
+//       '#2ECC71',
+//       '#28B463',
+//       '#239B56',
+//       '#1D8348',
+//       '#186A3B' // Value colors
+//     ],
+//     legend: { position: 'top', horizontalAlign: 'left' }
+//   };
+
+//   this.dashboardService.RegionWiseMonthlyAvgPerOrderFn(MonthlyTotalOrderingPayload).subscribe(
+//       (response) => {
+//           if (response && response.body) {
+//               this.spinner.hide();
+//               // this.RegionWiseGrowthOverPreviousMonth(MonthlyTotalOrderingPayload);
+//               // Prepare categories based on unique months
+//               const uniqueMonths = [...new Set(response.body.map((item: any) => item.month))];
+//               uniqueMonths.forEach((month: any) => {
+//                   categories.push(monthNames[month - 1]);
+//               });
+
+//               // Prepare data series for each metric and region
+//               const prepareSeriesData = (data: any[], metric: string, group: string) => {
+//                   const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
+//                   const metricLabels: { [key: string]: string } = {
+//                       totalRetailerCode: 'No Of Orders %',
+//                       totalQTY: 'Avg Oty Per Order (K)',
+//                       totalRevenue: 'Avg Value Per Order (Cr)'
+//                   };
+
+//                   return regions.map(region => {
+//                       const regionData = data.filter(item => item.region === region);
+//                       return {
+//                           name: `${metricLabels[metric]} - ${region}`,
+//                           group: group,
+//                           data: regionData.map(item => {
+//                               if (metric === 'avgQtyPerOrder') return (item.avgQtyPerOrder / 1000).toFixed(2); // Adjust units
+//                               if (metric === 'avgPricePerOrder') return (item.avgPricePerOrder / 10000000).toFixed(2) // Adjust units
+//                               return item.noOfOrdersPercentage;
+//                           })
+//                       };
+//                   });
+//               };
+
+//               // Update chart options with dynamic series and categories
+//               this.RegionWiseMonthlyAvgPerOrder = {
+//                   ...this.RegionWiseMonthlyAvgPerOrder,
+//                   series: [
+//                       // ...prepareSeriesData(response.body, 'totalRetailerCode', 'No Of Orders'),
+//                       ...prepareSeriesData(response.body, 'avgQtyPerOrder', 'qty'),
+//                       ...prepareSeriesData(response.body, 'avgPricePerOrder', 'value')
+//                   ],
+//                   xaxis: { ...this.RegionWiseMonthlyAvgPerOrder.xaxis, categories },
+//                   title: {
+//                     text: 'Region Wise Monthly Avg Per Order.',
+//                     align: 'center',
+//                     // style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
+//                 },
+//                 yaxis: [{
+//                   title: {
+//                       text: '(Avg Oty Per Order)',
+//                       style: { color: '#000000' }
+//                   },
+//                   labels: {
+//                       formatter: (val: any) => '' + val
+//                   },
+//                   tickAmount: 4
+//               }],
+//               };
+//           }
+//       },
+//       (error) => {
+//           this.spinner.hide();
+//           console.error('Error fetching region-wise monthly distribution data:', error);
+//       }
+//   );
+// };
+
 public RegionWiseMonthlyAvgPerOrderFn = (MonthlyTotalOrderingPayload?: any) => {
   this.spinner.show();
   const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -2452,147 +3066,110 @@ public RegionWiseMonthlyAvgPerOrderFn = (MonthlyTotalOrderingPayload?: any) => {
 
   // Define chart options with placeholder series (to be updated dynamically)
   this.RegionWiseMonthlyAvgPerOrder = {
-    // series: [],
     series: [
-      // Retailers group
-      { name: 'Avg Oty Per Order - East', group: 'retailers', data: [] },
-      { name: 'Avg Oty Per Order - South1', group: 'retailers', data: [] },
-      { name: 'Avg Oty Per Order - South2', group: 'retailers', data: [] },
-      { name: 'Avg Oty Per Order - North', group: 'retailers', data: [] },
-      { name: 'Avg Oty Per Order - West', group: 'retailers', data: [] },
-
       // Qty group
-      { name: 'Avg Value Per Order - East', group: 'qty', data: [] },
-      { name: 'Avg Value Per Order - South1', group: 'qty', data: [] },
-      { name: 'Avg Value Per Order - South2', group: 'qty', data: [] },
-      { name: 'Avg Value Per Order - North', group: 'qty', data: [] },
-      { name: 'Avg Value Per Order - West', group: 'qty', data: [] },
+      { name: 'Avg Qty Per Order - East', group: 'qty', data: [] },
+      { name: 'Avg Qty Per Order - South1', group: 'qty', data: [] },
+      { name: 'Avg Qty Per Order - South2', group: 'qty', data: [] },
+      { name: 'Avg Qty Per Order - North', group: 'qty', data: [] },
+      { name: 'Avg Qty Per Order - West', group: 'qty', data: [] },
 
-      // // Value group
-      // { name: 'Value - East', group: 'value', data: [] },
-      // { name: 'Value - South1', group: 'value', data: [] },
-      // { name: 'Value - South2', group: 'value', data: [] },
-      // { name: 'Value - North', group: 'value', data: [] },
-      // { name: 'Value - West', group: 'value', data: [] }
+      // Value group
+      { name: 'Avg Value Per Order - East', group: 'value', data: [] },
+      { name: 'Avg Value Per Order - South1', group: 'value', data: [] },
+      { name: 'Avg Value Per Order - South2', group: 'value', data: [] },
+      { name: 'Avg Value Per Order - North', group: 'value', data: [] },
+      { name: 'Avg Value Per Order - West', group: 'value', data: [] }
     ],
     title: {
       text: 'Region Wise Monthly Avg Per Order Loading...',
-      align: 'center',
-      // style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
+      align: 'center'
     },
-    yaxis: [
-      {
-        title: {
-          text: '(Avg Oty Per Order) Loading...',
-          style: { color: '#000000' }
-        },
-        labels: {
-          formatter: (val: any) => '' + val
-        },
-        tickAmount: 4
-      }
-    ],
+    yaxis: [{
+      title: {
+        text: '(Avg Qty/Value Per Order)',
+        style: { color: '#000000' }
+      },
+      labels: {
+        formatter: (val: any) => '' + val
+      },
+      tickAmount: 4
+    }],
     xaxis: {
       labels: { trim: false },
       categories: [],
       title: { style: { color: '#000000' } }
     },
-    dataLabels: { enabled: true },
-    chart: {
-      type: 'bar',
-      height: 350,
-      stacked: true
-    },
+    dataLabels: { enabled: false },
+    chart: { type: 'bar', height: 350, stacked: true },
     plotOptions: { bar: { horizontal: false } },
     fill: { opacity: 1 },
     colors: [
-      '#80c7fd',
-      '#008FFB',
-      '#80f1cb',
-      '#00E396',
-      '#feb019', // Retailers colors
-      '#FF5733',
-      '#FFBD33',
-      '#C70039',
-      '#900C3F',
-      '#581845', // Qty colors
-      '#2ECC71',
-      '#28B463',
-      '#239B56',
-      '#1D8348',
-      '#186A3B' // Value colors
+      '#80c7fd', '#008FFB', '#80f1cb', '#00E396', '#feb019', // Qty colors
+      '#FF5733', '#FFBD33', '#C70039', '#900C3F', '#581845'  // Value colors
     ],
-    legend: { position: 'top', horizontalAlign: 'left' }
+    legend: { position: 'right', horizontalAlign: 'left' }
   };
 
   this.dashboardService.RegionWiseMonthlyAvgPerOrderFn(MonthlyTotalOrderingPayload).subscribe(
-      (response) => {
-          if (response && response.body) {
-              this.spinner.hide();
-              // this.RegionWiseGrowthOverPreviousMonth(MonthlyTotalOrderingPayload);
-              // Prepare categories based on unique months
-              const uniqueMonths = [...new Set(response.body.map((item: any) => item.month))];
-              uniqueMonths.forEach((month: any) => {
-                  categories.push(monthNames[month - 1]);
-              });
+    (response) => {
+      if (response && response.body) {
+        this.spinner.hide();
 
-              // Prepare data series for each metric and region
-              const prepareSeriesData = (data: any[], metric: string, group: string) => {
-                  const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
-                  const metricLabels: { [key: string]: string } = {
-                      totalRetailerCode: 'No Of Orders %',
-                      totalQTY: 'Avg Oty Per Order (K)',
-                      totalRevenue: 'Avg Value Per Order (Cr)'
-                  };
+        // Prepare categories based on unique months
+        const uniqueMonths = [...new Set(response.body.map((item: any) => item.month))];
+        uniqueMonths.forEach((month: any) => {
+          categories.push(monthNames[month - 1]);
+        });
 
-                  return regions.map(region => {
-                      const regionData = data.filter(item => item.region === region);
-                      return {
-                          name: `${metricLabels[metric]} - ${region}`,
-                          group: group,
-                          data: regionData.map(item => {
-                              if (metric === 'avgQtyPerOrder') return (item.avgQtyPerOrder / 1000).toFixed(2); // Adjust units
-                              if (metric === 'avgPricePerOrder') return (item.avgPricePerOrder / 10000000).toFixed(2) // Adjust units
-                              return item.noOfOrdersPercentage;
-                          })
-                      };
-                  });
-              };
+        // Prepare data series for each metric and region
+        const prepareSeriesData = (data: any[], metric: string, group: string) => {
+          const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
+          const metricLabels: { [key: string]: string } = {
+            avgQtyPerOrder: 'Avg Qty Per Order',
+            avgPricePerOrder: 'Avg Value Per Order (K)'
+          };
 
-              // Update chart options with dynamic series and categories
-              this.RegionWiseMonthlyAvgPerOrder = {
-                  ...this.RegionWiseMonthlyAvgPerOrder,
-                  series: [
-                      // ...prepareSeriesData(response.body, 'totalRetailerCode', 'No Of Orders'),
-                      ...prepareSeriesData(response.body, 'avgQtyPerOrder', 'qty'),
-                      ...prepareSeriesData(response.body, 'avgPricePerOrder', 'value')
-                  ],
-                  xaxis: { ...this.RegionWiseMonthlyAvgPerOrder.xaxis, categories },
-                  title: {
-                    text: 'Region Wise Monthly Avg Per Order.',
-                    align: 'center',
-                    // style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
-                },
-                yaxis: [{
-                  title: {
-                      text: '(Avg Oty Per Order)',
-                      style: { color: '#000000' }
-                  },
-                  labels: {
-                      formatter: (val: any) => '' + val
-                  },
-                  tickAmount: 4
-              }],
-              };
-          }
-      },
-      (error) => {
-          this.spinner.hide();
-          console.error('Error fetching region-wise monthly distribution data:', error);
+          return regions.map(region => {
+            const regionData = data.filter(item => item.region === region);
+            return {
+              name: `${metricLabels[metric]} - ${region}`,
+              group: group,
+              data: regionData.map(item => {
+                if (metric === 'avgQtyPerOrder') return (item.avgQtyPerOrder).toFixed(2); // Adjust units
+                if (metric === 'avgPricePerOrder') return (item.avgPricePerOrder / 1000).toFixed(2); // Adjust units
+                return item.noOfOrdersPercentage;
+              })
+            };
+          });
+        };
+
+        // Update chart options with dynamic series and categories
+        this.RegionWiseMonthlyAvgPerOrder = {
+          ...this.RegionWiseMonthlyAvgPerOrder,
+          series: [
+            ...prepareSeriesData(response.body, 'avgQtyPerOrder', 'qty'),
+            ...prepareSeriesData(response.body, 'avgPricePerOrder', 'value')
+          ],
+          xaxis: { ...this.RegionWiseMonthlyAvgPerOrder.xaxis, categories },
+          title: { text: 'Region Wise Monthly Avg Per Order', align: 'center' },
+          yaxis: [{
+            title: {
+              text: '(Avg Qty/Value Per Order)',
+              style: { color: '#000000' }
+            },
+            labels: { formatter: (val: any) => '' + val },
+            tickAmount: 4
+          }]
+        };
       }
+    },
+    (error) => {
+      this.spinner.hide();
+      console.error('Error fetching region-wise monthly avg per order data:', error);
+    }
   );
 };
-
 
 toggleDropdownVisibilityForMonth() {
   this.isDropdownOpenForMonth = !this.isDropdownOpenForMonth;
@@ -2629,5 +3206,21 @@ filterAvailableMonths() {
     month.name.toLowerCase().includes(searchValue)
   );
 }
+
+resetChartOptions() {
+  this.chartOptionsline = {};
+  this.chartOptionsRegionwise = {};
+  this.chartOptionsRegionwiseGrowth = {};
+  this.regionWiseGrowthOptions = {};
+  this.budgetChartOptions = {};
+  this.RegionWiseMonthlyDistibutionOptions = {};
+  this.RegionWiseGrowthOverPreviousMonthOptions = {};
+  this.chartOptions = {};
+  // Menu id 3 specific charts
+  this.chartOptionslineForOrdBh = {};
+  this.RegionWiseMonthlyDistibutionOptionsFOrdBh = {};
+  this.RegionWiseMonthlyAvgPerOrder = {};
+}
+
 
 }

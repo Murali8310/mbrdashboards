@@ -325,7 +325,7 @@ text-align: center;
     </div>
   </div>
   
-  <div class="col-xl-12 col-md-12" *ngIf="chartOptionsline">
+  <div class="col-xl-12 col-md-12" *ngIf="chartOptionsline && chartOptionsline && chartOptionsline.series && chartOptionsline.series.length > 0">
     <app-card cardTitle="" [options]="false">
     <div id="chart">
       <apx-chart
@@ -347,7 +347,7 @@ text-align: center;
     </app-card>
   </div>
 
-  <div class="col-xl-12 col-md-12"  *ngIf="chartOptions">
+  <div class="col-xl-12 col-md-12"  *ngIf="chartOptions && chartOptions && chartOptions.series && chartOptions.series.length > 0">
     <app-card cardTitle="" [options]="false">
       
     <div id="chart2">
@@ -368,9 +368,8 @@ text-align: center;
     </div>
     </app-card>
   </div>
-  <div class="col-xl-12 col-md-12"  *ngIf="RegionWiseMonthlyDistibutionOptions">
+  <div class="col-xl-12 col-md-12"  *ngIf="RegionWiseMonthlyDistibutionOptions && RegionWiseMonthlyDistibutionOptions && RegionWiseMonthlyDistibutionOptions.series && RegionWiseMonthlyDistibutionOptions.series.length > 0">
     <app-card cardTitle="" [options]="false">
-
     <div id="chart2">
       <apx-chart
       [series]="RegionWiseMonthlyDistibutionOptions.series"
@@ -391,7 +390,7 @@ text-align: center;
     </app-card>
   </div>
   
-  <div class="col-xl-12 col-md-12"  *ngIf="RegionWiseGrowthOverPreviousMonthOptions">
+  <div class="col-xl-12 col-md-12" *ngIf="RegionWiseGrowthOverPreviousMonthOptions && RegionWiseGrowthOverPreviousMonthOptions && RegionWiseGrowthOverPreviousMonthOptions.series && RegionWiseGrowthOverPreviousMonthOptions.series.length > 0">
     <app-card cardTitle="" [options]="false">
     <div id="chart2">
       <apx-chart
@@ -413,27 +412,7 @@ text-align: center;
     </div>
     </app-card>
   </div>
-  <div class="col-xl-12 col-md-12" *ngIf="chartOptionsRegionwise && false">
-    <app-card cardTitle="" [options]="false">
-      
-    <div id="chart2">
-      <apx-chart
-        [series]="chartOptionsRegionwise.series"
-        [chart]="chartOptionsRegionwise.chart"
-        [dataLabels]="chartOptionsRegionwise.dataLabels"
-        [plotOptions]="chartOptionsRegionwise.plotOptions"
-        [yaxis]="chartOptionsRegionwise.yaxis"
-        [legend]="chartOptionsRegionwise.legend"
-        [fill]="chartOptionsRegionwise.fill"
-        [stroke]="chartOptionsRegionwise.stroke"
-        [tooltip]="chartOptionsRegionwise.tooltip"
-        [xaxis]="chartOptionsRegionwise.xaxis"
-        [title]="chartOptionsRegionwise.title">
 
-      ></apx-chart>
-    </div>
-    </app-card>
-  </div>
 
   <div class="col-xl-12 col-md-12" *ngIf="chartOptionsRegionwiseGrowth && false">
     <app-card cardTitle="" [options]="false">
@@ -764,7 +743,7 @@ text-align: center;
     </div>
   </div>
   
-  <div class="col-xl-12 col-md-12" *ngIf="chartOptionslineForOrdBh">
+  <div class="col-xl-12 col-md-12"  *ngIf="chartOptionslineForOrdBh && chartOptionslineForOrdBh.series && chartOptionslineForOrdBh.series.length > 0">
     <app-card cardTitle="" [options]="false">
     <div id="chart">
       <apx-chart
@@ -785,7 +764,7 @@ text-align: center;
     
     </app-card>
   </div>
-  <div class="col-xl-12 col-md-12"  *ngIf="RegionWiseMonthlyDistibutionOptionsFOrdBh">
+  <div class="col-xl-12 col-md-12"   *ngIf="RegionWiseMonthlyDistibutionOptionsFOrdBh && RegionWiseMonthlyDistibutionOptionsFOrdBh.series && RegionWiseMonthlyDistibutionOptionsFOrdBh.series.length > 0" >
     <app-card cardTitle="" [options]="false">
 
     <div id="chart2">
@@ -808,7 +787,7 @@ text-align: center;
     </app-card>
   </div>
   
-  <div class="col-xl-12 col-md-12"  *ngIf="RegionWiseMonthlyAvgPerOrder">
+  <div class="col-xl-12 col-md-12"  *ngIf="RegionWiseMonthlyAvgPerOrder && RegionWiseMonthlyAvgPerOrder && RegionWiseMonthlyAvgPerOrder.series && RegionWiseMonthlyAvgPerOrder.series.length > 0">
     <app-card cardTitle="" [options]="false">
     <div id="chart2">
       <apx-chart
