@@ -185,7 +185,7 @@ Alter PROCEDURE GetOrderSummary
 
 ------------------------ Monthly Trend new Query optimized one --not using this--
 
-ALTER PROCEDURE GetOrderSummary
+ALTER PROCEDURE GetOrderSummary_temp
   @RegionList VARCHAR(MAX),    -- Comma-separated list of regions
   @StartDate INT,              -- Start date in yyyymmdd format (e.g., 20240601)
   @EndDate INT,                -- End date in yyyymmdd format (e.g., 20240630)
@@ -257,9 +257,7 @@ BEGIN
     MONTH(OrderDate);
 END;
 
-
-
-EXEC GetOrderSummary
+EXEC GetOrderSummary_temp
 		@RegionList = 'EAST, WEST, NORTH, SOUTH 1, SOUTH 2', -- Comma-separated list of regions
 		@StartDate = 20240401,         -- Start date in yyyymmdd format
 		@EndDate = 20241030,		   -- End date in yyyymmdd format
@@ -267,21 +265,6 @@ EXEC GetOrderSummary
 		@RSNameList ='',
 		@ABMName='',
 		@RetailerType='';
-
-
-
-		EXEC GetOrderSummary @RegionList = 'EAST, WEST, NORTH, SOUTH 1, SOUTH 2', @StartDate = '20240401', @EndDate = '20241001', @BrandList = '', @RSNameList = '', @ABMName = '', @RetailerType = '';
-
-
-EXEC GetOrderSummary
-		@RegionList = '', -- Comma-separated list of regions
-		@StartDate = 20240401,         -- Start date in yyyymmdd format
-		@EndDate = 20241030,		   -- End date in yyyymmdd format
-		@BrandList ='',
-		@RSNameList ='',
-		@ABMName='',
-		@RetailerType='IDD';
-
 ----------------------------------------------------------------------Growth over Previous Month------------------------------------------------------
  Alter PROCEDURE GrowthOverPreviousMonth
     @RegionList VARCHAR(MAX),     -- Comma-separated list of regions

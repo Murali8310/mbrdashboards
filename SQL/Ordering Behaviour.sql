@@ -1,6 +1,6 @@
 use DB_MBR; 
 
-select * from MBROrders;
+select MONTH(OrderDate) from MBROrders;
  select * from MBRUsers where UserName like '1425137'
 
  SELECT 
@@ -100,7 +100,7 @@ END;
 
 -----------------------------------------------------------------------------RegionWiseMonthlyDistributionNoofOrders---------------------------
 	Alter PROCEDURE RegionWiseMonthlyDistributionNoofOrders
-	 @RegionList VARCHAR(MAX),    -- Comma-separated list of regions
+	@RegionList VARCHAR(MAX),    -- Comma-separated list of regions
     @StartDate INT,              -- Start date in yyyymmdd format (e.g., 20240601)
     @EndDate INT,                -- End date in yyyymmdd format (e.g., 20240630)
     @RSNameList VARCHAR(MAX),

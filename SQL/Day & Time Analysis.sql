@@ -151,7 +151,7 @@ END;
 
 ----------------------------------------------------------------------------------------  % of Orders by Weekday/Weekend &&  % of Orders by Weekday/Weekend Monthly ----------------------------------------------------------------------------------------------------------------------
 
-	Alter PROCEDURE PercentageofOrdersbyWeekdayorWeekend
+Alter PROCEDURE PercentageofOrdersbyWeekdayorWeekend
     @RegionList VARCHAR(MAX),    -- Comma-separated list of regions
     @StartDate INT,              -- Start date in yyyymmdd format (e.g., 20240601)
     @EndDate INT,                -- End date in yyyymmdd format (e.g., 20240630)
@@ -264,6 +264,213 @@ EXEC PercentageofOrdersbyWeekdayorWeekend
 
 ------------------------------------------------------------------------------------------------------------------------% of Orders by Weekday/Weekend Region wise for selected Month-----------------------------------------------------------------------------
 
+ALTER PROCEDURE PercentageofOrdersByWeekdayorWeekendRegionWise
+    @RegionList VARCHAR(MAX),    -- Comma-separated list of regions
+    @StartDate INT,              -- Start date in yyyymmdd format (e.g., 20240601)
+    @EndDate INT,                -- End date in yyyymmdd format (e.g., 20240630)
+    @RSNameList VARCHAR(MAX),
+    @BrandList VARCHAR(MAX),
+    @ABMName VARCHAR(MAX),       -- New parameter for ABMName
+    @RetailerType VARCHAR(MAX)   -- RetailerType parameter to filter by retailer type
+AS
+BEGIN
+    -- CTE to calculate total orders per region for the specified date range
+    WITH RegionOrderCount AS (
+        SELECT 
+            Region,
+            COUNT(DISTINCT OrderNo) AS TotalOrders
+        FROM 
+            MBROrders (NOLOCK)
+        WHERE 
+            OrderDate BETWEEN @StartDate AND @EndDate
+            AND (
+                Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RegionList, ','))
+                OR Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@BrandList, ','))
+                OR RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RSNameList, ','))
+                OR (
+                    @ABMName IS NOT NULL 
+                    AND @ABMName <> '' 
+                    AND (
+                        ABMEMM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ',')) 
+                        OR ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ',')) 
+                    )
+                )
+                OR (
+                    @RetailerType IS NOT NULL 
+                    AND @RetailerType <> '' 
+                    AND RetailerCode LIKE 
+                        CASE 
+                            WHEN @RetailerType = 'IDD' THEN '9%'  
+                            WHEN @RetailerType = 'DD' THEN '1%'   
+                            ELSE ''  
+                        END
+                )
+            )
+        GROUP BY Region
+    )
+
+    -- Main query to calculate percentage of orders for weekdays and weekends by region
+    SELECT 
+        o.Region,  -- Region
+        MONTH(o.OrderDate) AS OrderMonth,  -- Extract Month from OrderDate
+        CASE 
+            WHEN DATENAME(WEEKDAY, o.OrderDate) IN ('Saturday', 'Sunday') THEN 'Weekend'
+            ELSE 'Weekday'
+        END AS DayType,  -- Categorize into Weekday or Weekend
+        COUNT(DISTINCT o.OrderNo) AS DistinctOrderCount,  -- Count of distinct orders for the day type
+        (COUNT(DISTINCT o.OrderNo) * 1.0 / r.TotalOrders) * 100 AS PercentageOfOrders  -- Percentage within region
+    FROM 
+        MBROrders (NOLOCK) o
+    JOIN 
+        RegionOrderCount r ON o.Region = r.Region  -- Join with RegionOrderCount to get total orders per region
+    WHERE 
+        o.OrderDate BETWEEN @StartDate AND @EndDate  -- Date range for the orders
+        AND (
+            o.Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RegionList, ','))
+            OR o.Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@BrandList, ','))
+            OR o.RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RSNameList, ','))
+            OR (
+                @ABMName IS NOT NULL 
+                AND @ABMName <> '' 
+                AND (
+                    o.ABMEMM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ',')) 
+                    OR o.ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ',')) 
+                )
+            )
+            OR (
+                @RetailerType IS NOT NULL 
+                AND @RetailerType <> '' 
+                AND o.RetailerCode LIKE 
+                    CASE 
+                        WHEN @RetailerType = 'IDD' THEN '9%'  
+                        WHEN @RetailerType = 'DD' THEN '1%'   
+                        ELSE ''  
+                    END
+            )
+        )
+    GROUP BY
+        o.Region, 
+        MONTH(o.OrderDate),  -- Group by Month of the order
+        CASE 
+            WHEN DATENAME(WEEKDAY, o.OrderDate) IN ('Saturday', 'Sunday') THEN 'Weekend'
+            ELSE 'Weekday'
+        END,  -- Group by Weekday or Weekend
+        r.TotalOrders  -- Include the TotalOrders in GROUP BY
+    ORDER BY
+        o.Region, OrderMonth, DayType;  -- Order by Region, Month, and then by Weekday/Weekend category
+END;
+
+
+
+    
+	EXEC PercentageofOrdersByWeekdayorWeekendRegionWise
+		@RegionList ='EAST, WEST, NORTH, SOUTH 1, SOUTH 2', -- Comma-separated list of regions
+		@StartDate = 20240401,         -- Start date in yyyymmdd format
+		@EndDate = 20240430,		   -- End date in yyyymmdd format
+		@BrandList ='',
+		@RSNameList ='',
+		@ABMName='',
+		@RetailerType='';
 
 
 --------------------------------------------------------------------------------------------------------------------% of Orders by Hour of the Day on week day weekend---------------------------------------------------------------------------------------
+ALTER PROCEDURE PercentaageOfOrdersByHourOfTheDayOnWeekdayWeekend
+    @RegionList VARCHAR(MAX),    -- Comma-separated list of regions
+    @StartDate INT,              -- Start date in yyyymmdd format (e.g., 20240601)
+    @EndDate INT,                -- End date in yyyymmdd format (e.g., 20240630)
+    @RSNameList VARCHAR(MAX),
+    @BrandList VARCHAR(MAX),
+    @ABMName VARCHAR(MAX),       -- New parameter for ABMName
+    @RetailerType VARCHAR(MAX)   -- RetailerType parameter to filter by retailer type
+AS
+BEGIN
+    -- CTE to calculate total orders for the specified date range
+    WITH TotalOrderCount AS (
+        SELECT 
+            COUNT(DISTINCT OrderNo) AS TotalOrders
+        FROM 
+            MBROrders (NOLOCK)
+        WHERE 
+            OrderDate BETWEEN @StartDate AND @EndDate
+            AND (
+                Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RegionList, ',')) 
+                OR Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@BrandList, ',')) 
+                OR RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RSNameList, ',')) 
+                OR (
+                    @ABMName IS NOT NULL 
+                    AND @ABMName <> '' 
+                    AND (
+                        ABMEMM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ',')) 
+                        OR ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ',')) 
+                    )
+                )
+                OR (
+                    @RetailerType IS NOT NULL 
+                    AND @RetailerType <> '' 
+                    AND RetailerCode LIKE 
+                        CASE 
+                            WHEN @RetailerType = 'IDD' THEN '9%'  
+                            WHEN @RetailerType = 'DD' THEN '1%'   
+                            ELSE ''  
+                        END
+                )
+            )
+    )
+
+    -- Main query to calculate percentage of orders for each hour of the day on weekdays and weekends
+    SELECT 
+        MONTH(o.OrderDate) AS OrderMonth,  -- Extract Month from OrderDate
+        CASE 
+            WHEN DATENAME(WEEKDAY, o.OrderDate) IN ('Saturday', 'Sunday') THEN 'Weekend'
+            ELSE 'Weekday'
+        END AS DayType,  -- Categorize into Weekday or Weekend
+        DATEPART(HOUR, o.OrderTime) AS OrderHour,  -- Extract Hour of the Order from OrderTime
+        COUNT(DISTINCT o.OrderNo) AS DistinctOrderCount,  -- Count of distinct orders for the hour
+        (COUNT(DISTINCT o.OrderNo) * 1.0 / (SELECT TotalOrders FROM TotalOrderCount)) * 100 AS PercentageOfOrders  -- Percentage within total orders
+    FROM 
+        MBROrders (NOLOCK) o
+    WHERE 
+        o.OrderDate BETWEEN @StartDate AND @EndDate  -- Date range for the orders
+        AND (
+            o.Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RegionList, ',')) 
+            OR o.Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@BrandList, ',')) 
+            OR o.RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RSNameList, ',')) 
+            OR (
+                @ABMName IS NOT NULL 
+                AND @ABMName <> '' 
+                AND (
+                    o.ABMEMM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ',')) 
+                    OR o.ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ',')) 
+                )
+            )
+            OR (
+                @RetailerType IS NOT NULL 
+                AND @RetailerType <> '' 
+                AND o.RetailerCode LIKE 
+                    CASE 
+                        WHEN @RetailerType = 'IDD' THEN '9%'  
+                        WHEN @RetailerType = 'DD' THEN '1%'   
+                        ELSE ''  
+                    END
+            )
+        )
+    GROUP BY
+        MONTH(o.OrderDate),  -- Group by Month of the order
+        CASE 
+            WHEN DATENAME(WEEKDAY, o.OrderDate) IN ('Saturday', 'Sunday') THEN 'Weekend'
+            ELSE 'Weekday'
+        END,  -- Group by Weekday or Weekend
+        DATEPART(HOUR, o.OrderTime)  -- Group by Hour of the day based on OrderTime
+    ORDER BY
+        OrderMonth, DayType, OrderHour;  -- Order by Month, Weekday/Weekend, and then Hour of the day
+END;
+
+
+EXEC PercentaageOfOrdersByHourOfTheDayOnWeekdayWeekend
+		@RegionList ='EAST, WEST, NORTH, SOUTH 1, SOUTH 2', -- Comma-separated list of regions
+		@StartDate = 20240401,         -- Start date in yyyymmdd format
+		@EndDate = 20240430,		   -- End date in yyyymmdd format
+		@BrandList ='',
+		@RSNameList ='',
+		@ABMName='',
+		@RetailerType='';
