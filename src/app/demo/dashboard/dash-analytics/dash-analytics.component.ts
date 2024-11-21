@@ -986,7 +986,7 @@ searchInputValueForMonth: string = '';
           //     ]
           //   }
           // };
-          
+
           this.chartOptionsline = {
             series: [
               {
@@ -1005,11 +1005,30 @@ searchInputValueForMonth: string = '';
             chart: {
               height: 500,
               type: 'line',
+              toolbar: {
+                show: true,
+                tools: {
+                  zoom: true,           // Enable zoom
+                  zoomin: true,          // Enable zoom-in
+                  zoomout: true,         // Enable zoom-out
+                  pan: true,             // Enable panning
+                  reset: true            // Reset zoom and pan to the initial state
+                },
+                // autoSelected: 'zoom'    // Set default tool to zoom
+              },
+              // events: {
+              //   mounted: function (chart) {
+              //     // Disable mouse wheel zooming after the chart is mounted
+              //     const chartElement = chart.el;
+              //     chartElement.addEventListener('wheel', function (event:any) {
+              //       event.preventDefault(); // Prevent zooming on wheel scroll
+              //     }, { passive: false });
+              //   }
+              // }
             },
             dataLabels: {
               enabled: true,
-              offsetX: -5,
-              offsetY: -5,
+              offsetX: -5,  // X-axis offset
               style: {
                 fontSize: '10px',
               },
@@ -1017,15 +1036,27 @@ searchInputValueForMonth: string = '';
                 enabled: true,
                 foreColor: '#000000'
               },
-              formatter: function (val:any, { seriesIndex, w }) {
+              formatter: function (val: any, { seriesIndex, w }) {
                 // Apply custom scaling to data labels based on series name
                 const seriesName = w.config.series[seriesIndex].name;
+                let scaledValue = val;
+          
+                // Apply custom scaling for each series
                 if (seriesName === 'Quantity (k)') {
-                  return (val * 10).toFixed(2);  // Scale Quantity by 10
+                  scaledValue = (val * 10).toFixed(2); // Scale Quantity by 10
                 } else if (seriesName === 'Retailers') {
-                  return (val * 100);  // Scale Retailers by 100
+                  scaledValue = (val * 100).toFixed(0); // Scale Retailers by 100
+                } else {
+                  scaledValue = val.toFixed(2); // No scaling for other series
                 }
-                return val.toFixed(2);  // No scaling for other series
+          
+                // Offset Y based on series index
+                const dataLabelOffsetsY = [0, -20, 20];  // Customize offsets per series index
+                const offsetY = dataLabelOffsetsY[seriesIndex] || 0; // Use the default offset if none provided
+          
+                // Update the offsetY dynamically
+                w.config.dataLabels.offsetX = offsetY;
+                return scaledValue;
               }
             },
             stroke: {
@@ -1086,15 +1117,18 @@ searchInputValueForMonth: string = '';
                   // Apply scaling based on series name in the tooltip
                   const seriesName = series[seriesIndex].name;
                   if (seriesIndex === 0) {
-                    return (value * 10).toFixed(2);
+                    return (value * 10).toFixed(2);  // Scale Quantity by 10
                   } else if (seriesIndex === 1) {
-                    return (value * 100).toFixed(0);
+                    return (value * 100).toFixed(0);  // Scale Retailers by 100
                   }
-                  return value.toFixed(2);
+                  return value.toFixed(2);  // No scaling for other series
                 }
               }
             }
           };
+          
+          
+        
           
           
         }

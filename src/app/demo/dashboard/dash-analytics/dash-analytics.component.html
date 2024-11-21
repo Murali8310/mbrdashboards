@@ -69,7 +69,7 @@ text-align: center;
             font-weight: 800;" class="form-label">Region</label>
           <!-- </div> -->
           <!-- <div class="col-xl-10"> -->
-            <div class="multiselect-dropdown" tabindex="0">
+            <div class="multiselect-dropdown" tabindex="0" [class.posinherit]="!isDropdownOpen">
               <div (click)="toggleDropdownVisibility()" class="dropdown-btn" tabindex="-1" id="allowClickButton">
                 <span  style="margin-left: 5px;" *ngIf="selectedRegions.length === 0">Select one</span>
                 <i *ngIf="selectedRegions.length == 0" class="fas fa-chevron-down"></i>
@@ -111,7 +111,7 @@ text-align: center;
         <!-- </div> -->
       </div>
       
-      <div class="form-group col-md-6">
+      <div class="form-group col-md-3">
         <!-- <div class="row"> -->
           <!-- <div class="col-xl-2"> -->
             <label style="margin-top: 10px;
@@ -119,7 +119,7 @@ text-align: center;
                         font-weight: 800;" class="form-label">ABM Name</label>
           <!-- </div> -->
           <!-- <div class="col-xl-10"> -->
-            <div class="multiselect-dropdown" tabindex="0">
+            <div class="multiselect-dropdown" tabindex="0" [class.posinherit]="!isDropdownOpenForAbm">
               <div (click)="toggleDropdownVisibilityForAbm()" class="dropdown-btn" tabindex="-1" id="allowClickButtonabm">
                 <span style="margin-left: 5px;" *ngIf="selectedAbmNames.length === 0">Select one</span>
                 <!-- <i *ngIf="isExpanded" class="fas fa-chevron-up"></i> -->
@@ -166,7 +166,7 @@ text-align: center;
             font-weight: 800;" class="form-label">Retailer Type</label>
           <!-- </div> -->
           <!-- <div class="col-xl-10"> -->
-            <div class="multiselect-dropdown" tabindex="0">
+            <div class="multiselect-dropdown" tabindex="0" [class.posinherit]="!isDropdownOpenForRetailer">
               <div (click)="toggleDropdownVisibilityForRetailer()" class="dropdown-btn" tabindex="-1" id="retailerTypeallow">
                 <span style="margin-left: 5px;" *ngIf="selectedRetailerTypes.length === 0">Select one</span>
                 <i *ngIf="selectedRetailerTypes.length == 0" class="fas fa-chevron-down"></i>
@@ -207,10 +207,7 @@ text-align: center;
           <!-- </div> -->
         <!-- </div> -->
       </div>
-      
-      </div>
-      <div class="row" >
-      <div class="form-group col-md-4">
+      <div class="form-group col-md-3">
         <!-- <div class="row"> -->
           <!-- <div class="col-xl-2"> -->
             <label style="margin-top: 10px;
@@ -258,9 +255,57 @@ text-align: center;
           <!-- </div> -->
         <!-- </div> -->
       </div>
-      
-  
-      <div class="form-group col-md-4">
+      </div>
+      <div class="row" >
+      <div class="form-group col-md-3" *ngIf="false">
+        <!-- <div class="row"> -->
+          <!-- <div class="col-xl-2"> -->
+            <label style="margin-top: 10px;
+            float: left;
+            font-weight: 800;" class="form-label">RS Name</label>
+          <!-- </div> -->
+          <!-- <div class="col-xl-10"> -->
+            <div class="multiselect-dropdown" [class.posinherit]="!isDropdownOpenForRS" tabindex="0">
+              <div (click)="toggleDropdownVisibilityForRS()" class="dropdown-btn" tabindex="-1" id="rsnamemenu">
+                <span style="margin-left: 5px;" *ngIf="selectedRSNames.length === 0">Select one</span>
+                <i *ngIf="selectedRSNames.length == 0" class="fas fa-chevron-down"></i>
+                <!-- <span *ngIf="selectedRSNames.length > 0"> -->
+                  <div *ngIf="selectedRSNames.length > 0" class="selected-items-container">
+                  <ng-container *ngFor="let rs of selectedRSNames; let isLast = last">
+                    <div class="selected-item">
+                      {{ rs.name }}
+                      <span class="remove-icon" (click)="removeSelectedRS(rs, $event)">&#10005;</span>
+                    </div>
+                    <!-- <span *ngIf="!isLast"></span> -->
+                  </ng-container>
+                <!-- </span> -->
+                </div>
+                <span class="dropdown-multiselect--active" style="float:right !important;padding-right:4px">
+                  <span class="dropdown-multiselect__caret"></span>
+                </span>
+              </div>
+              <div *ngIf="isDropdownOpenForRS" class="dropdown-list" id="rsnamemenu2">
+                <ul class="item1">
+                  <li class="multiselect-item-checkbox">
+                    <input type="checkbox" (change)="toggleAllRSSelection($event)" [checked]="areAllRSSelected" />
+                    <div style="margin-left: 10px;">Select All</div>
+                  </li>
+                  <li class="filter-textbox">
+                    <input type="text" placeholder="Search" [(ngModel)]="searchInputValueForRS" (input)="filterAvailableRSNames()" />
+                  </li>
+                </ul>
+                <ul class="item2" style="max-height: 197px; overflow-y: auto;">
+                  <li *ngFor="let rs of filteredRSNamesList" class="multiselect-item-checkbox">
+                    <input type="checkbox" [checked]="selectedRSNames.includes(rs)" (change)="toggleRSSelection(rs)" />
+                    <div style="margin-left: 10px;" [class.selected]="selectedRSNames.includes(rs)">{{ rs.name }}</div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          <!-- </div> -->
+        <!-- </div> -->
+      </div>
+      <div class="form-group col-md-3">
         <!-- <div class="row"> -->
           <!-- <div class="col-xl-2"> -->
             <label style="margin-top: 10px;
@@ -312,14 +357,62 @@ text-align: center;
       </div>
       
   
+      <div class="form-group col-md-3">
+        <label style="margin-top: 10px; float: left; font-weight: 800;" class="form-label">Month</label>
+        <div class="multiselect-dropdown" tabindex="0" [class.posinherit]="!isDropdownOpenForMonth">
+          <div (click)="toggleDropdownVisibilityForMonth()" class="dropdown-btn" tabindex="-1" id="monthDropdown">
+            <span style="margin-left: 5px;" *ngIf="selectedMonths.length === 0">Select one</span>
+            <i *ngIf="selectedMonths.length == 0" class="fas fa-chevron-down"></i>
+            <div *ngIf="selectedMonths.length > 0" class="selected-items-container">
+              <ng-container *ngFor="let month of selectedMonths; let isLast = last">
+                <div class="selected-item">
+                  {{ month.name }}
+                  <span class="remove-icon" (click)="removeSelectedMonth(month, $event)">&#10005;</span>
+                </div>
+              </ng-container>
+            </div>
+            <span class="dropdown-multiselect--active" style="float:right !important;padding-right:4px">
+              <span class="dropdown-multiselect__caret"></span>
+            </span>
+          </div>
+          <div  class="dropdown-list" *ngIf="isDropdownOpenForMonth" id="monthDropdownmenu">
+            <ul class="item1">
+              <li class="multiselect-item-checkbox">
+                <input type="checkbox" (change)="toggleAllMonthSelection($event)" [checked]="areAllMonthsSelected" />
+                <div style="margin-left: 10px;">Select All</div>
+              </li>
+              <li class="filter-textbox">
+                <input type="text" placeholder="Search" [(ngModel)]="searchInputValueForMonth" (input)="filterAvailableMonths()" />
+              </li>
+            </ul>
+            <ul class="item2" style="max-height: 197px; overflow-y: auto;">
+              <li *ngFor="let month of filteredMonthsList" class="multiselect-item-checkbox">
+                <input type="checkbox" [checked]="selectedMonths.includes(month)" (change)="toggleMonthSelection(month)" />
+                <div style="margin-left: 10px;" [class.selected]="selectedMonths.includes(month)">{{ month.name }}</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
       <!-- Search Button -->
-      <div class="form-group col-md-4 d-flex align-items-end row">
-        <div class="col-md-6">
+      <!-- <div class="form-group col-md-3 d-flex align-items-end row" style="align-items: center !important;">
+        <div class="col-md-6" style="margin-top: 28px;">
           <button class="btn btn-primary w-100 fw-bold" (click)="prepareSearchData('search')">Search</button>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" style="margin-top: 28px;">
           <button class="btn btn-secondary w-100 fw-bold" (click)="prepareSearchData('reset')">Reset</button>
         </div>
+      </div> -->
+      <div class="form-group col-md-3" style="margin-top: 39px;">
+        <button class="btn btn-primary w-100 fw-bold" (click)="prepareSearchData('search')">Search</button>
+      <!-- </div> -->
+        <!-- </div> -->
+      </div>
+      <div class="form-group col-md-3" style="margin-top: 39px;">
+        <button class="btn btn-secondary w-100 fw-bold" (click)="prepareSearchData('reset')">Reset</button>
+          <!-- </div> -->
+        <!-- </div> -->
       </div>
       
     </div>
@@ -444,7 +537,7 @@ text-align: center;
             <label style="margin-top: 10px;
             float: left;
             font-weight: 800;" class="form-label">Region</label>
-            <div class="multiselect-dropdown" tabindex="0">
+            <div class="multiselect-dropdown" tabindex="0" [class.posinherit]="!isDropdownOpen">
               <div (click)="toggleDropdownVisibility()" class="dropdown-btn" tabindex="-1" id="allowClickButton">
                 <span  style="margin-left: 5px;" *ngIf="selectedRegions.length === 0">Select one</span>
                 <i *ngIf="selectedRegions.length == 0" class="fas fa-chevron-down"></i>
@@ -494,7 +587,7 @@ text-align: center;
                         font-weight: 800;" class="form-label">ABM Name</label>
           <!-- </div> -->
           <!-- <div class="col-xl-10"> -->
-            <div class="multiselect-dropdown" tabindex="0">
+            <div class="multiselect-dropdown" tabindex="0" [class.posinherit]="!isDropdownOpenForAbm">
               <div (click)="toggleDropdownVisibilityForAbm()" class="dropdown-btn" tabindex="-1" id="allowClickButtonabm">
                 <span style="margin-left: 5px;" *ngIf="selectedAbmNames.length === 0">Select one</span>
                 <!-- <i *ngIf="isExpanded" class="fas fa-chevron-up"></i> -->
@@ -541,7 +634,7 @@ text-align: center;
             font-weight: 800;" class="form-label">Retailer Type</label>
           <!-- </div> -->
           <!-- <div class="col-xl-10"> -->
-            <div class="multiselect-dropdown" tabindex="0">
+            <div class="multiselect-dropdown" tabindex="0"  [class.posinherit]="!isDropdownOpenForRetailer">
               <div (click)="toggleDropdownVisibilityForRetailer()" class="dropdown-btn" tabindex="-1" id="retailerTypeallow">
                 <span style="margin-left: 5px;" *ngIf="selectedRetailerTypes.length === 0">Select one</span>
                 <i *ngIf="selectedRetailerTypes.length == 0" class="fas fa-chevron-down"></i>
