@@ -504,7 +504,7 @@ searchInputValueForMonth: string = '';
         }
       ],
       chart: {
-        height: 350,
+        height: 500,
         type: 'line'
       },
       dataLabels: {
@@ -1121,7 +1121,7 @@ searchInputValueForMonth: string = '';
           this.chartOptions = {
             chart: {
               type: 'bar',
-              height: 400,
+              height: 500,
               toolbar: {
                 show: true,
                 tools: {
@@ -1950,7 +1950,7 @@ searchInputValueForMonth: string = '';
           this.dashBoardInitalDataOptions = {
             chart: {
               type: 'bar',
-              height: 350,
+              height: 500,
               toolbar: {
                 show: false // Optional: Hide toolbar if not needed
               }
@@ -2080,7 +2080,7 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
     },
     chart: {
       type: 'bar',
-      height: 400,
+      height: 500,
       stacked: true
     },
     plotOptions: { bar: { horizontal: false } },
@@ -2231,7 +2231,7 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
         }, },
         chart: {
             type: 'bar',
-            height: 350,
+            height: 500,
             stacked: true
         },
         plotOptions: { bar: { horizontal: false } },
@@ -2381,7 +2381,7 @@ public chartOptionslineForOrdBhFn = (MonthlyToalOrdaringPayload?: any) => {
       }
     ],
     chart: {
-      height: 350,
+      height: 500,
       type: 'line'
     },
     dataLabels: {
@@ -2653,7 +2653,7 @@ public chartOptionslineForOrdBhFn = (MonthlyToalOrdaringPayload?: any) => {
             }
           ],
           chart: {
-            height: 350,
+            height: 500,
             type: 'line'
           },
           dataLabels: {
@@ -2817,7 +2817,7 @@ public RegionWiseMonthlyDistibutionOptionsFOrdBhFn = (MonthlyTotalOrderingPayloa
     dataLabels: { enabled: false },
     chart: {
       type: 'bar',
-      height: 350,
+      height: 500,
       stacked: true
     },
     plotOptions: { bar: { horizontal: false } },
@@ -3101,7 +3101,7 @@ public RegionWiseMonthlyAvgPerOrderFn = (MonthlyTotalOrderingPayload?: any) => {
       title: { style: { color: '#000000' } }
     },
     dataLabels: { enabled: false },
-    chart: { type: 'bar', height: 350, stacked: true },
+    chart: { type: 'bar', height: 500, stacked: true },
     plotOptions: { bar: { horizontal: false } },
     fill: { opacity: 1 },
     colors: [
