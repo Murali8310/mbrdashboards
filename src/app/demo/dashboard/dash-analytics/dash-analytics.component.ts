@@ -109,6 +109,14 @@ export default class DashAnalyticsComponent {
   public appendClass: any;
 
 
+  // percenate of orders cnharts.
+
+  percentageOfOrdersOfDayInMonthOptions!:ApexOptions;
+  percentageofOrdersbyWeekdayorWeekendOptionsPiechart!:ApexOptions;
+  percentageofOrdersbyWeekdayorWeekendOptionsBarchart!:ApexOptions;
+  percentageofOrdersByWeekdayorWeekendRegionWiseOptions!:ApexOptions;
+  percentageofOrdersByHourOfTheDayOptionsBarchart!:ApexOptions;
+
   @HostListener('window:click', ['$event'])
   onWindowClick(event: MouseEvent) {
     // Ignore clicks on the specific button with id 'allowClickButton'
@@ -422,7 +430,7 @@ generateFinancialYearPayload(months:any) {
       const payload = this.generateFinancialYearPayload(this.selectedMonths);
 
       MonthlyToalOrdaringPayload = {
-        regionList: regionList, /// default all regions
+        regionList: regionList ? regionList.length > 0 : "EAST, WEST,NORTH,SOUTH 1,SOUTH 2", /// default all regions
         startDate: payload.startDate, /// default case start date of financial year in integer format
         endDate: payload.endDate, ////  default case end date of financial year in integer format
         brandList: brandList, //// default casen ""
@@ -1863,6 +1871,10 @@ generateFinancialYearPayload(months:any) {
             this.MonthlyToalOrdaring(MonthlyToalOrdaringPayload);
           } else if(this.dashboardService.selectedData === '3'){
             this.chartOptionslineForOrdBhFn(MonthlyToalOrdaringPayload);
+          } else if(this.dashboardService.selectedData === '4'){
+            MonthlyToalOrdaringPayload.startDate = 20241001;       /// default case start date of financial year in integer format
+            MonthlyToalOrdaringPayload.endDate = 202401030;
+            this.percentageOfOrdersOfDayInMonth(MonthlyToalOrdaringPayload);
           }
         }
 
@@ -3390,6 +3402,831 @@ resetChartOptions() {
   this.RegionWiseMonthlyDistibutionOptionsFOrdBh = {};
   this.RegionWiseMonthlyAvgPerOrder = {};
 }
+
+// orders by day of the month.
+
+// // this is to get the monthly avg qty,value and orders.
+// public percentageOfOrdersOfDayInMonth = (MonthlyToalOrdaringPayload?: any) => {
+//   this.spinner.show();
+//         // Define month names for easy mapping
+//         const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+//         // Prepare data for each series
+//         const retailersData :any= [];
+//         const quantityData :any= [];
+//         const valueData:any = [];
+//         const categories: string[] = []; // This will hold the month names
+
+//   this.percentageOfOrdersOfDayInMonthOptions = {
+//     series: [
+//          {
+//         name: 'No Of Orders.',
+//         data: retailersData // Extracts totalRetailerCode values
+//       },
+//       {
+//         name: 'Avg Qty Per Order. (k)',
+//         data: quantityData // Extracts totalQTY values
+//       },
+//       {
+//         name: 'Avg Value Per Order. (Cr)',
+//         data: valueData // Extracts totalRevenue values
+//       }
+//     ],
+//     chart: {
+//       height: 500,
+//       type: 'line'
+//     },
+//     dataLabels: {
+//       enabled: false
+//     },
+//     stroke: {
+//       width: 5,
+//       curve: 'smooth', // Smooth curve for the line chart
+//       dashArray: [0, 8, 5] // Different dash arrays for each line
+//     },
+//     title: {
+//       text: 'Monthly Orders Trend Loading...',
+//       align: 'center'
+//     },
+//     legend: {
+//       tooltipHoverFormatter: function (val, opts) {
+//         const dataValue = opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex];
+//         const formattedValue = dataValue % 1 === 0 ? dataValue : dataValue.toFixed(2);
+//         return val + ' - <strong>' + formattedValue + '</strong>';
+//       }
+//     },            
+//     markers: {
+//       size: 5, // Size of markers on the line
+//       hover: {
+//         sizeOffset: 6
+//       }
+//     },
+//     xaxis: {
+//       labels: {
+//         trim: false,
+//           show:false,
+//       },
+//       categories: categories,
+//       title: {
+//         text: 'Monthly Orders Trend Loading...', // Left y-axis title
+//         style: {
+//           color: '#000000' // Change color as needed
+//         }
+//       },
+//     },
+//     yaxis: [
+//       {
+//         title: {
+//           text: 'Quantity (K) Loading...', // Left y-axis title
+//           style: {
+//             color: '#000000' // Change color as needed
+//           }
+//         },
+//         min: 0, // Minimum value for left y-axis
+//         labels: {
+//           show:false,
+//           formatter: function (val) {
+//             // return '' + val; // Format for value
+//             return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
+//           }
+//         },
+//         tickAmount: 4 // Adjust the number of ticks as necessary
+//       },
+      
+//     ],
+//     tooltip: {
+//       shared: true, // Show shared tooltip
+//       intersect: false,
+//       y: [
+//         {
+//           title: {
+//             formatter: function (val) {
+//               return val;
+//             }
+//           }
+//         },
+//         {
+//           title: {
+//             formatter: function (val) {
+//               return val;
+//             }
+//           }
+//         },
+//         {
+//           title: {
+//             formatter: function (val) {
+//               return  val; // Format for value
+//             }
+//           }
+//         }
+//       ]
+//     }
+//   };
+//   this.dashboardService.percentageOfOrdersOfDayInMonthFn(MonthlyToalOrdaringPayload).subscribe(
+//     (response) => {
+//       if (response && response.body) {
+//         this.spinner.hide();
+//         // this.RegionWiseMonthlyDistibutionOptionsFOrdBhFn(MonthlyToalOrdaringPayload);
+//         response.body.forEach((item: any) => {
+//           // Push values to each series array
+//           retailersData.push(item.noOforders/100);
+//           quantityData.push((item.avgQtyPerOrder));
+//           valueData.push((item.avgValuePerOrder / 1000));
+
+//           // Get month name and add to categories
+//           categories.push(monthNames[item.month - 1]);
+//         });
+       
+//         this.percentageOfOrdersOfDayInMonthOptions = {
+//           series: [
+//             {
+//               name: 'No Of Orders',
+//               data: retailersData // Extracts totalRetailerCode values
+//             },
+//             {
+//               name: 'Avg Qty Per Order',
+//               data: quantityData // Extracts totalQTY values
+//             },
+//             {
+//               name: 'Avg Value Per Order (k)',
+//               data: valueData // Extracts totalRevenue values
+//             }
+//           ],
+//           chart: {
+//             height: 500,
+//             type: 'line',
+//             zoom: {
+//               enabled: false
+//             },
+//           },
+//           dataLabels: {
+//             // enabled: true,
+//             enabled: this.isMobileView ? false: true,
+
+//             offsetX: -5,
+//             offsetY: -5,
+//             style: {
+//               fontSize: '10px',
+//             },
+//             background: {
+//               enabled: true,
+//               foreColor: '#000000'
+//             },
+//             formatter: function (val:any, { seriesIndex, w }) {
+//               const seriesName = w.config.series[seriesIndex].name;
+//               if (val === 'Avg Value Per Order (K)') {
+//                 val = val * 1000;
+//              }  else if (seriesName === 'No Of Orders') {
+//                 return (val * 100).toFixed(0); // Scale No Of Orders by 100
+//               }
+//               if (val === 'Avg Qty Per Order') {
+//                 val = val.toFixed(0);
+//               }
+//                 // Offset Y based on series index
+//           const dataLabelOffsetsY = [0,0,35];  // Customize offsets per series index
+//           const offsetY = dataLabelOffsetsY[seriesIndex] || 0; // Use the default offset if none provided
+    
+//           // Update the offsetY dynamically
+//           w.config.dataLabels.offsetX = offsetY;
+//               return val.toFixed(2); // No scaling for Avg Value
+//             }
+//           },
+//           stroke: {
+//             width: 5,
+//             curve: 'smooth',
+//             dashArray: [0, 8, 5]
+//           },
+//           title: {
+//             text: 'Monthly Orders Trend',
+//             align: 'center'
+//           },
+//           legend: {
+//             tooltipHoverFormatter: function (val, opts) {
+//               let dataValue = opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex];
+//               if (val === 'Avg Value Per Order (K)') {
+//                  dataValue = dataValue * 1000;
+//               } else if (val === 'No Of Orders') {
+//                 dataValue = (dataValue * 100).toFixed(0);
+//               }
+//               const formattedValue = dataValue % 1 === 0 ? dataValue : dataValue.toFixed(2);
+//               if (val === 'Avg Qty Per Order') {
+//                 dataValue = dataValue.toFixed(0);
+//               }
+//               return val + ' - <strong>' + formattedValue + '</strong>';
+//             }
+//           },
+//           markers: {
+//             size: 5,
+//             hover: {
+//               sizeOffset: 6
+//             }
+//           },
+//           xaxis: {
+//             labels: {
+//               trim: false
+//             },
+//             categories: categories
+//           },
+//           yaxis: {
+//             title: {
+//               text: 'Values',
+//               style: {
+//                 color: '#000000'
+//               }
+//             },
+//             min: 0,
+//             labels: {
+//               formatter: function (val) {
+//                 return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
+//               },
+//               offsetX: -20
+//             },
+//             tickAmount: 4
+//           },
+//           tooltip: {
+//             shared: true,
+//             intersect: false,
+//             y: {
+//               formatter: function (value:any, { series, seriesIndex }) {
+//                 const seriesName = series[seriesIndex].name;
+//                 if (value === 'Avg Value Per Order (k)') {
+//                   value = value * 1000;
+//                }  else if (seriesIndex === 0) {
+//                   return (value * 100).toFixed(0);
+//                 }
+
+//                 return value.toFixed(2);
+//               }
+//             }
+//           }
+//         };
+        
+        
+//       }
+//       console.log('this is for checking');
+//     },
+//     (error) => {
+//       // this.errorMessage = 'An error occurred during login';
+//       console.error('Login error:', error);
+//     }
+//   );
+// };
+
+public percentageOfOrdersOfDayInMonth = (MonthlyTotalOrderingPayload?: any) => {
+  this.spinner.show();
+
+  // Prepare data for the series
+  const percentageData: any = [];
+  const orderCounts: any = [];
+  const daysInMonth: string[] = Array.from({ length: 31 }, (_, i) => (i + 1).toString());
+
+  // Initial chart options with loading text in title
+  this.percentageOfOrdersOfDayInMonthOptions = {
+    series: [
+      {
+        name: 'Order Percentage',
+        data: percentageData
+      }
+    ],
+    chart: {
+      height: 500,
+      type: 'line',
+      zoom :{
+        enabled:false
+      }
+    },
+    dataLabels: {
+      enabled: true, // Enable data labels
+      formatter: (val:any) => `${val.toFixed(0)}%` // Format as percentage
+    },
+    stroke: {
+      width: 2,
+      curve: 'smooth'
+    },
+    title: {
+      text: '% Of Orders By Day Of The Month Loading...', // Initial title with loading text
+      align: 'center'
+    },
+    xaxis: {
+      categories: daysInMonth,
+      title: {
+        text: 'Day of Month',
+        style: {
+          color: '#000000'
+        }
+      },
+    },
+    yaxis: {
+      title: {
+        text: 'Order Percentage',
+        style: {
+          color: '#000000'
+        }
+      },
+      labels: {
+        formatter: (val) => val.toFixed(0) + '%' // Format as percentage
+      },
+      min: 0
+    },
+    // tooltip: {
+    //   shared: true,
+    //   intersect: false,
+    //   y: {
+    //     formatter: function (val, { dataPointIndex }) {
+    //       // Display both percentage and number of orders in the tooltip
+    //       const orders = orderCounts[dataPointIndex] || 0;
+    //       return `Order %: ${val.toFixed(2)}% <br>Orders: ${orders}`;
+    //     }
+    //   }
+    // },
+    tooltip: {
+      shared: true,
+      intersect: false,
+      custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+        // Access percentage value and number of orders for the tooltip
+        const percentage = series[seriesIndex][dataPointIndex];
+        const orders = orderCounts[dataPointIndex] || 0;
+    
+        // Custom tooltip content with percentage and order count
+        return `
+          <div style="padding: 10px; border-radius: 5px; background-color: #f4f4f4; color: #333;">
+            <strong>Day: ${daysInMonth[dataPointIndex]}</strong><br>
+            Order %: ${percentage.toFixed(2)}<br>
+            Orders: ${orders}
+          </div>
+        `;
+      }
+    },
+    markers: {
+      size: 5,
+      hover: {
+        sizeOffset: 6
+      }
+    },
+    legend: {
+      position: 'top'
+    }
+  };
+
+  this.dashboardService.percentageOfOrdersOfDayInMonthFn(MonthlyTotalOrderingPayload).subscribe(
+    (response) => {
+      if (response && response.body) {
+        this.spinner.hide();
+        this.percentageofOrdersbyWeekdayorWeekendFN(MonthlyTotalOrderingPayload);
+        response.body.forEach((item: any) => {
+          // Populate data for each day
+          percentageData.push(item.percentageOfOrders); // Add percentage data
+          orderCounts.push(item.distinctOrderCount); // Store order count for tooltip
+        });
+
+        // Update chart options with fetched data and remove loading from title
+        this.percentageOfOrdersOfDayInMonthOptions = {
+          ...this.percentageOfOrdersOfDayInMonthOptions,
+          title: {
+            text: '% Of Orders By Day Of The Month', // Update title after data load
+            align: 'center'
+          },
+          series: [
+            {
+              name: 'Order Percentage',
+              data: percentageData
+            }
+          ]
+        };
+      }
+    },
+    (error) => {
+      console.error('Error fetching monthly order data:', error);
+      this.spinner.hide();
+    }
+  );
+};
+
+
+public percentageofOrdersbyWeekdayorWeekendFN = (MonthlyTotalOrderingPayload?: any) => {
+  // Default payload to previous month if none is provided
+  MonthlyTotalOrderingPayload = MonthlyTotalOrderingPayload || {
+    startDate: '20241001',
+    endDate: '20241031'
+  };
+
+  // Show spinner and set loading title
+  this.spinner.show();
+  this.percentageofOrdersbyWeekdayorWeekendOptionsPiechart = {
+    ...this.percentageofOrdersbyWeekdayorWeekendOptionsPiechart,
+    title: { text: 'Loading data...', align: 'center' }
+  };
+  this.percentageofOrdersbyWeekdayorWeekendOptionsBarchart = {
+    ...this.percentageofOrdersbyWeekdayorWeekendOptionsBarchart,
+    title: { text: 'Loading data...', align: 'center' }
+  };
+
+  // Prepare data for the charts
+  const pieSeriesData: number[] = [];   // For percentage data for Weekday and Weekend
+  const pieLabels: string[] = [];       // For labeling the pie chart slices
+  const barCategories: string[] = ['Weekday', 'Weekend'];
+  const barSeriesData: number[] = [];   // For order count for Weekday and Weekend
+  const distinctOrderCounts: number[] = []; // To store distinct order counts for tooltip
+
+  // Define Pie Chart options
+  this.percentageofOrdersbyWeekdayorWeekendOptionsPiechart = {
+    series: [],
+    chart: {
+      type: 'pie',
+      height: 500
+    },
+    labels: [], // Set labels dynamically based on data received
+    title: {
+      text: 'Percentage of Orders by Weekday/Weekend',
+      align: 'center'
+    },
+    legend: {
+      position: 'bottom'
+    },
+    tooltip: {
+      y: {
+        formatter: (val: any) => `${val.toFixed(2)}%`
+      }
+    }
+  };
+
+  // Define Bar Chart options
+  this.percentageofOrdersbyWeekdayorWeekendOptionsBarchart = {
+    series: [
+      {
+        name: 'Percentage of Orders',
+        data: barSeriesData // We will only show percentage here
+      }
+    ],
+    chart: {
+      height: 500,
+      type: 'bar'
+    },
+    dataLabels: {
+      enabled: true,
+      formatter: (val: any) => `${val.toFixed(2)}%`
+    },
+    title: {
+      text: 'Order Count by Weekday/Weekend',
+      align: 'center'
+    },
+    xaxis: {
+      categories: barCategories,
+      title: {
+        text: 'Day Type'
+      }
+    },
+    yaxis: {
+      title: {
+        text: 'Percentage of Orders'
+      },
+      labels: {
+        formatter: (val: any) => `${val.toFixed(2)}%`
+      }
+    },
+    tooltip: {
+      shared: true,
+      intersect: false,
+      custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+        const distinctOrderCount = distinctOrderCounts[dataPointIndex] || 0;
+        return `
+          <div style="padding: 10px; border-radius: 5px; background-color: #f4f4f4; color: #333;">
+            <strong>${barCategories[dataPointIndex]}</strong><br>
+            Order %: ${series[seriesIndex][dataPointIndex].toFixed(2)}%<br>
+            Orders: ${distinctOrderCount}
+          </div>
+        `;
+      }
+    },
+    markers: {
+      size: 5
+    },
+    legend: {
+      position: 'top'
+    }
+  };
+
+  // Fetch data
+  this.dashboardService.percentageofOrdersbyWeekdayorWeekendFn(MonthlyTotalOrderingPayload).subscribe(
+    (response) => {
+      if (response && response.body) {
+        this.spinner.hide();
+this.percentageofOrdersByWeekdayorWeekendRegionWiseFn(MonthlyTotalOrderingPayload);
+        response.body.forEach((item: any) => {
+          // Populate pie chart data
+          pieSeriesData.push(item.percentageOfOrders);
+          pieLabels.push(item.dayType); // Set labels from API response ("Weekday" or "Weekend")
+
+          // Populate bar chart data with percentages and distinct order counts for tooltip
+          barSeriesData.push(item.percentageOfOrders);
+          distinctOrderCounts.push(item.distinctOrderCount);
+        });
+
+        // Update pie chart with actual data and labels
+        this.percentageofOrdersbyWeekdayorWeekendOptionsPiechart = {
+          ...this.percentageofOrdersbyWeekdayorWeekendOptionsPiechart,
+          series: pieSeriesData,
+          labels: pieLabels, // Assign dynamically set labels here
+          title: {
+            text: 'Percentage of Orders by Weekday/Weekend',
+            align: 'center'
+          }
+        };
+
+        // Update bar chart with actual data and remove loading title
+        this.percentageofOrdersbyWeekdayorWeekendOptionsBarchart = {
+          ...this.percentageofOrdersbyWeekdayorWeekendOptionsBarchart,
+          series: [
+            {
+              name: 'Percentage of Orders',
+              data: barSeriesData
+            }
+          ],
+          title: {
+            text: 'Order Count by Weekday/Weekend',
+            align: 'center'
+          }
+        };
+      }
+    },
+    (error) => {
+      console.error('Error fetching monthly order data:', error);
+      this.spinner.hide();
+    }
+  );
+};
+
+public percentageofOrdersByWeekdayorWeekendRegionWiseFn = (MonthlyTotalOrderingPayload?: any) => {
+  // Default payload to previous month if none is provided
+  MonthlyTotalOrderingPayload = MonthlyTotalOrderingPayload || {
+    startDate: '20241001',
+    endDate: '20241031'
+  };
+
+  // Show spinner and set loading title
+  this.spinner.show();
+  this.percentageofOrdersbyWeekdayorWeekendOptionsBarchart = {
+    ...this.percentageofOrdersbyWeekdayorWeekendOptionsBarchart,
+    title: { text: 'Loading data...', align: 'center' }
+  };
+
+  // Prepare data for the grouped bar chart
+  const barCategories: string[] = [];   // For x-axis categories (regions)
+  const weekdayData: number[] = [];     // For Weekday data
+  const weekendData: number[] = [];     // For Weekend data
+  const distinctOrderCountsWeekday: number[] = []; // To store distinct order counts for Weekday tooltip
+  const distinctOrderCountsWeekend: number[] = []; // To store distinct order counts for Weekend tooltip
+
+  // Define Bar Chart options
+  this.percentageofOrdersByWeekdayorWeekendRegionWiseOptions = {
+    series: [
+      {
+        name: 'Weekday',
+        data: weekdayData
+      },
+      {
+        name: 'Weekend',
+        data: weekendData
+      }
+    ],
+    chart: {
+      height: 500,
+      type: 'bar',
+      stacked: false // Keep bars separate (non-stacked)
+    },
+    dataLabels: {
+      enabled: true,
+      formatter: (val: any) => `${val.toFixed(2)}%` // Display percentage
+    },
+    title: {
+      text: 'Order Count by Region (Weekday vs Weekend)',
+      align: 'center'
+    },
+    xaxis: {
+      categories: barCategories,
+      title: {
+        text: 'Region Wise'
+      }
+    },
+    yaxis: {
+      title: {
+        text: 'Percentage of Orders'
+      },
+      labels: {
+        formatter: (val: any) => `${val.toFixed(2)}%`
+      }
+    },
+    tooltip: {
+      shared: true,
+      intersect: false,
+      custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+        const distinctOrderCount = seriesIndex === 0 
+          ? distinctOrderCountsWeekday[dataPointIndex] // Weekday
+          : distinctOrderCountsWeekend[dataPointIndex]; // Weekend
+
+        return `
+          <div style="padding: 10px; border-radius: 5px; background-color: #f4f4f4; color: #333;">
+            <strong>${barCategories[dataPointIndex]}</strong><br>
+            ${series[seriesIndex][dataPointIndex].toFixed(2)}%<br>
+            Orders: ${distinctOrderCount}
+          </div>
+        `;
+      }
+    },
+    markers: {
+      size: 5
+    },
+    legend: {
+      position: 'top'
+    }
+  };
+
+  // Fetch data
+  this.dashboardService.percentageofOrdersByWeekdayorWeekendRegionWiseFn(MonthlyTotalOrderingPayload).subscribe(
+    (response) => {
+      if (response && response.body) {
+        this.spinner.hide();
+this.percentaageOfOrdersByHourOfTheDayOnWeekdayWeekendFn(MonthlyTotalOrderingPayload);
+        const groupedData = response.body.reduce((acc:any, item:any) => {
+          const region = item.region;
+          const dayType = item.dayType;
+          
+          // Ensure region exists in the accumulator
+          if (!acc[region]) {
+            acc[region] = { weekday: 0, weekend: 0, weekdayOrders: 0, weekendOrders: 0 };
+          }
+
+          if (dayType === 'Weekday') {
+            acc[region].weekday = item.percentageOfOrders;
+            acc[region].weekdayOrders = item.distinctOrderCount;
+          } else if (dayType === 'Weekend') {
+            acc[region].weekend = item.percentageOfOrders;
+            acc[region].weekendOrders = item.distinctOrderCount;
+          }
+
+          return acc;
+        }, {});
+
+        // Now populate chart data
+        for (const region in groupedData) {
+          if (groupedData.hasOwnProperty(region)) {
+            barCategories.push(region);
+            weekdayData.push(groupedData[region].weekday);
+            weekendData.push(groupedData[region].weekend);
+            distinctOrderCountsWeekday.push(groupedData[region].weekdayOrders);
+            distinctOrderCountsWeekend.push(groupedData[region].weekendOrders);
+          }
+        }
+
+        // Update bar chart with actual data and remove loading title
+        this.percentageofOrdersByWeekdayorWeekendRegionWiseOptions = {
+          ...this.percentageofOrdersByWeekdayorWeekendRegionWiseOptions,
+          series: [
+            { name: 'Weekday', data: weekdayData },
+            { name: 'Weekend', data: weekendData }
+          ],
+          title: {
+            text: 'Order Count by Region (Weekday vs Weekend)',
+            align: 'center'
+          }
+        };
+      }
+    },
+    (error) => {
+      console.error('Error fetching order data:', error);
+      this.spinner.hide();
+    }
+  );
+};
+
+public percentaageOfOrdersByHourOfTheDayOnWeekdayWeekendFn = (MonthlyTotalOrderingPayload?: any) => {
+  MonthlyTotalOrderingPayload = MonthlyTotalOrderingPayload || {
+    startDate: '20241001',
+    endDate: '20241031'
+  };
+
+  this.spinner.show();
+  this.percentageofOrdersByHourOfTheDayOptionsBarchart = {
+    ...this.percentageofOrdersByHourOfTheDayOptionsBarchart,
+    title: { text: 'Loading data...', align: 'center' }
+  };
+
+  // Prepare data for the grouped bar chart
+  const hours = Array.from({ length: 24 }, (_, i) => i.toString()); // x-axis categories: 0-23 hours
+  const weekdayData: number[] = Array(24).fill(0); // Initialize with 0 values for all hours
+  const weekendData: number[] = Array(24).fill(0);
+  const weekdayOrderCounts: number[] = Array(24).fill(0); // Store order counts for tooltips
+  const weekendOrderCounts: number[] = Array(24).fill(0);
+
+  // Define Bar Chart options
+  this.percentageofOrdersByHourOfTheDayOptionsBarchart = {
+    series: [
+      {
+        name: 'Weekday',
+        data: weekdayData
+      },
+      {
+        name: 'Weekend',
+        data: weekendData
+      }
+    ],
+    chart: {
+      height: 500,
+      type: 'bar',
+      stacked: false
+    },
+    dataLabels: {
+      enabled: true,
+      formatter: (val: any) => `${val.toFixed(2)}%`
+    },
+    title: {
+      text: 'Order Percentage by Hour (Weekday vs Weekend)',
+      align: 'center'
+    },
+    xaxis: {
+      categories: hours,
+      title: {
+        text: 'Hour of the Day'
+      }
+    },
+    yaxis: {
+      title: {
+        text: 'Percentage of Orders'
+      },
+      labels: {
+        formatter: (val: any) => `${val.toFixed(2)}%`
+      }
+    },
+    tooltip: {
+      shared: true,
+      intersect: false,
+      custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+        const isWeekday = seriesIndex === 0;
+        const distinctOrderCount = isWeekday 
+          ? weekdayOrderCounts[dataPointIndex]
+          : weekendOrderCounts[dataPointIndex];
+        const percentage = series[seriesIndex][dataPointIndex];
+
+        return `
+          <div style="padding: 10px; border-radius: 5px; background-color: #f4f4f4; color: #333;">
+            <strong>${hours[dataPointIndex]}:00</strong><br>
+            ${isWeekday ? 'Weekday' : 'Weekend'}<br>
+            ${percentage.toFixed(2)}%<br>
+            Orders: ${distinctOrderCount}
+          </div>
+        `;
+      }
+    },
+    legend: {
+      position: 'top'
+    }
+  };
+
+  // Fetch data
+  this.dashboardService.percentaageOfOrdersByHourOfTheDayOnWeekdayWeekendFn(MonthlyTotalOrderingPayload).subscribe(
+    (response) => {
+      if (response && response.body) {
+        this.spinner.hide();
+
+        // Group data by hour and day type
+        response.body.forEach((item: any) => {
+          const hour = item.orderHour;
+          const isWeekday = item.dayType === 'Weekday';
+
+          if (isWeekday) {
+            weekdayData[hour] = item.percentageOfOrders;
+            weekdayOrderCounts[hour] = item.distinctOrderCount;
+          } else {
+            weekendData[hour] = item.percentageOfOrders;
+            weekendOrderCounts[hour] = item.distinctOrderCount;
+          }
+        });
+
+        // Check if weekend data is present and update the chart title
+        const weekendDataAvailable = weekendData.some((val) => val > 0);
+
+        // Update chart options with actual data and remove loading title
+        this.percentageofOrdersByHourOfTheDayOptionsBarchart = {
+          ...this.percentageofOrdersByHourOfTheDayOptionsBarchart,
+          series: [
+            { name: 'Weekday', data: weekdayData },
+            { name: 'Weekend', data: weekendData }
+          ],
+          title: {
+            text: weekendDataAvailable 
+              ? 'Order Percentage by Hour (Weekday vs Weekend)' 
+              : 'Order Percentage by Hour (Weekday)',
+            align: 'center'
+          }
+        };
+      }
+    },
+    (error) => {
+      console.error('Error fetching order data:', error);
+      this.spinner.hide();
+    }
+  );
+};
 
 
 }

@@ -231,5 +231,62 @@ public  chartOptionslineForOrdBh(MonthlyToalOrdaringPayload?:any) {
       }
     );      
 }
+
+// This is for getting the data for avg orders epr month.
+public  percentageOfOrdersOfDayInMonthFn(MonthlyToalOrdaringPayload?:any) {
+  return this.http
+    .post<any>(
+      `${environment.apiUrl}/percentageofOrdersbyDayoftheMonth`,
+      JSON.stringify(MonthlyToalOrdaringPayload),
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        observe: 'response',
+      }
+    );      
+}
+
+
+// This is for getting the data for avg orders epr month.
+public  percentageofOrdersbyWeekdayorWeekendFn(MonthlyToalOrdaringPayload?:any) {
+  return this.http
+    .post<any>(
+      `${environment.apiUrl}/percentageofOrdersbyWeekdayorWeekend`,
+      JSON.stringify(MonthlyToalOrdaringPayload),
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        observe: 'response',
+      }
+    );      
+}
+
+
+
+// This is for getting the data for avg orders epr month.
+public  percentageofOrdersByWeekdayorWeekendRegionWiseFn(MonthlyToalOrdaringPayload?:any) {
+  return this.http
+    .post<any>(
+      `${environment.apiUrl}/percentageofOrdersByWeekdayorWeekendRegionWise`,
+      JSON.stringify(MonthlyToalOrdaringPayload),
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        observe: 'response',
+      }
+    );      
+}
+
+
+// This is for getting the data for avg orders epr month.
+public  percentaageOfOrdersByHourOfTheDayOnWeekdayWeekendFn(MonthlyToalOrdaringPayload?:any) {
+  return this.http
+    .post<any>(
+      `${environment.apiUrl}/percentaageOfOrdersByHourOfTheDayOnWeekdayWeekend`,
+      JSON.stringify(MonthlyToalOrdaringPayload),
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        observe: 'response',
+      }
+    );      
+}
+
   
 }
