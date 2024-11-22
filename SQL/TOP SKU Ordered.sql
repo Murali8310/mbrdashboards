@@ -10,9 +10,9 @@ Alter PROCEDURE OverallSKUOrdered
 		@RegionList VARCHAR(MAX),    -- Comma-separated list of regions
 		@StartDate INT,              -- Start date in yyyymmdd format (e.g., 20240601)
 		@EndDate INT,                -- End date in yyyymmdd format (e.g., 20240630)
-	--	@RSNameList VARCHAR(MAX),
+		@RSNameList VARCHAR(MAX),
 		@BrandList VARCHAR(MAX),
-		--@ABMName VARCHAR(MAX),       -- New parameter for ABMName
+		@ABMName VARCHAR(MAX),       -- New parameter for ABMName
 		@RetailerType VARCHAR(MAX) 
 	AS
 	BEGIN
@@ -35,16 +35,16 @@ Alter PROCEDURE OverallSKUOrdered
 			)
 			OR 
 			Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@BrandList, ','))  -- Split the @BrandList string into values
-		--	OR 
-			--RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RSNameList, ',')) -- Split the @RSNameList string into values
-		--	OR
-	--		(
+			OR 
+			RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RSNameList, ',')) -- Split the @RSNameList string into values
+			OR
+			(
 				-- Check if ABMName is provided and exists in ABMEMM or ABMKAM columns
-		--		@ABMName IS NOT NULL AND @ABMName <> '' AND (
-	--				ABMEMM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ',')) 
-	--	--			OR ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ','))
-	--			) 
-	--		)
+				@ABMName IS NOT NULL AND @ABMName <> '' AND (
+					ABMEMM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ',')) 
+					OR ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ','))
+				) 
+			)
 			OR
 			(
 			@RetailerType IS NOT NULL AND(
@@ -69,9 +69,9 @@ Alter PROCEDURE OverallSKUOrdered
 		@StartDate = 20240401,         -- Start date in yyyymmdd format
 		@EndDate = 20240430,		   -- End date in yyyymmdd format
 		@BrandList ='',
-	--	@RSNameList ='',
-	--	@ABMName='',
+		@RSNameList ='',
+		@ABMName='',
 		@RetailerType='';
------------------------------------------------------------------------------Region Selected-------------------------
-----------------------------------------------------------------RS selected---------------------------------------------
+-----------------------------------------------------------------------------Region Selected----------------------------
+-----------------------------------------------------------------------------RS selected---------------------------------------------
 

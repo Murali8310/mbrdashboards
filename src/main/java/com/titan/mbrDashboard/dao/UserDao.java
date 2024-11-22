@@ -34,6 +34,7 @@ import com.titan.mbrDashboard.dto.OutputRegionWiseGrowthOverPreviousMonth;
 import com.titan.mbrDashboard.dto.OutputRegionWiseMonthlyAvgPerOrder;
 import com.titan.mbrDashboard.dto.OutputRegionWiseMonthlyDistribution;
 import com.titan.mbrDashboard.dto.OutputRegionWiseMonthlyDistributionNoofOrders;
+import com.titan.mbrDashboard.dto.OutputTopSKUOrderedOverall;
 
 @Repository
 public interface UserDao {
@@ -349,6 +350,15 @@ public interface UserDao {
 
 	List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionNoofOrdersRegular(
 			MonthlyDataFilter filter);
+
+
+	List<OutputTopSKUOrderedOverall> topSKUOrderedOverallRegular(MonthlyDataFilter filter);
+
+
+	List<OutputTopSKUOrderedOverall> topSKUOrderedRegionSelected(MonthlyDataFilter filter);
+
+
+	List<OutputTopSKUOrderedOverall> topSKUOrderedRSNameSelected(MonthlyDataFilter filter);
 
 
 

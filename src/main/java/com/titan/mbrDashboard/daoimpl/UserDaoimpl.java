@@ -88,6 +88,7 @@ import com.titan.mbrDashboard.dto.OutputRegionWiseGrowthOverPreviousMonth;
 import com.titan.mbrDashboard.dto.OutputRegionWiseMonthlyAvgPerOrder;
 import com.titan.mbrDashboard.dto.OutputRegionWiseMonthlyDistribution;
 import com.titan.mbrDashboard.dto.OutputRegionWiseMonthlyDistributionNoofOrders;
+import com.titan.mbrDashboard.dto.OutputTopSKUOrderedOverall;
 import com.titan.mbrDashboard.model.user.*;
 import com.titan.mbrDashboard.security.AuthenticationService;
 import com.titan.util.PasswordUtils;
@@ -7524,5 +7525,164 @@ public class UserDaoimpl implements UserDao {
 		}
 
 		return regionWiseMonthlyDistributionData;
+	}
+
+	@Override
+	public List<OutputTopSKUOrderedOverall> topSKUOrderedOverallRegular(MonthlyDataFilter filter) {
+		List<OutputTopSKUOrderedOverall> topSKUOrderedOverall = new ArrayList<>();
+
+		StringBuilder conditions = new StringBuilder();
+		// Extract filter criteria
+		Integer startDate = filter.getStartDate(); // e.g., "20240401"
+		Integer endDate = filter.getEndDate(); // e.g., "20240430"
+		String brandList = filter.getBrandList(); // e.g., "EAST"
+		String retailerType = filter.getRetailerType(); // e.g., "Regular"
+
+		// Build dynamic conditions
+		if (startDate != null && endDate != null) {
+			conditions.append("OrderDate BETWEEN ").append(startDate).append(" AND ").append(endDate).append(" ");
+		}
+
+		if (retailerType != null && !retailerType.isEmpty()) {
+			conditions.append("AND RetailerCode LIKE '").append(retailerType.equals("IDD") ? "9%" : "1%").append("' ");
+		}
+
+		if (brandList != null && !brandList.isEmpty()) {
+			conditions.append("AND Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(brandList)
+					.append("', ',')) ");
+		}
+
+		// Final query
+		String finalQuery = "SELECT TOP 5 " + "       SUM(OrderQty) AS TotalOrderQty, " + "       ProductCode "
+				+ "FROM MBROrders (NOLOCK) " + "WHERE " + conditions.toString() + "GROUP BY ProductCode "
+				+ "ORDER BY TotalOrderQty DESC";
+
+		// Execute query and map results
+		Query query = entityManager.createNativeQuery(finalQuery);
+
+		try {
+			List<Object[]> result = query.getResultList();
+
+			for (Object[] row : result) {
+				OutputTopSKUOrderedOverall data = new OutputTopSKUOrderedOverall();
+				data.setTotalOrderQty((Integer) row[0]);
+				data.setProductCode(row[1].toString());
+				topSKUOrderedOverall.add(data);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return topSKUOrderedOverall;
+	}
+
+	@Override
+	public List<OutputTopSKUOrderedOverall> topSKUOrderedRegionSelected(MonthlyDataFilter filter) {
+		List<OutputTopSKUOrderedOverall> topSKUOrderedOverall = new ArrayList<>();
+
+		StringBuilder conditions = new StringBuilder();
+		// Extract filter criteria
+		Integer startDate = filter.getStartDate(); // e.g., "20240401"
+		Integer endDate = filter.getEndDate(); // e.g., "20240430"
+		String brandList = filter.getBrandList(); // e.g., "EAST"
+		String retailerType = filter.getRetailerType(); // e.g., "Regular"
+		String regionList = filter.getRegionList();// e.g., "EAST, WEST"
+
+		// Build dynamic conditions
+		if (startDate != null && endDate != null) {
+			conditions.append("OrderDate BETWEEN ").append(startDate).append(" AND ").append(endDate).append(" ");
+		}
+		if (retailerType != null && !retailerType.isEmpty()) {
+			conditions.append("AND RetailerCode LIKE '").append(retailerType.equals("IDD") ? "9%" : "1%").append("' ");
+		}
+
+		if (brandList != null && !brandList.isEmpty()) {
+			conditions.append("AND Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(brandList)
+					.append("', ',')) ");
+		}
+		if (regionList != null && !regionList.isEmpty()) {
+			conditions.append("AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(regionList)
+					.append("', ',')) ");
+		}
+		// Final query
+		String finalQuery = "SELECT TOP 5 " + "       SUM(OrderQty) AS TotalOrderQty, " + "       ProductCode "
+				+ "FROM MBROrders (NOLOCK) " + "WHERE " + conditions.toString() + "GROUP BY ProductCode "
+				+ "ORDER BY TotalOrderQty DESC";
+
+		// Execute query and map results
+		Query query = entityManager.createNativeQuery(finalQuery);
+
+		try {
+			List<Object[]> result = query.getResultList();
+
+			for (Object[] row : result) {
+				OutputTopSKUOrderedOverall data = new OutputTopSKUOrderedOverall();
+				data.setTotalOrderQty((Integer) row[0]);
+				data.setProductCode(row[1].toString());
+				topSKUOrderedOverall.add(data);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return topSKUOrderedOverall;
+	}
+
+	@Override
+	public List<OutputTopSKUOrderedOverall> topSKUOrderedRSNameSelected(MonthlyDataFilter filter) {
+		List<OutputTopSKUOrderedOverall> topSKUOrderedOverall = new ArrayList<>();
+
+		StringBuilder conditions = new StringBuilder();
+		// Extract filter criteria
+		Integer startDate = filter.getStartDate(); // e.g., "20240401"
+		Integer endDate = filter.getEndDate(); // e.g., "20240430"
+		String brandList = filter.getBrandList(); // e.g., "EAST"
+		String retailerType = filter.getRetailerType(); // e.g., "Regular"
+		String regionList = filter.getRegionList();// e.g., "EAST, WEST"
+		String rsList= filter.getRsNameList();
+
+		// Build dynamic conditions
+		if (startDate != null && endDate != null) {
+			conditions.append("OrderDate BETWEEN ").append(startDate).append(" AND ").append(endDate).append(" ");
+		}
+		if (retailerType != null && !retailerType.isEmpty()) {
+			conditions.append("AND RetailerCode LIKE '").append(retailerType.equals("IDD") ? "9%" : "1%").append("' ");
+		}
+
+		if (brandList != null && !brandList.isEmpty()) {
+			conditions.append("AND Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(brandList)
+					.append("', ',')) ");
+		}
+		if (regionList != null && !regionList.isEmpty()) {
+			conditions.append("AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(regionList)
+					.append("', ',')) ");
+		}
+		if (regionList != null && !regionList.isEmpty()) {
+			conditions.append("AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(regionList)
+					.append("', ',')) ");
+		}
+		if (rsList != null && !rsList.isEmpty()) {
+			conditions.append("AND RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(regionList)
+					.append("', ',')) ");
+		}
+		// Final query
+		String finalQuery = "SELECT TOP 5 " + "       SUM(OrderQty) AS TotalOrderQty, " + "       ProductCode "
+				+ "FROM MBROrders (NOLOCK) " + "WHERE " + conditions.toString() + "GROUP BY ProductCode "
+				+ "ORDER BY TotalOrderQty DESC";
+
+		// Execute query and map results
+		Query query = entityManager.createNativeQuery(finalQuery);
+
+		try {
+			List<Object[]> result = query.getResultList();
+
+			for (Object[] row : result) {
+				OutputTopSKUOrderedOverall data = new OutputTopSKUOrderedOverall();
+				data.setTotalOrderQty((Integer) row[0]);
+				data.setProductCode(row[1].toString());
+				topSKUOrderedOverall.add(data);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return topSKUOrderedOverall;
 	}
 }

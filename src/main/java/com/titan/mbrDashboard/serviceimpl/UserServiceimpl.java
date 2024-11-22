@@ -52,6 +52,7 @@ import com.titan.mbrDashboard.dto.OutputRegionWiseGrowthOverPreviousMonth;
 import com.titan.mbrDashboard.dto.OutputRegionWiseMonthlyAvgPerOrder;
 import com.titan.mbrDashboard.dto.OutputRegionWiseMonthlyDistribution;
 import com.titan.mbrDashboard.dto.OutputRegionWiseMonthlyDistributionNoofOrders;
+import com.titan.mbrDashboard.dto.OutputTopSKUOrderedOverall;
 import com.titan.mbrDashboard.service.Userservice;
 
 @Service("userService")
@@ -1238,6 +1239,26 @@ public class UserServiceimpl implements Userservice {
 			MonthlyDataFilter filter) {
 		// TODO Auto-generated method stub
 		return userDao.regionWiseMonthlyDistributionNoofOrdersRegular(filter);
+	}
+
+	@Override
+	public List<OutputTopSKUOrderedOverall> topSKUOrderedOverallRegular(
+			MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		return userDao.topSKUOrderedOverallRegular(filter);
+	}
+
+	@Override
+	public List<OutputTopSKUOrderedOverall> topSKUOrderedRegionSelected(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		return userDao.topSKUOrderedRegionSelected(filter);
+
+	}
+
+	@Override
+	public List<OutputTopSKUOrderedOverall> topSKUOrderedRSNameSelected(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		return userDao.topSKUOrderedRSNameSelected(filter);
 	}
 
 
