@@ -3041,8 +3041,31 @@ public List<OutputForMontlyFilter> MonthlyTrendRegular(HttpServletRequest reques
 		return result;
 	}
 
+//	@RequestMapping(value = "monthlyOrdaringBehaviour", method = RequestMethod.POST)
+//	public List<OutputMonthlyOrdaringBehaviour> monthlyOrdaringBehaviour(HttpServletRequest request,
+//			HttpServletResponse response, RedirectAttributes redirect, Model model,
+//			@RequestBody MonthlyDataFilter filter) {
+//		List<OutputMonthlyOrdaringBehaviour> result = new ArrayList<>();
+//
+//		HttpSession session = request.getSession();
+//		String loginId = "";
+////			try {
+////				Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+////				loginId = (String) userMap.get("login_id");
+////			} catch (Exception er) {
+////				er.printStackTrace();
+////				//return new StringBuilder("Session is timeout, <a href='login' >click here</a> to login");
+////			}
+//
+//		result = userService.monthlyOrdaringBehaviour(filter);
+//		redirect.addFlashAttribute("MESSAGE", result);
+//		model.addAttribute("MESSAGE", result);
+//		return result;
+//	}
+	
+	
 	@RequestMapping(value = "monthlyOrdaringBehaviour", method = RequestMethod.POST)
-	public List<OutputMonthlyOrdaringBehaviour> monthlyOrdaringBehaviour(HttpServletRequest request,
+	public List<OutputMonthlyOrdaringBehaviour> monthlyOrdaringBehaviourRegular(HttpServletRequest request,
 			HttpServletResponse response, RedirectAttributes redirect, Model model,
 			@RequestBody MonthlyDataFilter filter) {
 		List<OutputMonthlyOrdaringBehaviour> result = new ArrayList<>();
@@ -3057,14 +3080,39 @@ public List<OutputForMontlyFilter> MonthlyTrendRegular(HttpServletRequest reques
 //				//return new StringBuilder("Session is timeout, <a href='login' >click here</a> to login");
 //			}
 
-		result = userService.monthlyOrdaringBehaviour(filter);
+		result = userService.monthlyOrdaringBehaviourRegular(filter);
 		redirect.addFlashAttribute("MESSAGE", result);
 		model.addAttribute("MESSAGE", result);
 		return result;
 	}
 
+	
+	
+	
+//	@RequestMapping(value = "regionWiseMonthlyDistributionNoofOrders", method = RequestMethod.POST)
+//	public List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionNoofOrders(
+//			HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirect, Model model,
+//			@RequestBody MonthlyDataFilter filter) {
+//		List<OutputRegionWiseMonthlyDistributionNoofOrders> result = new ArrayList<>();
+//
+//		HttpSession session = request.getSession();
+//		String loginId = "";
+////			try {
+////				Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+////				loginId = (String) userMap.get("login_id");
+////			} catch (Exception er) {
+////				er.printStackTrace();
+////				//return new StringBuilder("Session is timeout, <a href='login' >click here</a> to login");
+////			}
+//
+//		result = userService.regionWiseMonthlyDistributionNoofOrders(filter);
+//		redirect.addFlashAttribute("MESSAGE", result);
+//		model.addAttribute("MESSAGE", result);
+//		return result;
+//	}
+	
 	@RequestMapping(value = "regionWiseMonthlyDistributionNoofOrders", method = RequestMethod.POST)
-	public List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionNoofOrders(
+	public List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionNoofOrdersRegular(
 			HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirect, Model model,
 			@RequestBody MonthlyDataFilter filter) {
 		List<OutputRegionWiseMonthlyDistributionNoofOrders> result = new ArrayList<>();
@@ -3079,11 +3127,12 @@ public List<OutputForMontlyFilter> MonthlyTrendRegular(HttpServletRequest reques
 //				//return new StringBuilder("Session is timeout, <a href='login' >click here</a> to login");
 //			}
 
-		result = userService.regionWiseMonthlyDistributionNoofOrders(filter);
+		result = userService.regionWiseMonthlyDistributionNoofOrdersRegular(filter);
 		redirect.addFlashAttribute("MESSAGE", result);
 		model.addAttribute("MESSAGE", result);
 		return result;
 	}
+	
 
 	@RequestMapping(value = "regionWiseMonthlyAvgPerOrder", method = RequestMethod.POST)
 	public List<OutputRegionWiseMonthlyAvgPerOrder> regionWiseMonthlyAvgPerOrder(HttpServletRequest request,

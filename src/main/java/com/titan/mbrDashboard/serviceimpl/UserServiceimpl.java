@@ -1227,6 +1227,19 @@ public class UserServiceimpl implements Userservice {
 		return userDao.regionWiseGrowthOverPreviousMonthRegular(filter);
 	}
 
+	@Override
+	public List<OutputMonthlyOrdaringBehaviour> monthlyOrdaringBehaviourRegular(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		return userDao.monthlyOrdaringBehaviourRegular(filter);
+	}
+
+	@Override
+	public List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionNoofOrdersRegular(
+			MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		return userDao.regionWiseMonthlyDistributionNoofOrdersRegular(filter);
+	}
+
 
 
 }

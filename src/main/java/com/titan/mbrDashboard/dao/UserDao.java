@@ -344,5 +344,12 @@ public interface UserDao {
 	List<OutputRegionWiseGrowthOverPreviousMonth> regionWiseGrowthOverPreviousMonthRegular(MonthlyDataFilter filter);
 
 
+	List<OutputMonthlyOrdaringBehaviour> monthlyOrdaringBehaviourRegular(MonthlyDataFilter filter);
+
+
+	List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionNoofOrdersRegular(
+			MonthlyDataFilter filter);
+
+
 
 }
