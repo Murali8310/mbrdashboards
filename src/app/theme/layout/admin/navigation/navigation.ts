@@ -68,6 +68,23 @@ export const NavigationItems: NavigationItem[] = [
       }
     ]
   },
+  {
+    id: 'chart',
+    title: 'Chart',
+    type: 'group',
+    icon: 'icon-group',
+    children: [
+      {
+        id: '4',
+        title: 'Day & Time Analysis',
+        type: 'item',
+        url: '/charts',
+        classes: 'nav-item',
+        icon: 'feather float-end icon-shopping-cart'
+      }
+      
+    ]
+  },
   
   // {
   //   id: 'ui-component',

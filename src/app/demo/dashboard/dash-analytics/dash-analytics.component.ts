@@ -323,6 +323,7 @@ searchInputValueForMonth: string = '';
   filteredBrandsList = this.availableBrands;
 
   isLoading = false; // Start with loading state
+  isMobileView = window.innerWidth <= 768;
 
   // constructor
   constructor(
@@ -542,6 +543,7 @@ generateFinancialYearPayload(months:any) {
           const quantityData :any= [];
           const valueData:any = [];
           const categories: string[] = []; // This will hold the month names
+          const isMobile = window.innerWidth <= 768;
 
     this.chartOptionsline = {
       series: [
@@ -595,7 +597,8 @@ generateFinancialYearPayload(months:any) {
         }
       },  
       dataLabels: {
-        enabled: true,
+        enabled:isMobile ? false: true,
+        
         offsetX: -5,  // X-axis offset
         style: {
           fontSize: '10px',
@@ -1118,7 +1121,8 @@ generateFinancialYearPayload(months:any) {
               // }
             },
             dataLabels: {
-              enabled: true,
+              // enabled: true,
+              enabled: isMobile ? false: true,
               offsetX: -5,  // X-axis offset
               style: {
                 fontSize: '10px',
@@ -1297,7 +1301,7 @@ generateFinancialYearPayload(months:any) {
               }
             },
             dataLabels: {
-              enabled: true,
+              enabled: this.isMobileView ? false: true,
               background: {
                 enabled: true,
                 foreColor: '#000000'
@@ -1438,7 +1442,9 @@ generateFinancialYearPayload(months:any) {
               }
             },
             dataLabels: {
-              enabled: true,
+              // enabled: true,
+              enabled: this.isMobileView ? false: true,
+
               //  offsetY: -10,
               
               style: {
@@ -2107,7 +2113,9 @@ generateFinancialYearPayload(months:any) {
               }
             },
             dataLabels: {
-              enabled: true
+              // enabled: true
+              enabled: this.isMobileView ? false: true,
+
             },
             stroke: {
               show: true,
@@ -2198,7 +2206,10 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
       categories: [],
       title: { style: { color: '#000000' } }
     },
-    dataLabels: { enabled: true ,
+    dataLabels: {
+      //  enabled: true ,
+       enabled: this.isMobileView ? false: true,
+
       style: {
         fontSize: "10px",
         colors: ['#000000'] 
@@ -2351,7 +2362,11 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
             categories: [],
             title: { style: { color: '#000000' } }
         },
-        dataLabels: { enabled: true,  style: {
+        dataLabels: {
+          //  enabled: true, 
+           enabled: this.isMobileView ? false: true,
+
+            style: {
           fontSize: "10px",
           colors: ['#000000'] 
         }, },
@@ -2788,7 +2803,9 @@ public chartOptionslineForOrdBhFn = (MonthlyToalOrdaringPayload?: any) => {
             },
           },
           dataLabels: {
-            enabled: true,
+            // enabled: true,
+            enabled: this.isMobileView ? false: true,
+
             offsetX: -5,
             offsetY: -5,
             style: {
@@ -2952,7 +2969,12 @@ public RegionWiseMonthlyDistibutionOptionsFOrdBhFn = (MonthlyTotalOrderingPayloa
       categories: [],
       title: { style: { color: '#000000' } }
     },
-    dataLabels: { enabled: false },
+    dataLabels: {
+      //  enabled: false 
+       enabled: this.isMobileView ? false: true,
+
+
+    },
     chart: {
       type: 'bar',
       height: 500,
@@ -3239,7 +3261,11 @@ public RegionWiseMonthlyAvgPerOrderFn = (MonthlyTotalOrderingPayload?: any) => {
       categories: [],
       title: { style: { color: '#000000' } }
     },
-    dataLabels: { enabled: false },
+    dataLabels: { 
+      // enabled: false
+      enabled: this.isMobileView ? false: true,
+
+     },
     chart: { type: 'bar', height: 500, stacked: true },
     plotOptions: { bar: { horizontal: false } },
     fill: { opacity: 1 },
