@@ -16,7 +16,7 @@ export class NavBarComponent {
   @Output() NavCollapsedMob = new EventEmitter();
 
 constructor(private dash:DashboardService){
-
+this.navCollapseForMobile();
 }
 
   // public method
@@ -29,6 +29,15 @@ constructor(private dash:DashboardService){
   navCollapse() {
     if (this.windowWidth >= 992) {
       this.NavCollapse.emit();
+    }
+  }
+
+  navCollapseForMobile() {
+    const mobileCollapseElement = document.getElementById('mobileresponsiveElement');
+    // Check if the element exists
+    if (mobileCollapseElement) {
+      // Toggle the 'navbar-collapsed' class on the element
+      mobileCollapseElement.classList.toggle('navbar-collapsed');
     }
   }
 

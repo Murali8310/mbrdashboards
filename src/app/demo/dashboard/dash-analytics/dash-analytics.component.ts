@@ -117,7 +117,7 @@ export default class DashAnalyticsComponent {
     if (
       targetElement.closest('#allowClickButton') || targetElement.closest('#allowClickButtonabm') || targetElement.closest('#restrictclicksabm')||
       targetElement.closest('#restrictclicks') || targetElement.closest('#retailerTypeallow') || targetElement.closest('#retailerTypeallow') || targetElement.closest('#retailerTypeallowDropdown')
-      ||targetElement.closest('#rsnamemenu2')||targetElement.closest('#rsnamemenu') || targetElement.closest('#brandDropdown') ||targetElement.closest('#brandDropdownmenu')
+      ||targetElement.closest('#rsnamemenu2')||targetElement.closest('#rsnamemenu') || targetElement.closest('#brandDropdown') ||targetElement.closest('#brandDropdownmenu') || targetElement.closest('#monthDropdownmenu') || targetElement.closest('#monthDropdown')
     ) {
       return; // Ignore clicks on this button and its children
     }
@@ -331,6 +331,12 @@ searchInputValueForMonth: string = '';
     private router: Router,
     private route: ActivatedRoute
   ) {
+    // this.selectedAbmNames = [];
+    // this.selectedBrands = [];
+    // this.selectedRSNames = [];
+    // this.selectedRegions = [];
+    // this.selectedRetailerTypes = [];
+    // this.selectedMonths = [];
 
     this.route.queryParams.subscribe((params) => {
       this.dashboardService.selectedData = params['id'];
@@ -347,6 +353,53 @@ searchInputValueForMonth: string = '';
     console.log('calling count')
     this.spinner.show();
   }
+
+  // Function to generate payload dynamically
+// generateFinancialYearPayload(months:any) {
+//   const year = new Date().getFullYear(); // Gets current year
+//   const startMonth = months[0]; // Assuming January is the first month in the list
+//   const endMonth = months[months.length - 1]; // Assuming December is the last month in the list
+
+//   // Construct startDate and endDate in YYYYMMDD format as integers
+//   const startDate = months && months.length ===0 ? 20240401 :parseInt(`${year}0${startMonth.id}01`); // 1st of January
+//   const endDate = months && months.length ===0 ? 202401030 : parseInt(`${year}0${endMonth.id}30`); // 30th of December (custom end date as per requirement)
+
+//   return {
+//       startDate,
+//       endDate,
+//   };
+// }
+
+generateFinancialYearPayload(months:any) {
+  const year = new Date().getFullYear(); // Gets the current year
+  
+  if (!months || months.length === 0) {
+    // Default dates if months array is empty
+    return { startDate: 20240401, endDate: 202401030 };
+  }
+
+  // Find the minimum and maximum month IDs in the array
+  let startMonth = months[0];
+  let endMonth = months[0];
+
+  months.forEach((month:any) => {
+    if (month.id < startMonth.id) {
+      startMonth = month;
+    }
+    if (month.id > endMonth.id) {
+      endMonth = month;
+    }
+  });
+
+  // Construct startDate and endDate in YYYYMMDD format as integers
+  const startDate = parseInt(`${year}0${startMonth.id}01`); // 1st day of the start month
+  const endDate = parseInt(`${year}0${endMonth.id}30`);     // 30th day of the end month
+
+  return {
+    startDate,
+    endDate,
+  };
+}
 
   // this is to get the searched data;
   public prepareSearchData(data: any) {
@@ -365,11 +418,12 @@ searchInputValueForMonth: string = '';
       rsNameList = this.selectedRSNames.map((item) => item.name).join(', ');
       regionList = this.selectedRegions.map((item) => item.name).join(', ');
       retailerTypeList = this.selectedRetailerTypes.map((item) => item.name).join(', ');
+      const payload = this.generateFinancialYearPayload(this.selectedMonths);
 
       MonthlyToalOrdaringPayload = {
         regionList: regionList, /// default all regions
-        startDate: 20240401, /// default case start date of financial year in integer format
-        endDate: 202401030, ////  default case end date of financial year in integer format
+        startDate: payload.startDate, /// default case start date of financial year in integer format
+        endDate: payload.endDate, ////  default case end date of financial year in integer format
         brandList: brandList, //// default casen ""
         rsNameList: rsNameList, //// default casen ""
         abmName:abmNameList,
@@ -398,6 +452,7 @@ searchInputValueForMonth: string = '';
         this.selectedRSNames = [];
         this.selectedRegions = [];
         this.selectedRetailerTypes = [];
+        this.selectedMonths = [];
     }
     this.GetMasterData(payloadForMaster,MonthlyToalOrdaringPayload);
   }
@@ -507,9 +562,9 @@ searchInputValueForMonth: string = '';
         height: 500,
         type: 'line'
       },
-      dataLabels: {
-        enabled: true
-      },
+      // dataLabels: {
+      //   enabled: true
+      // },
       stroke: {
         width: 5,
         curve: 'smooth', // Smooth curve for the line chart
@@ -538,7 +593,40 @@ searchInputValueForMonth: string = '';
           const formattedValue = dataValue % 1 === 0 ? dataValue : dataValue.toFixed(2);
           return val + ' - <strong>' + formattedValue + '</strong>';
         }
-      },            
+      },  
+      dataLabels: {
+        enabled: true,
+        offsetX: -5,  // X-axis offset
+        style: {
+          fontSize: '10px',
+        },
+        background: {
+          enabled: true,
+          foreColor: '#000000'
+        },
+        formatter: function (val: any, { seriesIndex, w }) {
+          // Apply custom scaling to data labels based on series name
+          const seriesName = w.config.series[seriesIndex].name;
+          let scaledValue = val;
+    
+          // Apply custom scaling for each series
+          if (seriesName === 'Quantity (k)') {
+            scaledValue = (val * 10).toFixed(2); // Scale Quantity by 10
+          } else if (seriesName === 'Retailers') {
+            scaledValue = (val * 100).toFixed(0); // Scale Retailers by 100
+          } else {
+            scaledValue = val.toFixed(2); // No scaling for other series
+          }
+    
+          // Offset Y based on series index
+          const dataLabelOffsetsY = [0, 35, 0];  // Customize offsets per series index
+          const offsetY = dataLabelOffsetsY[seriesIndex] || 0; // Use the default offset if none provided
+    
+          // Update the offsetY dynamically
+          w.config.dataLabels.offsetX = offsetY;
+          return scaledValue;
+        }
+      },          
       markers: {
         size: 5, // Size of markers on the line
         hover: {
@@ -1005,6 +1093,9 @@ searchInputValueForMonth: string = '';
             chart: {
               height: 500,
               type: 'line',
+              zoom: {
+                enabled: false
+              },
               toolbar: {
                 show: true,
                 tools: {
@@ -1051,7 +1142,7 @@ searchInputValueForMonth: string = '';
                 }
           
                 // Offset Y based on series index
-                const dataLabelOffsetsY = [0, -20, 20];  // Customize offsets per series index
+                const dataLabelOffsetsY = [0, 35, 0];  // Customize offsets per series index
                 const offsetY = dataLabelOffsetsY[seriesIndex] || 0; // Use the default offset if none provided
           
                 // Update the offsetY dynamically
@@ -1569,7 +1660,7 @@ searchInputValueForMonth: string = '';
       this.isDropdownOpenForBrand = false;
       this.isDropdownOpen = false;
       this.isDropdownOpenForAbm = false;
-
+      this.isDropdownOpenForMonth = false;
       // Open the selected dropdown
       this[selectedDropdown] = true;
     }
@@ -2057,6 +2148,7 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
   this.spinner.show();
   const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const categories: string[] = [];
+  const isMobile = window.innerWidth <= 768;
 
   // Define chart options with placeholder series (to be updated dynamically)
   this.RegionWiseMonthlyDistibutionOptions = {
@@ -2136,9 +2228,8 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
       '#1D8348',
       '#186A3B' // Value colors
     ],
-    legend: { position: 'right', horizontalAlign: 'left' }
+    legend: { position: isMobile ? 'top' : 'right', horizontalAlign: 'left' },
   };
-
   this.dashboardService.RegionWiseMonthlyDistribution(MonthlyTotalOrderingPayload).subscribe(
       (response) => {
           if (response && response.body) {
@@ -2213,6 +2304,7 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
 
     const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const categories: string[] = [];
+    const isMobile = window.innerWidth <= 768;
 
     this.RegionWiseGrowthOverPreviousMonthOptions = {
         series: [
@@ -2275,7 +2367,7 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
             '#FF5733', '#FFBD33', '#C70039', '#900C3F', '#581845',
             '#2ECC71', '#28B463', '#239B56', '#1D8348', '#186A3B'
         ],
-        legend: { position: 'right', horizontalAlign: 'left' }
+        legend: { position: isMobile ? 'top' : 'right', horizontalAlign: 'left' }
     };
 
     this.dashboardService.RegionWiseGrowthOverPreviousMonth(MonthlyToalOrdaringPayload).subscribe(
@@ -2419,7 +2511,7 @@ public chartOptionslineForOrdBhFn = (MonthlyToalOrdaringPayload?: any) => {
       type: 'line'
     },
     dataLabels: {
-      enabled: true
+      enabled: false
     },
     stroke: {
       width: 5,
@@ -2458,7 +2550,8 @@ public chartOptionslineForOrdBhFn = (MonthlyToalOrdaringPayload?: any) => {
     },
     xaxis: {
       labels: {
-        trim: false
+        trim: false,
+          show:false,
       },
       categories: categories,
       title: {
@@ -2478,6 +2571,7 @@ public chartOptionslineForOrdBhFn = (MonthlyToalOrdaringPayload?: any) => {
         },
         min: 0, // Minimum value for left y-axis
         labels: {
+          show:false,
           formatter: function (val) {
             // return '' + val; // Format for value
             return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
@@ -2688,7 +2782,10 @@ public chartOptionslineForOrdBhFn = (MonthlyToalOrdaringPayload?: any) => {
           ],
           chart: {
             height: 500,
-            type: 'line'
+            type: 'line',
+            zoom: {
+              enabled: false
+            },
           },
           dataLabels: {
             enabled: true,
@@ -2711,6 +2808,12 @@ public chartOptionslineForOrdBhFn = (MonthlyToalOrdaringPayload?: any) => {
               if (val === 'Avg Qty Per Order') {
                 val = val.toFixed(0);
               }
+                // Offset Y based on series index
+          const dataLabelOffsetsY = [0,0,35];  // Customize offsets per series index
+          const offsetY = dataLabelOffsetsY[seriesIndex] || 0; // Use the default offset if none provided
+    
+          // Update the offsetY dynamically
+          w.config.dataLabels.offsetX = offsetY;
               return val.toFixed(2); // No scaling for Avg Value
             }
           },
@@ -2838,13 +2941,14 @@ public RegionWiseMonthlyDistibutionOptionsFOrdBhFn = (MonthlyTotalOrderingPayloa
           style: { color: '#000000' }
         },
         labels: {
+          show:false,
           formatter: (val: any) => '' + val
         },
         tickAmount: 4
       }
     ],
     xaxis: {
-      labels: { trim: false },
+      labels: { trim: false ,  show:true,},
       categories: [],
       title: { style: { color: '#000000' } }
     },
@@ -3125,12 +3229,13 @@ public RegionWiseMonthlyAvgPerOrderFn = (MonthlyTotalOrderingPayload?: any) => {
         style: { color: '#000000' }
       },
       labels: {
+        show:false,
         formatter: (val: any) => '' + val
       },
       tickAmount: 4
     }],
     xaxis: {
-      labels: { trim: false },
+      labels: { trim: false  , show:true,},
       categories: [],
       title: { style: { color: '#000000' } }
     },
@@ -3202,11 +3307,15 @@ public RegionWiseMonthlyAvgPerOrderFn = (MonthlyTotalOrderingPayload?: any) => {
       this.spinner.hide();
       console.error('Error fetching region-wise monthly avg per order data:', error);
     }
-  );
+  ); 
 };
 
 toggleDropdownVisibilityForMonth() {
-  this.isDropdownOpenForMonth = !this.isDropdownOpenForMonth;
+  this.toggleDropdownVisibility1('isDropdownOpenForMonth');
+    if (this.isDropdownOpenForMonth) {
+      this.filteredMonthsList = this.availableMonths; // Reset filtered list on opening
+    }
+  // this.isDropdownOpenForMonth = !this.isDropdownOpenForMonth;
 }
 
 toggleMonthSelection(month: any) {
