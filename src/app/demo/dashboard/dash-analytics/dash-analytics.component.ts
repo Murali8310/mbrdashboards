@@ -310,7 +310,7 @@ export default class DashAnalyticsComponent {
 
   // Filtered list for search functionality
 filteredMonthsList: any[] = [...this.availableMonths];
-selectedMonths: any[] = [];
+selectedMonths: any[] = [{ id: 10, name: 'October', code: 'OCT' }];
 isDropdownOpenForMonth: boolean = false;
 areAllMonthsSelected: boolean = false;
 searchInputValueForMonth: string = '';
@@ -1133,7 +1133,8 @@ generateFinancialYearPayload(months:any) {
               enabled: isMobile ? false: true,
               offsetX: -5,  // X-axis offset
               style: {
-                fontSize: '10px',
+                fontSize: '10px', // Set font size to 5px
+                fontWeight: 'normal' // Remove bold styling by setting fontWeight to normal
               },
               background: {
                 enabled: true,
@@ -1411,7 +1412,7 @@ generateFinancialYearPayload(months:any) {
               }
             },
             title: {
-              text: 'Growth Over Previous Month.', // Chart title
+              text: 'Growth Over Previous Month', // Chart title
               align: 'center',
               style: {
                 fontSize: '16px',
@@ -1457,7 +1458,8 @@ generateFinancialYearPayload(months:any) {
               
               style: {
                 fontSize: "10px",
-                colors: ['#000000'] 
+                fontWeight: 'normal' // Remove bold styling by setting fontWeight to normal
+
               },
               
             },
@@ -1872,8 +1874,11 @@ generateFinancialYearPayload(months:any) {
           } else if(this.dashboardService.selectedData === '3'){
             this.chartOptionslineForOrdBhFn(MonthlyToalOrdaringPayload);
           } else if(this.dashboardService.selectedData === '4'){
-            MonthlyToalOrdaringPayload.startDate = 20241001;       /// default case start date of financial year in integer format
-            MonthlyToalOrdaringPayload.endDate = 202401030;
+
+            this.selectedMonths = [{ id: 10, name: 'October', code: 'OCT' }];
+            const payload = this.generateFinancialYearPayload(this.selectedMonths);
+            MonthlyToalOrdaringPayload.startDate = payload.startDate;       /// default case start date of financial year in integer format
+            MonthlyToalOrdaringPayload.endDate = payload.endDate;
             this.percentageOfOrdersOfDayInMonth(MonthlyToalOrdaringPayload);
           }
         }
@@ -2224,7 +2229,7 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
 
       style: {
         fontSize: "10px",
-        colors: ['#000000'] 
+        fontWeight: 'normal' // Remove bold styling by setting fontWeight to normal
       },
     },
     chart: {
@@ -2234,23 +2239,28 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
     },
     plotOptions: { bar: { horizontal: false } },
     fill: { opacity: 1 },
+    // colors: [
+    //   '#80c7fd',
+    //   '#008FFB',
+    //   '#80f1cb',
+    //   '#00E396',
+    //   '#feb019', // Retailers colors
+    //   '#FF5733',
+    //   '#FFBD33',
+    //   '#C70039',
+    //   '#900C3F',
+    //   '#581845', // Qty colors
+    //   '#2ECC71',
+    //   '#28B463',
+    //   '#239B56',
+    //   '#1D8348',
+    //   '#186A3B' // Value colors
+    // ],
     colors: [
-      '#80c7fd',
-      '#008FFB',
-      '#80f1cb',
-      '#00E396',
-      '#feb019', // Retailers colors
-      '#FF5733',
-      '#FFBD33',
-      '#C70039',
-      '#900C3F',
-      '#581845', // Qty colors
-      '#2ECC71',
-      '#28B463',
-      '#239B56',
-      '#1D8348',
-      '#186A3B' // Value colors
-    ],
+      '#007bff', '#ff5733', '#28a745', '#ffc107', '#dc3545', // Blue, red-orange, green, amber, crimson
+      '#6f42c1', '#17a2b8', '#fd7e14', '#6610f2', '#e83e8c', // Purple, teal, orange, violet, pink
+      '#20c997', '#ff6347', '#8b0000', '#4169e1', '#32cd32'  // Aqua, tomato, dark red, royal blue, lime green
+    ], 
     legend: { position: isMobile ? 'top' : 'right', horizontalAlign: 'left' },
   };
   this.dashboardService.RegionWiseMonthlyDistribution(MonthlyTotalOrderingPayload).subscribe(
@@ -2380,7 +2390,8 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
 
             style: {
           fontSize: "10px",
-          colors: ['#000000'] 
+          fontWeight: 'normal' // Remove bold styling by setting fontWeight to normal
+
         }, },
         chart: {
             type: 'bar',
@@ -2389,11 +2400,16 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
         },
         plotOptions: { bar: { horizontal: false } },
         fill: { opacity: 1 },
+        // colors: [
+        //     '#80c7fd', '#008FFB', '#80f1cb', '#00E396', '#feb019',
+        //     '#FF5733', '#FFBD33', '#C70039', '#900C3F', '#581845',
+        //     '#2ECC71', '#28B463', '#239B56', '#1D8348', '#186A3B'
+        // ],t
         colors: [
-            '#80c7fd', '#008FFB', '#80f1cb', '#00E396', '#feb019',
-            '#FF5733', '#FFBD33', '#C70039', '#900C3F', '#581845',
-            '#2ECC71', '#28B463', '#239B56', '#1D8348', '#186A3B'
-        ],
+          '#007bff', '#ff5733', '#28a745', '#ffc107', '#dc3545', // Blue, red-orange, green, amber, crimson
+          '#6f42c1', '#17a2b8', '#fd7e14', '#6610f2', '#e83e8c', // Purple, teal, orange, violet, pink
+          '#20c997', '#ff6347', '#8b0000', '#4169e1', '#32cd32'  // Aqua, tomato, dark red, royal blue, lime green
+        ],        
         legend: { position: isMobile ? 'top' : 'right', horizontalAlign: 'left' }
     };
 
@@ -2822,6 +2838,7 @@ public chartOptionslineForOrdBhFn = (MonthlyToalOrdaringPayload?: any) => {
             offsetY: -5,
             style: {
               fontSize: '10px',
+              fontWeight:'normal'
             },
             background: {
               enabled: true,
@@ -2984,7 +3001,9 @@ public RegionWiseMonthlyDistibutionOptionsFOrdBhFn = (MonthlyTotalOrderingPayloa
     dataLabels: {
       //  enabled: false 
        enabled: this.isMobileView ? false: true,
-
+style:{
+  fontWeight:'normal'
+}
 
     },
     chart: {
@@ -2994,24 +3013,29 @@ public RegionWiseMonthlyDistibutionOptionsFOrdBhFn = (MonthlyTotalOrderingPayloa
     },
     plotOptions: { bar: { horizontal: false } },
     fill: { opacity: 1 },
+    // colors: [
+    //   '#80c7fd',
+    //   '#008FFB',
+    //   '#80f1cb',
+    //   '#00E396',
+    //   '#feb019', // Retailers colors
+    //   '#FF5733',
+    //   '#FFBD33',
+    //   '#C70039',
+    //   '#900C3F',
+    //   '#581845', // Qty colors
+    //   '#2ECC71',
+    //   '#28B463',
+    //   '#239B56',
+    //   '#1D8348',
+    //   '#186A3B' // Value colors
+    // ],
     colors: [
-      '#80c7fd',
-      '#008FFB',
-      '#80f1cb',
-      '#00E396',
-      '#feb019', // Retailers colors
-      '#FF5733',
-      '#FFBD33',
-      '#C70039',
-      '#900C3F',
-      '#581845', // Qty colors
-      '#2ECC71',
-      '#28B463',
-      '#239B56',
-      '#1D8348',
-      '#186A3B' // Value colors
-    ],
-    legend: { position: 'top', horizontalAlign: 'left' }
+      '#007bff', '#ff5733', '#28a745', '#ffc107', '#dc3545', // Blue, red-orange, green, amber, crimson
+      '#6f42c1', '#17a2b8', '#fd7e14', '#6610f2', '#e83e8c', // Purple, teal, orange, violet, pink
+      '#20c997', '#ff6347', '#8b0000', '#4169e1', '#32cd32'  // Aqua, tomato, dark red, royal blue, lime green
+    ], 
+    legend: { position: 'right', horizontalAlign: 'left' }
   };
 
   this.dashboardService.RegionWiseMonthlyDistibutionOptionsFOrdBhFn(MonthlyTotalOrderingPayload).subscribe(
@@ -3058,7 +3082,7 @@ public RegionWiseMonthlyDistibutionOptionsFOrdBhFn = (MonthlyTotalOrderingPayloa
                   ],
                   xaxis: { ...this.RegionWiseMonthlyDistibutionOptionsFOrdBh.xaxis, categories },
                   title: {
-                    text: 'Region Wise Monthly Distribution - No Of Orders.',
+                    text: 'Region Wise Monthly Distribution - No Of Orders',
                     align: 'center',
                     // style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
                 },
@@ -3276,7 +3300,9 @@ public RegionWiseMonthlyAvgPerOrderFn = (MonthlyTotalOrderingPayload?: any) => {
     dataLabels: { 
       // enabled: false
       enabled: this.isMobileView ? false: true,
-
+      style:{
+        fontWeight:'normal'
+      }
      },
     chart: { type: 'bar', height: 500, stacked: true },
     plotOptions: { bar: { horizontal: false } },
@@ -3696,6 +3722,9 @@ public percentageOfOrdersOfDayInMonth = (MonthlyTotalOrderingPayload?: any) => {
       }
     },
     dataLabels: {
+      style:{
+        fontWeight:'noraml'
+      },
       enabled: true, // Enable data labels
       formatter: (val:any) => `${val.toFixed(0)}%` // Format as percentage
     },
@@ -3835,6 +3864,11 @@ public percentageofOrdersbyWeekdayorWeekendFN = (MonthlyTotalOrderingPayload?: a
       type: 'pie',
       height: 500
     },
+    dataLabels:{
+      style:{
+        fontWeight:'noraml'
+      },
+    },
     labels: [], // Set labels dynamically based on data received
     title: {
       text: 'Percentage of Orders by Weekday/Weekend',
@@ -3847,23 +3881,95 @@ public percentageofOrdersbyWeekdayorWeekendFN = (MonthlyTotalOrderingPayload?: a
       y: {
         formatter: (val: any) => `${val.toFixed(2)}%`
       }
-    }
+    },
+    yaxis: {
+      labels: {
+        formatter: (val: any) => `${val.toFixed(0)}%`
+      }
+    },
   };
 
   // Define Bar Chart options
+  // this.percentageofOrdersbyWeekdayorWeekendOptionsBarchart = {
+  //   series: [
+  //     {
+  //       name: 'Percentage of Orders',
+  //       data: barSeriesData // We will only show percentage here
+  //     }
+  //   ],
+  //   chart: {
+  //     height: 500,
+  //     type: 'bar'
+  //   },
+  //   dataLabels: {
+  //     enabled: true,
+  //     formatter: (val: any) => `${val.toFixed(2)}%`
+  //   },
+  //   title: {
+  //     text: 'Order Count by Weekday/Weekend',
+  //     align: 'center'
+  //   },
+  //   xaxis: {
+  //     categories: barCategories,
+  //     title: {
+  //       text: 'Day Type'
+  //     }
+  //   },
+  //   yaxis: {
+  //     title: {
+  //       text: 'Percentage of Orders'
+  //     },
+  //     labels: {
+  //       formatter: (val: any) => `${val.toFixed(2)}%`
+  //     }
+  //   },
+  //   colors: [
+  //     '#80c7fd', '#008FFB', // Qty colors
+  //   ],
+  //   tooltip: {
+  //     shared: true,
+  //     intersect: false,
+  //     custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+  //       const distinctOrderCount = distinctOrderCounts[dataPointIndex] || 0;
+  //       return `
+  //         <div style="padding: 10px; border-radius: 5px; background-color: #f4f4f4; color: #333;">
+  //           <strong>${barCategories[dataPointIndex]}</strong><br>
+  //           Order %: ${series[seriesIndex][dataPointIndex].toFixed(2)}%<br>
+  //           Orders: ${distinctOrderCount}
+  //         </div>
+  //       `;
+  //     }
+  //   },
+  //   markers: {
+  //     size: 5
+  //   },
+  //   legend: {
+  //     position: 'top'
+  //   }
+  // };
   this.percentageofOrdersbyWeekdayorWeekendOptionsBarchart = {
     series: [
       {
         name: 'Percentage of Orders',
-        data: barSeriesData // We will only show percentage here
+        data: barSeriesData // Show percentage here
       }
     ],
     chart: {
       height: 500,
       type: 'bar'
     },
+    plotOptions: {
+      bar: {
+        columnWidth: '45%',
+        distributed: true // Enable distributed colors for each bar
+      }
+    },
+    
     dataLabels: {
       enabled: true,
+      style:{
+        fontWeight:'normal'
+      },
       formatter: (val: any) => `${val.toFixed(2)}%`
     },
     title: {
@@ -3874,6 +3980,12 @@ public percentageofOrdersbyWeekdayorWeekendFN = (MonthlyTotalOrderingPayload?: a
       categories: barCategories,
       title: {
         text: 'Day Type'
+      },
+      labels: {
+        style: {
+         
+          fontSize: '12px'
+        }
       }
     },
     yaxis: {
@@ -3881,9 +3993,22 @@ public percentageofOrdersbyWeekdayorWeekendFN = (MonthlyTotalOrderingPayload?: a
         text: 'Percentage of Orders'
       },
       labels: {
-        formatter: (val: any) => `${val.toFixed(2)}%`
+        formatter: (val: any) => `${val.toFixed(0)}%`
       }
     },
+    colors: [
+      '#007bff', 'rgb(0, 227, 150)', '#80f1cb', '#00E396', '#feb019',
+      '#FF5733', '#FFBD33', '#C70039', '#900C3F', '#581845',
+      '#2ECC71', '#28B463', '#239B56', '#1D8348', '#186A3B',
+      '#FF33FF', '#FF5733', '#FFC300', '#DAF7A6', '#581845',
+      '#900C3F', '#C70039', '#FF5733', '#FFC300', '#FF33FF',
+      '#4B0082', '#7B68EE', '#6A5ACD', '#8A2BE2', '#9932CC',
+      '#FF6347', '#4682B4', '#40E0D0', '#00CED1', '#20B2AA',
+      '#FF1493', '#FF4500', '#DA70D6', '#FF69B4', '#DB7093',
+      '#CD5C5C', '#8B0000', '#556B2F', '#2F4F4F', '#D2691E',
+      '#6495ED', '#FF7F50', '#7FFF00', '#7CFC00', '#ADFF2F',
+      '#32CD32', '#66CDAA', '#8FBC8F', '#3CB371', '#228B22'
+    ],// Unique colors for each bar
     tooltip: {
       shared: true,
       intersect: false,
@@ -3902,9 +4027,11 @@ public percentageofOrdersbyWeekdayorWeekendFN = (MonthlyTotalOrderingPayload?: a
       size: 5
     },
     legend: {
-      position: 'top'
+      show: false
     }
   };
+  
+  
 
   // Fetch data
   this.dashboardService.percentageofOrdersbyWeekdayorWeekendFn(MonthlyTotalOrderingPayload).subscribe(
@@ -4013,7 +4140,7 @@ public percentageofOrdersByWeekdayorWeekendRegionWiseFn = (MonthlyTotalOrderingP
         text: 'Percentage of Orders'
       },
       labels: {
-        formatter: (val: any) => `${val.toFixed(2)}%`
+        formatter: (val: any) => `${val.toFixed(0)}%`
       }
     },
     tooltip: {
@@ -4168,7 +4295,7 @@ public percentaageOfOrdersByHourOfTheDayOnWeekdayWeekendFn = (MonthlyTotalOrderi
         text: 'Percentage of Orders'
       },
       labels: {
-        formatter: (val: any) => `${val.toFixed(2)}%`
+        formatter: (val: any) => `${val.toFixed(0)}%`
       }
       
     },

@@ -80,7 +80,7 @@ export const NavigationItems: NavigationItem[] = [
         type: 'item',
         url: '/charts',
         classes: 'nav-item',
-        icon: 'feather float-end icon-shopping-cart'
+        icon: 'fas fa-clock'
       }
       
     ]
