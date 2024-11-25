@@ -430,7 +430,7 @@ generateFinancialYearPayload(months:any) {
       const payload = this.generateFinancialYearPayload(this.selectedMonths);
 
       MonthlyToalOrdaringPayload = {
-        regionList: regionList ? regionList.length > 0 : "EAST, WEST,NORTH,SOUTH 1,SOUTH 2", /// default all regions
+        regionList: regionList && regionList.length > 0 ? regionList : "EAST, WEST,NORTH,SOUTH 1,SOUTH 2", /// default all regions
         startDate: payload.startDate, /// default case start date of financial year in integer format
         endDate: payload.endDate, ////  default case end date of financial year in integer format
         brandList: brandList, //// default casen ""

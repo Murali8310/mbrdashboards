@@ -10,7 +10,7 @@ import { GradientConfig } from 'src/app/app-config';
 })
 export class AdminComponent {
   // public props
-  navCollapsed: boolean;
+  navCollapsed: boolean = true;
   navCollapsedMob: boolean;
   windowWidth: number;
 
@@ -31,8 +31,11 @@ export class AdminComponent {
       GradientConfig.collapse_menu = true;
     }
 
-    this.navCollapsed = this.windowWidth >= 992 ? GradientConfig.collapse_menu : false;
+    this.navCollapsed = this.windowWidth >= 992 ? GradientConfig.collapse_menu : true;
     this.navCollapsedMob = false;
+    this.navCollapsed = true;;
+
+    console.log(this.navCollapsed+'navCollapsed')
   }
 
   // public method

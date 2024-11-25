@@ -32,14 +32,39 @@ this.navCollapseForMobile();
     }
   }
 
+  
+
+  // navCollapseForMobile() {
+  //   const mobileCollapseElement = document.getElementById('mobileresponsiveElement');
+    
+  //   // Check if the element exists
+  //   if (mobileCollapseElement) {
+  //     // Toggle display between 'none' and 'block'
+  //     if (mobileCollapseElement.style.display === 'none' || mobileCollapseElement.style.display === '') {
+  //       mobileCollapseElement.style.display = 'block';
+  //     } else {
+  //       mobileCollapseElement.style.display = 'none';
+  //     }
+  //   }
+  // }
+
   navCollapseForMobile() {
     const mobileCollapseElement = document.getElementById('mobileresponsiveElement');
+    const mainContainer:any = document.querySelector('.pcoded-main-container');
+    
     // Check if the element exists
-    if (mobileCollapseElement) {
-      // Toggle the 'navbar-collapsed' class on the element
-      mobileCollapseElement.classList.toggle('navbar-collapsed');
+    if (mobileCollapseElement && mainContainer) {
+      // Toggle display between 'none' and 'block' for the navbar
+      if (mobileCollapseElement.style.display === 'none' || mobileCollapseElement.style.display === '') {
+        mobileCollapseElement.style.display = 'block';
+        mainContainer.style.marginLeft = '70px'; // Set margin-left to 70px when navbar is visible
+      } else {
+        mobileCollapseElement.style.display = 'none';
+        mainContainer.style.marginLeft = '0px'; // Set margin-left to 0px when navbar is hidden
+      }
     }
   }
+
 
   api() {
     this.dash.getData().subscribe(

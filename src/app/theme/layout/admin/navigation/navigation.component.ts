@@ -43,6 +43,6 @@ export class NavigationComponent {
 
   ngAfterViewInit(): void {
     // this.cdr.detectChanges();
-    this.setElementValues();
+    // this.setElementValues();
   }
 }
