@@ -4136,8 +4136,16 @@ public percentaageOfOrdersByHourOfTheDayOnWeekdayWeekendFn = (MonthlyTotalOrderi
       stacked: false
     },
     dataLabels: {
-      enabled: true,
-      formatter: (val: any) => `${val.toFixed(2)}%`
+      enabled: false,
+      formatter: (val: any) => `${val.toFixed(2)}%`,
+      offsetY: 25, 
+      style: {
+        fontSize: '10px',
+      },
+      background: {
+        enabled: true,
+        foreColor: '#000000'
+      },
     },
     title: {
       text: 'Order Percentage by Hour (Weekday vs Weekend)',
@@ -4148,6 +4156,12 @@ public percentaageOfOrdersByHourOfTheDayOnWeekdayWeekendFn = (MonthlyTotalOrderi
       title: {
         text: 'Hour of the Day'
       }
+    }, plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: '80%'
+        // endingShape: "rounded"
+      }
     },
     yaxis: {
       title: {
@@ -4156,23 +4170,49 @@ public percentaageOfOrdersByHourOfTheDayOnWeekdayWeekendFn = (MonthlyTotalOrderi
       labels: {
         formatter: (val: any) => `${val.toFixed(2)}%`
       }
+      
     },
+    // tooltip: {
+    //   shared: true,
+    //   intersect: false,
+    //   custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+    //     const isWeekday = seriesIndex === 0;
+    //     const distinctOrderCount = isWeekday 
+    //       ? weekdayOrderCounts[dataPointIndex]
+    //       : weekendOrderCounts[dataPointIndex];
+    //     const percentage = series[seriesIndex][dataPointIndex];
+
+    //     return `
+    //       <div style="padding: 10px; border-radius: 5px; background-color: #f4f4f4; color: #333;">
+    //         <strong>${hours[dataPointIndex]}:00</strong><br>
+    //         ${isWeekday ? 'Weekday' : 'Weekend'}<br>
+    //         ${percentage.toFixed(2)}%<br>
+    //         Orders: ${distinctOrderCount}
+    //       </div>
+    //     `;
+    //   }
+    // },
     tooltip: {
       shared: true,
       intersect: false,
-      custom: ({ series, seriesIndex, dataPointIndex, w }) => {
-        const isWeekday = seriesIndex === 0;
-        const distinctOrderCount = isWeekday 
-          ? weekdayOrderCounts[dataPointIndex]
-          : weekendOrderCounts[dataPointIndex];
-        const percentage = series[seriesIndex][dataPointIndex];
-
+      custom: ({ dataPointIndex, w }) => {
+        // Retrieve weekday and weekend data for the current hour (dataPointIndex)
+        const weekdayPercentage = w.config.series[0].data[dataPointIndex];
+        const weekendPercentage = w.config.series[1].data[dataPointIndex];
+        
+        const weekdayOrders = weekdayOrderCounts[dataPointIndex];
+        const weekendOrders = weekendOrderCounts[dataPointIndex];
+    
         return `
           <div style="padding: 10px; border-radius: 5px; background-color: #f4f4f4; color: #333;">
             <strong>${hours[dataPointIndex]}:00</strong><br>
-            ${isWeekday ? 'Weekday' : 'Weekend'}<br>
-            ${percentage.toFixed(2)}%<br>
-            Orders: ${distinctOrderCount}
+            <div>Weekday</div>
+            <div>Percentage: ${weekdayPercentage.toFixed(2)}%</div>
+            <div>Orders: ${weekdayOrders}</div>
+            <br>
+            <div>Weekend</div>
+            <div>Percentage: ${weekendPercentage.toFixed(2)}%</div>
+            <div>Orders: ${weekendOrders}</div>
           </div>
         `;
       }
