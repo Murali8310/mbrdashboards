@@ -316,7 +316,20 @@ areAllMonthsSelected: boolean = false;
 searchInputValueForMonth: string = '';
 
 
+orders = [
+  { id: 'hn3434ff00', orderQty: 1200, region: 'North', rs: 'RS1' },
+  { id: 'hn3434ff01', orderQty: 1500, region: 'South', rs: 'RS2' },
+  { id: 'hn3434ff02', orderQty: 1300, region: 'East', rs: 'RS3' },
+  { id: 'hn3434ff03', orderQty: 1100, region: 'West', rs: 'RS1' },
+  { id: 'hn3434ff04', orderQty: 1400, region: 'North', rs: 'RS2' },
+];
+overallGrandTotal: number = 0;
+overallRegionGrandTotal: number = 0;
+overallRsGrandTotal: number = 0;
 
+overallOrders:any;
+regionTotals:any;
+rsTotals:any;
 
   // Holds selected brands
   selectedBrands: { id: number; name: string }[] = [];
@@ -1869,17 +1882,18 @@ generateFinancialYearPayload(months:any) {
         // this.spinner.hide();
         if(!isFromFilter){
 
-          if(this.dashboardService.selectedData === '2'){
+          if (this.dashboardService.selectedData === '2') {
             this.MonthlyToalOrdaring(MonthlyToalOrdaringPayload);
-          } else if(this.dashboardService.selectedData === '3'){
+          } else if (this.dashboardService.selectedData === '3') {
             this.chartOptionslineForOrdBhFn(MonthlyToalOrdaringPayload);
-          } else if(this.dashboardService.selectedData === '4'){
-
+          } else if (this.dashboardService.selectedData === '4') {
             this.selectedMonths = [{ id: 10, name: 'October', code: 'OCT' }];
             const payload = this.generateFinancialYearPayload(this.selectedMonths);
-            MonthlyToalOrdaringPayload.startDate = payload.startDate;       /// default case start date of financial year in integer format
+            MonthlyToalOrdaringPayload.startDate = payload.startDate; /// default case start date of financial year in integer format
             MonthlyToalOrdaringPayload.endDate = payload.endDate;
             this.percentageOfOrdersOfDayInMonth(MonthlyToalOrdaringPayload);
+          } else if (this.dashboardService.selectedData === '5') {
+            this.topSKUOrderedOverall(MonthlyToalOrdaringPayload);
           }
         }
 
@@ -4396,4 +4410,95 @@ public percentaageOfOrdersByHourOfTheDayOnWeekdayWeekendFn = (MonthlyTotalOrderi
 };
 
 
+// Compute the total order quantity
+get totalOrderQty(): number {
+  return this.orders.reduce((acc, order) => acc + order.orderQty, 0);
+}
+
+// Helper method to aggregate data by a given field (region or rs)
+private aggregateData(field: string): [string, number][] {
+  const totals: { [key: string]: number } = this.orders.reduce((acc:any, order:any) => {
+    acc[order[field]] = (acc[order[field]] || 0) + order.orderQty;
+    return acc;
+  }, {});
+
+  return Object.entries(totals) as [string, number][];  // Cast to the correct type
+}
+
+
+// this is for getting the top sku qty.
+
+public topSKUOrderedOverall = (MonthlyTotalOrderingPayload?: any) => {
+  this.spinner.show();
+
+  this.dashboardService.topSKUOrderedOverall(MonthlyTotalOrderingPayload).subscribe(
+    (response) => {
+      if (response && response.body) {
+       this.overallOrders = response.body;
+       this.calculateOverallGrandTotal();
+       this.topSKUOrderedRegionSelected(MonthlyTotalOrderingPayload);
+      }
+    },
+    (error) => {
+      console.error('Error fetching monthly order data:', error);
+      this.spinner.hide();
+    }
+  );
+};
+
+
+// this is for getting the top sku qty.
+
+public topSKUOrderedRegionSelected = (MonthlyTotalOrderingPayload?: any) => {
+  this.spinner.show();
+
+  this.dashboardService.topSKUOrderedRegionSelected(MonthlyTotalOrderingPayload).subscribe(
+    (response) => {
+      if (response && response.body) {
+       this.regionTotals = response.body;
+       this.getRegionGrandTotal();
+       this.topSKUOrderedRSNameSelected(MonthlyTotalOrderingPayload);
+      }
+    },
+    (error) => {
+      console.error('Error fetching monthly order data:', error);
+      this.spinner.hide();
+    }
+  );
+};
+
+// Method to calculate grand total
+calculateOverallGrandTotal() {
+  this.overallGrandTotal = this.overallOrders.reduce((acc:any, order:any) => acc + order.totalOrderQty, 0);
+}
+
+// Method to calculate grand total
+getRegionGrandTotal() {
+  this.overallRegionGrandTotal =  this.regionTotals.reduce((acc:any, order:any) => acc + order.totalOrderQty, 0);
+}
+
+// Method to calculate grand total
+getRSGrandTotal() {
+  this.overallRsGrandTotal =this.rsTotals.reduce((acc:any, order:any) => acc + order.totalOrderQty, 0);
+}
+
+
+
+// This is to get the rs names data.
+public topSKUOrderedRSNameSelected = (MonthlyTotalOrderingPayload?: any) => {
+  this.spinner.show();
+
+  this.dashboardService.topSKUOrderedRSNameSelected(MonthlyTotalOrderingPayload).subscribe(
+    (response) => {
+      if (response && response.body) {
+       this.rsTotals = response.body;
+       this.getRSGrandTotal();
+      }
+    },
+    (error) => {
+      console.error('Error fetching monthly order data:', error);
+      this.spinner.hide();
+    }
+  );
+};
 }

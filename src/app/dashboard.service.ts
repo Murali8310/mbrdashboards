@@ -288,5 +288,45 @@ public  percentaageOfOrdersByHourOfTheDayOnWeekdayWeekendFn(MonthlyToalOrdaringP
     );      
 }
 
+
+// This is for getting the data for avg orders epr month.
+public  topSKUOrderedOverall(MonthlyToalOrdaringPayload?:any) {
+  return this.http
+    .post<any>(
+      `${environment.apiUrl}/topSKUOrderedOverall`,
+      JSON.stringify(MonthlyToalOrdaringPayload),
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        observe: 'response',
+      }
+    );      
+}
+
+// This is for getting the data for avg orders epr month.
+public  topSKUOrderedRegionSelected(MonthlyToalOrdaringPayload?:any) {
+  return this.http
+    .post<any>(
+      `${environment.apiUrl}/topSKUOrderedRegionSelected`,
+      JSON.stringify(MonthlyToalOrdaringPayload),
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        observe: 'response',
+      }
+    );      
+}
+
+
+// This is for getting the data for avg orders epr month.
+public  topSKUOrderedRSNameSelected(MonthlyToalOrdaringPayload?:any) {
+  return this.http
+    .post<any>(
+      `${environment.apiUrl}/topSKUOrderedRSNameSelected`,
+      JSON.stringify(MonthlyToalOrdaringPayload),
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        observe: 'response',
+      }
+    );      
+}
   
 }
