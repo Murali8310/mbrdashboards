@@ -1,9 +1,35 @@
+use DB_MBR
 
-	select TOP 5
-	 ProductCode,                                 -- SKU column
-    SUM(OrderQty) AS TotalOrderQty from MBROrders  
-	group by ProductCode
-	order by TotalOrderQty desc
+--------------------------------------	--------------------------------------------------------
+ SELECT TOP 5 SUM(OrderQty) AS TotalOrderQty, ProductCode
+FROM MBROrders
+WHERE
+  OrderDate BETWEEN '20240401' AND '20240430'
+	--AND RetailerCode LIKE '1%'
+  --AND Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('EAST', ','))
+  
+GROUP BY ProductCode
+ORDER BY TotalOrderQty DESC;
+
+    
+ SELECT TOP 5 SUM(OrderQty) AS TotalOrderQty, ProductCode
+FROM MBROrders
+WHERE Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('EAST', ','))
+  AND  OrderDate BETWEEN '20240401' AND '20240430'
+GROUP BY ProductCode
+ORDER BY TotalOrderQty DESC;
+
+    
+
+ SELECT TOP 5 SUM(OrderQty) AS TotalOrderQty, ProductCode
+FROM MBROrders
+WHERE RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('ABA-PUN', ','))
+  AND  OrderDate BETWEEN '20240401' AND '20240430'
+GROUP BY ProductCode
+ORDER BY TotalOrderQty DESC;
+
+select * from MBROrders where RSName like '%ABA%'
+
 
 ----------------------------------------------------------------------------Overall------------------------------
 Alter PROCEDURE OverallSKUOrdered

@@ -6490,8 +6490,8 @@ public class UserDaoimpl implements UserDao {
 				data.setYear((Integer) row[0]);
 				data.setMonth((Integer) row[1]);
 				data.setOrderValue((BigDecimal) row[2]);
-				data.setTotalOrder((Integer) row[3]);
-				data.setOrderQuentity((Integer) row[4]);
+				data.setTotalOrder((Integer) row[4]);
+				data.setOrderQuentity((Integer) row[3]);
 				data.setDelears((Integer) row[5]);
 				data.setRegion(row[6].toString());
 				outputDashboardTiles.add(data);
@@ -7438,95 +7438,210 @@ public class UserDaoimpl implements UserDao {
 
 	}
 
+//	@Override
+//	public List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionNoofOrdersRegular(
+//			MonthlyDataFilter filter) {
+//		List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionData = new ArrayList<>();
+//
+//		StringBuilder conditions = new StringBuilder(); // Using StringBuilder for efficient string concatenation
+//
+//		// Assuming the user input for startDate and endDate
+//		Integer startDate = filter.getStartDate(); // User-provided start date (e.g., "20240601")
+//		Integer endDate = filter.getEndDate(); // User-provided end date (e.g., "20240630")
+//		String regionList = filter.getRegionList();
+//		String brandList = filter.getBrandList();
+//		String abmNameList = filter.getAbmName();
+//		String rsNameList = filter.getRsNameList();
+//		String retailerType = filter.getRetailerType();
+//
+//		// Add startDate and endDate conditions if provided
+//		if (startDate != null && endDate != null) {
+//			conditions.append("CONVERT(VARCHAR, OrderDate, 112) >= ").append(startDate)
+//					.append(" AND CONVERT(VARCHAR, OrderDate, 112) <= ").append(endDate).append(" ");
+//		}
+//
+//		// Add Region condition if provided
+//		if (regionList != null && !regionList.isEmpty()) {
+//			conditions.append("AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(regionList)
+//					.append("', ',')) ");
+//		}
+//
+//		// Add ABMName condition if provided
+//		if (abmNameList != null && !abmNameList.isEmpty()) {
+//			conditions.append("AND (").append("    '").append(abmNameList).append("' IS NOT NULL AND '")
+//					.append(abmNameList).append("' <> '' AND (")
+//					.append("        ABMEMM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(abmNameList)
+//					.append("', ','))").append("        OR ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('")
+//					.append(abmNameList).append("', ','))").append("    )").append(") ");
+//		}
+//
+//		// Add Brand condition if provided
+//		if (brandList != null && !brandList.isEmpty()) {
+//			conditions.append("AND Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(brandList)
+//					.append("', ',')) ");
+//		}
+//
+//		// Add RSName condition if provided
+//		if (rsNameList != null && !rsNameList.isEmpty()) {
+//			conditions.append("AND RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(rsNameList)
+//					.append("', ',')) ");
+//		}
+//
+//		// Add RetailerType condition if provided
+//		if (retailerType != null && !retailerType.isEmpty()) {
+//			conditions.append("AND RetailerCode LIKE '").append(retailerType.equals("IDD") ? "9%" : "1%").append("' ");
+//		}
+//
+//		// Build the final query
+//		String finalQuery = " DECLARE @TotalOrderQty DECIMAL(18, 2); " + " SELECT @TotalOrderQty = SUM(OrderQty) "
+//				+ " FROM MBROrders (NOLOCK) " + " WHERE " + conditions.toString() // Add dynamic conditions
+//				+ " SELECT " + "        YEAR(OrderDate) AS OrderYear, " + "        MONTH(OrderDate) AS OrderMonth, "
+//				+ "        COUNT(DISTINCT OrderNo) AS DistinctOrderCount, " + "        Region, "
+//				+ "        (SUM(OrderQty) * 1000.0) / @TotalOrderQty AS RegionOrderQtyPercentage "
+//				+ " FROM MBROrders (NOLOCK) " + " WHERE " + conditions.toString() // Add dynamic conditions
+//				+ " GROUP BY YEAR(OrderDate), MONTH(OrderDate), Region " + " ORDER BY OrderYear, OrderMonth";
+//
+//		// Create a native query
+//		Query query = entityManager.createNativeQuery(finalQuery);
+//
+//		// Execute the query and map results
+//		try {
+//			List<Object[]> result = query.getResultList();
+//			// filteredData = (OutputForMontlyFilter) query.getSingleResult();
+//
+//			for (Object[] row : result) {
+//				// Assuming row contains values in the correct order for mapping
+//				OutputRegionWiseMonthlyDistributionNoofOrders data = new OutputRegionWiseMonthlyDistributionNoofOrders();
+//				data.setYear((Integer) row[0]);
+//				data.setMonth((Integer) row[1]);
+//				data.setNoOfOrders((Integer) row[2]);
+//				data.setRegion(row[3].toString());
+//				data.setNoOfOrdersPercentage((BigDecimal) row[4]);
+//				// Now, filteredData is populated with values
+//				regionWiseMonthlyDistributionData.add(data);
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//
+//		return regionWiseMonthlyDistributionData;
+//	}
+
 	@Override
-	public List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionNoofOrdersRegular(
-			MonthlyDataFilter filter) {
-		List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionData = new ArrayList<>();
+	public List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionNoofOrdersRegular(MonthlyDataFilter filter) {
+	    List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionData = new ArrayList<>();
 
-		StringBuilder conditions = new StringBuilder(); // Using StringBuilder for efficient string concatenation
+	    StringBuilder conditions = new StringBuilder(); // Using StringBuilder for efficient string concatenation
 
-		// Assuming the user input for startDate and endDate
-		Integer startDate = filter.getStartDate(); // User-provided start date (e.g., "20240601")
-		Integer endDate = filter.getEndDate(); // User-provided end date (e.g., "20240630")
-		String regionList = filter.getRegionList();
-		String brandList = filter.getBrandList();
-		String abmNameList = filter.getAbmName();
-		String rsNameList = filter.getRsNameList();
-		String retailerType = filter.getRetailerType();
+	    // Assuming the user input for startDate and endDate
+	    Integer startDate = filter.getStartDate(); // User-provided start date (e.g., "20240601")
+	    Integer endDate = filter.getEndDate(); // User-provided end date (e.g., "20240630")
+	    String regionList = filter.getRegionList();
+	    String brandList = filter.getBrandList();
+	    String abmNameList = filter.getAbmName();
+	    String rsNameList = filter.getRsNameList();
+	    String retailerType = filter.getRetailerType();
 
-		// Add startDate and endDate conditions if provided
-		if (startDate != null && endDate != null) {
-			conditions.append("CONVERT(VARCHAR, OrderDate, 112) >= ").append(startDate)
-					.append(" AND CONVERT(VARCHAR, OrderDate, 112) <= ").append(endDate).append(" ");
-		}
+	    // Add startDate and endDate conditions if provided
+	    if (startDate != null && endDate != null) {
+	        conditions.append("CONVERT(VARCHAR, OrderDate, 112) >= ").append(startDate)
+	                .append(" AND CONVERT(VARCHAR, OrderDate, 112) <= ").append(endDate).append(" ");
+	    }
 
-		// Add Region condition if provided
-		if (regionList != null && !regionList.isEmpty()) {
-			conditions.append("AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(regionList)
-					.append("', ',')) ");
-		}
+	    // Add Region condition if provided
+	    if (regionList != null && !regionList.isEmpty()) {
+	        conditions.append("AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(regionList)
+	                .append("', ',')) ");
+	    }
 
-		// Add ABMName condition if provided
-		if (abmNameList != null && !abmNameList.isEmpty()) {
-			conditions.append("AND (").append("    '").append(abmNameList).append("' IS NOT NULL AND '")
-					.append(abmNameList).append("' <> '' AND (")
-					.append("        ABMEMM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(abmNameList)
-					.append("', ','))").append("        OR ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('")
-					.append(abmNameList).append("', ','))").append("    )").append(") ");
-		}
+	    // Add ABMName condition if provided
+	    if (abmNameList != null && !abmNameList.isEmpty()) {
+	        conditions.append("AND (").append("    '").append(abmNameList).append("' IS NOT NULL AND '")
+	                .append(abmNameList).append("' <> '' AND (")
+	                .append("        ABMEMM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(abmNameList)
+	                .append("', ','))").append("        OR ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('")
+	                .append(abmNameList).append("', ','))").append("    )").append(") ");
+	    }
 
-		// Add Brand condition if provided
-		if (brandList != null && !brandList.isEmpty()) {
-			conditions.append("AND Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(brandList)
-					.append("', ',')) ");
-		}
+	    // Add Brand condition if provided
+	    if (brandList != null && !brandList.isEmpty()) {
+	        conditions.append("AND Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(brandList)
+	                .append("', ',')) ");
+	    }
 
-		// Add RSName condition if provided
-		if (rsNameList != null && !rsNameList.isEmpty()) {
-			conditions.append("AND RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(rsNameList)
-					.append("', ',')) ");
-		}
+	    // Add RSName condition if provided
+	    if (rsNameList != null && !rsNameList.isEmpty()) {
+	        conditions.append("AND RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(rsNameList)
+	                .append("', ',')) ");
+	    }
 
-		// Add RetailerType condition if provided
-		if (retailerType != null && !retailerType.isEmpty()) {
-			conditions.append("AND RetailerCode LIKE '").append(retailerType.equals("IDD") ? "9%" : "1%").append("' ");
-		}
+	    // Add RetailerType condition if provided
+	    if (retailerType != null && !retailerType.isEmpty()) {
+	        conditions.append("AND RetailerCode LIKE '").append(retailerType.equals("IDD") ? "9%" : "1%").append("' ");
+	    }
 
-		// Build the final query
-		String finalQuery = " DECLARE @TotalOrderQty DECIMAL(18, 2); " + " SELECT @TotalOrderQty = SUM(OrderQty) "
-				+ " FROM MBROrders (NOLOCK) " + " WHERE " + conditions.toString() // Add dynamic conditions
-				+ " SELECT " + "        YEAR(OrderDate) AS OrderYear, " + "        MONTH(OrderDate) AS OrderMonth, "
-				+ "        COUNT(DISTINCT OrderNo) AS DistinctOrderCount, " + "        Region, "
-				+ "        (SUM(OrderQty) * 1000.0) / @TotalOrderQty AS RegionOrderQtyPercentage "
-				+ " FROM MBROrders (NOLOCK) " + " WHERE " + conditions.toString() // Add dynamic conditions
-				+ " GROUP BY YEAR(OrderDate), MONTH(OrderDate), Region " + " ORDER BY OrderYear, OrderMonth";
+	    // Build the final query with the corrected approach
+	    String finalQuery = "DECLARE @TotalOrderQtyForMonth DECIMAL(18, 2);\r\n"
+	            + "\r\n"
+	            + "WITH MonthlyRegionOrderQty AS (\r\n"
+	            + "    SELECT \r\n"
+	            + "        YEAR(OrderDate) AS OrderYear,\r\n"
+	            + "        MONTH(OrderDate) AS OrderMonth,\r\n"
+	            + "        Region,\r\n"
+	            + "        SUM(OrderQty) AS RegionOrderQty,\r\n"
+	            + "        COUNT(DISTINCT OrderNo) AS DistinctOrderCount\r\n"
+	            + "    FROM \r\n"
+	            + "        MBROrders (NOLOCK)\r\n"
+	            + "    WHERE " + conditions.toString() + "\r\n"
+	            + "    GROUP BY YEAR(OrderDate), MONTH(OrderDate), Region\r\n"
+	            + ")\r\n"
+	            + "SELECT \r\n"
+	            + "    OrderYear,\r\n"
+	            + "    OrderMonth,\r\n"
+	            + "    Region,\r\n"
+	            + "    DistinctOrderCount,\r\n"
+	            + "    RegionOrderQty,\r\n"
+	            + "    CASE \r\n"
+	            + "        WHEN TotalOrderQtyForMonth > 0 THEN (RegionOrderQty * 100.0) / TotalOrderQtyForMonth\r\n"
+	            + "        ELSE 0\r\n"
+	            + "    END AS RegionOrderQtyPercentage\r\n"
+	            + "FROM \r\n"
+	            + "    MonthlyRegionOrderQty\r\n"
+	            + "CROSS APPLY (\r\n"
+	            + "    SELECT SUM(OrderQty) AS TotalOrderQtyForMonth\r\n"
+	            + "    FROM MBROrders (NOLOCK) \r\n"
+	            + "    WHERE " + conditions.toString() + "\r\n"
+	            + "    GROUP BY YEAR(OrderDate), MONTH(OrderDate)\r\n"
+	            + ") AS TotalOrderQty\r\n"  // Alias for the CROSS APPLY result
+	            + "ORDER BY \r\n"
+	            + "    OrderYear,\r\n"
+	            + "    OrderMonth,\r\n"
+	            + "    Region;";
 
-		// Create a native query
-		Query query = entityManager.createNativeQuery(finalQuery);
+	    // Execute the query
+	    Query query = entityManager.createNativeQuery(finalQuery);
 
-		// Execute the query and map results
-		try {
-			List<Object[]> result = query.getResultList();
-			// filteredData = (OutputForMontlyFilter) query.getSingleResult();
+	    // Map results to OutputRegionWiseMonthlyDistributionNoofOrders
+	    try {
+	        List<Object[]> result = query.getResultList();
+	        for (Object[] row : result) {
+	            OutputRegionWiseMonthlyDistributionNoofOrders data = new OutputRegionWiseMonthlyDistributionNoofOrders();
+	            data.setYear((Integer) row[0]);
+	            data.setMonth((Integer) row[1]);
+	            data.setRegion(row[2].toString());
+	            data.setNoOfOrders((Integer) row[3]);
+	            data.setNoOfOrdersPercentage((BigDecimal) row[5]);
+	            regionWiseMonthlyDistributionData.add(data);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 
-			for (Object[] row : result) {
-				// Assuming row contains values in the correct order for mapping
-				OutputRegionWiseMonthlyDistributionNoofOrders data = new OutputRegionWiseMonthlyDistributionNoofOrders();
-				data.setYear((Integer) row[0]);
-				data.setMonth((Integer) row[1]);
-				data.setNoOfOrders((Integer) row[2]);
-				data.setRegion(row[3].toString());
-				data.setNoOfOrdersPercentage((BigDecimal) row[4]);
-				// Now, filteredData is populated with values
-				regionWiseMonthlyDistributionData.add(data);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return regionWiseMonthlyDistributionData;
+	    return regionWiseMonthlyDistributionData;
 	}
 
+	
+	
 	@Override
 	public List<OutputTopSKUOrderedOverall> topSKUOrderedOverallRegular(MonthlyDataFilter filter) {
 		List<OutputTopSKUOrderedOverall> topSKUOrderedOverall = new ArrayList<>();

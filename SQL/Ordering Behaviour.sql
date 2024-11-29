@@ -109,82 +109,78 @@ END;
     @RetailerType VARCHAR(MAX)   -- RetailerType parameter to filter by retailer type
 AS
 BEGIN
-    -- Declare a variable to hold the total sum of OrderQty for all regions
-    DECLARE @TotalOrderQty DECIMAL(18, 2);
-
-    -- Calculate the total sum of OrderQty for all regions within the specified date range
-    SELECT 
-        @TotalOrderQty = SUM(OrderQty)
-    FROM 
-        MBROrders (NOLOCK)  
-    WHERE 
-        OrderDate BETWEEN @StartDate AND @EndDate
-        AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RegionList, ','))  
-        AND (
-            (@BrandList IS NULL OR @BrandList = '' OR Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@BrandList, ',')))
-            AND (@RSNameList IS NULL OR @RSNameList = '' OR RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RSNameList, ',')))
-            AND (
-                @ABMName IS NULL 
-                OR @ABMName = ''
-                OR (
-                    ABMEMM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ',')) 
-                    OR ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ','))
-                )
-            )
-            AND (
-                @RetailerType IS NULL 
-                OR @RetailerType = '' 
-                OR RetailerCode LIKE 
-                    CASE 
-                        WHEN @RetailerType = 'IDD' THEN '9%'  
-                        WHEN @RetailerType = 'DD' THEN '1%'   
-                        ELSE ''  
-                    END
-            )
-        );
+    -- Declare a variable to hold the total sum of OrderQty for all regions for each month
+    DECLARE @TotalOrderQtyForMonth DECIMAL(18, 2);
 
     -- Now, select the distinct count of orders, sum of order quantities, and percentage for each region
-    SELECT 
-        YEAR(OrderDate) AS OrderYear,              -- Extract Year from OrderDate
-        MONTH(OrderDate) AS OrderMonth,  
-		COUNT(DISTINCT OrderNo) AS DistinctOrderCount,-- Extract Month from OrderDate
-        Region,                                    -- Region
-        -- Count of distinct orders
-        (SUM(OrderQty) * 1000.0) / @TotalOrderQty AS RegionOrderQtyPercentage -- Percentage of the region's total OrderQty
-    FROM 
-        MBROrders (NOLOCK)  
-    WHERE 
-        OrderDate BETWEEN @StartDate AND @EndDate
-        AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RegionList, ','))  
-        AND (
-            (@BrandList IS NULL OR @BrandList = '' OR Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@BrandList, ',')))
-            AND (@RSNameList IS NULL OR @RSNameList = '' OR RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RSNameList, ',')))
+    WITH MonthlyRegionOrderQty AS (
+        -- This CTE calculates the total order quantity per region for each month
+        SELECT 
+            YEAR(OrderDate) AS OrderYear,
+            MONTH(OrderDate) AS OrderMonth,
+            Region,
+            SUM(OrderQty) AS RegionOrderQty,
+            COUNT(DISTINCT OrderNo) AS DistinctOrderCount
+        FROM 
+            MBROrders (NOLOCK)  
+        WHERE 
+            OrderDate BETWEEN @StartDate AND @EndDate
+            AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RegionList, ','))  
             AND (
-                @ABMName IS NULL 
-                OR @ABMName = ''
-                OR (
-                    ABMEMM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ',')) 
-                    OR ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ','))
+                (@BrandList IS NULL OR @BrandList = '' OR Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@BrandList, ',')))
+                AND (@RSNameList IS NULL OR @RSNameList = '' OR RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RSNameList, ',')))
+                AND (
+                    @ABMName IS NULL 
+                    OR @ABMName = ''
+                    OR (
+                        ABMEMM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ',')) 
+                        OR ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@ABMName, ','))
+                    )
+                )
+                AND (
+                    @RetailerType IS NULL 
+                    OR @RetailerType = '' 
+                    OR RetailerCode LIKE 
+                        CASE 
+                            WHEN @RetailerType = 'IDD' THEN '9%'  
+                            WHEN @RetailerType = 'DD' THEN '1%'   
+                            ELSE ''  
+                        END
                 )
             )
-            AND (
-                @RetailerType IS NULL 
-                OR @RetailerType = '' 
-                OR RetailerCode LIKE 
-                    CASE 
-                        WHEN @RetailerType = 'IDD' THEN '9%'  
-                        WHEN @RetailerType = 'DD' THEN '1%'   
-                        ELSE ''  
-                    END
-            )
-        )
-    GROUP BY
-        YEAR(OrderDate),  -- Group by Year
-        MONTH(OrderDate),  -- Group by Month
-        Region             -- Group by Region
-    ORDER BY
-        OrderYear,  -- Order by Year
-        OrderMonth; -- Order by Month
+        GROUP BY
+            YEAR(OrderDate),
+            MONTH(OrderDate),
+            Region
+    )
+    -- Main query to calculate percentage for each region per month
+    SELECT 
+        OrderYear,
+        OrderMonth,
+        Region,
+        DistinctOrderCount,
+        RegionOrderQty,
+        -- Calculate the percentage of OrderQty for each region per month
+        CASE 
+            WHEN TotalOrderQtyForMonth > 0 THEN (RegionOrderQty * 100.0) / TotalOrderQtyForMonth
+            ELSE 0
+        END AS RegionOrderQtyPercentage
+    FROM 
+        MonthlyRegionOrderQty
+    CROSS APPLY (
+        -- Subquery to calculate the total OrderQty for the month across all regions
+        SELECT SUM(OrderQty) AS TotalOrderQtyForMonth
+        FROM MBROrders (NOLOCK)
+        WHERE 
+            YEAR(OrderDate) = MonthlyRegionOrderQty.OrderYear
+            AND MONTH(OrderDate) = MonthlyRegionOrderQty.OrderMonth
+            AND OrderDate BETWEEN @StartDate AND @EndDate
+            AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@RegionList, ','))
+    ) AS TotalMonthData
+    ORDER BY 
+        OrderYear,
+        OrderMonth,
+        Region;
 END;
 
 EXEC RegionWiseMonthlyDistributionNoofOrders
@@ -277,3 +273,42 @@ END;
 
 
 
+
+
+
+DECLARE @TotalOrderQtyForMonth DECIMAL(18, 2);
+
+WITH MonthlyRegionOrderQty AS (
+    SELECT 
+        YEAR(OrderDate) AS OrderYear,
+        MONTH(OrderDate) AS OrderMonth,
+        Region,
+        SUM(OrderQty) AS RegionOrderQty,
+        COUNT(DISTINCT OrderNo) AS DistinctOrderCount
+    FROM 
+        MBROrders (NOLOCK)
+    WHERE CONVERT(VARCHAR, OrderDate, 112) >= 20240401 AND CONVERT(VARCHAR, OrderDate, 112) <= 20240430 AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('EAST, WEST, NORTH, SOUTH 1, SOUTH 2', ',')) 
+    GROUP BY YEAR(OrderDate), MONTH(OrderDate), Region
+)
+SELECT 
+    OrderYear,
+    OrderMonth,
+    Region,
+    DistinctOrderCount,
+    RegionOrderQty,
+    CASE 
+        WHEN TotalOrderQtyForMonth > 0 THEN (RegionOrderQty * 100.0) / TotalOrderQtyForMonth
+        ELSE 0
+    END AS RegionOrderQtyPercentage
+FROM 
+    MonthlyRegionOrderQty
+CROSS APPLY (
+    SELECT SUM(OrderQty) AS TotalOrderQtyForMonth
+    FROM MBROrders (NOLOCK) 
+    WHERE CONVERT(VARCHAR, OrderDate, 112) >= 20240401 AND CONVERT(VARCHAR, OrderDate, 112) <= 20240430 AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('EAST, WEST, NORTH, SOUTH 1, SOUTH 2', ',')) 
+    GROUP BY YEAR(OrderDate), MONTH(OrderDate)
+) AS TotalOrderQty
+ORDER BY 
+    OrderYear,
+    OrderMonth,
+    Region;
