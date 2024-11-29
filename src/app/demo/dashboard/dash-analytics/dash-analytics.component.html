@@ -1,37 +1,65 @@
 
-<h4 *ngIf="dashboardService.selectedData === '2'" style="
+
+
+<!-- <h4 *ngIf="dashboardService.selectedData === '3'" style="
 text-align: center;
 /* margin-top: 12px; */
-">Total Ordering Overview Dashboard.</h4>
-
-<h4 *ngIf="dashboardService.selectedData === '3'" style="
-text-align: center;
-/* margin-top: 12px; */
-">Ordering Behavior Dashboard.</h4>
+">Ordering Behavior Dashboard.</h4> -->
 
 
-<h4 *ngIf="dashboardService.selectedData === '4'" style="
-text-align: center;
-/* margin-top: 12px; */
-">Day & Time Analysis Dashboard.</h4>
+
+<div *ngIf="dashboardService.selectedData === '2'">
+  <app-card class="col-md-6 col-xl-12" ><h4 *ngIf="dashboardService.selectedData === '2'" style="
+    text-align: center;
+    /* margin-top: 12px; */
+    ">Total Ordering Overview Dashboard.</h4>   
+  </app-card>
+</div>
 
 
-<h4 *ngIf="dashboardService.selectedData === '5'" style="
-text-align: center;
-/* margin-top: 12px; */
-">Top SKUs Ordered Dashboard.</h4>
 
+<div *ngIf="dashboardService.selectedData === '3'">
+  <app-card class="col-md-6 col-xl-12" ><h4 *ngIf="dashboardService.selectedData === '3'" style="
+    text-align: center;
+    /* margin-top: 12px; */
+    ">Ordering Behavior Dashboard.</h4>    
+  </app-card>
+</div>
+
+
+<div *ngIf="dashboardService.selectedData === '4'">
+  <app-card class="col-md-6 col-xl-12" ><h4 *ngIf="dashboardService.selectedData === '4'" style="
+    text-align: center;
+    /* margin-top: 12px; */
+    ">Day & Time Analysis Dashboard.</h4>
+  </app-card>
+</div>
+
+<div *ngIf="dashboardService.selectedData === '5'">
+  <app-card class="col-md-6 col-xl-12" >
+    <h4 *ngIf="dashboardService.selectedData === '5'" style="
+    text-align: center;
+    /* margin-top: 12px; */
+    ">Top SKUs Ordered Dashboard.</h4>
+    
+  </app-card>
+</div>
 
 
  <!-- order-card start -->
   <div *ngIf="dashboardService.selectedData === '1'" class="row"> 
+
+    <app-card class="col-md-6 col-xl-12" ><h4 style="text-align: center;">MTD : {{currentMonthToDateText}}</h4>
+    </app-card>
+
+
  <div class="col-md-6 col-xl-2" *ngFor="let card of cards">
   <!-- <ng-container > -->
-    <app-card [hidHeader]="true" cardClass="{{ card.background }} order-card">
+    <app-card cardClass="{{ card.background }} order-card">
       <h4 class="text-white">{{ card.title }}<i class="feather {{ card.icon }} float-end"></i></h4>
       
       <p class="m-b-0"
-        >Total order<span class="float-end">{{ card.number }}</span></p
+        >No of Orders<span class="float-end">{{ card.number }}</span></p
       >
       <br>
       <p class="m-b-0"
@@ -69,6 +97,8 @@ text-align: center;
     ></apx-chart>
   </div>
   </app-card>
+</div>
+<div>
 </div>
 </div>
 <div class="row" *ngIf="dashboardService.selectedData === '2'">

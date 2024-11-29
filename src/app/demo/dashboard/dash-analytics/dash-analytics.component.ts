@@ -49,6 +49,7 @@ import {
 } from 'ng-apexcharts';
 import { DashboardService } from 'src/app/dashboard.service';
 import { ActivatedRoute, Router, RouterStateSnapshot } from '@angular/router';
+import { DatePipe } from '@angular/common';
 
 // export type ChartOptions = {
 //   series: ApexAxisChartSeries | ApexNonAxisChartSeries;
@@ -88,7 +89,9 @@ export type ChartOptions = {
   standalone: true,
   imports: [CommonModule, NgxSpinnerModule, SharedModule, NgApexchartsModule, ProductSaleComponent, NgMultiSelectDropDownModule],
   templateUrl: './dash-analytics.component.html',
-  styleUrls: ['./dash-analytics.component.scss']
+  styleUrls: ['./dash-analytics.component.scss'],
+  providers: [DatePipe],  // Provide DatePipe here
+
 })
 export default class DashAnalyticsComponent {
   chartOptionsline!: ApexOptions; // Change to ApexOptions
@@ -345,13 +348,15 @@ rsTotals:any;
 
   isLoading = false; // Start with loading state
   isMobileView = window.innerWidth <= 768;
+  currentMonthToDateText: string = '';
 
   // constructor
   constructor(
     public dashboardService: DashboardService,
     private spinner: NgxSpinnerService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private datePipe: DatePipe
   ) {
     // this.selectedAbmNames = [];
     // this.selectedBrands = [];
@@ -359,6 +364,7 @@ rsTotals:any;
     // this.selectedRegions = [];
     // this.selectedRetailerTypes = [];
     // this.selectedMonths = [];
+    this.getCurrentMonthToDate();
 
     this.route.queryParams.subscribe((params) => {
       this.dashboardService.selectedData = params['id'];
@@ -368,6 +374,7 @@ rsTotals:any;
         this.prepareSearchData('reset');
       }
     });
+    
   }
 
   // life cycle event
@@ -413,16 +420,23 @@ generateFinancialYearPayload(months:any) {
     }
   });
 
-  // Construct startDate and endDate in YYYYMMDD format as integers
-  const startDate = parseInt(`${year}0${startMonth.id}01`); // 1st day of the start month
-  const endDate = parseInt(`${year}0${endMonth.id}30`);     // 30th day of the end month
+  // // Construct startDate and endDate in YYYYMMDD format as integers
+  // const startDate = parseInt(`${year}0${startMonth.id}01`); // 1st day of the start month
+  // const endDate = parseInt(`${year}0${endMonth.id}30`);     // 30th day of the end month
 
+  // Construct startDate and endDate in YYYYMMDD format as integers
+const startDate = parseInt(`${year}${this.formatMonthId(startMonth.id)}01`); // 1st day of the start month
+const endDate = parseInt(`${year}${this.formatMonthId(endMonth.id)}30`);     // 30th day o
   return {
     startDate,
     endDate,
   };
 }
 
+
+formatMonthId(monthId: number): string {
+  return monthId < 10 ? `0${monthId}` : `${monthId}`;
+}
   // this is to get the searched data;
   public prepareSearchData(data: any) {
     this.resetChartOptions();
@@ -482,7 +496,7 @@ generateFinancialYearPayload(months:any) {
 
   cards = [
     {
-      background: 'bg-c-blue',
+      background: 'eastBg',
       title: 'East',
       icon: 'icon-shopping-cart',
       number: 'Loading...',
@@ -494,7 +508,7 @@ generateFinancialYearPayload(months:any) {
       no: 'Loading...'
     },
     {
-      background: 'bg-c-green',
+      background: 'northBg',
       title: 'North',
       icon: 'icon-shopping-cart',
       text: 'Total qty',
@@ -504,7 +518,7 @@ generateFinancialYearPayload(months:any) {
       no: 'Loading...'
     },
     {
-      background: 'bg-c-yellow',
+      background: 'south1Bg',
       title: 'South1',
       icon: 'icon-shopping-cart',
       text: 'Total qty',
@@ -514,7 +528,7 @@ generateFinancialYearPayload(months:any) {
       no: 'Loading...'
     },
     {
-      background: 'bg-c-red',
+      background: 'south2Bg',
       title: 'South2',
       icon: 'icon-shopping-cart',
       text: 'Total qty',
@@ -524,7 +538,7 @@ generateFinancialYearPayload(months:any) {
       qtyText: 'Loading...'
     },
     {
-      background: 'bg-c-red',
+      background: 'westBg',
       title: 'West',
       icon: 'icon-shopping-cart',
       text: 'Total qty',
@@ -1322,11 +1336,21 @@ generateFinancialYearPayload(months:any) {
                 // endingShape: "rounded"
               }
             },
+            // dataLabels: {
+            //   enabled: this.isMobileView ? false: true,
+            //   background: {
+            //     enabled: true,
+            //     foreColor: '#000000'
+            //   },
+            // },
             dataLabels: {
-              enabled: this.isMobileView ? false: true,
+              enabled: this.isMobileView ? false : true,
+              style: {
+                colors: ['#000000'], // Set the color of the data labels to black
+              },
               background: {
                 enabled: true,
-                foreColor: '#000000'
+                foreColor: '#000000', // This controls the color of the text in the background
               },
             },
             stroke: {
@@ -1397,7 +1421,7 @@ generateFinancialYearPayload(months:any) {
             // retailersData.push(item.retailerGrowth);
             // quantityData.push(item.orderGrowth);
             // valueData.push(item.priceGrowth);
-            retailersData.push(item.retailerGrowth);
+            retailersData.push(item.retailerGrowth/6);
             quantityData.push((item.orderGrowth / 1000).toFixed(2)); // Converts orderGrowth to thousands
             valueData.push((item.priceGrowth / 10000000).toFixed(2)); // Converts priceGrowth to crores
 
@@ -1463,18 +1487,35 @@ generateFinancialYearPayload(months:any) {
                 }
               }
             },
+            // dataLabels: {
+            //   // enabled: true,
+            //   enabled: this.isMobileView ? false: true,
+
+            //   //  offsetY: -10,
+              
+            //   style: {
+            //     fontSize: "10px",
+            //     fontWeight: 'normal' // Remove bold styling by setting fontWeight to normal
+
+            //   },
+              
+            // },
+
             dataLabels: {
-              // enabled: true,
-              enabled: this.isMobileView ? false: true,
-
-              //  offsetY: -10,
-              
+              enabled: this.isMobileView ? false : true,
               style: {
-                fontSize: "10px",
-                fontWeight: 'normal' // Remove bold styling by setting fontWeight to normal
-
+                colors: ['#000000'],
+                fontWeight:'normal' // Set the color of the data labels to black
               },
-              
+              formatter: function (val:any, { seriesIndex }) {
+                // Check if the current series is for retailer values (this can be based on seriesIndex or other criteria)
+                if (seriesIndex === 0) { // Assuming '0' is the index for retailer data series
+                  val = val * 6;  // Multiply the value by 6 for retailer values
+                }
+          
+                // Return the formatted value, rounding as needed
+                return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
+              }
             },
             stroke: {
               show: true,
@@ -1507,13 +1548,24 @@ generateFinancialYearPayload(months:any) {
               opacity: 1
             },
             tooltip: {
-              y: {
-                formatter: function (val) {
-                  return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
+            //   y: {
+            //     formatter: function (val) {
+            //       return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
+            //     }
+            //   }
+            // }
+            y: {
+              formatter: function (val, { seriesIndex }) {
+                // Check if the current series is for retailer values (this can be based on seriesIndex or other criteria)
+                if (seriesIndex === 0) { // Assuming '0' is the index for retailer data series
+                  val = val * 6;  // Multiply the value by 6 for retailer values
                 }
+          
+                // Return the formatted value, rounding as needed
+                return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
               }
             }
-          };
+          }}
           
           
         }
@@ -1954,33 +2006,37 @@ generateFinancialYearPayload(months:any) {
       (response) => {
         if (response && response.body) {
           this.spinner.hide();
+          
           this.cards[0].number = response.body[0].totalOrder;
-          this.cards[0].qtyValue = response.body[0].orderValue;
+          // Assuming 'response.body[0].totalOrder' is the value in the base unit (like rupees or any currency)
+// this.cards[0].number = (response.body[0].totalOrder / 10000000).toFixed(2); // Converts the value to crores with 2 decimal places
+
+          this.cards[0].qtyValue = (response.body[0].orderValue / 10000000).toFixed(2)+'Cr';
           this.cards[0].dealercount = response.body[0].delears;
-          this.cards[0].no = response.body[0].orderQuentity;
+          this.cards[0].no = (response.body[0].orderQuentity/ 1000).toFixed(2)+'K';
           
 
 
           this.cards[1].number = response.body[1].totalOrder;
           this.cards[1].qtyValue = response.body[1].orderValue;
           this.cards[1].dealercount = response.body[1].delears;
-          this.cards[1].no = response.body[1].orderQuentity;
+          this.cards[1].no = (response.body[1].orderQuentity / 1000).toFixed(2)+'K';
 
           this.cards[2].number = response.body[2].totalOrder;
-          this.cards[2].qtyValue = response.body[2].orderValue;
+          this.cards[2].qtyValue = (response.body[2].orderValue/ 10000000).toFixed(2)+'Cr';
           this.cards[2].dealercount = response.body[2].delears;
-          this.cards[2].no = response.body[2].orderQuentity;
+          this.cards[2].no = (response.body[2].orderQuentity/ 1000).toFixed(2)+'K';
 
 
           this.cards[3].number = response.body[3].totalOrder;
-          this.cards[3].qtyValue = response.body[3].orderValue;
+          this.cards[3].qtyValue = (response.body[3].orderValue/ 10000000).toFixed(2)+'Cr';
           this.cards[3].dealercount = response.body[3].delears;
-          this.cards[3].no = response.body[3].orderQuentity;
+          this.cards[3].no = (response.body[3].orderQuentity/ 1000).toFixed(2)+'K';
 
           this.cards[4].number = response.body[4].totalOrder;
-          this.cards[4].qtyValue = response.body[4].orderValue;
+          this.cards[4].qtyValue = (response.body[4].orderValue/ 10000000).toFixed(2)+'Cr';
           this.cards[4].dealercount = response.body[4].delears;
-          this.cards[4].no = response.body[4].orderQuentity;
+          this.cards[4].no = (response.body[4].orderQuentity/ 1000).toFixed(2)+'K';
 
 // this.dashBoardInitalDataforchart();
           // // Define month names for easy mapping
@@ -2233,7 +2289,7 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
       }
     ],
     xaxis: {
-      labels: { trim: false,show:false },
+      labels: { trim: false,show:true },
       categories: [],
       title: { style: { color: '#000000' } }
     },
@@ -2243,9 +2299,19 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
 
       style: {
         fontSize: "10px",
-        fontWeight: 'normal' // Remove bold styling by setting fontWeight to normal
+        fontWeight: 'normal', // Remove bold styling by setting fontWeight to normal,
+        
+      },
+      background: {
+        // enabled: true,
+        foreColor: '#000000'
       },
     },
+    // dataLabels: {formatter : (_, opt:any) => {
+    //   const name = opt.w.globals.labels[opt.dataPointIndex];
+    //   const val = [opt.dataPointIndex];
+    //   return val ? `${val}` : '';
+    // },},
     chart: {
       type: 'bar',
       height: 500,
@@ -2276,73 +2342,266 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
       '#20c997', '#ff6347', '#8b0000', '#4169e1', '#32cd32'  // Aqua, tomato, dark red, royal blue, lime green
     ], 
     legend: { position: isMobile ? 'top' : 'right', horizontalAlign: 'left' },
+    
   };
+  // this.dashboardService.RegionWiseMonthlyDistribution(MonthlyTotalOrderingPayload).subscribe(
+  //     (response) => {
+  //         if (response && response.body) {
+  //             this.spinner.hide();
+  //             this.RegionWiseGrowthOverPreviousMonth(MonthlyTotalOrderingPayload);
+  //             // Prepare categories based on unique months
+  //             const uniqueMonths = [...new Set(response.body.map((item: any) => item.month))];
+  //             uniqueMonths.forEach((month: any) => {
+  //                 categories.push(monthNames[month - 1]);
+  //             });
+
+  //             // Prepare data series for each metric and region
+  //             const prepareSeriesData = (data: any[], metric: string, group: string) => {
+  //                 const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
+  //                 const metricLabels: { [key: string]: string } = {
+  //                     totalRetailerCode: 'Total Retailers',
+  //                     totalQTY: 'Total Qty (K)',
+  //                     totalRevenue: 'Total Value (Cr)'
+  //                 };
+
+  //                 return regions.map(region => {
+  //                     const regionData = data.filter(item => item.region === region);
+  //                     return {
+  //                         name: `${metricLabels[metric]} - ${region}`,
+  //                         group: group,
+  //                         data: regionData.map(item => {
+  //                             if (metric === 'totalQTY') return (item.totalQTY / 1000).toFixed(2); // Adjust units
+  //                             if (metric === 'totalRevenue') return (item.totalRevenue / 10000000).toFixed(2) // Adjust units
+  //                             return item.totalRetailerCode;
+  //                         })
+  //                     };
+  //                 });
+  //             };
+
+  //             // Update chart options with dynamic series and categories
+  //             this.RegionWiseMonthlyDistibutionOptions = {
+  //                 ...this.RegionWiseMonthlyDistibutionOptions,
+  //                 series: [
+  //                     // ...prepareSeriesData(response.body, 'totalRetailerCode', 'retailers'),
+  //                     // ...prepareSeriesData(response.body, 'totalQTY', 'qty'),
+  //                     ...prepareSeriesData(response.body, 'totalRevenue', 'value')
+  //                 ],
+  //                 xaxis: { ...this.RegionWiseMonthlyDistibutionOptions.xaxis, categories },
+  //                 title: {
+  //                   text: 'Region Wise Distribution',
+  //                   align: 'center',
+  //                   // style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
+  //               },
+  //               yaxis: [{
+  //                 title: {
+  //                     text: '(Quantity)',
+  //                     style: { color: '#000000' }
+  //                 },
+  //                 labels: {
+  //                     formatter: (val: any) => '' + val
+  //                 },
+  //                 tickAmount: 4
+  //             }],
+  //             };
+  //         }
+  //     },
+  //     (error) => {
+  //         this.spinner.hide();
+  //         console.error('Error fetching region-wise monthly distribution data:', error);
+  //     }
+  // );
+
+  // this.dashboardService.RegionWiseMonthlyDistribution(MonthlyTotalOrderingPayload).subscribe(
+  //   (response) => {
+  //       if (response && response.body) {
+  //           this.spinner.hide();
+  //           this.RegionWiseGrowthOverPreviousMonth(MonthlyTotalOrderingPayload);
+  
+  //           // Prepare categories based on unique months
+  //           const uniqueMonths = [...new Set(response.body.map((item: any) => item.month))];
+  //           const categories: string[] = [];
+  //           uniqueMonths.forEach((month: any) => {
+  //               categories.push(monthNames[month - 1]);
+  //           });
+  
+  //           // Prepare data series for each metric and region
+  //           const prepareSeriesData = (data: any[], metric: string, group: string) => {
+  //               const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
+  //               const metricLabels: { [key: string]: string } = {
+  //                   totalRetailerCode: 'Total Retailers',
+  //                   totalQTY: 'Total Qty (K)',
+  //                   totalRevenue: 'Total Value (Cr)'
+  //               };
+  
+  //               return regions.map(region => {
+  //                   const regionData = data.filter(item => item.region === region);
+  //                   return {
+  //                       name: `${metricLabels[metric]} - ${region}`,
+  //                       group: group,
+  //                       data: regionData.map(item => {
+  //                           if (metric === 'totalQTY') return (item.totalQTY / 1000).toFixed(2); // Adjust units
+  //                           if (metric === 'totalRevenue') return (item.totalRevenue / 10000000).toFixed(2); // Adjust units
+  //                           return item.totalRetailerCode;
+  //                       })
+  //                   };
+  //               });
+  //           };
+  
+  //           // Update chart options with dynamic series and categories
+  //           const tooltipData = response.body; // Store response data for tooltip logic
+  //           this.RegionWiseMonthlyDistibutionOptions = {
+  //               ...this.RegionWiseMonthlyDistibutionOptions,
+  //               series: [
+  //                   // Prepare series dynamically based on metrics
+  //                   // ...prepareSeriesData(response.body, 'totalRetailerCode', 'retailers'),
+  //                   // ...prepareSeriesData(response.body, 'totalQTY', 'qty'),
+  //                   ...prepareSeriesData(response.body, 'totalRevenue', 'value')
+  //               ],
+  //               xaxis: { 
+  //                   ...this.RegionWiseMonthlyDistibutionOptions.xaxis, 
+  //                   categories 
+  //               },
+  //               title: {
+  //                   text: 'Region Wise Distribution',
+  //                   align: 'center',
+  //               },
+  //               yaxis: [{
+  //                   title: {
+  //                       text: '(Quantity)',
+  //                       style: { color: '#000000' }
+  //                   },
+  //                   labels: {
+  //                       formatter: (val: any) => '' + val
+  //                   },
+  //                   tickAmount: 4
+  //               }],
+  //               tooltip: {
+  //                   shared: true,
+  //                   intersect: false,
+  //                   custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+  //                       const dataPoint = tooltipData[dataPointIndex] || {}; // Get data for the current index
+  //                       const totalOrders = dataPoint.totalRetailerCode || 0;
+  //                       const totalQty = (dataPoint.totalQTY || 0) / 1000; // Convert to K
+  //                       const totalValue = (dataPoint.totalRevenue || 0) / 10000000; // Convert to Cr
+  
+  //                       return `
+  //                           <div style="padding: 10px; border-radius: 5px; background-color: #f4f4f4; color: #333;">
+  //                               <strong>Orders:</strong> ${totalOrders}<br>
+  //                               <strong>Qty (K):</strong> ${totalQty.toFixed(2)}<br>
+  //                               <strong>Value (Cr):</strong> ${totalValue.toFixed(2)}
+  //                           </div>
+  //                       `;
+  //                   }
+  //               }
+  //           };
+  //       }
+  //   },
+  //   (error) => {
+  //       this.spinner.hide();
+  //       console.error('Error fetching region-wise monthly distribution data:', error);
+  //   }
+  // );
   this.dashboardService.RegionWiseMonthlyDistribution(MonthlyTotalOrderingPayload).subscribe(
-      (response) => {
-          if (response && response.body) {
-              this.spinner.hide();
-              this.RegionWiseGrowthOverPreviousMonth(MonthlyTotalOrderingPayload);
-              // Prepare categories based on unique months
-              const uniqueMonths = [...new Set(response.body.map((item: any) => item.month))];
-              uniqueMonths.forEach((month: any) => {
-                  categories.push(monthNames[month - 1]);
-              });
-
-              // Prepare data series for each metric and region
-              const prepareSeriesData = (data: any[], metric: string, group: string) => {
-                  const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
-                  const metricLabels: { [key: string]: string } = {
-                      totalRetailerCode: 'Total Retailers',
-                      totalQTY: 'Total Qty (K)',
-                      totalRevenue: 'Total Value (Cr)'
-                  };
-
-                  return regions.map(region => {
-                      const regionData = data.filter(item => item.region === region);
-                      return {
-                          name: `${metricLabels[metric]} - ${region}`,
-                          group: group,
-                          data: regionData.map(item => {
-                              if (metric === 'totalQTY') return (item.totalQTY / 1000).toFixed(2); // Adjust units
-                              if (metric === 'totalRevenue') return (item.totalRevenue / 10000000).toFixed(2) // Adjust units
-                              return item.totalRetailerCode;
-                          })
-                      };
-                  });
-              };
-
-              // Update chart options with dynamic series and categories
-              this.RegionWiseMonthlyDistibutionOptions = {
-                  ...this.RegionWiseMonthlyDistibutionOptions,
-                  series: [
-                      ...prepareSeriesData(response.body, 'totalRetailerCode', 'retailers'),
-                      ...prepareSeriesData(response.body, 'totalQTY', 'qty'),
-                      ...prepareSeriesData(response.body, 'totalRevenue', 'value')
-                  ],
-                  xaxis: { ...this.RegionWiseMonthlyDistibutionOptions.xaxis, categories },
-                  title: {
-                    text: 'Region Wise Distribution',
-                    align: 'center',
-                    // style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
-                },
-                yaxis: [{
-                  title: {
-                      text: '(Quantity)',
-                      style: { color: '#000000' }
-                  },
-                  labels: {
-                      formatter: (val: any) => '' + val
-                  },
-                  tickAmount: 4
-              }],
-              };
-          }
-      },
-      (error) => {
-          this.spinner.hide();
-          console.error('Error fetching region-wise monthly distribution data:', error);
+    (response) => {
+      if (response && response.body) {
+        this.spinner.hide();
+        this.RegionWiseGrowthOverPreviousMonth(MonthlyTotalOrderingPayload);
+  
+        // Prepare categories based on unique months
+        const uniqueMonths = [...new Set(response.body.map((item: any) => item.month))];
+        const categories: string[] = [];
+        uniqueMonths.forEach((month: any) => {
+          categories.push(monthNames[month - 1]);
+        });
+  
+        // Prepare data series for each metric and region
+        const prepareSeriesData = (data: any[], metric: string) => {
+          const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
+          const metricLabels: { [key: string]: string } = {
+            totalRetailerCode: 'Total Retailers',
+            totalQTY: 'Total Qty (K)',
+            totalRevenue: 'Total Value (Cr)',
+          };
+  
+          return regions.map((region) => {
+            const regionData = data.filter((item) => item.region === region);
+            return {
+              name: `${metricLabels[metric]} - ${region}`, // Ensure region info is in 'name'
+              data: regionData.map((item) => {
+                if (metric === 'totalQTY') return (item.totalQTY / 1000).toFixed(2); // Adjust units
+                if (metric === 'totalRevenue') return (item.totalRevenue / 10000000).toFixed(2); // Adjust units
+                return item.totalRetailerCode;
+              }),
+              region: region // Adding region to the data structure
+            };
+          });
+        };
+  
+        const tooltipData = response.body; // Store response data for tooltip logic
+        const seriesData = prepareSeriesData(response.body, 'totalRevenue'); // Adjust metric if needed
+  
+        // Update chart options with dynamic series and categories
+        this.RegionWiseMonthlyDistibutionOptions = {
+          ...this.RegionWiseMonthlyDistibutionOptions,
+          series: seriesData,
+          xaxis: {
+            ...this.RegionWiseMonthlyDistibutionOptions.xaxis,
+            categories,
+          },
+          title: {
+            text: 'Region Wise Distribution',
+            align: 'center',
+          },
+          yaxis: [
+            {
+              title: {
+                text: '(Quantity)',
+                style: { color: '#000000' },
+              },
+              labels: {
+                formatter: (val: any) => '' + val,
+              },
+              tickAmount: 4,
+            },
+          ],
+          // tooltip: {
+          //   shared: true,
+          //   intersect: false,
+         
+          //   custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+          //     const seriesName = series[seriesIndex]?.name || '';
+          //     const region = seriesName.split(' - ')[1];
+              
+          //     // Get the data point for this region
+          //     const dataPoint = tooltipData.find(
+          //       (item:any) => item.region === region && item.month === uniqueMonths[dataPointIndex]
+          //     ) || {};
+          
+          //     const totalOrders = dataPoint.totalRetailerCode || 0;
+          //     const totalQty = (dataPoint.totalQTY || 0) / 1000;
+          //     const totalValue = (dataPoint.totalRevenue || 0) / 10000000;
+          
+          //     return `
+          //       <div style="padding: 10px; border-radius: 5px; background-color: #f4f4f4; color: #333;">
+          //         <strong>Region:</strong> ${region}<br>
+          //         <strong>Orders:</strong> ${totalOrders}<br>
+          //         <strong>Qty (K):</strong> ${totalQty.toFixed(2)}<br>
+          //         <strong>Value (Cr):</strong> ${totalValue.toFixed(2)}
+          //       </div>
+          //     `;
+          //   }
+          // }
+          
+        };
       }
+    },
+    (error) => {
+      this.spinner.hide();
+      console.error('Error fetching region-wise monthly distribution data:', error);
+    }
   );
+  
+  
 };
 
 
@@ -2404,6 +2663,7 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
 
             style: {
           fontSize: "10px",
+          colors:['#000000'],
           fontWeight: 'normal' // Remove bold styling by setting fontWeight to normal
 
         }, },
@@ -2454,7 +2714,7 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
                             group: group,
                             data: regionData.map(item => {
                                 if (metric === 'orderGrowth') return (item.orderGrowth / 1000).toFixed(2); // Adjust units
-                                if (metric === 'priceGrowth') return (item.priceGrowth / 10000000).toFixed(2); // Adjust units
+                                if (metric === 'priceGrowth') return ((item.priceGrowth / 10000000)/10).toFixed(2); // Adjust units
                                 return item.retailerGrowth;
                             })
                         };
@@ -2465,8 +2725,8 @@ public RegionWiseMonthlyDistribution = (MonthlyTotalOrderingPayload?: any) => {
                 this.RegionWiseGrowthOverPreviousMonthOptions = {
                     ...this.RegionWiseGrowthOverPreviousMonthOptions,
                     series: [
-                        ...prepareSeriesData(response.body, 'retailerGrowth', 'retailers'),
-                        ...prepareSeriesData(response.body, 'orderGrowth', 'qty'),
+                        // ...prepareSeriesData(response.body, 'retailerGrowth', 'retailers'),
+                        // ...prepareSeriesData(response.body, 'orderGrowth', 'qty'),
                         ...prepareSeriesData(response.body, 'priceGrowth', 'value')
                     ],
                     xaxis: { ...this.RegionWiseGrowthOverPreviousMonthOptions.xaxis, categories },
@@ -4501,4 +4761,12 @@ public topSKUOrderedRSNameSelected = (MonthlyTotalOrderingPayload?: any) => {
     }
   );
 };
+getCurrentMonthToDate() {
+  const currentDate = new Date();
+  const currentMonth = this.datePipe.transform(currentDate, 'MMMM');  // Get current month name (e.g., 'November')
+  const currentYear = this.datePipe.transform(currentDate, 'yyyy');   // Get current year (e.g., '2024')
+  const currentDay = currentDate.getDate();  // Get current day (e.g., '29')
+
+  this.currentMonthToDateText = `From ${currentMonth} ${currentYear} to till date order details.`;
+}
 }

@@ -1,114 +1,118 @@
-<div class="login-container">
-  <img src="assets/images/Designer.png" alt="Background Image" class="background-image">
+<div class="login-container row">
 
-    <div class="login-form">
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-lg-4 col-md-4">
-            <!-- <div class="logo mb-4 text-center">
-              <img src="assets/images/titan-logo.png" alt="Titan" class="mb-3" />
-              <h3>Titan Safety Portal</h3>
-            </div> -->
-            <!-- <div class="row mb-5 d-flex align-items-center">
-              <div class="col">
-                <img
-                  src="assets/images/Logo_of_Titan_Company.png"
-                  class="img-fluid"
-                  alt=""
-                />
-              </div>
-              <div class="col">
-                <img
-                  src="assets/images/OHSMS PORTAL.png"
-                  class="img-fluid"
-                  alt=""
-                />
-              </div>
-              <div class="col">
-                <img
-                  src="assets/images/surakshaicon.png"
-                  class="img-fluid"
-                  alt=""
-                />
-              </div>
-            </div> -->
-            <div class="row mb-5 d-flex align-items-center" style="
-                            text-align: center;
-                            justify-content: center;
-                            margin-bottom: 17px !important;">
-              <img src="assets/images/Logo_of_Titan_Company.png" alt="" class="img-fluid" style="
-                            height: 90px;
-                            width: 122px;
-                        ">
-            </div>
-            <form
-              class="mb-4"
-              [formGroup]="loginForm"
-              *ngIf="allowOnlyAfterClearCache"
-            >
-              <div class="form-group mb-3" *ngIf="allowOnlyAfterClearCache">
-                <label for="exampleInputEmail1" class="mb-2"
-                  >Username <sup>*</sup></label
-                >
-                <input
-                  type="email"
-                  class="form-control"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                  maxlength="30"
-                  placeholder="Enter your Emp code with prefix E"
-                  formControlName="userName"
-                />
-              </div>
-              <div class="form-group mb-3">
-                <label for="exampleInputEmail1" class="mb-2"
-                  >Password <sup>*</sup></label
-                >
-                <div class="fmin-group">
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="password"
-                    aria-describedby="emailHelp"
-                    placeholder="Enter password"
-                    formControlName="password"
+  <!-- <div class="col-6">
+    <img src="assets/images/Designer.png" alt="Background Image" class="background-image">
+  </div> -->
+  
+      <div class="login-form col-6">
+        <!-- <div class="container"> -->
+          <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-4">
+              <!-- <div class="logo mb-4 text-center">
+                <img src="assets/images/titan-logo.png" alt="Titan" class="mb-3" />
+                <h3>Titan Safety Portal</h3>
+              </div> -->
+              <!-- <div class="row mb-5 d-flex align-items-center">
+                <div class="col">
+                  <img
+                    src="assets/images/Logo_of_Titan_Company.png"
+                    class="img-fluid"
+                    alt=""
                   />
-                  <i
-                    class="fa fa-eye"
-                    aria-hidden="true"
-                    (click)="showPassword()"
-                  ></i>
                 </div>
+                <div class="col">
+                  <img
+                    src="assets/images/OHSMS PORTAL.png"
+                    class="img-fluid"
+                    alt=""
+                  />
+                </div>
+                <div class="col">
+                  <img
+                    src="assets/images/surakshaicon.png"
+                    class="img-fluid"
+                    alt=""
+                  />
+                </div>
+              </div> -->
+              <div class="row mb-5 d-flex align-items-center" style="
+                              text-align: center;
+                              justify-content: center;
+                              margin-bottom: 17px !important;">
+                <img src="assets/images/Logo_of_Titan_Company.png" alt="" class="img-fluid" style="
+                              height: 90px;
+                              width: 122px;
+                          ">
               </div>
-              <button
-                type="submit"
-                class="btn btn-primary btn-block"
-                (click)="onSubmit()"
+              <form
+                class="mb-4"
+                [formGroup]="loginForm"
+                *ngIf="allowOnlyAfterClearCache"
               >
-                <!-- Login -->
-                {{loginText}}
-                <svg *ngIf="loginText == 'Logging'" class="pl" width="240" height="240" viewBox="0 0 240 240">
-                  <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
-                  <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
-                  <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
-                  <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
-                </svg>
-              </button>
-              <div class="alert alert-warning" style="margin-top: 10px;" *ngIf="submitted && isLoginFailed">
-                {{ errorMessage }}
+                <div class="form-group mb-3" *ngIf="allowOnlyAfterClearCache">
+                  <label for="exampleInputEmail1" class="mb-2"
+                    >Username <sup>*</sup></label
+                  >
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="exampleInputEmail1"
+                    aria-describedby="emailHelp"
+                    maxlength="30"
+                    placeholder="Enter your Emp code with prefix E"
+                    formControlName="userName"
+                  />
+                </div>
+                <div class="form-group mb-3">
+                  <label for="exampleInputEmail1" class="mb-2"
+                    >Password <sup>*</sup></label
+                  >
+                  <div class="fmin-group">
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="password"
+                      aria-describedby="emailHelp"
+                      placeholder="Enter password"
+                      formControlName="password"
+                    />
+                    <i
+                      class="fa fa-eye"
+                      aria-hidden="true"
+                      (click)="showPassword()"
+                    ></i>
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  class="btn btn-primary btn-block"
+                  (click)="onSubmit()"
+                >
+                  <!-- Login -->
+                  {{loginText}}
+                  <svg *ngIf="loginText == 'Logging'" class="pl" width="240" height="240" viewBox="0 0 240 240">
+                    <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
+                    <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
+                    <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+                    <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+                  </svg>
+                </button>
+                <div class="alert alert-warning" style="margin-top: 10px;" *ngIf="submitted && isLoginFailed">
+                  {{ errorMessage }}
+                </div>
+              </form>
+              <div class="copy-rights mt-5">
+                © 2024 - 2025 Titan company limited
               </div>
-            </form>
-            <div class="copy-rights mt-5">
-              © 2024 - 2025 Titan company limited
             </div>
           </div>
-        </div>
+        <!-- </div> -->
+      </div>
+      <div id="back">
+        <img  src="assets/images/mbrlandpage.jpg" alt="" class="img-fluid" style="
+      height: 100%;">
+      <!-- mbrlandpage -->
       </div>
     </div>
-    <!-- <div id="back">
-      <img  src="assets/images/mbr.jpg" alt="" class="img-fluid" style="
-    height: 100%;">
-    </div> -->
-  </div>
-  <!-- <ngx-ui-loader></ngx-ui-loader> -->
-  
+    <!-- <ngx-ui-loader></ngx-ui-loader> -->
+    

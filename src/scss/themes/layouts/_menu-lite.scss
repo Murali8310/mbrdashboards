@@ -1641,21 +1641,20 @@
   &[class*='header-'] {
     .mobile-menu {
       span {
-        background-color:  #5213e6;
-
+        background-color:  #666;
         &:after,
         &:before {
-          background-color: #5213e6;
+          background-color: #666;
         }
       }
 
       &:hover {
         span {
-          background-color: #5213e6;
+          background-color: #666;
 
           &:after,
           &:before {
-            background-color:  #5213e6;
+            background-color:  #666;
           }
         }
       }
