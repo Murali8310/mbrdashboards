@@ -403,3 +403,18 @@ height: 100%;
 object-fit: cover;
 z-index: -1; /* Send the background image behind content */
 }
+body {
+  background: linear-gradient(135deg, #fffdfd, #39415c, #340d60);
+
+}
+
+.backRight{
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: 50% center;
+  // background-image: url(assets/images/mbrlandpage.jpg);
+  background-image: url('/assets/images/mbrlandpage.jpg');
+
+  background-repeat: no-repeat;
+}

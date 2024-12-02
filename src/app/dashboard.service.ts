@@ -179,18 +179,18 @@ public selectedData:any = '1';
       
       
       public  dashBoardInitalData(data?:any) {
-        const GrowthOverPreviousMonthPayload :any = {
-          // "regionList": "EAST, WEST,NORTH,SOUTH 1,SOUTH 2",  /// default all regions 
-            "startDate":20241001,       /// default case start date of financial year in integer format
-            "endDate": 202401030,       ////  default case end date of financial year in integer format
-            // "brandList": "",       //// default casen ""
-            // "rsNameList": ""//// default casen ""
-          };
+        // const GrowthOverPreviousMonthPayload :any = {
+        //   // "regionList": "EAST, WEST,NORTH,SOUTH 1,SOUTH 2",  /// default all regions 
+        //     "startDate":20241101,       /// default case start date of financial year in integer format
+        //     "endDate": 202401130,       ////  default case end date of financial year in integer format
+        //     // "brandList": "",       //// default casen ""
+        //     // "rsNameList": ""//// default casen ""
+        //   };
     
         return this.http
           .post<any>(
             `${environment.apiUrl}/dashboardTiles`,
-            JSON.stringify(GrowthOverPreviousMonthPayload),
+            JSON.stringify(data),
             {
               headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
               observe: 'response',
