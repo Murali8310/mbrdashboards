@@ -361,5 +361,8 @@ public interface UserDao {
 	List<OutputTopSKUOrderedOverall> topSKUOrderedRSNameSelected(MonthlyDataFilter filter);
 
 
+	List<OutputGrowthOverPreviousMonth> growthOverPreviousYear(MonthlyDataFilter filter);
+
+
 
 }

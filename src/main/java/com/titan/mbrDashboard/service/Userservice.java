@@ -315,6 +315,9 @@ public interface Userservice {
 	List<OutputTopSKUOrderedOverall> topSKUOrderedRegionSelected(MonthlyDataFilter filter);
 
 
-	List<OutputTopSKUOrderedOverall> topSKUOrderedRSNameSelected(MonthlyDataFilter filter);	
+	List<OutputTopSKUOrderedOverall> topSKUOrderedRSNameSelected(MonthlyDataFilter filter);
+
+
+	List<OutputGrowthOverPreviousMonth> growthOverPreviousYear(MonthlyDataFilter filter);	
 
 }

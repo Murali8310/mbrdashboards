@@ -1261,6 +1261,12 @@ public class UserServiceimpl implements Userservice {
 		return userDao.topSKUOrderedRSNameSelected(filter);
 	}
 
+	@Override
+	public List<OutputGrowthOverPreviousMonth> growthOverPreviousYear(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		return userDao.growthOverPreviousYear(filter);
+	}
+
 
 
 }
