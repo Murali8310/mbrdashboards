@@ -192,8 +192,8 @@ export default class DashAnalyticsComponent {
   availableRegions: any = [
     { id: 1, name: 'East' },
     { id: 2, name: 'North' },
-    { id: 3, name: 'South1' },
-    { id: 4, name: 'South2' },
+    { id: 3, name: 'South 1' },
+    { id: 4, name: 'South 2' },
     { id: 5, name: 'West' }
   ];
   selectedRegions: { id: number; name: string }[] = [];
