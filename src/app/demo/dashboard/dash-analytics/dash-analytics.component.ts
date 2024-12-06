@@ -57,6 +57,7 @@ import {
 import { DashboardService } from 'src/app/dashboard.service';
 import { ActivatedRoute, Router, RouterStateSnapshot } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { left } from '@popperjs/core';
 
 // export type ChartOptions = {
 //   series: ApexAxisChartSeries | ApexNonAxisChartSeries;
@@ -1362,7 +1363,7 @@ console.log(MonthlyToalOrdaringPayload);
               }
             ],
             chart: {
-              height: 500,
+              height: 700,
               type: 'line',
               zoom: {
                 enabled: false
@@ -1471,7 +1472,7 @@ console.log(MonthlyToalOrdaringPayload);
                 },
                 offsetX: -20
               },
-              tickAmount: 3
+              tickAmount: 10
             },
             tooltip: {
               shared: true,
@@ -1661,7 +1662,7 @@ console.log(MonthlyToalOrdaringPayload);
                 enabled: true
               },
               type: 'bar',
-              height: 500,
+              height: 700,
               toolbar: {
                 show: true,
                 tools: {
@@ -1755,20 +1756,21 @@ console.log(MonthlyToalOrdaringPayload);
               {
                 floating: false,
                 title: {
-                  text: ' (Growth Value)' // Left y-axis title
+                  text: ' (Growth Value)', // Left y-axis title
                   // style: {
                   //   color: '#000000' // Change color as needed
                   // }
+                  offsetX:20
                 },
                 // min: 0, // Set minimum value for the y-axis
                 //max: 800, // Set maximum value for the y-axis (adjust as needed)
-                tickAmount: 4, // Adjust the number of ticks based on the range
+                tickAmount: 10, // Adjust the number of ticks based on the range
                 labels: {
                   formatter: function (val) {
                     return val.toFixed(0);
                   }
-                }
-              }
+                },
+              },
             ],
             fill: {
               opacity: 1
@@ -2504,7 +2506,7 @@ let lastHoveredDataPointIndex:any = '';
       // },},
       chart: {
         type: 'bar',
-        height: 500,
+        height: 1000,
         stacked: true,
         events: {
           mouseMove: (event, chartContext, config) => {
@@ -2554,7 +2556,7 @@ let lastHoveredDataPointIndex:any = '';
         // '#4169e1',
         // '#32cd32' // Aqua, tomato, dark red, royal blue, lime green
       ],
-      legend: { position: isMobile ? 'top' : 'right', horizontalAlign: 'left' },
+      legend: { position: isMobile ? 'top' : 'bottom', horizontalAlign: 'center' },
       
    
   }
@@ -2612,13 +2614,14 @@ let lastHoveredDataPointIndex:any = '';
                   },
                   yaxis: [{
                     title: {
-                        text: '(Quantity)',
-                        style: { color: '#000000' }
+                        text: '(Value (Cr))',
+                        style: { color: '#000000' },
+                        offsetX:20
                     },
                     labels: {
                         formatter: (val: any) => '' + val
                     },
-                    tickAmount: 4
+                    tickAmount: 10
                 }],
              // Regions mapping
 
@@ -2651,10 +2654,9 @@ tooltip: {
             //     <div>Value (Cr): ${record.totalRevenue/10000000}</div>
             // `;
             tooltipContent += `
-    <div>Retailers: ${record.totalRetailerCode}</div>
-    <div>Qty (K): ${(record.totalQTY / 1000).toFixed(2)}</div>
-    <div>Value (Cr): ${(record.totalRevenue / 10000000).toFixed(2)}</div>
-`;
+             <div>Value (Cr): ${(record.totalRevenue / 10000000).toFixed(2)}</div>
+             <div>Qty (K): ${(record.totalQTY / 1000).toFixed(2)}</div>
+             <div>Retailers: ${record.totalRetailerCode}</div>`;
 
         } else {
             // Fallback content if no record is found
@@ -2665,6 +2667,48 @@ tooltip: {
         return tooltipContent;
     }
 }
+,
+dataLabels: {
+  enabled: true,
+  formatter: function(value, { seriesIndex, dataPointIndex }) {
+      const regionName = regions[seriesIndex];
+      const month = dataPointIndex + 4;
+      const record = response.body.find(
+          (item: any) => item.region === regionName && item.month === month
+      );
+
+      if (record) {
+          return [
+              `Value: ${(record.totalRevenue / 10000000).toFixed(2)} Cr`,
+              `Qty: ${(record.totalQTY / 1000).toFixed(2)} K`,
+              `Retailers: ${record.totalRetailerCode}`
+          ];
+      } else {
+          return ["No Data"];
+      }
+  },
+  style: {
+      fontSize: '10px',  // Set font size to fit inside the box
+      fontFamily: 'Arial, sans-serif',  // Font family
+      fontWeight: 'normal',  // Font weight
+      colors: ['#ffffff'],  // Font color (white)
+      align:'left',
+  },
+  background: {
+    enabled: false,
+    //foreColor: '#000000',  // Black text for high contrast
+   // borderRadius: 5,
+   // padding: 5,
+   // opacity: 0.9,  // Higher opacity for solid background
+   // borderWidth: 1,
+   // borderColor: '#007BFF',  // Border with a vibrant blue
+},
+  offsetY:30
+}
+
+
+
+
                 };
 
             }
@@ -2934,7 +2978,7 @@ tooltip: {
       },
       chart: {
         type: 'bar',
-        height: 500,
+        height: 1000,
         stacked: true
       },
       plotOptions: { bar: { horizontal: false } },
@@ -2961,7 +3005,7 @@ tooltip: {
         // '#4169e1',
         // '#32cd32' // Aqua, tomato, dark red, royal blue, lime green
       ],
-      legend: { position: isMobile ? 'top' : 'right', horizontalAlign: 'left' }
+      legend: { position: isMobile ? 'top' : 'bottom', horizontalAlign: 'center' }
     };
 
     this.dashboardService.RegionWiseGrowthOverPreviousMonth(MonthlyToalOrdaringPayload).subscribe(
@@ -2976,6 +3020,28 @@ tooltip: {
           });
 
           // Function to prepare series data
+          // const prepareSeriesData = (data: any[], metric: string, group: string) => {
+          //   const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
+          //   const metricLabels: { [key: string]: string } = {
+          //     retailerGrowth: 'Retailer Growth',
+          //     orderGrowth: 'Order Growth (K)',
+          //     priceGrowth: 'Price Growth (Cr)'
+          //   };
+
+          //   return regions.map((region) => {
+          //     const regionData = data.filter((item) => item.region === region);
+          //     return {
+          //       name: `${metricLabels[metric]} - ${region}`,
+          //       group: group,
+          //       data: regionData.map((item) => {
+          //         if (metric === 'orderGrowth') return (item.orderGrowth / 1000).toFixed(2); // Adjust units
+          //         if (metric === 'priceGrowth') return ((item.priceGrowth / 10000000).toFixed(2)); // Adjust units
+          //         return item.retailerGrowth;
+          //       })
+          //     };
+          //   });
+          // };
+
           const prepareSeriesData = (data: any[], metric: string, group: string) => {
             const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
             const metricLabels: { [key: string]: string } = {
@@ -2983,9 +3049,9 @@ tooltip: {
               orderGrowth: 'Order Growth (K)',
               priceGrowth: 'Price Growth (Cr)'
             };
-
+          
             return regions.map((region) => {
-              const regionData = data.filter((item) => item.region === region);
+              const regionData = data.filter((item) => item.region.toUpperCase() === region.toUpperCase()); // Case-insensitive comparison
               return {
                 name: `${metricLabels[metric]} - ${region}`,
                 group: group,
@@ -2997,6 +3063,7 @@ tooltip: {
               };
             });
           };
+          
 
 
           const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
@@ -3019,12 +3086,13 @@ tooltip: {
               {
                 title: {
                   text: '(Quantity)',
-                  style: { color: '#000000' }
+                  style: { color: '#000000' },
+                  offsetX:20
                 },
                 labels: {
                   formatter: (val: any) => '' + val
                 },
-                tickAmount: 4
+                tickAmount: 10,
               }
             ],
 
@@ -3196,7 +3264,7 @@ tooltip: {
         }
       ],
       chart: {
-        height: 500,
+        height: 700,
         type: 'line'
       },
       dataLabels: {
@@ -3470,7 +3538,7 @@ tooltip: {
               }
             ],
             chart: {
-              height: 500,
+              height: 700,
               type: 'line',
               zoom: {
                 enabled: false
@@ -3559,7 +3627,7 @@ tooltip: {
                 },
                 offsetX: -20
               },
-              tickAmount: 4
+              tickAmount: 10
             },
             tooltip: {
               shared: true,
@@ -3690,7 +3758,7 @@ tooltip: {
         // '#4169e1',
         // '#32cd32' // Aqua, tomato, dark red, royal blue, lime green
       ],
-      legend: { position: 'right', horizontalAlign: 'left' }
+      legend: { position: 'bottom', horizontalAlign: 'center' }
     };
 
     this.dashboardService.RegionWiseMonthlyDistibutionOptionsFOrdBhFn(MonthlyTotalOrderingPayload).subscribe(
@@ -3984,7 +4052,7 @@ tooltip: {
         '#ffc107',
         '#dc3545',
       ],
-      legend: { position: 'right', horizontalAlign: 'left' }
+      legend: { position: 'bottom', horizontalAlign: 'center' }
     };
 
     this.dashboardService.RegionWiseMonthlyAvgPerOrderFn(MonthlyTotalOrderingPayload).subscribe(
@@ -4007,7 +4075,7 @@ tooltip: {
             };
 
             return regions.map((region) => {
-              const regionData = data.filter((item) => item.region === region);
+              const regionData = data.filter((item) => item.region.toUpperCase() === region.toUpperCase());
               return {
                 name: `${metricLabels[metric]} - ${region}`,
                 group: group,

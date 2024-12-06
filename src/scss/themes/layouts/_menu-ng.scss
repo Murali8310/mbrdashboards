@@ -320,7 +320,8 @@ app-nav-group {
   }
 
   &.menupos-fixed {
-    height: 100vh;
+    // height: 100vh;
+    height: 100%;
     min-height: 100vh;
 
     .pcoded-inner-navbar {

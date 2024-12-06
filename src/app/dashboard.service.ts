@@ -203,7 +203,7 @@ public selectedData:any = '1';
   
       return this.http
         .post<any>(
-          `${environment.apiUrl}/growthOverPreviousYear`,
+          `${environment.apiUrl}/growthOverPreviousYearMonthly`,
           JSON.stringify(MonthlyToalOrdaringPayload),
           {
             headers: new HttpHeaders({ 'Content-Type': 'application/json' }),

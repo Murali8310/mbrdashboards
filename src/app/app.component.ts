@@ -23,6 +23,9 @@ export class AppComponent implements OnInit {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
+
+      const getElement:any = document.body;  // Access the body element directly
+      getElement.style.zoom = '80%';  // Set zoom level to 80%
       window.scrollTo(0, 0);
     });
     // this.onLoginSubmit();
