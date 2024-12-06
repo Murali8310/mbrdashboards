@@ -6795,10 +6795,10 @@ public class UserDaoimpl implements UserDao {
 			for (Object[] row : result) {
 				// Assuming row contains values in the correct order for mapping
 				OutputPercentageofOrdersbyWeekdayorWeekend data = new OutputPercentageofOrdersbyWeekdayorWeekend();
-				data.setMonth((Integer) row[0]);
-				data.setDayType(row[1].toString());
-				data.setDistinctOrderCount((Integer) row[2]);
-				data.setPercentageOfOrders((BigDecimal) row[3]);
+				//data.setMonth((Integer) row[0]);
+				data.setDayType(row[0].toString());
+				data.setDistinctOrderCount((Integer) row[1]);
+				data.setPercentageOfOrders((BigDecimal) row[2]);
 				// Now, filteredData is populated with values
 				percentageofOrdersbyWeekdayorWeekend.add(data);
 			}
@@ -6835,10 +6835,10 @@ public class UserDaoimpl implements UserDao {
 				// Assuming row contains values in the correct order for mapping
 				OutputPercentageofOrdersByWeekdayorWeekendRegionWise data = new OutputPercentageofOrdersByWeekdayorWeekendRegionWise();
 				data.setRegion(row[0].toString());
-				data.setMonth((Integer) row[1]);
-				data.setDayType(row[2].toString());
-				data.setDistinctOrderCount((Integer) row[3]);
-				data.setPercentageOfOrders((BigDecimal) row[4]);
+				//data.setMonth((Integer) row[1]);
+				data.setDayType(row[1].toString());
+				data.setDistinctOrderCount((Integer) row[2]);
+				data.setPercentageOfOrders((BigDecimal) row[3]);
 				// Now, filteredData is populated with values
 				percentageofOrdersByWeekdayorWeekendRegionWise.add(data);
 			}
@@ -6874,11 +6874,11 @@ public class UserDaoimpl implements UserDao {
 			for (Object[] row : result) {
 				// Assuming row contains values in the correct order for mapping
 				OutputPercentaageOfOrdersByHourOfTheDayOnWeekdayWeekend data = new OutputPercentaageOfOrdersByHourOfTheDayOnWeekdayWeekend();
-				data.setMonth((Integer) row[0]);
-				data.setDayType(row[1].toString());
-				data.setOrderHour((Integer) row[2]);
-				data.setDistinctOrderCount((Integer) row[3]);
-				data.setPercentageOfOrders((BigDecimal) row[4]);
+				//data.setMonth((Integer) row[0]);
+				data.setDayType(row[0].toString());
+				data.setOrderHour((Integer) row[1]);
+				data.setDistinctOrderCount((Integer) row[2]);
+				data.setPercentageOfOrders((BigDecimal) row[3]);
 				// Now, filteredData is populated with values
 				percentaageOfOrdersByHourOfTheDayOnWeekdayWeekend.add(data);
 			}
@@ -8010,12 +8010,12 @@ public class UserDaoimpl implements UserDao {
 			conditions.append("AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(regionList)
 					.append("', ',')) ");
 		}
-		if (regionList != null && !regionList.isEmpty()) {
-			conditions.append("AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(regionList)
-					.append("', ',')) ");
-		}
+//		if (regionList != null && !regionList.isEmpty()) {
+//			conditions.append("AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(regionList)
+//					.append("', ',')) ");
+//		}
 		if (rsList != null && !rsList.isEmpty()) {
-			conditions.append("AND RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(regionList)
+			conditions.append("AND RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(rsList)
 					.append("', ',')) ");
 		}
 		// Final query
