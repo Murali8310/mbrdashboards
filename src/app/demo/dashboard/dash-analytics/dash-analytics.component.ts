@@ -107,6 +107,7 @@ export default class DashAnalyticsComponent {
   budgetChartOptions!: ApexOptions;
   RegionWiseMonthlyDistibutionOptions!: ApexOptions;
   RegionWiseGrowthOverPreviousMonthOptions!: ApexOptions;
+  RegionWiseGrowthOverPreviousMonthOptionsForPrevYear!: ApexOptions;
 
   // This is for menu id 3
   chartOptionslineForOrdBh!: ApexOptions; // Change to ApexOptions
@@ -286,6 +287,7 @@ export default class DashAnalyticsComponent {
   filteredRSNamesList = this.availableRSNames;
   @ViewChild('chart') chart!: ChartComponent;
   chartOptions!: ApexOptions;
+  growthOverPreviousMonthYear!: ApexOptions;
   dashBoardInitalDataOptions!: Partial<ChartOptions>;
 
   // chartOptionsline!: Partial<ChartOptions>;
@@ -363,6 +365,11 @@ export default class DashAnalyticsComponent {
   isLoading = false; // Start with loading state
   isMobileView = window.innerWidth <= 768;
   currentMonthToDateText: string = '';
+selectedOrder:any = 'ND2011324/P';
+currentOverallLevel:any = 0;
+selectedImageSource:any = 'assets/images/1802NL02/1802SL12_3.jpg';
+selectedImageSourceForRegion:any = 'assets/images/1802NL02/1802SL12_3.jpg';
+selectedImageSourceForRs:any = 'assets/images/1802NL02/1802SL12_3.jpg';
 
   // constructor
   constructor(
@@ -464,10 +471,27 @@ export default class DashAnalyticsComponent {
     const selectedStartYear = this.selectedYears.length > 0 ? Math.min(...this.selectedYears) : currentYear;
     const selectedEndYear = this.selectedYears.length > 0 ? Math.max(...this.selectedYears) : currentYear;
   
+    // if (!months || months.length === 0) {
+    //   // Default dates if months array is empty (use the selectedStartYear and selectedEndYear)
+    //   return { startDate: parseInt(`${selectedStartYear}0401`), endDate: parseInt(`${selectedEndYear}1231`) };
+    // }
+
     if (!months || months.length === 0) {
-      // Default dates if months array is empty (use the selectedStartYear and selectedEndYear)
-      return { startDate: parseInt(`${selectedStartYear}0401`), endDate: parseInt(`${selectedEndYear}0331`) };
+      // Set start date to April 1st of the selectedStartYear
+      const startDate = parseInt(`${selectedStartYear}0401`);
+    
+      // Get current date and determine the last day of the current month
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth(); // 0-based index (0 = January)
+      const currentYear = currentDate.getFullYear();
+    
+      // Get the last day of the current month
+      const endDate = new Date(currentYear, currentMonth + 1, 0); // This gives the last day of the current month
+      const endDateFormatted = parseInt(`${endDate.getFullYear()}${(endDate.getMonth() + 1).toString().padStart(2, '0')}${endDate.getDate().toString().padStart(2, '0')}`);
+    
+      return { startDate, endDate: endDateFormatted };
     }
+    
   
     // Find the minimum and maximum month IDs in the array
     let startMonth = months[0];
@@ -1617,7 +1641,7 @@ console.log(MonthlyToalOrdaringPayload);
         if (response && response.body) {
           this.spinner.hide();
           this.RegionWiseMonthlyDistribution(MonthlyToalOrdaringPayload);
-
+// this.GrowthOverPreviousYear(MonthlyToalOrdaringPayload);
           response.body.forEach((item: any) => {
             // Push values to each series array
             // retailersData.push(item.retailerGrowth);
@@ -2532,28 +2556,7 @@ let lastHoveredDataPointIndex:any = '';
       ],
       legend: { position: isMobile ? 'top' : 'right', horizontalAlign: 'left' },
       
-      tooltip: {
-        enabled: true,
    
-        theme: 'light',
-        y: {
-          formatter: (value: any, { seriesIndex, dataPointIndex, w }: any) => {
-            let adjustedValue = value;
-    
-            // Adjust tooltip values based on the series group
-            if (w.config.series[seriesIndex].group === 'retailers') {
-              // Multiply retailer code by 100 in tooltip
-              adjustedValue = (value * 100).toFixed(0);
-            } else if (w.config.series[seriesIndex].group === 'qty') {
-              // Divide quantity by 100 for tooltip display
-              adjustedValue = ((value *10000)/ 1000).toFixed(2);
-            }
-    
-            // Return formatted value with 2 decimal places
-            return adjustedValue;
-          }
-        }
-    }
   }
   
     this.dashboardService.RegionWiseMonthlyDistribution(MonthlyTotalOrderingPayload).subscribe(
@@ -2591,12 +2594,14 @@ let lastHoveredDataPointIndex:any = '';
                     });
                 };
 
+                const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
+
                 // Update chart options with dynamic series and categories
                 this.RegionWiseMonthlyDistibutionOptions = {
                     ...this.RegionWiseMonthlyDistibutionOptions,
                     series: [
-                        ...prepareSeriesData(response.body, 'totalRetailerCode', 'retailers'),
-                        ...prepareSeriesData(response.body, 'totalQTY', 'qty'),
+                        // ...prepareSeriesData(response.body, 'totalRetailerCode', 'retailers'),
+                        // ...prepareSeriesData(response.body, 'totalQTY', 'qty'),
                         ...prepareSeriesData(response.body, 'totalRevenue', 'value')
                     ],
                     xaxis: { ...this.RegionWiseMonthlyDistibutionOptions.xaxis, categories },
@@ -2615,7 +2620,53 @@ let lastHoveredDataPointIndex:any = '';
                     },
                     tickAmount: 4
                 }],
+             // Regions mapping
+
+tooltip: {
+    enabled: true,
+    custom: function({ series, seriesIndex, dataPointIndex, w }) {
+        // Find the region name based on seriesIndex
+        const regionName = regions[seriesIndex];
+
+        // Find the month corresponding to dataPointIndex (e.g., dataPointIndex 0 = month 4)
+        const month = dataPointIndex + 4;
+
+        // Filter the response array to find the matching record
+        const record = response.body.find(
+            (item:any) => item.region === regionName && item.month === month
+        );
+
+
+        // Build the tooltip content
+        let tooltipContent = `
+            <div style="padding: 8px; font-size: 12px; background: white; border: 1px solid #ddd;">
+                <strong>${regionName} Region</strong>
+        `;
+
+        if (record) {
+            // Add data if record is found
+            // tooltipContent += `
+            //     <div>Retailers: ${record.totalRetailerCode}</div>
+            //     <div>Qty (K): ${record.totalQTY/1000}</div>
+            //     <div>Value (Cr): ${record.totalRevenue/10000000}</div>
+            // `;
+            tooltipContent += `
+    <div>Retailers: ${record.totalRetailerCode}</div>
+    <div>Qty (K): ${(record.totalQTY / 1000).toFixed(2)}</div>
+    <div>Value (Cr): ${(record.totalRevenue / 10000000).toFixed(2)}</div>
+`;
+
+        } else {
+            // Fallback content if no record is found
+            tooltipContent += `<div>No data available</div>`;
+        }
+
+        tooltipContent += `</div>`;
+        return tooltipContent;
+    }
+}
                 };
+
             }
         },
         (error) => {
@@ -2917,7 +2968,7 @@ let lastHoveredDataPointIndex:any = '';
       (response) => {
         if (response && response.body) {
           this.spinner.hide();
-
+// this.RegionWiseGrowthOverPreviousMonthForPreviousYear(MonthlyToalOrdaringPayload);
           // Prepare categories based on unique months
           const uniqueMonths = [...new Set(response.body.map((item: any) => item.month))];
           uniqueMonths.forEach((month: any) => {
@@ -2947,12 +2998,15 @@ let lastHoveredDataPointIndex:any = '';
             });
           };
 
+
+          const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
+
           // Update chart options with dynamic series and categories
           this.RegionWiseGrowthOverPreviousMonthOptions = {
             ...this.RegionWiseGrowthOverPreviousMonthOptions,
             series: [
-              ...prepareSeriesData(response.body, 'retailerGrowth', 'retailers'),
-              ...prepareSeriesData(response.body, 'orderGrowth', 'qty'),
+              // ...prepareSeriesData(response.body, 'retailerGrowth', 'retailers'),
+              // ...prepareSeriesData(response.body, 'orderGrowth', 'qty'),
               ...prepareSeriesData(response.body, 'priceGrowth', 'value')
             ],
             xaxis: { ...this.RegionWiseGrowthOverPreviousMonthOptions.xaxis, categories },
@@ -2973,6 +3027,52 @@ let lastHoveredDataPointIndex:any = '';
                 tickAmount: 4
               }
             ],
+
+            tooltip: {
+              enabled: true,
+              custom: function({ series, seriesIndex, dataPointIndex, w }) {
+                  // Find the region name based on seriesIndex
+                  const regionName = regions[seriesIndex];
+          
+                  // Find the month corresponding to dataPointIndex (e.g., dataPointIndex 0 = month 4)
+                  const month = dataPointIndex + 4;
+          
+                  // Filter the response array to find the matching record
+                  const record = response.body.find(
+                      (item:any) => item.region === regionName && item.month === month
+                  );
+          
+                  // Build the tooltip content
+                  let tooltipContent = `
+                      <div style="padding: 8px; font-size: 12px; background: white; border: 1px solid #ddd;">
+                          <strong>${regionName} Region</strong>
+                  `;
+          
+                  if (record) {
+                      // Add data if record is found
+                      // tooltipContent += `
+                      //     <div>Retailers: ${record.totalRetailerCode}</div>
+                      //     <div>Qty (K): ${record.totalQTY/1000}</div>
+                      //     <div>Value (Cr): ${record.totalRevenue/10000000}</div>
+                      // `;
+
+
+                      
+                      tooltipContent += `
+              <div>RetailerGrowth: ${record.retailerGrowth}</div>
+              <div>OrderGrowth (K): ${(record.orderGrowth / 1000).toFixed(2)}</div>
+              <div>PriceGrowth (Cr): ${(record.priceGrowth / 10000000).toFixed(2)}</div>
+          `;
+          
+                  } else {
+                      // Fallback content if no record is found
+                      tooltipContent += `<div>No data available</div>`;
+                  }
+          
+                  tooltipContent += `</div>`;
+                  return tooltipContent;
+              }
+          }
             // tooltip: {
             //   shared: true,
             //   intersect: false,
@@ -5101,4 +5201,677 @@ let lastHoveredDataPointIndex:any = '';
 
     this.currentMonthToDateText = `From ${currentMonth} ${currentYear} to till date order details.`;
   }
+
+
+
+
+  // This is to get the growth over previous year month.
+  public GrowthOverPreviousYear = (MonthlyToalOrdaringPayload?: any) => {
+    this.spinner.show();
+
+    // Define month names for easy mapping
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    // Prepare data for each series
+    const retailersData: any = [];
+    const quantityData: any = [];
+    const valueData: any = [];
+    const categories: string[] = []; // This will hold the month names
+    this.growthOverPreviousMonthYear = {
+      chart: {
+        type: 'bar',
+        height: 500,
+        toolbar: {
+          show: true,
+          tools: {
+            zoom: true, // Enable zoom
+            zoomin: true, // Enable zoom-in
+            zoomout: true, // Enable zoom-out
+            pan: true, // Enable panning
+            reset: true // Reset zoom and pan to the initial state
+          },
+          autoSelected: 'zoom' // Set default tool to zoom
+        }
+      },
+      title: {
+        text: 'Growth Over Previous Year Loading...', // Chart title
+        align: 'center',
+        style: {
+          fontSize: '16px',
+          // fontWeight: 'bold',
+          color: '#333'
+        }
+      },
+      legend: {
+        tooltipHoverFormatter: function (val, opts) {
+          const dataValue = opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex];
+          const formattedValue = dataValue % 1 === 0 ? dataValue : dataValue.toFixed(2);
+          return val + ' - <strong>' + formattedValue + '</strong>';
+        }
+      },
+      series: [
+        {
+          name: 'Number of Retailers',
+          data: retailersData // Example values for Number of Retailers
+        },
+        {
+          name: 'Quantity (k)',
+          data: quantityData // Example values for Quantity
+        },
+        {
+          name: 'Value (Cr)',
+          data: valueData // Example values for Value
+        }
+      ],
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: '80%'
+          // endingShape: "rounded"
+        }
+      },
+      // dataLabels: {
+      //   enabled: this.isMobileView ? false: true,
+      //   background: {
+      //     enabled: true,
+      //     foreColor: '#000000'
+      //   },
+      // },
+      dataLabels: {
+        enabled: this.isMobileView ? false : true,
+        style: {
+          colors: ['#000000'] // Set the color of the data labels to black
+        },
+        background: {
+          enabled: true,
+          foreColor: '#000000' // This controls the color of the text in the background
+        }
+      },
+      stroke: {
+        show: true,
+        width: 2,
+        colors: ['transparent']
+      },
+      xaxis: {
+        categories: categories,
+        title: {
+          text: 'Monthly Distribution Loading...', // Left y-axis title
+          style: {
+            color: '#000000' // Change color as needed
+          }
+        },
+        labels: {
+          // trim: false,
+          show: false
+        }
+      },
+      // yaxis: {
+      //   title: {
+      //     text: ' (Growth Value)'
+      //   },
+      //               // min: -100 // Set a minimum value for y-axis to accommodate negative values
+      // },
+
+      yaxis: [
+        {
+          title: {
+            text: '(Growth Value) Loading...', // Left y-axis title
+            style: {
+              color: '#000000' // Change color as needed
+            }
+          },
+          // min: 0, // Minimum value for left y-axis
+          labels: {
+            show: false,
+            formatter: function (val: any) {
+              return '' + val; // Format for value
+            }
+          },
+          tickAmount: 1 // Adjust the number of ticks as necessary
+        }
+      ],
+      fill: {
+        opacity: 1
+      },
+      tooltip: {
+        y: {
+          formatter: function (val) {
+            // return val.toFixed(2);
+            return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
+          }
+        }
+      }
+    };
+    this.dashboardService.GrowthOverPreviousYear(MonthlyToalOrdaringPayload).subscribe(
+      (response) => {
+        if (response && response.body) {
+          this.spinner.hide();
+          this.RegionWiseMonthlyDistribution(MonthlyToalOrdaringPayload);
+
+          response.body.forEach((item: any) => {
+            // Push values to each series array
+            // retailersData.push(item.retailerGrowth);
+            // quantityData.push(item.orderGrowth);
+            // valueData.push(item.priceGrowth);
+            retailersData.push(item.retailerGrowth / 6);
+            quantityData.push((item.orderGrowth / 1000).toFixed(2)); // Converts orderGrowth to thousands
+            valueData.push((item.priceGrowth / 10000000).toFixed(2)); // Converts priceGrowth to crores
+
+            // Get month name and add to categories
+            categories.push(monthNames[item.month - 1]);
+          });
+
+          this.growthOverPreviousMonthYear = {
+            chart: {
+              zoom: {
+                enabled: true
+              },
+              type: 'bar',
+              height: 500,
+              toolbar: {
+                show: true,
+                tools: {
+                  zoom: true, // Enable zoom
+                  zoomin: true, // Enable zoom-in
+                  zoomout: true, // Enable zoom-out
+                  pan: true, // Enable panning
+                  reset: true // Reset zoom and pan to the initial state
+                }
+                // autoSelected: 'zoom'    // Set default tool to zoom
+              }
+            },
+            title: {
+              text: 'Growth Over Previous Year', // Chart title
+              align: 'center',
+              style: {
+                fontSize: '16px',
+                color: '#333'
+              }
+            },
+            legend: {
+              tooltipHoverFormatter: function (val, opts) {
+                const dataValue = opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex];
+                const formattedValue = dataValue % 1 === 0 ? dataValue : dataValue.toFixed(2);
+                return val + ' - <strong>' + formattedValue + '</strong>';
+              }
+            },
+            series: [
+              {
+                name: 'Number of Retailers',
+                data: retailersData // Example values for Number of Retailers
+              },
+              {
+                name: 'Value (Cr)',
+                data: valueData // Example values for Value
+              },
+              {
+                name: 'Quantity (k)',
+                data: quantityData // Example values for Quantity
+              }
+            ],
+            plotOptions: {
+              bar: {
+                horizontal: false,
+                columnWidth: '80%',
+                dataLabels: {
+                  position: 'top'
+                }
+              }
+            },
+            // dataLabels: {
+            //   // enabled: true,
+            //   enabled: this.isMobileView ? false: true,
+
+            //   //  offsetY: -10,
+
+            //   style: {
+            //     fontSize: "10px",
+            //     fontWeight: 'normal' // Remove bold styling by setting fontWeight to normal
+
+            //   },
+
+            // },
+
+            dataLabels: {
+              enabled: this.isMobileView ? false : true,
+              style: {
+                colors: ['#000000'],
+                fontWeight: 'normal' // Set the color of the data labels to black
+              },
+              formatter: function (val: any, { seriesIndex }) {
+                // Check if the current series is for retailer values (this can be based on seriesIndex or other criteria)
+                if (seriesIndex === 0) {
+                  // Assuming '0' is the index for retailer data series
+                  val = val * 6; // Multiply the value by 6 for retailer values
+                }
+
+                // Return the formatted value, rounding as needed
+                return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
+              }
+            },
+            stroke: {
+              show: true,
+              width: 2,
+              colors: ['transparent']
+            },
+            xaxis: {
+              categories: categories // Your x-axis categories (months, or other)
+            },
+            yaxis: [
+              {
+                floating: false,
+                title: {
+                  text: ' (Growth Value)' // Left y-axis title
+                  // style: {
+                  //   color: '#000000' // Change color as needed
+                  // }
+                },
+                // min: 0, // Set minimum value for the y-axis
+                //max: 800, // Set maximum value for the y-axis (adjust as needed)
+                tickAmount: 4, // Adjust the number of ticks based on the range
+                labels: {
+                  formatter: function (val) {
+                    return val.toFixed(0);
+                  }
+                }
+              }
+            ],
+            fill: {
+              opacity: 1
+            },
+            tooltip: {
+              //   y: {
+              //     formatter: function (val) {
+              //       return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
+              //     }
+              //   }
+              // }
+              y: {
+                formatter: function (val, { seriesIndex }) {
+                  // Check if the current series is for retailer values (this can be based on seriesIndex or other criteria)
+                  if (seriesIndex === 0) {
+                    // Assuming '0' is the index for retailer data series
+                    val = val * 6; // Multiply the value by 6 for retailer values
+                  }
+
+                  // Return the formatted value, rounding as needed
+                  return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
+                }
+              }
+            }
+          };
+        }
+        console.log('this is for checking');
+      },
+      (error) => {
+        // this.errorMessage = 'An error occurred during login';
+        console.error('Login error:', error);
+      }
+    );
+  };
+
+
+
+  // This is to get the all year data comaprision for evry month.
+  public RegionWiseGrowthOverPreviousMonthForPreviousYear = (MonthlyToalOrdaringPayload?: any) => {
+    this.spinner.show();
+
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const categories: string[] = [];
+    const isMobile = window.innerWidth <= 768;
+
+    this.RegionWiseGrowthOverPreviousMonthOptionsForPrevYear = {
+      series: [
+        { name: 'Retailers - East', group: 'retailers', data: [] },
+        { name: 'Retailers - South1', group: 'retailers', data: [] },
+        { name: 'Retailers - South2', group: 'retailers', data: [] },
+        { name: 'Retailers - North', group: 'retailers', data: [] },
+        { name: 'Retailers - West', group: 'retailers', data: [] },
+
+        // Qty group
+        { name: 'Qty - East', group: 'qty', data: [] },
+        { name: 'Qty - South1', group: 'qty', data: [] },
+        { name: 'Qty - South2', group: 'qty', data: [] },
+        { name: 'Qty - North', group: 'qty', data: [] },
+        { name: 'Qty - West', group: 'qty', data: [] },
+
+        // Value group
+        { name: 'Value - East', group: 'value', data: [] },
+        { name: 'Value - South1', group: 'value', data: [] },
+        { name: 'Value - South2', group: 'value', data: [] },
+        { name: 'Value - North', group: 'value', data: [] },
+        { name: 'Value - West', group: 'value', data: [] }
+      ],
+      title: {
+        text: 'Region Wise  Year Growth Loading...',
+        align: 'center'
+        // style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
+      },
+      yaxis: [
+        {
+          title: {
+            text: '(Growth Value)',
+            style: { color: '#000000' }
+          },
+          labels: {
+            show: false,
+            formatter: (val: any) => '' + val
+          },
+          tickAmount: 4
+        }
+      ],
+      xaxis: {
+        labels: { trim: false, show: true },
+        categories: [],
+        title: { style: { color: '#000000' } }
+      },
+      dataLabels: {
+        //  enabled: true,
+        enabled: this.isMobileView ? false : true,
+
+        style: {
+          fontSize: '10px',
+          colors: ['#000000'],
+          fontWeight: 'normal' // Remove bold styling by setting fontWeight to normal
+        }
+      },
+      chart: {
+        type: 'bar',
+        height: 500,
+        stacked: true
+      },
+      plotOptions: { bar: { horizontal: false } },
+      fill: { opacity: 1 },
+      // colors: [
+      //     '#80c7fd', '#008FFB', '#80f1cb', '#00E396', '#feb019',
+      //     '#FF5733', '#FFBD33', '#C70039', '#900C3F', '#581845',
+      //     '#2ECC71', '#28B463', '#239B56', '#1D8348', '#186A3B'
+      // ],t
+      colors: [
+        '#007bff',
+        '#ff5733',
+        '#28a745',
+        '#ffc107',  
+        '#dc3545', // Blue, red-orange, green, amber, crimson
+        // '#6f42c1',
+        // '#17a2b8',
+        // '#fd7e14',
+        // '#6610f2',
+        // '#e83e8c', // Purple, teal, orange, violet, pink
+        // '#20c997',
+        // '#ff6347',
+        // '#8b0000',
+        // '#4169e1',
+        // '#32cd32' // Aqua, tomato, dark red, royal blue, lime green
+      ],
+      legend: { position: isMobile ? 'top' : 'right', horizontalAlign: 'left' }
+    };
+
+    this.dashboardService.RegionWiseGrowthOverPreviousMonthForPreviousYear(MonthlyToalOrdaringPayload).subscribe(
+      (response) => {
+        if (response && response.body) {
+          this.spinner.hide();
+
+          // Prepare categories based on unique months
+          const uniqueMonths = [...new Set(response.body.map((item: any) => item.month))];
+          uniqueMonths.forEach((month: any) => {
+            categories.push(monthNames[month - 1]);
+          });
+
+          // Function to prepare series data
+          const prepareSeriesData = (data: any[], metric: string, group: string) => {
+            const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
+            const metricLabels: { [key: string]: string } = {
+              retailerGrowth: 'Retailer Growth',
+              orderGrowth: 'Order Growth (K)',
+              priceGrowth: 'Price Growth (Cr)'
+            };
+
+            return regions.map((region) => {
+              const regionData = data.filter((item) => item.region === region);
+              return {
+                name: `${metricLabels[metric]} - ${region}`,
+                group: group,
+                data: regionData.map((item) => {
+                  if (metric === 'orderGrowth') return (item.orderGrowth / 1000).toFixed(2); // Adjust units
+                  if (metric === 'priceGrowth') return ((item.priceGrowth / 10000000).toFixed(2)); // Adjust units
+                  return item.retailerGrowth;
+                })
+              };
+            });
+          };
+
+
+          const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
+
+          // Update chart options with dynamic series and categories
+          this.RegionWiseGrowthOverPreviousMonthOptionsForPrevYear = {
+            ...this.RegionWiseGrowthOverPreviousMonthOptionsForPrevYear,
+            series: [
+              // ...prepareSeriesData(response.body, 'retailerGrowth', 'retailers'),
+              // ...prepareSeriesData(response.body, 'orderGrowth', 'qty'),
+              ...prepareSeriesData(response.body, 'priceGrowth', 'value')
+            ],
+            xaxis: { ...this.RegionWiseGrowthOverPreviousMonthOptionsForPrevYear.xaxis, categories },
+            title: {
+              text: 'Region Wise Year Growth',
+              align: 'center'
+              // style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
+            },
+            yaxis: [
+              {
+                title: {
+                  text: '(Quantity)',
+                  style: { color: '#000000' }
+                },
+                labels: {
+                  formatter: (val: any) => '' + val
+                },
+                tickAmount: 4
+              }
+            ],
+
+            tooltip: {
+              enabled: true,
+              custom: function({ series, seriesIndex, dataPointIndex, w }) {
+                  // Find the region name based on seriesIndex
+                  const regionName = regions[seriesIndex];
+          
+                  // Find the month corresponding to dataPointIndex (e.g., dataPointIndex 0 = month 4)
+                  const month = dataPointIndex + 4;
+          
+                  // Filter the response array to find the matching record
+                  const record = response.body.find(
+                      (item:any) => item.region === regionName && item.month === month
+                  );
+          
+                  // Build the tooltip content
+                  let tooltipContent = `
+                      <div style="padding: 8px; font-size: 12px; background: white; border: 1px solid #ddd;">
+                          <strong>${regionName} Region</strong>
+                  `;
+          
+                  if (record) {
+                      // Add data if record is found
+                      // tooltipContent += `
+                      //     <div>Retailers: ${record.totalRetailerCode}</div>
+                      //     <div>Qty (K): ${record.totalQTY/1000}</div>
+                      //     <div>Value (Cr): ${record.totalRevenue/10000000}</div>
+                      // `;
+
+
+                      
+                      tooltipContent += `
+              <div>RetailerGrowth: ${record.retailerGrowth}</div>
+              <div>OrderGrowth (K): ${(record.orderGrowth / 1000).toFixed(2)}</div>
+              <div>PriceGrowth (Cr): ${(record.priceGrowth / 10000000).toFixed(2)}</div>
+          `;
+          
+                  } else {
+                      // Fallback content if no record is found
+                      tooltipContent += `<div>No data available</div>`;
+                  }
+          
+                  tooltipContent += `</div>`;
+                  return tooltipContent;
+              }
+          }
+            // tooltip: {
+            //   shared: true,
+            //   intersect: false,
+            //   custom: ({ series, dataPointIndex, w }: any) => {
+            //     // Retrieve the category (month or x-axis label)
+            //     const category = w.globals.labels[dataPointIndex];
+            
+            //     // Define column headers
+            //     const headers = ['Region', 'Retailer Growth', 'Order Growth', 'Price Growth'];
+            
+            //     // Construct rows for each region
+            //     const tableRows = series[0].map((_: any, seriesIndex: number) => {
+            //       const regionName = w.globals.seriesNames[seriesIndex];
+            //       const retailerGrowth = series[0][dataPointIndex].toFixed(2); // Retailer Growth (series 0)
+            //       const orderGrowth = (series[1][dataPointIndex] / 1000).toFixed(2); // Order Growth (series 1, divided by 1000)
+            //       const priceGrowth = (series[2][dataPointIndex] * 1000).toFixed(2); // Price Growth (series 2, multiplied by 1000)
+            
+            //       return `
+            //         <tr>
+            //           <td style="padding: 5px; border: 1px solid #ccc;">${regionName}</td>
+            //           <td style="padding: 5px; border: 1px solid #ccc;">${retailerGrowth}</td>
+            //           <td style="padding: 5px; border: 1px solid #ccc;">${orderGrowth}</td>
+            //           <td style="padding: 5px; border: 1px solid #ccc;">${priceGrowth}</td>
+            //         </tr>
+            //       `;
+            //     }).join('');
+            
+            //     // Build the final tooltip content
+            //     return `
+            //       <div style="padding: 10px; border: 1px solid #ccc; background-color: #fff;">
+            //         <strong>${category}</strong>
+            //         <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+            //           <thead>
+            //             <tr style="background-color: #f2f2f2;">
+            //               ${headers.map(header => `<th style="padding: 5px; border: 1px solid #ccc; text-align: left;">${header}</th>`).join('')}
+            //             </tr>
+            //           </thead>
+            //           <tbody>
+            //             ${tableRows}
+            //           </tbody>
+            //         </table>
+            //       </div>
+            //     `;
+            //   }
+            // }
+            
+            
+          };
+        }
+      },
+      (error) => {
+        console.error('Data loading error:', error);
+      }
+    );
+  };
+
+  selectImage(data: any,index:any) {
+    this.selectedOrder = data.productCode;
+    
+    const selectedImage = [
+      'assets/images/1802NL02/1802SL12_2.jpg',
+      'assets/images/1802NL02/1802NL02_1.jpg',
+      'assets/images/1802NL02/1802SL12_3.jpg',
+      'assets/images/1802NL02/1802SL12_4.jpg',
+    ];
+  
+    this.currentOverallLevel = index;
+    // Initialize the index
+    let currentIndex = 0;
+    this.selectedImageSource = selectedImage[currentIndex];
+  
+    // Set an interval to update the image every 3 seconds
+    const interval = setInterval(() => {
+      currentIndex++;
+      if (currentIndex >= selectedImage.length) {
+        currentIndex = 0; // Reset to the first image when reaching the end
+      }
+      this.selectedImageSource = selectedImage[currentIndex];
+    }, 3000);
+  
+    // Optionally clear the interval after some time (e.g., when the user navigates away or the component is destroyed)
+    // this will prevent the interval from running forever.
+    // You can use lifecycle hooks like ngOnDestroy to clear the interval.
+  
+    // Example to clear after 15 seconds (or any other condition you choose):
+    setTimeout(() => {
+      clearInterval(interval);
+    }, 15000); // clears interval after 15 seconds
+  }
+  
+// this is for image for regionwise
+  selectImageforregion(data: any) {
+    this.selectedOrder = data.productCode;
+    
+    const selectedImage = [
+      'assets/images/1802NL02/1802SL12_2.jpg',
+      'assets/images/1802NL02/1802NL02_1.jpg',
+      'assets/images/1802NL02/1802SL12_3.jpg',
+      'assets/images/1802NL02/1802SL12_4.jpg',
+    ];
+  
+    // Initialize the index
+    let currentIndex = 0;
+    this.selectedImageSource = selectedImage[currentIndex];
+  
+    // Set an interval to update the image every 3 seconds
+    const interval = setInterval(() => {
+      currentIndex++;
+      if (currentIndex >= selectedImage.length) {
+        currentIndex = 0; // Reset to the first image when reaching the end
+      }
+      this.selectedImageSourceForRegion = selectedImage[currentIndex];
+    }, 3000);
+  
+    // Optionally clear the interval after some time (e.g., when the user navigates away or the component is destroyed)
+    // this will prevent the interval from running forever.
+    // You can use lifecycle hooks like ngOnDestroy to clear the interval.
+  
+    // Example to clear after 15 seconds (or any other condition you choose):
+    setTimeout(() => {
+      clearInterval(interval);
+    }, 15000); // clears interval after 15 seconds
+  }
+
+  // this is for image for regionwise
+  selectedImageSourceForRsFn(data: any) {
+    this.selectedOrder = data.productCode;
+    
+    const selectedImage = [
+      'assets/images/1802NL02/1802SL12_2.jpg',
+      'assets/images/1802NL02/1802NL02_1.jpg',
+      'assets/images/1802NL02/1802SL12_3.jpg',
+      'assets/images/1802NL02/1802SL12_4.jpg',
+    ];
+  
+    // Initialize the index
+    let currentIndex = 0;
+    this.selectedImageSourceForRs = selectedImage[currentIndex];
+  
+    // Set an interval to update the image every 3 seconds
+    const interval = setInterval(() => {
+      currentIndex++;
+      if (currentIndex >= selectedImage.length) {
+        currentIndex = 0; // Reset to the first image when reaching the end
+      }
+      this.selectedImageSourceForRegion = selectedImage[currentIndex];
+    }, 3000);
+  
+    // Optionally clear the interval after some time (e.g., when the user navigates away or the component is destroyed)
+    // this will prevent the interval from running forever.
+    // You can use lifecycle hooks like ngOnDestroy to clear the interval.
+  
+    // Example to clear after 15 seconds (or any other condition you choose):
+    setTimeout(() => {
+      clearInterval(interval);
+    }, 15000); // clears interval after 15 seconds
+  }
+  
 }

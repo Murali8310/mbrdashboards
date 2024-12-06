@@ -283,7 +283,7 @@ input {
 
 /* Container for all tables */
 .order-summary-container {
-  display: flex;
+  // display: flex;
   justify-content: space-between;
   margin-top: 20px;
   gap: 20px; /* Space between tables */
@@ -389,4 +389,18 @@ input {
 .w-100-tx-left {
   width: 100%;
   text-align: left;
+}
+
+.green {
+  background-color: green !important;
+}
+.headerStyles {
+  // height: 51px;
+  padding: 5px;
+    background: #007BFF;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    display: flex;
+    border-radius: 5px;
 }

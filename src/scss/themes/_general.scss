@@ -6,8 +6,8 @@ body {
   font-size: $theme-font-size;
   color: $theme-font-color;
   font-weight: 400;
-  // background: $theme-background;
-  background: linear-gradient(135deg, #fffdfd, #39415c, #340d60);
+  background: $theme-background;
+  // background: linear-gradient(135deg, #fffdfd, #39415c, #340d60);
 
   position: relative;
 }

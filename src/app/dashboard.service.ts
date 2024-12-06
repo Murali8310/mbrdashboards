@@ -153,6 +153,23 @@ public selectedData:any = '1';
         }
       );      
   }
+
+  /**
+   * This is for geting the region wise growth over data fro prev year.
+   * @param MonthlyToalOrdaringPayload 
+   * @returns 
+   */
+  public  RegionWiseGrowthOverPreviousMonthForPreviousYear(MonthlyToalOrdaringPayload?:any) {
+    return this.http
+      .post<any>(
+        `${environment.apiUrl}/RegionWiseGrowthOverPreviousMonthForPrevYear`,
+        JSON.stringify(MonthlyToalOrdaringPayload),
+        {
+          headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+          observe: 'response',
+        }
+      );      
+  }
   
 
   public  GrowthOverPreviousMonth(MonthlyToalOrdaringPayload?:any) {
@@ -174,6 +191,28 @@ public selectedData:any = '1';
         }
       ); 
     }
+
+    public  GrowthOverPreviousYear(MonthlyToalOrdaringPayload?:any) {
+      // const GrowthOverPreviousMonthPayload :any = {
+      //   "regionList": "EAST, WEST,NORTH,SOUTH 1,SOUTH 2",  /// default all regions 
+      //     "startDate":20240401,       /// default case start date of financial year in integer format
+      //     "endDate": 202401030,       ////  default case end date of financial year in integer format
+      //     "brandList": "",       //// default casen ""
+      //     "rsNameList": ""//// default casen ""
+      //   };
+  
+      return this.http
+        .post<any>(
+          `${environment.apiUrl}/growthOverPreviousYear`,
+          JSON.stringify(MonthlyToalOrdaringPayload),
+          {
+            headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+            observe: 'response',
+          }
+        ); 
+      }
+
+    
       
 
       

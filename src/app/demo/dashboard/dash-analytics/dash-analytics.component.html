@@ -723,6 +723,30 @@ text-align: center;
     </div>
     </app-card>
   </div>
+
+
+  <div class="col-xl-12 col-md-12"  *ngIf="growthOverPreviousMonthYear && growthOverPreviousMonthYear && growthOverPreviousMonthYear.series && growthOverPreviousMonthYear.series.length > 0">
+    <app-card cardTitle="" [options]="false">
+      
+    <div id="chart2">
+      <apx-chart
+        [series]="growthOverPreviousMonthYear.series"
+        [chart]="growthOverPreviousMonthYear.chart"
+        [dataLabels]="growthOverPreviousMonthYear.dataLabels"
+        [plotOptions]="growthOverPreviousMonthYear.plotOptions"
+        [yaxis]="growthOverPreviousMonthYear.yaxis"
+        [legend]="growthOverPreviousMonthYear.legend"
+        [fill]="growthOverPreviousMonthYear.fill"
+        [stroke]="growthOverPreviousMonthYear.stroke"
+        [tooltip]="growthOverPreviousMonthYear.tooltip"
+        [xaxis]="growthOverPreviousMonthYear.xaxis"
+        [title]="growthOverPreviousMonthYear.title">
+
+      ></apx-chart>
+    </div>
+    </app-card>
+  </div>
+
   <div class="col-xl-12 col-md-12"  *ngIf="RegionWiseMonthlyDistibutionOptions && RegionWiseMonthlyDistibutionOptions && RegionWiseMonthlyDistibutionOptions.series && RegionWiseMonthlyDistibutionOptions.series.length > 0">
     <app-card cardTitle="" [options]="false">
     <div id="chart2">
@@ -762,6 +786,29 @@ text-align: center;
       [tooltip]="RegionWiseGrowthOverPreviousMonthOptions.tooltip"
       [xaxis]="RegionWiseGrowthOverPreviousMonthOptions.xaxis"
       [title]="RegionWiseGrowthOverPreviousMonthOptions.title"
+      >
+    </apx-chart>
+    </div>
+    </app-card>
+  </div>
+
+  <div class="col-xl-12 col-md-12" *ngIf="RegionWiseGrowthOverPreviousMonthOptionsForPrevYear && RegionWiseGrowthOverPreviousMonthOptionsForPrevYear && RegionWiseGrowthOverPreviousMonthOptionsForPrevYear.series && RegionWiseGrowthOverPreviousMonthOptionsForPrevYear.series.length > 0">
+    <app-card cardTitle="" [options]="false">
+    <div id="chart2">
+      <apx-chart
+      [series]="RegionWiseGrowthOverPreviousMonthOptionsForPrevYear.series"
+      [chart]="RegionWiseGrowthOverPreviousMonthOptionsForPrevYear.chart"
+      [stroke]="RegionWiseGrowthOverPreviousMonthOptionsForPrevYear.stroke"
+      [dataLabels]="RegionWiseGrowthOverPreviousMonthOptionsForPrevYear.dataLabels"
+      [plotOptions]="RegionWiseGrowthOverPreviousMonthOptionsForPrevYear.plotOptions"
+      [xaxis]="RegionWiseGrowthOverPreviousMonthOptionsForPrevYear.xaxis"
+      [yaxis]="RegionWiseGrowthOverPreviousMonthOptionsForPrevYear.yaxis"
+      [fill]="RegionWiseGrowthOverPreviousMonthOptionsForPrevYear.fill"
+      [colors]="RegionWiseGrowthOverPreviousMonthOptionsForPrevYear.colors"
+      [legend]="RegionWiseGrowthOverPreviousMonthOptionsForPrevYear.legend"
+      [tooltip]="RegionWiseGrowthOverPreviousMonthOptionsForPrevYear.tooltip"
+      [xaxis]="RegionWiseGrowthOverPreviousMonthOptionsForPrevYear.xaxis"
+      [title]="RegionWiseGrowthOverPreviousMonthOptionsForPrevYear.title"
       >
     </apx-chart>
     </div>
@@ -2069,74 +2116,147 @@ text-align: center;
   </div>
   <!-- order-summary.component.html -->
   <div class="order-summary-container">
-    <div class="table-container" *ngIf="overallOrders && overallOrders.length > 0">
-      <!-- Overall Orders Table -->
-      <table class="summary-table">
-        <thead>
-          <tr>
-            <th>Overall</th>
-            <th>Sum of Order Qty</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Loop through each product to display its data -->
-          <tr *ngFor="let order of overallOrders">
-            <td class="allign-left">{{ order.productCode }}</td>
-            <td>{{ order.totalOrderQty }}</td>
-          </tr>
-          <!-- Grand Total Row -->
-          <tr class="grand-total">
-            <td><strong>Grand Total</strong></td>
-            <td>{{ overallGrandTotal }}</td>
-          </tr>
-        </tbody>
-      </table>
+
+    <app-card class="col-md-6 col-xl-12" >
+      <h4 *ngIf="dashboardService.selectedData === '5'" style="
+      text-align: center;
+      /* margin-top: 12px; */
+      ">Over All Details</h4>
+    </app-card>
+
+    <div class="row" style="margin-top: 20px;">
+      <div class="col-lg-6  col-md-12 table-responsive" *ngIf="overallOrders && overallOrders.length > 0">
+        <!-- Overall Orders Table -->
+        <table class="summary-table">
+          <thead>
+            <tr>
+              <th>Sr No</th>
+              <th>Overall</th>
+              <th>Sum of Order Qty</th>
+              <th>Image Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Loop through each product to display its data -->
+            <tr *ngFor="let order of overallOrders;index as i" style="cursor: pointer;" [class.green]="selectedOrder == order.productCode" (click)="selectImage(order,i)">
+              <td style="text-align: left;">{{i + 1}}</td>
+              <td class="allign-left">{{ order.productCode }}</td>
+              <td>{{ order.totalOrderQty }}</td>
+              <td ><img  src="assets/images/1802NL02/1802SL12_2.jpg" alt="logo-img" class="logo" style="height: 33px; width: 33px;border-radius: 2px;"></td>
+            </tr>
+            <!-- Grand Total Row -->
+            <tr class="grand-total">
+              <td></td>
+              <td></td>
+              <td><strong>Grand Total</strong></td>
+              <td>{{ overallGrandTotal }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-lg-6 col-md-12"  *ngIf="overallOrders && overallOrders.length > 0">
+       
+       <div class="headerStyles">
+       <h4 style="text-align: center;border-radius: 7px;color: white;
+       " class="ng-star-inserted">Top {{currentOverallLevel + 1}} ND2011324/P  Image Details</h4>
+       </div>
+        <img  src="{{selectedImageSource}}" alt="logo-img" class="logo" style="height:337px;width: 100%;border-radius: 13px;">
+        <!-- <img  src="assets/images/1802NL02/1802SL12_2.jpg" alt="logo-img" class="logo" style="height: 33px; width: 33px;"> -->
+      </div>
     </div>
-  
-    <div class="table-container" *ngIf="regionTotals && regionTotals.length > 0">
+
+    <app-card class="col-md-6 col-xl-12" >
+      <h4 *ngIf="dashboardService.selectedData === '5'" style="
+      text-align: center;
+      /* margin-top: 12px; */
+      ">Region Wise Details</h4>
+    </app-card>
+    <div class="row" style="margin-top: 20px;">
+    <div class="col-lg-6  col-md-12 table-responsive" *ngIf="regionTotals && regionTotals.length > 0">
       <!-- Region-wise Orders Table -->
       <table class="summary-table">
         <thead>
           <tr>
+            <th>Sr No</th>
             <th>Region</th>
             <th>Sum of Order Qty</th>
+            <th>Image Details</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let order of regionTotals">
+          <tr *ngFor="let order of regionTotals;index as rgindx" [class.green]="selectedOrder == order.productCode" (click)="selectImageforregion(order)">
+              <td style="text-align: left;">{{rgindx + 1}}</td>
             <td class="allign-left">{{ order.productCode }}</td>
             <td>{{ order.totalOrderQty }}</td>
+            <td ><img  src="assets/images/1802NL02/1802SL12_2.jpg" alt="logo-img" class="logo" style="height: 33px; width: 33px;border-radius: 2px;"></td>
           </tr>
           <tr class="grand-total">
+            <td></td>
+            <td></td>
             <td class="allign-left"><strong>Grand Total</strong></td>
             <td>{{ overallRegionGrandTotal }}</td> <!-- Grand Total for Region -->
           </tr>
         </tbody>
       </table>
     </div>
-  
-    <div class="table-container" *ngIf="rsTotals && rsTotals.length > 0">
+    <div class="col-lg-6 col-md-12"  *ngIf="regionTotals && regionTotals.length > 0">
+      <div class="headerStyles">
+        <h4 style="text-align: center;border-radius: 7px;color: white;
+        " class="ng-star-inserted">Top 1 ND2011324/P  Image Details.</h4>
+        </div>
+              <img  src="{{selectedImageSourceForRegion}}" alt="logo-img" class="logo" style="height:337px;width: 100%;border-radius: 13px;">
+      <!-- <img  src="assets/images/1802NL02/1802SL12_2.jpg" alt="logo-img" class="logo" style="height: 33px; width: 33px;"> -->
+    </div>
+  </div>
+
+
+  <app-card class="col-md-6 col-xl-12" >
+    <h4 *ngIf="dashboardService.selectedData === '5'" style="
+    text-align: center;
+    /* margin-top: 12px; */
+    ">RS Wise Details.</h4>
+  </app-card>
+  <div class="row" style="margin-top: 20px;">
+    <div class="col-lg-6  col-md-12 table-responsive" *ngIf="rsTotals && rsTotals.length > 0">
       <!-- RS-wise Orders Table -->
       <table class="summary-table">
         <thead>
           <tr>
+            <th>Sr No</th>
             <th>RS</th>
             <th>Sum of Order Qty</th>
+            <th>Image Details</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let order of rsTotals">
+          <tr *ngFor="let order of rsTotals;index as rsidx" [class.green]="selectedOrder == order.productCode" (click)="selectedImageSourceForRsFn(order)">
+            <td style="text-align: left;">
+              {{rsidx + 1}}
+            </td>
             <td class="allign-left">{{ order.productCode }}</td>
             <td>{{ order.totalOrderQty }}</td>
+            <td ><img  src="assets/images/1802NL02/1802SL12_2.jpg" alt="logo-img" class="logo" style="height: 33px; width: 33px;border-radius: 2px;"></td>
           </tr>
           <tr class="grand-total">
+            <td></td>
+            <td></td>
             <td class="allign-left"><strong>Grand Total</strong></td>
             <td>{{ overallRsGrandTotal }}</td> <!-- Grand Total for RS -->
           </tr>
         </tbody>
       </table>
     </div>
+    <div class="col-lg-6 col-md-12"  *ngIf="rsTotals && rsTotals.length > 0">
+      <div class="headerStyles">
+        <h4 style="text-align: center;border-radius: 7px;color: white;
+        " class="ng-star-inserted">Top 1 ND2011324/P  Image Details</h4>
+        </div>
+              <img  src="{{selectedImageSourceForRs}}" alt="logo-img" class="logo" style="height:337px;width: 100%;border-radius: 13px;">
+      <!-- <img  src="assets/images/1802NL02/1802SL12_2.jpg" alt="logo-img" class="logo" style="height: 33px; width: 33px;"> -->
+    </div>
+    </div>
   </div>
+
   
 </div>
 
