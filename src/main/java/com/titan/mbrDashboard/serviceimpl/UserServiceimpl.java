@@ -1267,6 +1267,9 @@ public class UserServiceimpl implements Userservice {
 		return userDao.growthOverPreviousYear(filter);
 	}
 
-
-
+	@Override
+	public List<OutputGrowthOverPreviousMonth> growthOverPreviousYearMonthly(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		return userDao.growthOverPreviousYearMonthly(filter);
+	}
 }

@@ -318,6 +318,9 @@ public interface Userservice {
 	List<OutputTopSKUOrderedOverall> topSKUOrderedRSNameSelected(MonthlyDataFilter filter);
 
 
-	List<OutputGrowthOverPreviousMonth> growthOverPreviousYear(MonthlyDataFilter filter);	
+	List<OutputGrowthOverPreviousMonth> growthOverPreviousYear(MonthlyDataFilter filter);
+
+
+	List<OutputGrowthOverPreviousMonth> growthOverPreviousYearMonthly(MonthlyDataFilter filter);	
 
 }

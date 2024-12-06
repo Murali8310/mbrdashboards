@@ -364,5 +364,8 @@ public interface UserDao {
 	List<OutputGrowthOverPreviousMonth> growthOverPreviousYear(MonthlyDataFilter filter);
 
 
+	List<OutputGrowthOverPreviousMonth> growthOverPreviousYearMonthly(MonthlyDataFilter filter);
+
+
 
 }

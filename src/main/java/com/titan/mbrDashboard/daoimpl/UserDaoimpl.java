@@ -7061,7 +7061,7 @@ public class UserDaoimpl implements UserDao {
 				+ "    -- Calculate the growth in DistinctRetailerCount (month-over-month growth)\r\n" + "    CASE \r\n"
 				+ "        WHEN LAG(DistinctRetailerCount, 1) OVER (ORDER BY Year, Month) = 0 THEN NULL\r\n"
 				+ "        WHEN LAG(DistinctRetailerCount, 1) OVER (ORDER BY Year, Month) IS NULL THEN NULL\r\n"
-				+ "        ELSE \r\n"
+				+ "        ELSre\r\n"
 				+ "            (DistinctRetailerCount - LAG(DistinctRetailerCount, 1) OVER (ORDER BY Year, Month))\r\n"
 				+ "    END AS RetailerGrowth,\r\n" + "\r\n"
 				+ "    -- Calculate the percentage growth in TotalPrice (month-over-month growth)\r\n" + "    CASE \r\n"
@@ -7527,254 +7527,341 @@ public class UserDaoimpl implements UserDao {
 //		return regionWiseMonthlyDistributionData;
 //	}
 
-	@Override
-	public List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionNoofOrdersRegular(MonthlyDataFilter filter) {
-	    List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionData = new ArrayList<>();
+//	@Override
+//	public List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionNoofOrdersRegular(MonthlyDataFilter filter) {
+//	    List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionData = new ArrayList<>();
+////
+////	    StringBuilder conditions = new StringBuilder(); // Using StringBuilder for efficient string concatenation
+////
+////	    // Assuming the user input for startDate and endDate
+////	    Integer startDate = filter.getStartDate(); // User-provided start date (e.g., "20240601")
+////	    Integer endDate = filter.getEndDate(); // User-provided end date (e.g., "20240630")
+////	    String regionList = filter.getRegionList();
+////	    String brandList = filter.getBrandList();
+////	    String abmNameList = filter.getAbmName();
+////	    String rsNameList = filter.getRsNameList();
+////	    String retailerType = filter.getRetailerType();
+////
+////	    // Add startDate and endDate conditions if provided
+////	    if (startDate != null && endDate != null) {
+////	        conditions.append("CONVERT(VARCHAR, OrderDate, 112) >= ").append(startDate)
+////	                .append(" AND CONVERT(VARCHAR, OrderDate, 112) <= ").append(endDate).append(" ");
+////	    }
+////
+////	    // Add Region condition if provided
+////	    if (regionList != null && !regionList.isEmpty()) {
+////	        conditions.append("AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(regionList)
+////	                .append("', ',')) ");
+////	    }
+////
+////	    // Add ABMName condition if provided
+////	    if (abmNameList != null && !abmNameList.isEmpty()) {
+////	        conditions.append("AND (").append("    '").append(abmNameList).append("' IS NOT NULL AND '")
+////	                .append(abmNameList).append("' <> '' AND (")
+////	                .append("        ABMEMM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(abmNameList)
+////	                .append("', ','))").append("        OR ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('")
+////	                .append(abmNameList).append("', ','))").append("    )").append(") ");
+////	    }
+////
+////	    // Add Brand condition if provided
+////	    if (brandList != null && !brandList.isEmpty()) {
+////	        conditions.append("AND Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(brandList)
+////	                .append("', ',')) ");
+////	    }
+////
+////	    // Add RSName condition if provided
+////	    if (rsNameList != null && !rsNameList.isEmpty()) {
+////	        conditions.append("AND RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(rsNameList)
+////	                .append("', ',')) ");
+////	    }
+////
+////	    // Add RetailerType condition if provided
+////	    if (retailerType != null && !retailerType.isEmpty()) {
+////	        conditions.append("AND RetailerCode LIKE '").append(retailerType.equals("IDD") ? "9%" : "1%").append("' ");
+////	    }
+////
+////	    // Build the final query with the corrected approach
+//////	    String finalQuery = "DECLARE @TotalOrderQtyForMonth DECIMAL(18, 2);\r\n"
+//////	            + "\r\n"
+//////	            + "WITH MonthlyRegionOrderQty AS (\r\n"
+//////	            + "    SELECT \r\n"
+//////	            + "        YEAR(OrderDate) AS OrderYear,\r\n"
+//////	            + "        MONTH(OrderDate) AS OrderMonth,\r\n"
+//////	            + "        Region,\r\n"
+//////	            + "        SUM(OrderQty) AS RegionOrderQty,\r\n"
+//////	            + "        COUNT(DISTINCT OrderNo) AS DistinctOrderCount\r\n"
+//////	            + "    FROM \r\n"
+//////	            + "        MBROrders (NOLOCK)\r\n"
+//////	            + "    WHERE " + conditions.toString() + "\r\n"
+//////	            + "    GROUP BY YEAR(OrderDate), MONTH(OrderDate), Region\r\n"
+//////	            + ")\r\n"
+//////	            + "SELECT \r\n"
+//////	            + "    OrderYear,\r\n"
+//////	            + "    OrderMonth,\r\n"
+//////	            + "    Region,\r\n"
+//////	            + "    DistinctOrderCount,\r\n"
+//////	            + "    RegionOrderQty,\r\n"
+//////	            + "    CASE \r\n"
+//////	            + "        WHEN TotalOrderQtyForMonth > 0 THEN (RegionOrderQty * 100.0) / TotalOrderQtyForMonth\r\n"
+//////	            + "        ELSE 0\r\n"
+//////	            + "    END AS RegionOrderQtyPercentage\r\n"
+//////	            + "FROM \r\n"
+//////	            + "    MonthlyRegionOrderQty\r\n"
+//////	            + "CROSS APPLY (\r\n"
+//////	            + "    SELECT SUM(OrderQty) AS TotalOrderQtyForMonth\r\n"
+//////	            + "    FROM MBROrders (NOLOCK) \r\n"
+//////	            + "    WHERE " + conditions.toString() + "\r\n"
+//////	            + "    GROUP BY YEAR(OrderDate), MONTH(OrderDate)\r\n"
+//////	            + ") AS TotalOrderQty\r\n"  // Alias for the CROSS APPLY result
+//////	            + "ORDER BY \r\n"
+//////	            + "    OrderYear,\r\n"
+//////	            + "    OrderMonth,\r\n"
+//////	            + "    Region;";
+////	    		
+////	    
+////	    
+////	    String finalQuery = "DECLARE @TotalOrderQtyForMonth DECIMAL(18, 2);\r\n" +
+////	    	    "\r\n" +
+////	    	    "WITH MonthlyRegionOrderQty AS (\r\n" +
+////	    	    "    SELECT \r\n" +
+////	    	    "        YEAR(OrderDate) AS OrderYear,\r\n" +
+////	    	    "        MONTH(OrderDate) AS OrderMonth,\r\n" +
+////	    	    "        Region,\r\n" +
+////	    	    "        SUM(OrderQty) AS RegionOrderQty,\r\n" +
+////	    	    "        COUNT(DISTINCT OrderNo) AS DistinctOrderCount\r\n" +
+////	    	    "    FROM \r\n" +
+////	    	    "        MBROrders (NOLOCK)\r\n" +
+////	    	    "    WHERE" + conditions.toString()+
+////	    	    "    GROUP BY YEAR(OrderDate), MONTH(OrderDate), Region\r\n" +
+////	    	    ")\r\n" +
+////	    	    "SELECT \r\n" +
+////	    	    "    OrderYear,\r\n" +
+////	    	    "    OrderMonth,\r\n" +
+////	    	    "    Region,\r\n" +
+////	    	    "    DistinctOrderCount,\r\n" +
+////	    	    "    RegionOrderQty,\r\n" +
+////	    	    "    CASE \r\n" +
+////	    	    "        WHEN TotalOrderQtyForMonth > 0 THEN (RegionOrderQty * 100.0) / TotalOrderQtyForMonth\r\n" +
+////	    	    "        ELSE 0\r\n" +
+////	    	    "    END AS RegionOrderQtyPercentage\r\n" +
+////	    	    "FROM \r\n" +
+////	    	    "    MonthlyRegionOrderQty\r\n" +
+////	    	    "CROSS APPLY (\r\n" +
+////	    	    "    SELECT SUM(OrderQty) AS TotalOrderQtyForMonth\r\n" +
+////	    	    "    FROM MBROrders (NOLOCK)\r\n" +
+////	    	    conditions.toString() +
+////	    	    " AS TotalMonthData\r\n" +
+////	    	    "ORDER BY \r\n" +
+////	    	    "    OrderYear,\r\n" +
+////	    	    "    OrderMonth,\r\n" +
+////	    	    "    Region;";
 //
-//	    StringBuilder conditions = new StringBuilder(); // Using StringBuilder for efficient string concatenation
-//
-//	    // Assuming the user input for startDate and endDate
-//	    Integer startDate = filter.getStartDate(); // User-provided start date (e.g., "20240601")
-//	    Integer endDate = filter.getEndDate(); // User-provided end date (e.g., "20240630")
-//	    String regionList = filter.getRegionList();
-//	    String brandList = filter.getBrandList();
-//	    String abmNameList = filter.getAbmName();
-//	    String rsNameList = filter.getRsNameList();
-//	    String retailerType = filter.getRetailerType();
-//
-//	    // Add startDate and endDate conditions if provided
-//	    if (startDate != null && endDate != null) {
-//	        conditions.append("CONVERT(VARCHAR, OrderDate, 112) >= ").append(startDate)
-//	                .append(" AND CONVERT(VARCHAR, OrderDate, 112) <= ").append(endDate).append(" ");
-//	    }
-//
-//	    // Add Region condition if provided
-//	    if (regionList != null && !regionList.isEmpty()) {
-//	        conditions.append("AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(regionList)
-//	                .append("', ',')) ");
-//	    }
-//
-//	    // Add ABMName condition if provided
-//	    if (abmNameList != null && !abmNameList.isEmpty()) {
-//	        conditions.append("AND (").append("    '").append(abmNameList).append("' IS NOT NULL AND '")
-//	                .append(abmNameList).append("' <> '' AND (")
-//	                .append("        ABMEMM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(abmNameList)
-//	                .append("', ','))").append("        OR ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('")
-//	                .append(abmNameList).append("', ','))").append("    )").append(") ");
-//	    }
-//
-//	    // Add Brand condition if provided
-//	    if (brandList != null && !brandList.isEmpty()) {
-//	        conditions.append("AND Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(brandList)
-//	                .append("', ',')) ");
-//	    }
-//
-//	    // Add RSName condition if provided
-//	    if (rsNameList != null && !rsNameList.isEmpty()) {
-//	        conditions.append("AND RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(rsNameList)
-//	                .append("', ',')) ");
-//	    }
-//
-//	    // Add RetailerType condition if provided
-//	    if (retailerType != null && !retailerType.isEmpty()) {
-//	        conditions.append("AND RetailerCode LIKE '").append(retailerType.equals("IDD") ? "9%" : "1%").append("' ");
-//	    }
-//
-//	    // Build the final query with the corrected approach
-////	    String finalQuery = "DECLARE @TotalOrderQtyForMonth DECIMAL(18, 2);\r\n"
-////	            + "\r\n"
-////	            + "WITH MonthlyRegionOrderQty AS (\r\n"
-////	            + "    SELECT \r\n"
-////	            + "        YEAR(OrderDate) AS OrderYear,\r\n"
-////	            + "        MONTH(OrderDate) AS OrderMonth,\r\n"
-////	            + "        Region,\r\n"
-////	            + "        SUM(OrderQty) AS RegionOrderQty,\r\n"
-////	            + "        COUNT(DISTINCT OrderNo) AS DistinctOrderCount\r\n"
-////	            + "    FROM \r\n"
-////	            + "        MBROrders (NOLOCK)\r\n"
-////	            + "    WHERE " + conditions.toString() + "\r\n"
-////	            + "    GROUP BY YEAR(OrderDate), MONTH(OrderDate), Region\r\n"
-////	            + ")\r\n"
-////	            + "SELECT \r\n"
-////	            + "    OrderYear,\r\n"
-////	            + "    OrderMonth,\r\n"
-////	            + "    Region,\r\n"
-////	            + "    DistinctOrderCount,\r\n"
-////	            + "    RegionOrderQty,\r\n"
-////	            + "    CASE \r\n"
-////	            + "        WHEN TotalOrderQtyForMonth > 0 THEN (RegionOrderQty * 100.0) / TotalOrderQtyForMonth\r\n"
-////	            + "        ELSE 0\r\n"
-////	            + "    END AS RegionOrderQtyPercentage\r\n"
-////	            + "FROM \r\n"
-////	            + "    MonthlyRegionOrderQty\r\n"
-////	            + "CROSS APPLY (\r\n"
-////	            + "    SELECT SUM(OrderQty) AS TotalOrderQtyForMonth\r\n"
-////	            + "    FROM MBROrders (NOLOCK) \r\n"
-////	            + "    WHERE " + conditions.toString() + "\r\n"
-////	            + "    GROUP BY YEAR(OrderDate), MONTH(OrderDate)\r\n"
-////	            + ") AS TotalOrderQty\r\n"  // Alias for the CROSS APPLY result
-////	            + "ORDER BY \r\n"
-////	            + "    OrderYear,\r\n"
-////	            + "    OrderMonth,\r\n"
-////	            + "    Region;";
-//	    		
 //	    
-//	    
-//	    String finalQuery = "DECLARE @TotalOrderQtyForMonth DECIMAL(18, 2);\r\n" +
-//	    	    "\r\n" +
-//	    	    "WITH MonthlyRegionOrderQty AS (\r\n" +
-//	    	    "    SELECT \r\n" +
-//	    	    "        YEAR(OrderDate) AS OrderYear,\r\n" +
-//	    	    "        MONTH(OrderDate) AS OrderMonth,\r\n" +
-//	    	    "        Region,\r\n" +
-//	    	    "        SUM(OrderQty) AS RegionOrderQty,\r\n" +
-//	    	    "        COUNT(DISTINCT OrderNo) AS DistinctOrderCount\r\n" +
-//	    	    "    FROM \r\n" +
-//	    	    "        MBROrders (NOLOCK)\r\n" +
-//	    	    "    WHERE" + conditions.toString()+
-//	    	    "    GROUP BY YEAR(OrderDate), MONTH(OrderDate), Region\r\n" +
-//	    	    ")\r\n" +
-//	    	    "SELECT \r\n" +
-//	    	    "    OrderYear,\r\n" +
-//	    	    "    OrderMonth,\r\n" +
-//	    	    "    Region,\r\n" +
-//	    	    "    DistinctOrderCount,\r\n" +
-//	    	    "    RegionOrderQty,\r\n" +
-//	    	    "    CASE \r\n" +
-//	    	    "        WHEN TotalOrderQtyForMonth > 0 THEN (RegionOrderQty * 100.0) / TotalOrderQtyForMonth\r\n" +
-//	    	    "        ELSE 0\r\n" +
-//	    	    "    END AS RegionOrderQtyPercentage\r\n" +
-//	    	    "FROM \r\n" +
-//	    	    "    MonthlyRegionOrderQty\r\n" +
-//	    	    "CROSS APPLY (\r\n" +
-//	    	    "    SELECT SUM(OrderQty) AS TotalOrderQtyForMonth\r\n" +
-//	    	    "    FROM MBROrders (NOLOCK)\r\n" +
-//	    	    conditions.toString() +
-//	    	    " AS TotalMonthData\r\n" +
-//	    	    "ORDER BY \r\n" +
-//	    	    "    OrderYear,\r\n" +
-//	    	    "    OrderMonth,\r\n" +
-//	    	    "    Region;";
+//	    StringBuilder conditions = new StringBuilder(); // Efficient string concatenation
+//
+//	 // Assuming the user input for filters
+//	 Integer startDate = filter.getStartDate(); // e.g., "20240601"
+//	 Integer endDate = filter.getEndDate(); // e.g., "20240630"
+//	 String regionList = filter.getRegionList();
+//	 String brandList = filter.getBrandList();
+//	 String abmNameList = filter.getAbmName();
+//	 String rsNameList = filter.getRsNameList();
+//	 String retailerType = filter.getRetailerType();
+//
+//	 // Add startDate and endDate conditions if provided
+//	 if (startDate != null && endDate != null) {
+//	     conditions.append(" CONVERT(VARCHAR, OrderDate, 112) >= ").append(startDate)
+//	               .append(" AND CONVERT(VARCHAR, OrderDate, 112) <= ").append(endDate);
+//	 }
+//
+//	 // Add Region condition if provided
+//	 if (regionList != null && !regionList.isEmpty()) {
+//	     conditions.append(" AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('")
+//	               .append(regionList).append("', ','))");
+//	 }
+//
+//	 // Add ABMName condition if provided
+//	 if (abmNameList != null && !abmNameList.isEmpty()) {
+//	     conditions.append(" AND ('").append(abmNameList).append("' IS NOT NULL AND '")
+//	               .append(abmNameList).append("' <> '' AND (")
+//	               .append("ABMEMM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('")
+//	               .append(abmNameList).append("', ',')) OR ")
+//	               .append("ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('")
+//	               .append(abmNameList).append("', ','))))");
+//	 }
+//
+//	 // Add Brand condition if provided
+//	 if (brandList != null && !brandList.isEmpty()) {
+//	     conditions.append(" AND Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('")
+//	               .append(brandList).append("', ','))");
+//	 }
+//
+//	 // Add RSName condition if provided
+//	 if (rsNameList != null && !rsNameList.isEmpty()) {
+//	     conditions.append(" AND RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('")
+//	               .append(rsNameList).append("', ','))");
+//	 }
+//
+//	 // Add RetailerType condition if provided
+//	 if (retailerType != null && !retailerType.isEmpty()) {
+//	     conditions.append(" AND RetailerCode LIKE '")
+//	               .append(retailerType.equals("IDD") ? "9%" : "1%").append("'");
+//	 }
+//
+//	 // Build the final query
+//	 String finalQuery = "WITH MonthlyRegionOrderQty AS (\r\n" +
+//		        "    SELECT \r\n" +
+//		        "        YEAR(OrderDate) AS OrderYear,\r\n" +
+//		        "        MONTH(OrderDate) AS OrderMonth,\r\n" +
+//		        "        Region,\r\n" +
+//		        "        SUM(OrderQty) AS RegionOrderQty,\r\n" +
+//		        "        COUNT(DISTINCT OrderNo) AS DistinctOrderCount\r\n" +
+//		        "    FROM \r\n" +
+//		        "        MBROrders (NOLOCK)\r\n" +
+//		        "    WHERE " + conditions.toString() + "\r\n" +
+//		        "    GROUP BY YEAR(OrderDate), MONTH(OrderDate), Region\r\n" +
+//		        "),\r\n" +
+//		        "MonthlyTotalOrderQty AS (\r\n" +
+//		        "    SELECT \r\n" +
+//		        "        OrderYear,\r\n" +
+//		        "        OrderMonth,\r\n" +
+//		        "        SUM(RegionOrderQty) AS TotalOrderQtyForMonth\r\n" +
+//		        "    FROM \r\n" +
+//		        "        MonthlyRegionOrderQty\r\n" +
+//		        "    GROUP BY OrderYear, OrderMonth\r\n" +
+//		        ")\r\n" +
+//		        "SELECT \r\n" +
+//		        "    mrq.OrderYear,\r\n" +
+//		        "    mrq.OrderMonth,\r\n" +
+//		        "    mrq.Region,\r\n" +
+//		        "    mrq.DistinctOrderCount,\r\n" +
+//		        "    mrq.RegionOrderQty,\r\n" +
+//		        "    CASE \r\n" +
+//		        "        WHEN mtq.TotalOrderQtyForMonth > 0 THEN (mrq.RegionOrderQty * 100.0) / mtq.TotalOrderQtyForMonth\r\n" +
+//		        "        ELSE 0\r\n" +
+//		        "    END AS RegionOrderQtyPercentage\r\n" +
+//		        "FROM \r\n" +
+//		        "    MonthlyRegionOrderQty mrq\r\n" +
+//		        "JOIN \r\n" +
+//		        "    MonthlyTotalOrderQty mtq\r\n" +
+//		        "ON \r\n" +
+//		        "    mrq.OrderYear = mtq.OrderYear\r\n" +
+//		        "    AND mrq.OrderMonth = mtq.OrderMonth\r\n" +
+//		        "ORDER BY \r\n" +
+//		        "    mrq.OrderYear,\r\n" +
+//		        "    mrq.OrderMonth,\r\n" +
+//		        "    mrq.Region;";
+//
+//	    Query query = entityManager.createNativeQuery(finalQuery);
+//
+//	    // Map results to OutputRegionWiseMonthlyDistributionNoofOrders
+//	    try {
+//	        List<Object[]> result = query.getResultList();
+//	        for (Object[] row : result) {
+//	            OutputRegionWiseMonthlyDistributionNoofOrders data = new OutputRegionWiseMonthlyDistributionNoofOrders();
+//	            data.setYear((Integer) row[0]);
+//	            data.setMonth((Integer) row[1]);
+//	            data.setRegion(row[2].toString());
+//	            data.setNoOfOrders((Integer) row[3]);
+//	            data.setNoOfOrdersPercentage((BigDecimal) row[5]);
+//	            regionWiseMonthlyDistributionData.add(data);
+//	        }
+//	    } catch (Exception e) {
+//	        e.printStackTrace();
+//	    }
+//
+//	    return regionWiseMonthlyDistributionData;
+//	}
 
-	    
-	    StringBuilder conditions = new StringBuilder(); // Efficient string concatenation
+	public List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionNoofOrdersRegular(
+			MonthlyDataFilter filter) {
+		List<OutputRegionWiseMonthlyDistributionNoofOrders> regionWiseMonthlyDistributionData = new ArrayList<>();
 
-	 // Assuming the user input for filters
-	 Integer startDate = filter.getStartDate(); // e.g., "20240601"
-	 Integer endDate = filter.getEndDate(); // e.g., "20240630"
-	 String regionList = filter.getRegionList();
-	 String brandList = filter.getBrandList();
-	 String abmNameList = filter.getAbmName();
-	 String rsNameList = filter.getRsNameList();
-	 String retailerType = filter.getRetailerType();
+		// Initialize the conditions StringBuilder for dynamic query building
+		StringBuilder conditions = new StringBuilder();
 
-	 // Add startDate and endDate conditions if provided
-	 if (startDate != null && endDate != null) {
-	     conditions.append(" CONVERT(VARCHAR, OrderDate, 112) >= ").append(startDate)
-	               .append(" AND CONVERT(VARCHAR, OrderDate, 112) <= ").append(endDate);
-	 }
+		// Extract filter fields
+		Integer startDate = filter.getStartDate(); // e.g., "20240601"
+		Integer endDate = filter.getEndDate(); // e.g., "20240630"
+		String regionList = filter.getRegionList();
+		String brandList = filter.getBrandList();
+		String abmNameList = filter.getAbmName();
+		String rsNameList = filter.getRsNameList();
+		String retailerType = filter.getRetailerType();
 
-	 // Add Region condition if provided
-	 if (regionList != null && !regionList.isEmpty()) {
-	     conditions.append(" AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('")
-	               .append(regionList).append("', ','))");
-	 }
+		// Add conditions dynamically
+		if (startDate != null && endDate != null) {
+			conditions.append(" CONVERT(VARCHAR, OrderDate, 112) >= ").append(startDate)
+					.append(" AND CONVERT(VARCHAR, OrderDate, 112) <= ").append(endDate);
+		}
 
-	 // Add ABMName condition if provided
-	 if (abmNameList != null && !abmNameList.isEmpty()) {
-	     conditions.append(" AND ('").append(abmNameList).append("' IS NOT NULL AND '")
-	               .append(abmNameList).append("' <> '' AND (")
-	               .append("ABMEMM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('")
-	               .append(abmNameList).append("', ',')) OR ")
-	               .append("ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('")
-	               .append(abmNameList).append("', ','))))");
-	 }
+		if (regionList != null && !regionList.isEmpty()) {
+			conditions.append(" AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(regionList)
+					.append("', ','))");
+		}
 
-	 // Add Brand condition if provided
-	 if (brandList != null && !brandList.isEmpty()) {
-	     conditions.append(" AND Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('")
-	               .append(brandList).append("', ','))");
-	 }
+		if (abmNameList != null && !abmNameList.isEmpty()) {
+			conditions.append(" AND ('").append(abmNameList).append("' IS NOT NULL AND '").append(abmNameList)
+					.append("' <> '' AND (").append("ABMEMM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('")
+					.append(abmNameList).append("', ',')) OR ")
+					.append("ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(abmNameList)
+					.append("', ','))))");
+		}
 
-	 // Add RSName condition if provided
-	 if (rsNameList != null && !rsNameList.isEmpty()) {
-	     conditions.append(" AND RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('")
-	               .append(rsNameList).append("', ','))");
-	 }
+		if (brandList != null && !brandList.isEmpty()) {
+			conditions.append(" AND Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(brandList)
+					.append("', ','))");
+		}
 
-	 // Add RetailerType condition if provided
-	 if (retailerType != null && !retailerType.isEmpty()) {
-	     conditions.append(" AND RetailerCode LIKE '")
-	               .append(retailerType.equals("IDD") ? "9%" : "1%").append("'");
-	 }
+		if (rsNameList != null && !rsNameList.isEmpty()) {
+			conditions.append(" AND RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(rsNameList)
+					.append("', ','))");
+		}
 
-	 // Build the final query
-	 String finalQuery = "WITH MonthlyRegionOrderQty AS (\r\n" +
-		        "    SELECT \r\n" +
-		        "        YEAR(OrderDate) AS OrderYear,\r\n" +
-		        "        MONTH(OrderDate) AS OrderMonth,\r\n" +
-		        "        Region,\r\n" +
-		        "        SUM(OrderQty) AS RegionOrderQty,\r\n" +
-		        "        COUNT(DISTINCT OrderNo) AS DistinctOrderCount\r\n" +
-		        "    FROM \r\n" +
-		        "        MBROrders (NOLOCK)\r\n" +
-		        "    WHERE " + conditions.toString() + "\r\n" +
-		        "    GROUP BY YEAR(OrderDate), MONTH(OrderDate), Region\r\n" +
-		        "),\r\n" +
-		        "MonthlyTotalOrderQty AS (\r\n" +
-		        "    SELECT \r\n" +
-		        "        OrderYear,\r\n" +
-		        "        OrderMonth,\r\n" +
-		        "        SUM(RegionOrderQty) AS TotalOrderQtyForMonth\r\n" +
-		        "    FROM \r\n" +
-		        "        MonthlyRegionOrderQty\r\n" +
-		        "    GROUP BY OrderYear, OrderMonth\r\n" +
-		        ")\r\n" +
-		        "SELECT \r\n" +
-		        "    mrq.OrderYear,\r\n" +
-		        "    mrq.OrderMonth,\r\n" +
-		        "    mrq.Region,\r\n" +
-		        "    mrq.DistinctOrderCount,\r\n" +
-		        "    mrq.RegionOrderQty,\r\n" +
-		        "    CASE \r\n" +
-		        "        WHEN mtq.TotalOrderQtyForMonth > 0 THEN (mrq.RegionOrderQty * 100.0) / mtq.TotalOrderQtyForMonth\r\n" +
-		        "        ELSE 0\r\n" +
-		        "    END AS RegionOrderQtyPercentage\r\n" +
-		        "FROM \r\n" +
-		        "    MonthlyRegionOrderQty mrq\r\n" +
-		        "JOIN \r\n" +
-		        "    MonthlyTotalOrderQty mtq\r\n" +
-		        "ON \r\n" +
-		        "    mrq.OrderYear = mtq.OrderYear\r\n" +
-		        "    AND mrq.OrderMonth = mtq.OrderMonth\r\n" +
-		        "ORDER BY \r\n" +
-		        "    mrq.OrderYear,\r\n" +
-		        "    mrq.OrderMonth,\r\n" +
-		        "    mrq.Region;";
+		if (retailerType != null && !retailerType.isEmpty()) {
+			conditions.append(" AND RetailerCode LIKE '").append(retailerType.equals("IDD") ? "9%" : "1%").append("'");
+		}
 
-	    Query query = entityManager.createNativeQuery(finalQuery);
+		// Build the final query
+		String finalQuery = "WITH MonthlyRegionOrderQty AS (\r\n" + "    SELECT \r\n"
+				+ "        YEAR(OrderDate) AS OrderYear,\r\n" + "        MONTH(OrderDate) AS OrderMonth,\r\n"
+				+ "        Region,\r\n" + "        SUM(OrderQty) AS RegionOrderQty,\r\n"
+				+ "        COUNT(DISTINCT OrderNo) AS DistinctOrderCount\r\n" + "    FROM \r\n"
+				+ "        MBROrders (NOLOCK)\r\n" + "    WHERE " + conditions.toString() + "\r\n"
+				+ "    GROUP BY YEAR(OrderDate), MONTH(OrderDate), Region\r\n" + "),\r\n"
+				+ "MonthlyTotalOrderQty AS (\r\n" + "    SELECT \r\n" + "        OrderYear,\r\n"
+				+ "        OrderMonth,\r\n" + "        SUM(RegionOrderQty) AS TotalOrderQtyForMonth\r\n"
+				+ "    FROM \r\n" + "        MonthlyRegionOrderQty\r\n" + "    GROUP BY OrderYear, OrderMonth\r\n"
+				+ ")\r\n" + "SELECT \r\n" + "    mrq.OrderYear,\r\n" + "    mrq.OrderMonth,\r\n" + "    mrq.Region,\r\n"
+				+ "    mrq.DistinctOrderCount,\r\n" + "    mrq.RegionOrderQty,\r\n" + "    CASE \r\n"
+				+ "        WHEN mtq.TotalOrderQtyForMonth > 0 THEN (mrq.RegionOrderQty * 100.0) / mtq.TotalOrderQtyForMonth\r\n"
+				+ "        ELSE 0\r\n" + "    END AS RegionOrderQtyPercentage\r\n" + "FROM \r\n"
+				+ "    MonthlyRegionOrderQty mrq\r\n" + "JOIN \r\n" + "    MonthlyTotalOrderQty mtq\r\n" + "ON \r\n"
+				+ "    mrq.OrderYear = mtq.OrderYear\r\n" + "    AND mrq.OrderMonth = mtq.OrderMonth\r\n"
+				+ "ORDER BY \r\n" + "    mrq.OrderYear,\r\n" + "    mrq.OrderMonth,\r\n" + "    mrq.Region;";
 
-	    // Map results to OutputRegionWiseMonthlyDistributionNoofOrders
-	    try {
-	        List<Object[]> result = query.getResultList();
-	        for (Object[] row : result) {
-	            OutputRegionWiseMonthlyDistributionNoofOrders data = new OutputRegionWiseMonthlyDistributionNoofOrders();
-	            data.setYear((Integer) row[0]);
-	            data.setMonth((Integer) row[1]);
-	            data.setRegion(row[2].toString());
-	            data.setNoOfOrders((Integer) row[3]);
-	            data.setNoOfOrdersPercentage((BigDecimal) row[5]);
-	            regionWiseMonthlyDistributionData.add(data);
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
+		// Execute query and map results
+		Query query = entityManager.createNativeQuery(finalQuery);
 
-	    return regionWiseMonthlyDistributionData;
+		try {
+			List<Object[]> result = query.getResultList();
+			for (Object[] row : result) {
+				OutputRegionWiseMonthlyDistributionNoofOrders data = new OutputRegionWiseMonthlyDistributionNoofOrders();
+				data.setYear((Integer) row[0]);
+				data.setMonth((Integer) row[1]);
+				data.setRegion(row[2].toString());
+				data.setNoOfOrders((Integer) row[3]);
+				data.setNoOfOrdersPercentage(((BigDecimal) row[4]));
+
+//	            regionWiseMonthlyDistributionData.add(data);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return regionWiseMonthlyDistributionData;
 	}
 
-	
-	
 	@Override
 	public List<OutputTopSKUOrderedOverall> topSKUOrderedOverallRegular(MonthlyDataFilter filter) {
 		List<OutputTopSKUOrderedOverall> topSKUOrderedOverall = new ArrayList<>();
@@ -7885,7 +7972,7 @@ public class UserDaoimpl implements UserDao {
 		String brandList = filter.getBrandList(); // e.g., "EAST"
 		String retailerType = filter.getRetailerType(); // e.g., "Regular"
 		String regionList = filter.getRegionList();// e.g., "EAST, WEST"
-		String rsList= filter.getRsNameList();
+		String rsList = filter.getRsNameList();
 
 		// Build dynamic conditions
 		if (startDate != null && endDate != null) {
@@ -7934,8 +8021,8 @@ public class UserDaoimpl implements UserDao {
 		return topSKUOrderedOverall;
 	}
 
-
-	//	public List<OutputGrowthOverPreviousMonth> growthOverPreviousYearRegular(MonthlyDataFilter filter) {
+	// public List<OutputGrowthOverPreviousMonth>
+	// growthOverPreviousYearRegular(MonthlyDataFilter filter) {
 //	    List<OutputGrowthOverPreviousMonth> growthOverPreviousMonthData = new ArrayList<>();
 //	    StringBuilder conditions = new StringBuilder(); // Using StringBuilder for efficient string concatenation
 //
@@ -8061,51 +8148,281 @@ public class UserDaoimpl implements UserDao {
 //	    return growthOverPreviousMonthData;
 //	}
 
-@Override
-public List<OutputGrowthOverPreviousMonth> growthOverPreviousYear(MonthlyDataFilter filter) {
-	List<OutputGrowthOverPreviousMonth> growthOverPreviousMonthData = new ArrayList<>();
-	String storedProcedureCall = "EXEC GrowthOverPreviousYear @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
+	@Override
+	public List<OutputGrowthOverPreviousMonth> growthOverPreviousYear(MonthlyDataFilter filter) {
+		List<OutputGrowthOverPreviousMonth> growthOverPreviousMonthData = new ArrayList<>();
+		String storedProcedureCall = "EXEC GrowthOverPreviousYear @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
 
-	// Create a native query
-	Query query = entityManager.createNativeQuery(storedProcedureCall);
+		// Create a native query
+		Query query = entityManager.createNativeQuery(storedProcedureCall);
 
-	// Set the parameters for the stored procedure call
-	query.setParameter("regionList", filter.getRegionList()); // @RegionList (e.g., 'EAST, WEST')
-	query.setParameter("startDate", filter.getStartDate()); // @StartDate (e.g., 20240601)
-	query.setParameter("endDate", filter.getEndDate()); // @EndDate (e.g., 20240630)
-	query.setParameter("brandList", filter.getBrandList()); // @BrandList (e.g., 'Titan')
-	query.setParameter("rsNameList", filter.getRsNameList()); // @RSNameList (e.g., '' or some value)
-	query.setParameter("abmName", filter.getAbmName());
-	query.setParameter("retailerType", filter.getRetailerType());
+		// Set the parameters for the stored procedure call
+		query.setParameter("regionList", filter.getRegionList()); // @RegionList (e.g., 'EAST, WEST')
+		query.setParameter("startDate", filter.getStartDate()); // @StartDate (e.g., 20240601)
+		query.setParameter("endDate", filter.getEndDate()); // @EndDate (e.g., 20240630)
+		query.setParameter("brandList", filter.getBrandList()); // @BrandList (e.g., 'Titan')
+		query.setParameter("rsNameList", filter.getRsNameList()); // @RSNameList (e.g., '' or some value)
+		query.setParameter("abmName", filter.getAbmName());
+		query.setParameter("retailerType", filter.getRetailerType());
 
-	// Execute the query to invoke the stored procedure
-	try {
-		List<Object[]> result = query.getResultList();
-		// filteredData = (OutputForMontlyFilter) query.getSingleResult();
+		// Execute the query to invoke the stored procedure
+		try {
+			List<Object[]> result = query.getResultList();
+			// filteredData = (OutputForMontlyFilter) query.getSingleResult();
 
-		for (Object[] row : result) {
-			// Assuming row contains values in the correct order for mapping
-			OutputGrowthOverPreviousMonth data = new OutputGrowthOverPreviousMonth();
-			data.setYear((Integer) row[0]);
-		//	data.setMonth((Integer) row[1]);
-			data.setTotalRevenue((BigDecimal) row[1]);
-			data.setTotalQTY((Integer) row[2]);
-			data.setTotalRetailerCode((Integer) row[3]);
-			data.setRetailerGrowthPercentage((BigDecimal) row[4]);
-			data.setPriceGrowth((BigDecimal) row[5]);
-			data.setOrderGrowth((Integer) row[6]);
-		//	data.setRetailerGrowth((Integer) row[7]);
-			data.setPriceGrowthPercentage((BigDecimal) row[7]);
-			data.setOrderQtyGrowthPercentage((BigDecimal) row[8]);
+			for (Object[] row : result) {
+				// Assuming row contains values in the correct order for mapping
+				OutputGrowthOverPreviousMonth data = new OutputGrowthOverPreviousMonth();
+				data.setYear((Integer) row[0]);
+				// data.setMonth((Integer) row[1]);
+				data.setTotalRevenue((BigDecimal) row[1]);
+				data.setTotalQTY((Integer) row[2]);
+				data.setTotalRetailerCode((Integer) row[3]);
+				data.setRetailerGrowthPercentage((BigDecimal) row[4]);
+				data.setPriceGrowth((BigDecimal) row[5]);
+				data.setOrderGrowth((Integer) row[6]);
+				// data.setRetailerGrowth((Integer) row[7]);
+				data.setPriceGrowthPercentage((BigDecimal) row[7]);
+				data.setOrderQtyGrowthPercentage((BigDecimal) row[8]);
 
-			growthOverPreviousMonthData.add(data);
-			// Now, filteredData is populated with values
+				growthOverPreviousMonthData.add(data);
+				// Now, filteredData is populated with values
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-	} catch (Exception e) {
-		e.printStackTrace();
+
+		return growthOverPreviousMonthData;
+
 	}
 
-	return growthOverPreviousMonthData;
+	@Override
+	public List<OutputGrowthOverPreviousMonth> growthOverPreviousYearMonthly(MonthlyDataFilter filter) {
+	    List<OutputGrowthOverPreviousMonth> growthOverPreviousMonthData = new ArrayList<>();
+	    StringBuilder conditions = new StringBuilder();
 
-}
+	 // Extract filter fields
+	 Integer startDate = filter.getStartDate(); // e.g., "20240601"
+	 Integer endDate = filter.getEndDate(); // e.g., "20240630"
+	 String regionList = filter.getRegionList();
+	 String abmNameList = filter.getAbmName();
+	 String rsNameList = filter.getRsNameList();
+	 String retailerType = filter.getRetailerType();
+
+	 // Extract the year from startDate and endDate
+	 Integer startYear = startDate != null ? Integer.parseInt(startDate.toString().substring(0, 4)) : null;
+	 Integer endYear = endDate != null ? Integer.parseInt(endDate.toString().substring(0, 4)) : null;
+
+	 // Add conditions dynamically
+	 if (startDate != null && endDate != null) {
+	     conditions.append("OrderDate IN (").append(startDate).append(",").append(endDate).append(")");
+	 }
+
+	 if (regionList != null && !regionList.isEmpty()) {
+	     conditions.append(" AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(regionList)
+	               .append("', ','))");
+	 }
+
+	 if (abmNameList != null && !abmNameList.isEmpty()) {
+	     conditions.append(" AND ('").append(abmNameList).append("' IS NOT NULL AND '").append(abmNameList)
+	               .append("' <> '' AND (").append("ABMEMM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('")
+	               .append(abmNameList).append("', ',')) OR ")
+	               .append("ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(abmNameList)
+	               .append("', ','))))");
+	 }
+
+	 if (rsNameList != null && !rsNameList.isEmpty()) {
+	     conditions.append(" AND RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(rsNameList)
+	               .append("', ','))");
+	 }
+
+	 if (retailerType != null && !retailerType.isEmpty()) {
+	     conditions.append(" AND RetailerCode LIKE '").append(retailerType.equals("IDD") ? "9%" : "1%").append("'");
+	 }
+
+//	 // Build the final query
+//	 String finalQuery = "\r\n"
+//	 		+ "SELECT \r\n"
+//	 		+ "	YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) AS Year,\r\n"
+//	 		+ "    MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) AS Month,\r\n"
+//	 		+ "    SUM(TotalPrice) AS TotalPriceSum,\r\n"
+//	 		+ "    SUM(OrderQty) AS TotalOrderQty,\r\n"
+//	 		+ "    COUNT(DISTINCT RetailerCode) AS DistinctRetailerCount,\r\n"
+//	 		+ "	SUM(TotalPrice)- (\r\n"
+//	 		+ "	 SELECT \r\n"
+//	 		+ "    SUM(TotalPrice) AS TotalPriceSum\r\n"
+//	 		+ "FROM \r\n"
+//	 		+ "    MBROrders (nolock)\r\n"
+//	 		+ "WHERE \r\n"
+//	 		+ conditions.toString()
+//	 		+ "GROUP BY \r\n"
+//	 		+ "    YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)), \r\n"
+//	 		+ "    MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112))\r\n"
+//	 		+ "	 ) AS pricediff,\r\n"
+//	 		+ "\r\n"
+//	 		+ "\r\n"
+//	 		+ "\r\n"
+//	 		+ "	 SUM(OrderQty)- (\r\n"
+//	 		+ "	 SELECT \r\n"
+//	 		+ "    SUM(OrderQty)\r\n"
+//	 		+ "FROM \r\n"
+//	 		+ "    MBROrders (nolock)\r\n"
+//	 		+ "WHERE \r\n"
+//	 		+ conditions.toString()
+//	 		+ "GROUP BY \r\n"
+//	 		+ "    YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)), \r\n"
+//	 		+ "    MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112))\r\n"
+//	 		+ "	 ) AS orderQtydiff,\r\n"
+//	 		+ "\r\n"
+//	 		+ "\r\n"
+//	 		+ "\r\n"
+//	 		+ "	COUNT(DISTINCT RetailerCode)- (\r\n"
+//	 		+ "	 SELECT \r\n"
+//	 		+ "    COUNT(DISTINCT RetailerCode)\r\n"
+//	 		+ "FROM \r\n"
+//	 		+ "    MBROrders (nolock)\r\n"
+//	 		+ "WHERE \r\n"
+//	 		+ conditions.toString()
+//	 		+ "GROUP BY \r\n"
+//	 		+ "    YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)), \r\n"
+//	 		+ "    MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112))\r\n"
+//	 		+ "	 ) AS retailerdiff\r\n"
+//	 		+ "\r\n"
+//	 		+ "\r\n"
+//	 		+ "\r\n"
+//	 		+ "FROM \r\n"
+//	 		+ "    MBROrders (nolock)\r\n"
+//	 		+ "WHERE \r\n"
+//	 		+ conditions.toString()
+//	 		+ "GROUP BY \r\n"
+//	 		+ "    YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)), \r\n"
+//	 		+ "    MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112));\r\n"
+//	 		+ "";
+	 
+	 
+//String finalQuery="SELECT \r\n"
+//		+ "    YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) AS Year,\r\n"
+//		+ "    MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) AS Month,\r\n"
+//		+ "    SUM(TotalPrice) AS TotalPriceSum,\r\n"
+//		+ "    SUM(OrderQty) AS TotalOrderQty,\r\n"
+//		+ "    COUNT(DISTINCT RetailerCode) AS DistinctRetailerCount,\r\n"
+//		+ "    -- Calculate price difference\r\n"
+//		+ "    SUM(TotalPrice) - (\r\n"
+//		+ "        SELECT \r\n"
+//		+ "            SUM(TotalPrice)\r\n"
+//		+ "        FROM \r\n"
+//		+ "            MBROrders (nolock)\r\n"
+//		+ "        WHERE \r\n"
+//		+ "            YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = YEAR("+startDate+")\r\n"
+//		+ "            AND MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = MONTH("+startDate+")\r\n"
+//		+ "            AND " + conditions.toString()
+//		+ "    ) AS pricediff,\r\n"
+//		+ "    -- Calculate order quantity difference\r\n"
+//		+ "    SUM(OrderQty) - (\r\n"
+//		+ "        SELECT \r\n"
+//		+ "            SUM(OrderQty)\r\n"
+//		+ "        FROM \r\n"
+//		+ "            MBROrders (nolock)\r\n"
+//		+ "        WHERE \r\n"
+//		+ "            YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = YEAR("+startDate+")\r\n"
+//		+ "            AND MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = MONTH("+startDate+")\r\n"
+//		+ "            AND "+  conditions.toString()
+//		+ "    ) AS orderQtydiff,\r\n"
+//		+ "    -- Calculate retailer count difference\r\n"
+//		+ "    COUNT(DISTINCT RetailerCode) - (\r\n"
+//		+ "        SELECT \r\n"
+//		+ "            COUNT(DISTINCT RetailerCode)\r\n"
+//		+ "        FROM \r\n"
+//		+ "            MBROrders (nolock)\r\n"
+//		+ "        WHERE \r\n"
+//		+ "            YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = YEAR("+startDate+")\r\n"
+//		+ "            AND MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = MONTH("+startDate+") \r\n"
+//		+ "            AND " + conditions.toString()
+//		+ "    ) AS retailerdiff\r\n"
+//		+ "FROM \r\n"
+//		+ "    MBROrders (nolock)\r\n"
+//		+ "WHERE \r\n"
+//		+ "    YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = YEAR("+endDate+")\r\n"
+//		+ "    AND MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = MONTH("+endDate+")\r\n"
+//		+ "    AND " +conditions.toString()
+//		+ "GROUP BY \r\n"
+//		+ "    YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)), \r\n"
+//		+ "    MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112));\r\n"
+//		+ "";
+	 
+	 
+	 String finalQuery = "SELECT \r\n"
+		        + "    YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) AS Year,\r\n"
+		        + "    MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) AS Month,\r\n"
+		        + "    SUM(TotalPrice) AS TotalPriceSum,\r\n"
+		        + "    SUM(OrderQty) AS TotalOrderQty,\r\n"
+		        + "    COUNT(DISTINCT RetailerCode) AS DistinctRetailerCount,\r\n"
+		        + "    -- Calculate price difference\r\n"
+		        + "    SUM(TotalPrice) - (\r\n"
+		        + "        SELECT \r\n"
+		        + "            SUM(TotalPrice)\r\n"
+		        + "        FROM \r\n"
+		        + "            MBROrders (nolock)\r\n"
+		        + "        WHERE \r\n"
+		        + "            YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = YEAR(CONVERT(DATE, '" + startDate + "', 112))\r\n"
+		        + "            AND MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = MONTH(CONVERT(DATE, '" + startDate + "', 112))\r\n"
+		        + "            AND " + conditions.toString() + "\r\n"
+		        + "    ) AS pricediff,\r\n"
+		        + "    -- Calculate order quantity difference\r\n"
+		        + "    SUM(OrderQty) - (\r\n"
+		        + "        SELECT \r\n"
+		        + "            SUM(OrderQty)\r\n"
+		        + "        FROM \r\n"
+		        + "            MBROrders (nolock)\r\n"
+		        + "        WHERE \r\n"
+		        + "            YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = YEAR(CONVERT(DATE, '" + startDate + "', 112))\r\n"
+		        + "            AND MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = MONTH(CONVERT(DATE, '" + startDate + "', 112))\r\n"
+		        + "            AND " + conditions.toString() + "\r\n"
+		        + "    ) AS orderQtydiff,\r\n"
+		        + "    -- Calculate retailer count difference\r\n"
+		        + "    COUNT(DISTINCT RetailerCode) - (\r\n"
+		        + "        SELECT \r\n"
+		        + "            COUNT(DISTINCT RetailerCode)\r\n"
+		        + "        FROM \r\n"
+		        + "            MBROrders (nolock)\r\n"
+		        + "        WHERE \r\n"
+		        + "            YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = YEAR(CONVERT(DATE, '" + startDate + "', 112))\r\n"
+		        + "            AND MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = MONTH(CONVERT(DATE, '" + startDate + "', 112)) \r\n"
+		        + "            AND " + conditions.toString() + "\r\n"
+		        + "    ) AS retailerdiff\r\n"
+		        + "FROM \r\n"
+		        + "    MBROrders (nolock)\r\n"
+		        + "WHERE \r\n"
+		        + "    YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = YEAR(CONVERT(DATE, '" + endDate + "', 112))\r\n"
+		        + "    AND MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = MONTH(CONVERT(DATE, '" + endDate + "', 112))\r\n"
+		        + "    AND " + conditions.toString() + "\r\n"
+		        + "GROUP BY \r\n"
+		        + "    YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)), \r\n"
+		        + "    MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112));";
+
+	    
+	    // Execute query and map results
+	    Query query = entityManager.createNativeQuery(finalQuery);
+
+	    try {
+	        List<Object[]> result1 = query.getResultList();
+
+	        for (Object[] row : result1) {
+	            OutputGrowthOverPreviousMonth data = new OutputGrowthOverPreviousMonth();
+	           data.setPriceGrowth((BigDecimal)row[5]);
+	           data.setOrderGrowth((Integer)row[6]);
+	           data.setRetailerGrowth((Integer)row[7]);
+	           
+
+	            growthOverPreviousMonthData.add(data);
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return growthOverPreviousMonthData;
+	}
+
+		
 }
