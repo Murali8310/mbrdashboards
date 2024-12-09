@@ -2107,6 +2107,9 @@ console.log(MonthlyToalOrdaringPayload);
 
   // Check if all RS names are selected
   get areAllRSSelected() {
+    if(this.selectedRSNames.length ==0){
+      return false;
+    }
     return this.selectedRSNames.length === this.availableRSNames.length; // Return true if all RS names are selected
   }
 
@@ -2150,6 +2153,9 @@ console.log(MonthlyToalOrdaringPayload);
 
   // Check if all Brands are selected
   get areAllBrandsSelected() {
+    if(this.selectedBrands.length == 0){
+     return false;
+    }
     return this.selectedBrands.length === this.availableBrands.length; // Return true if all Brands are selected
   }
 
@@ -2178,7 +2184,10 @@ console.log(MonthlyToalOrdaringPayload);
             };
           });
           this.availableRegions = availableRegions;
+        } else {
+          // this.availableRegions = [];
         }
+
         if (response && response.body && response.body.brand && response.body.brand.length > 0) {
           // Step 3: Transform the data with type assertion
           const availableBrands: Brand[] = response.body.brand.map(([id, name]: [string, string]) => {
@@ -2188,6 +2197,8 @@ console.log(MonthlyToalOrdaringPayload);
             };
           });
           this.availableBrands = availableBrands;
+        } else {
+          this.availableBrands = [];
         }
 
         if (response && response.body && response.body.rsName && response.body.rsName.length > 0) {
@@ -2201,7 +2212,10 @@ console.log(MonthlyToalOrdaringPayload);
             };
           });
           this.availableRSNames = availableRSNames;
+        } else {
+          this.availableRSNames = [];
         }
+        
         if (response && response.body && response.body.abmName && response.body.abmName.length > 0) {
           // Step 3: Transform the data with type assertion
           const availableAbmNames: Brand[] = response.body.abmName.map(([id, name, region]: [string, string, string]) => {
@@ -2212,6 +2226,8 @@ console.log(MonthlyToalOrdaringPayload);
             };
           });
           this.availableAbmNames = availableAbmNames;
+        }else {
+          this.availableRSNames = [];
         }
       },
       (error) => {
@@ -2230,6 +2246,9 @@ console.log(MonthlyToalOrdaringPayload);
       this.cards[i].dealercount = 'Loading';
       this.cards[i].no = 'Loading';
     }
+
+   this.currentMonthToDateText= this.prepareOrderMessage(this.selectedYears, this.selectedMonths);
+
     this.dashboardService.dashBoardInitalData(data).subscribe(
       (response) => {
         this.spinner.hide();
@@ -2271,9 +2290,9 @@ for (let i = 0; i < this.cards.length; i++) {
 
   if (this.cards[i]) {
     this.cards[i].number = totalOrderSum[region] || 0;
-    this.cards[i].qtyValue = orderValueSum[region] ? (orderValueSum[region] / 10000000).toFixed(2) + 'Cr' : '0.00Cr';
+    this.cards[i].qtyValue = orderValueSum[region] ? (orderValueSum[region] / 10000000).toFixed(2) + ' Crs' : '0.00Crs';
     this.cards[i].dealercount = dealerCountSum[region] || 0;
-    this.cards[i].no = orderQuantitySum[region] ? (orderQuantitySum[region] / 1000).toFixed(2) + 'K' : '0.00K';
+    this.cards[i].no = orderQuantitySum[region] ? (orderQuantitySum[region] / 1000).toFixed(2) + ' K' : '0.00K';
   }
 }
 
@@ -4127,6 +4146,33 @@ dataLabels: {
     // this.isDropdownOpenForMonth = !this.isDropdownOpenForMonth;
   }
 
+   prepareOrderMessage(selectedYears:any, selectedMonths:any) {
+    if (selectedYears.length === 0 && selectedMonths.length === 0) {
+        return "No data available.";
+    }
+
+    // Find the earliest month and year
+    const sortedMonths = selectedMonths.sort((a:any, b:any) => {
+        return a.year - b.year || new Date(a.month + " 1").getMonth() - new Date(b.month + " 1").getMonth();
+    });
+
+    const startYear =  Math.min(...selectedYears);
+    const endMonth = sortedMonths.length > 0 ? sortedMonths[sortedMonths.length - 1].name : "January";
+
+    const EndYear =  Math.max(...selectedYears);
+    const startMonth = sortedMonths.length > 0 ? sortedMonths[0].name : "January";
+
+
+    // Get current date
+    const currentDate = new Date();
+    const currentMonth = currentDate.toLocaleString('default', { month: 'long' });
+    const currentYear = currentDate.getFullYear();
+
+    return `From ${startMonth} ${startYear} to ${endMonth} ${EndYear} order details.`;
+}
+
+
+
   toggleMonthSelection(month: any) {
     if (this.selectedMonths.includes(month)) {
       this.selectedMonths = this.selectedMonths.filter((m) => m.id !== month.id);
@@ -5269,7 +5315,7 @@ dataLabels: {
     const currentYear = this.datePipe.transform(currentDate, 'yyyy'); // Get current year (e.g., '2024')
     const currentDay = currentDate.getDate(); // Get current day (e.g., '29')
 
-    this.currentMonthToDateText = `From ${currentMonth} ${currentYear} to till date order details.`;
+    // this.currentMonthToDateText = `From ${currentMonth} ${currentYear} to till date order details.`;
   }
 
 
