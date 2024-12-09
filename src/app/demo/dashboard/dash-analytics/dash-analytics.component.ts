@@ -371,6 +371,7 @@ currentOverallLevel:any = 0;
 selectedImageSource:any = 'assets/images/1802NL02/1802SL12_3.jpg';
 selectedImageSourceForRegion:any = 'assets/images/1802NL02/1802SL12_3.jpg';
 selectedImageSourceForRs:any = 'assets/images/1802NL02/1802SL12_3.jpg';
+LoadingDataForSku:any={};
 
   // constructor
   constructor(
@@ -677,7 +678,7 @@ console.log(MonthlyToalOrdaringPayload);
   // Populate years dynamically
   initializeYears() {
     const currentYear = new Date().getFullYear();
-    for (let year = currentYear - 50; year <= currentYear + 10; year++) {
+    for (let year = currentYear - 1; year <= currentYear; year++) {
       this.yearsList.push(year);
     }
     this.filteredYearsList = [...this.yearsList];
@@ -753,7 +754,7 @@ console.log(MonthlyToalOrdaringPayload);
     },
     {
       background: 'south1Bg',
-      title: 'South1',
+      title: 'South 1',
       icon: 'icon-shopping-cart',
       text: 'Total qty',
       number: 'Loading...',
@@ -763,7 +764,7 @@ console.log(MonthlyToalOrdaringPayload);
     },
     {
       background: 'south2Bg',
-      title: 'South2',
+      title: 'South 2',
       icon: 'icon-shopping-cart',
       text: 'Total qty',
       number: 'Loading...',
@@ -3627,7 +3628,7 @@ dataLabels: {
                 },
                 offsetX: -20
               },
-              tickAmount: 10
+              tickAmount: 5
             },
             tooltip: {
               shared: true,
@@ -3813,7 +3814,8 @@ dataLabels: {
               {
                 title: {
                   text: '(No Of Orders)',
-                  style: { color: '#000000' }
+                  style: { color: '#000000' },
+                  offsetX:20
                 },
                 labels: {
                   formatter: (val: any) => '' + val
@@ -4032,7 +4034,7 @@ dataLabels: {
           fontWeight: 'normal'
         }
       },
-      chart: { type: 'bar', height: 500, stacked: true },
+      chart: { type: 'bar', height: 700, stacked: true },
       plotOptions: { bar: { horizontal: false } },
       fill: { opacity: 1 },
       colors: [
@@ -5193,7 +5195,7 @@ dataLabels: {
 
   public topSKUOrderedOverall = (MonthlyTotalOrderingPayload?: any) => {
     this.spinner.show();
-
+    this.overallOrders = [];
     this.dashboardService.topSKUOrderedOverall(MonthlyTotalOrderingPayload).subscribe(
       (response) => {
         if (response && response.body) {
@@ -5213,7 +5215,7 @@ dataLabels: {
 
   public topSKUOrderedRegionSelected = (MonthlyTotalOrderingPayload?: any) => {
     this.spinner.show();
-
+    this.regionTotals = [];
     this.dashboardService.topSKUOrderedRegionSelected(MonthlyTotalOrderingPayload).subscribe(
       (response) => {
         if (response && response.body) {
@@ -5247,7 +5249,7 @@ dataLabels: {
   // This is to get the rs names data.
   public topSKUOrderedRSNameSelected = (MonthlyTotalOrderingPayload?: any) => {
     this.spinner.show();
-
+    this.rsTotals = [];
     this.dashboardService.topSKUOrderedRSNameSelected(MonthlyTotalOrderingPayload).subscribe(
       (response) => {
         if (response && response.body) {

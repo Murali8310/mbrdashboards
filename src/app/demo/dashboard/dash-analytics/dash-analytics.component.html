@@ -48,7 +48,7 @@ text-align: center;
 
  <!-- order-card start -->
   <div *ngIf="dashboardService.selectedData === '1'" class="row"> 
-    <app-card class="col-md-6 col-xl-12" ><h4 style="text-align: center;">MTD : {{currentMonthToDateText}}</h4>
+    <app-card class="col-md-12 col-xl-12" ><h4 style="text-align: center;">DashBoard</h4>
     </app-card>
 
     <div class="container my-4">
@@ -270,7 +270,6 @@ text-align: center;
     </div>
   </div>
     <div class="row">
-
  <div class="col-md-6 col-xl-2" *ngFor="let card of cards">
   <!-- <ng-container > -->
     <app-card cardClass="{{ card.background }} order-card">
@@ -294,7 +293,6 @@ text-align: center;
     </app-card>
   <!-- </ng-container> -->
 </div>
-
 <div class="col-xl-12 col-md-12" *ngIf="dashBoardInitalDataOptions && false">
   <app-card cardTitle="" [options]="false">
     
@@ -315,6 +313,11 @@ text-align: center;
     ></apx-chart>
   </div>
   </app-card>
+</div>
+<div class="col-12">
+  <h5 style="float: right;">
+       {{currentMonthToDateText}}
+  </h5>
 </div>
 </div>
 </div>
@@ -2121,7 +2124,7 @@ text-align: center;
       <h4 *ngIf="dashboardService.selectedData === '5'" style="
       text-align: center;
       /* margin-top: 12px; */
-      ">Over All Details</h4>
+      ">{{overallOrders && overallOrders.length > 0 ? 'Over All Details' : 'Over All Details Loading...'}} </h4>
     </app-card>
 
     <div class="row" style="margin-top: 20px;">
@@ -2169,7 +2172,7 @@ text-align: center;
       <h4 *ngIf="dashboardService.selectedData === '5'" style="
       text-align: center;
       /* margin-top: 12px; */
-      ">Region Wise Details</h4>
+      "> {{regionTotals && regionTotals.length > 0 ? 'Region Wise Details' : 'Region Wise Details Loading...'}} </h4>
     </app-card>
     <div class="row" style="margin-top: 20px;">
     <div class="col-lg-6  col-md-12 table-responsive" *ngIf="regionTotals && regionTotals.length > 0">
@@ -2214,7 +2217,7 @@ text-align: center;
     <h4 *ngIf="dashboardService.selectedData === '5'" style="
     text-align: center;
     /* margin-top: 12px; */
-    ">RS Wise Details.</h4>
+    ">{{rsTotals && rsTotals.length > 0 ? 'RS Wise Details' : 'RS Wise Details Loading...'}}  </h4>
   </app-card>
   <div class="row" style="margin-top: 20px;">
     <div class="col-lg-6  col-md-12 table-responsive" *ngIf="rsTotals && rsTotals.length > 0">

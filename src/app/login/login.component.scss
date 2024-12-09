@@ -8,7 +8,7 @@ body {
 
 .login-container {
   width: 100%;
-  height: 99vh;
+  height: 125vh;
   display: inline-table;
   overflow: hidden;
   // background: url('assets/images/Designer.png');
@@ -17,7 +17,9 @@ body {
   // background: linear-gradient(135deg, #ff7e5f, #feb47b, #6a11cb); /* Three mixed colors */
 
   // background: linear-gradient(135deg, #ffebe6, #101c4a, #080110);
-  background: linear-gradient(135deg, #fffdfd, #39415c, #340d60);
+  // background: linear-gradient(135deg, #fffdfd, #39415c, #340d60);
+  background: linear-gradient(135deg, #fffdfd, #929fcb, #340d60);
+
 }
 .login-form {
   // width: 50%;
@@ -35,7 +37,7 @@ body {
   background-repeat: no-repeat;
 }
 #back {
-  height: 100vh;
+  // height: 100vh;
   width: 50%;
   display: table-cell;
 }
