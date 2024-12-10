@@ -10,6 +10,8 @@ public class OutputDashboardTiles {
 	private Integer delears;
 	private Integer totalOrder;
 	private String region;
+	private Integer startDate;
+	private String endDate;
 	
 	public Integer getYear() {
 		return year;
@@ -52,6 +54,18 @@ public class OutputDashboardTiles {
 	}
 	public void setTotalOrder(Integer totalOrder) {
 		this.totalOrder = totalOrder;
+	}
+	public Integer getStartDate() {
+		return startDate;
+	}
+	public String getEndDate() {
+		return endDate;
+	}
+	public void setStartDate(Integer startDate) {
+		this.startDate = startDate;
+	}
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
 	}
 	
 	

@@ -6461,16 +6461,38 @@ public class UserDaoimpl implements UserDao {
 	public List<OutputDashboardTiles> OutputDashboardTiles(MonthlyDataFilter filter) {
 		// TODO Auto-generated method stub
 		List<OutputDashboardTiles> outputDashboardTiles = new ArrayList<>();
-		String checkQuery = "SELECT \r\n" + "    -- Extract Year and Month to group by month\r\n"
-				+ "    YEAR(OrderDate) AS Year,\r\n" + "    MONTH(OrderDate) AS Month,\r\n"
-				+ "    SUM(TotalPrice) AS OrderValue,\r\n" + "    SUM(OrderQty) AS TotalOrder,\r\n"
-				+ "    COUNT(DISTINCT OrderNo) AS OrderQty,\r\n" + "    COUNT(DISTINCT RetailerCode) AS Dealers,\r\n"
-				+ "    Region\r\n" + "FROM \r\n" + "    MBROrders\r\n" + "WHERE \r\n"
-				+ "    CONVERT(VARCHAR, OrderDate, 112) >= :startDate    -- Compare OrderDate with StartDate\r\n"
-				+ "    AND CONVERT(VARCHAR, OrderDate, 112) <= :endDate \r\n" + "GROUP BY\r\n"
-				+ "    YEAR(OrderDate),\r\n" + "    MONTH(OrderDate),\r\n" + "    Region\r\n" + "ORDER BY\r\n"
-				+ "    YEAR(OrderDate),\r\n" + "    MONTH(OrderDate);";
+//		String checkQuery = "SELECT \r\n" + "    -- Extract Year and Month to group by month\r\n"
+//				+ "    YEAR(OrderDate) AS Year,\r\n" + "    MONTH(OrderDate) AS Month,\r\n"
+//				+ "    SUM(TotalPrice) AS OrderValue,\r\n" + "    SUM(OrderQty) AS TotalOrder,\r\n"
+//				+ "    COUNT(DISTINCT OrderNo) AS OrderQty,\r\n" + "    COUNT(DISTINCT RetailerCode) AS Dealers,\r\n"
+//				+ "    Region\r\n" + "FROM \r\n" + "    MBROrders\r\n" + "WHERE \r\n"
+//				+ "    CONVERT(VARCHAR, OrderDate, 112) >= :startDate    -- Compare OrderDate with StartDate\r\n"
+//				+ "    AND CONVERT(VARCHAR, OrderDate, 112) <= :endDate \r\n" + "GROUP BY\r\n"
+//				+ "    YEAR(OrderDate),\r\n" + "    MONTH(OrderDate),\r\n" + "    Region\r\n" + "ORDER BY\r\n"
+//				+ "    YEAR(OrderDate),\r\n" + "    MONTH(OrderDate);";
 
+		
+		String checkQuery =
+                "SELECT \r\n" + "    -- Extract Year and Month to group by month\r\n"
+				+ "    YEAR(OrderDate) AS Year,\r\n" + "    MONTH(OrderDate) AS Month,\r\n"				
+                + "    SUM(TotalPrice) AS OrderValue,\r\n" + "    SUM(OrderQty) AS TotalOrder,\r\n"
+				+ "    COUNT(DISTINCT OrderNo) AS OrderQty,\r\n" + "    COUNT(DISTINCT RetailerCode) AS Dealers,\r\n"
+				+ "    Region,\r\n"+
+                "        (SELECT MAX(OrderDate) \r\n" + 
+                "         FROM MBROrders \r\n" + 
+                "         WHERE CONVERT(VARCHAR, OrderDate, 112) <= :endDate) AS LastOrderDate\r\n" +
+                "    FROM \r\n" + 
+                "        MBROrders\r\n" + 
+                "    WHERE \r\n" +
+                "        CONVERT(VARCHAR, OrderDate, 112) >= :startDate \r\n" +
+                "        AND CONVERT(VARCHAR, OrderDate, 112) <= :endDate\r\n" + 
+                "    GROUP BY\r\n" +
+                "        YEAR(OrderDate),\r\n" + 
+                "        MONTH(OrderDate),\r\n" + 
+                "Region"+
+                "    ORDER BY\r\n" +
+                "        YEAR(OrderDate),\r\n" + 
+                "        MONTH(OrderDate);";
 		// Create a native query
 		Query query = entityManager.createNativeQuery(checkQuery);
 
@@ -6494,6 +6516,8 @@ public class UserDaoimpl implements UserDao {
 				data.setOrderQuentity((Integer) row[3]);
 				data.setDelears((Integer) row[5]);
 				data.setRegion(row[6].toString());
+				data.setEndDate(row[7].toString());
+				
 				outputDashboardTiles.add(data);
 				// Now, filteredData is populated with values
 			}
@@ -6517,6 +6541,29 @@ public class UserDaoimpl implements UserDao {
 				+ "            AND CONVERT(VARCHAR, OrderDate, 112) <= :endDate\r\n" + "	Group BY\r\n"
 				+ "	 YEAR(OrderDate),\r\n" + "        MONTH(OrderDate)\r\n" + "    ORDER BY\r\n"
 				+ "        YEAR(OrderDate),\r\n" + "        MONTH(OrderDate);";
+		
+		
+//		String checkQuery = "SELECT \r\n" + 
+//                "        -- Extract Year and Month to group by month\r\n" +
+//                "        YEAR(OrderDate) AS Year,\r\n" + 
+//                "        MONTH(OrderDate) AS Month,\r\n" +
+//                "        SUM(TotalPrice) AS OrderValue,\r\n" + 
+//                "        SUM(OrderQty) AS TotalOrder,\r\n" + 
+//                "        (SELECT MAX(OrderDate) \r\n" + 
+//                "         FROM MBROrders \r\n" + 
+//                "         WHERE CONVERT(VARCHAR, OrderDate, 112) <= :endDate) AS LastOrderDate\r\n" +
+//                "    FROM \r\n" + 
+//                "        MBROrders\r\n" + 
+//                "    WHERE \r\n" +
+//                "        CONVERT(VARCHAR, OrderDate, 112) >= :startDate \r\n" +
+//                "        AND CONVERT(VARCHAR, OrderDate, 112) <= :endDate\r\n" + 
+//                "    GROUP BY\r\n" +
+//                "        YEAR(OrderDate),\r\n" + 
+//                "        MONTH(OrderDate)\r\n" + 
+//                "    ORDER BY\r\n" +
+//                "        YEAR(OrderDate),\r\n" + 
+//                "        MONTH(OrderDate);";
+
 
 		// Create a native query
 		Query query = entityManager.createNativeQuery(checkQuery);
@@ -7869,7 +7916,7 @@ public class UserDaoimpl implements UserDao {
 				OutputRegionWiseMonthlyDistributionNoofOrders data = new OutputRegionWiseMonthlyDistributionNoofOrders();
 				data.setYear((Integer) row[0]);
 				data.setMonth((Integer) row[1]);
-				data.setRegion(row[2].toString());
+				data.setRegion(row[2].toString().toUpperCase());
 				data.setNoOfOrders((Integer) row[3]);
 				data.setNoOfOrdersPercentage(((BigDecimal) row[5]));
 
