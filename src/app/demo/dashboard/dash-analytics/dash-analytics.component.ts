@@ -365,7 +365,8 @@ export default class DashAnalyticsComponent {
 
   isLoading = false; // Start with loading state
   isMobileView = window.innerWidth <= 768;
-  currentMonthToDateText: string = '';
+  currentMonthToDateText: string = 'Loading...';
+  getLastUpdatedRecordDate: string = '';
 selectedOrder:any = 'ND2011324/P';
 currentOverallLevel:any = 0;
 selectedImageSource:any = 'assets/images/1802NL02/1802SL12_3.jpg';
@@ -1002,352 +1003,7 @@ console.log(MonthlyToalOrdaringPayload);
             // Get month name and add to categories
             categories.push(monthNames[item.month - 1]);
           });
-          // this.chartOptionsline = {
-          //   series: [
-          //     // {
-          //     //   name: 'Retailers',
-          //     //   data: [120, 150, 130] // Example data for Retailers over 3 months
-          //     // },
-          //     // {
-          //     //   name: 'Quantity (k)',
-          //     //   data: [30, 25, 35] // Example data for Quantity over 3 months
-          //     // },
-          //     // {
-          //     //   name: 'Value',
-          //     //   data: [100, 70, 80] // Example data for Value over 3 months (in thousands)
-          //     // }
-          //     {
-          //       name: 'Quantity (k)',
-          //       data: quantityData // Extracts totalQTY values
-          //     },
-          //     {
-          //       name: 'Retailers',
-          //       data: retailersData // Extracts totalRetailerCode values
-          //     },
-
-          //     {
-          //       name: 'Value (Cr)',
-          //       data: valueData // Extracts totalRevenue values
-          //     }
-          //   ],
-          //   chart: {
-          //     height: 500,
-          //     type: 'line',
-          //   },
-          //   dataLabels: {
-          //     enabled: true
-          //   },
-          //   stroke: {
-          //     width: 5,
-          //     curve: 'smooth', // Smooth curve for the line chart
-          //     dashArray: [0, 8, 5] // Different dash arrays for each line
-          //   },
-          //   title: {
-          //     text: 'Monthly Trend',
-          //     align: 'center'
-          //   },
-          //   // subtitle: {
-          //   //   text: 'No of Re-retailers, Value, and Qty',
-          //   //   align: 'center',
-          //   //   style: {
-          //   //     fontSize: '14px',
-          //   //     color: '#666'
-          //   //   }
-          //   // },
-          //   // legend: {
-          //   //   tooltipHoverFormatter: function (val, opts) {
-          //   //     return val + ' - <strong>' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + '</strong>';
-          //   //   }
-          //   // },
-          //   legend: {
-          //     tooltipHoverFormatter: function (val, opts) {
-          //       const dataValue = opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex];
-          //       const formattedValue = dataValue % 1 === 0 ? dataValue : dataValue.toFixed(2);
-          //       return val + ' - <strong>' + formattedValue + '</strong>';
-          //     }
-          //   },
-          //   markers: {
-          //     size: 5, // Size of markers on the line
-          //     hover: {
-          //       sizeOffset: 6
-          //     }
-          //   },
-          //   xaxis: {
-          //     labels: {
-          //       trim: false
-          //     },
-          //     categories: categories
-          //   },
-          //   yaxis: [
-          //     {
-          //       title: {
-          //         text: 'Quantity (K)', // Left y-axis title
-          //         style: {
-          //           color: '#000000' // Change color as needed
-          //         }
-          //       },
-          //       min: 0, // Minimum value for left y-axis
-          //       labels: {
-          //         formatter: function (val) {
-          //           // return '' + val; // Format for value
-          //           return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
-          //         }
-          //       },
-          //       tickAmount: 5 // Adjust the number of ticks as necessary
-          //     },
-
-          //     { // Make this y-axis on the opposite side
-          //       opposite: true,
-          //       title: {
-          //         text: 'Value (Cr)', // Right y-axis title
-          //         style: {
-          //           color: '#000000' // Change color as needed
-          //         }
-          //       },
-          //        labels: {
-          //         formatter: function (val) {
-          //           // return '' + val; // Format for value
-          //           return val.toFixed(0);
-          //         }
-          //       },
-          //       min: 0, // Minimum value for right y-axis
-          //       tickAmount: 5 // Adjust the number of ticks as necessary
-          //     }
-          //   ],
-          //   tooltip: {
-          //     shared: true, // Show shared tooltip
-          //     intersect: false,
-          //     y: [
-          //       {
-          //         title: {
-          //           formatter: function (val) {
-          //             return val;
-          //           }
-          //         }
-          //       },
-          //       {
-          //         title: {
-          //           formatter: function (val) {
-          //             return val;
-          //           }
-          //         }
-          //       },
-          //       {
-          //         title: {
-          //           formatter: function (val) {
-          //             return  val; // Format for value
-          //           }
-          //         }
-          //       }
-          //     ]
-          //   }
-          // };
-
-          // this is for single y -axis data c
-
-          // this.chartOptionsline = {
-          //   series: [
-          //     {
-          //       name: 'Quantity (k)',
-          //       data: quantityData // Extracts totalQTY values
-          //     },
-          //     {
-          //       name: 'Retailers',
-          //       data: retailersData // Extracts totalRetailerCode values
-          //     },
-          //     {
-          //       name: 'Value (Cr)',
-          //       data: valueData // Extracts totalRevenue values
-          //     }
-          //   ],
-          //   chart: {
-          //     height: 500,
-          //     type: 'line',
-          //   },
-          //   dataLabels: {
-          //     enabled: true
-          //   },
-          //   stroke: {
-          //     width: 5,
-          //     curve: 'smooth',
-          //     dashArray: [0, 8, 5]
-          //   },
-          //   title: {
-          //     text: 'Monthly Trend',
-          //     align: 'center'
-          //   },
-          //   legend: {
-          //     tooltipHoverFormatter: function (val, opts) {
-          //       const dataValue = opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex];
-          //       const formattedValue = dataValue % 1 === 0 ? dataValue : dataValue.toFixed(2);
-          //       return val + ' - <strong>' + formattedValue + '</strong>';
-          //     }
-          //   },
-          //   markers: {
-          //     size: 5,
-          //     hover: {
-          //       sizeOffset: 6
-          //     }
-          //   },
-          //   xaxis: {
-          //     labels: {
-          //       trim: false
-          //     },
-          //     categories: categories
-          //   },
-          //   yaxis: {
-          //     title: {
-          //       text: 'Values', // Generic title for combined y-axis
-          //       style: {
-          //         color: '#000000'
-          //       }
-          //     },
-          //     min: 0,
-          //     labels: {
-          //       formatter: function (val) {
-          //         return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
-          //       }
-          //     },
-          //     tickAmount: 3
-          //   },
-          //   tooltip: {
-          //     shared: true,
-          //     intersect: false,
-          //     y: [
-          //       {
-          //         title: {
-          //           formatter: function (val) {
-          //             return val;
-          //           }
-          //         }
-          //       },
-          //       {
-          //         title: {
-          //           formatter: function (val) {
-          //             return val;
-          //           }
-          //         }
-          //       },
-          //       {
-          //         title: {
-          //           formatter: function (val) {
-          //             return val;
-          //           }
-          //         }
-          //       }
-          //     ]
-          //   }
-          // };
-
-          // this.chartOptionsline = {
-          //   series: [
-          //     {
-          //       name: 'Quantity (k)',
-          //       data: quantityData // Extracts totalQTY values
-          //     },
-          //     {
-          //       name: 'Retailers',
-          //       data: retailersData // Extracts totalRetailerCode values
-          //     },
-          //     {
-          //       name: 'Value (Cr)',
-          //       data: valueData // Extracts totalRevenue values
-          //     }
-          //   ],
-          //   chart: {
-          //     height: 500,
-          //     type: 'line',
-          //   },
-          //   dataLabels: {
-          //     enabled: true,
-          //   offsetX: -5,
-          //   offsetY: -5,  // Move labels slightly to the right of the y-axis
-          //     style: {
-          //       fontSize: '10px',
-          //     },
-          //     background: {
-          //       enabled: true,
-          //       foreColor: '#000000'
-          //     }
-          //   },
-          //   stroke: {
-          //     width: 5,
-          //     curve: 'smooth',
-          //     dashArray: [0, 8, 5]
-          //   },
-          //   title: {
-          //     text: 'Monthly Trend',
-          //     align: 'center'
-          //   },
-          //   legend: {
-          //     tooltipHoverFormatter: function (val, opts) {
-          //       let dataValue = opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex];
-          //       if(val == 'Quantity (k)'){
-          //         dataValue = dataValue*10;
-          //       }else if(val == 'Retailers'){
-          //         dataValue = dataValue*100;
-          //       }
-          //       const formattedValue = dataValue % 1 === 0 ? dataValue : dataValue.toFixed(2);
-          //       return val + ' - <strong>' + formattedValue + '</strong>';
-          //     }
-          //   },
-          //   markers: {
-          //     size: 5,
-          //     hover: {
-          //       sizeOffset: 6
-          //     }
-          //   },
-          //   xaxis: {
-          //     labels: {
-          //       trim: false
-          //     },
-          //     categories: categories
-          //   },
-          //   yaxis: {
-          //     title: {
-          //       text: 'Values',
-          //       style: {
-          //         color: '#000000'
-          //       }
-          //     },
-          //     min: 0,
-          //     labels: {
-          //       formatter: function (val) {
-          //         return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
-          //       },
-          //       offsetX: -20, // Move y-axis labels slightly to avoid overlap
-          //     },
-          //     tickAmount: 3
-          //   },
-          //   tooltip: {
-          //     shared: true,
-          //     intersect: false,
-          //     y: [
-          //       {
-          //         title: {
-          //           formatter: function (val) {
-          //             return val;
-          //           }
-          //         }
-          //       },
-          //       {
-          //         title: {
-          //           formatter: function (val) {
-          //             return val;
-          //           }
-          //         }
-          //       },
-          //       {
-          //         title: {
-          //           formatter: function (val) {
-          //             return val;
-          //           }
-          //         }
-          //       }
-          //     ]
-          //   }
-          // };
-
+         
           this.chartOptionsline = {
             series: [
               {
@@ -1364,7 +1020,7 @@ console.log(MonthlyToalOrdaringPayload);
               }
             ],
             chart: {
-              height: 700,
+              height: 500,
               type: 'line',
               zoom: {
                 enabled: false
@@ -1471,9 +1127,9 @@ console.log(MonthlyToalOrdaringPayload);
                 formatter: function (val) {
                   return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
                 },
-                offsetX: -20
+                // offsetX: -0
               },
-              tickAmount: 10
+              tickAmount: 3
             },
             tooltip: {
               shared: true,
@@ -2227,7 +1883,7 @@ console.log(MonthlyToalOrdaringPayload);
           });
           this.availableAbmNames = availableAbmNames;
         }else {
-          this.availableRSNames = [];
+          this.availableAbmNames = [];
         }
       },
       (error) => {
@@ -2247,13 +1903,16 @@ console.log(MonthlyToalOrdaringPayload);
       this.cards[i].no = 'Loading';
     }
 
-   this.currentMonthToDateText= this.prepareOrderMessage(this.selectedYears, this.selectedMonths);
-
+    this.currentMonthToDateText = 'Loading...';
     this.dashboardService.dashBoardInitalData(data).subscribe(
       (response) => {
         this.spinner.hide();
 
         if (response && response.body && response.body.length > 0) {
+
+this.getLastUpdatedRecordDate = response.body &&response.body[0] &&  response.body[0].endDate;
+this.currentMonthToDateText = this.prepareOrderMessage(this.selectedYears, this.selectedMonths);
+
           // Map response data to the cards
           // for (let i = 0; i < this.cards.length; i++) {
           //   const cardData = response.body[i] || {};
@@ -2304,6 +1963,7 @@ for (let i = 0; i < this.cards.length; i++) {
             this.cards[i].dealercount = '';
             this.cards[i].no = '';
           }
+          this.currentMonthToDateText = 'No Data Available';
         }
 
         console.log('Data processed successfully');
@@ -2469,7 +2129,7 @@ let lastHoveredDataPointIndex:any = '';
         { name: 'Value - West', group: 'value', data: [] }
       ],
       title: {
-        text: 'Region Wise Distribution Loading...',
+        text: 'Regionwise Month and Month Growth Loading...',
         align: 'center'
         // style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
       },
@@ -2561,10 +2221,10 @@ let lastHoveredDataPointIndex:any = '';
       // ],
       colors: [
         '#007bff',
-        '#ff5733',
         '#28a745',
-        '#ffc107',
-        '#dc3545', // Blue, red-orange, green, amber, crimson
+        '#ffc107', 
+        '#dc3545', 
+        '#ff5733', // Blue, red-orange, green, amber, crimson
         // '#6f42c1',
         // '#17a2b8',
         // '#fd7e14',
@@ -2592,9 +2252,12 @@ let lastHoveredDataPointIndex:any = '';
                     categories.push(monthNames[month - 1]);
                 });
 
+                const  selectedMoths = this.selectedMonths;
                 // Prepare data series for each metric and region
                 const prepareSeriesData = (data: any[], metric: string, group: string) => {
-                    const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
+                    // const regions = ['EAST','NORTH', 'SOUTH 1' ,'SOUTH 2', 'WEST'];
+                    const regions = ['EAST','NORTH', 'SOUTH 1' ,'SOUTH 2', 'WEST'];
+
                     const metricLabels: { [key: string]: string } = {
                         totalRetailerCode: 'Total Retailers',
                         totalQTY: 'Total Qty (K)',
@@ -2604,7 +2267,8 @@ let lastHoveredDataPointIndex:any = '';
                     return regions.map(region => {
                         const regionData = data.filter(item => item.region === region);
                         return {
-                            name: `${metricLabels[metric]} - ${region}`,
+                            // name: `${metricLabels[metric]} - ${region}`,
+                            name: `${region}`,
                             group: group,
                             data: regionData.map(item => {
                                 if (metric === 'totalQTY') return (item.totalQTY / 10000).toFixed(2); // Adjust units
@@ -2616,7 +2280,8 @@ let lastHoveredDataPointIndex:any = '';
                     });
                 };
 
-                const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
+                // const regions = ['EAST','NORTH', 'SOUTH 1' ,'SOUTH 2', 'WEST'];
+                const regions = ['EAST','NORTH', 'SOUTH 1' ,'SOUTH 2', 'WEST'];
 
                 // Update chart options with dynamic series and categories
                 this.RegionWiseMonthlyDistibutionOptions = {
@@ -2628,7 +2293,7 @@ let lastHoveredDataPointIndex:any = '';
                     ],
                     xaxis: { ...this.RegionWiseMonthlyDistibutionOptions.xaxis, categories },
                     title: {
-                      text: 'Region Wise Distribution',
+                      text: 'Regionwise Month and Month Growth',
                       align: 'center',
                       // style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
                   },
@@ -2652,7 +2317,40 @@ tooltip: {
         const regionName = regions[seriesIndex];
 
         // Find the month corresponding to dataPointIndex (e.g., dataPointIndex 0 = month 4)
-        const month = dataPointIndex + 4;
+     let month =  dataPointIndex + 4;
+
+     if(selectedMoths &&  selectedMoths.length > 0 ){
+      // Find the earliest month and year
+      const ascendingOrderData = selectedMoths.sort((a:any, b:any) => {
+       return a.id - b.id;
+     });
+     
+     if(ascendingOrderData){
+       const monthsData= [
+        { id: 1, name: 'January', code: 'JAN' },
+        { id: 2, name: 'February', code: 'FEB' },
+        { id: 3, name: 'March', code: 'MAR' },
+        { id: 4, name: 'April', code: 'APR' },
+        { id: 5, name: 'May', code: 'MAY' },
+        { id: 6, name: 'June', code: 'JUN' },
+        { id: 7, name: 'July', code: 'JUL' },
+        { id: 8, name: 'August', code: 'AUG' },
+        { id: 9, name: 'September', code: 'SEP' },
+        { id: 10, name: 'October', code: 'OCT' },
+        { id: 11, name: 'November', code: 'NOV' },
+        { id: 12, name: 'December', code: 'DEC' }
+      ];
+
+    const getFiltedData = monthsData.filter(
+      month => 
+        month.id >= ascendingOrderData[0].id && 
+        month.id <= ascendingOrderData[ascendingOrderData.length - 1].id
+    );
+  
+      month = getFiltedData[dataPointIndex].id;
+     }
+      
+     }
 
         // Filter the response array to find the matching record
         const record = response.body.find(
@@ -2692,10 +2390,47 @@ dataLabels: {
   enabled: true,
   formatter: function(value, { seriesIndex, dataPointIndex }) {
       const regionName = regions[seriesIndex];
-      const month = dataPointIndex + 4;
-      const record = response.body.find(
-          (item: any) => item.region === regionName && item.month === month
+      let month = dataPointIndex + 4;
+    
+      if(selectedMoths &&  selectedMoths.length > 0 ){
+        // Find the earliest month and year
+        const ascendingOrderData = selectedMoths.sort((a:any, b:any) => {
+         return a.id - b.id;
+       });
+       
+       if(ascendingOrderData){
+         const monthsData= [
+          { id: 1, name: 'January', code: 'JAN' },
+          { id: 2, name: 'February', code: 'FEB' },
+          { id: 3, name: 'March', code: 'MAR' },
+          { id: 4, name: 'April', code: 'APR' },
+          { id: 5, name: 'May', code: 'MAY' },
+          { id: 6, name: 'June', code: 'JUN' },
+          { id: 7, name: 'July', code: 'JUL' },
+          { id: 8, name: 'August', code: 'AUG' },
+          { id: 9, name: 'September', code: 'SEP' },
+          { id: 10, name: 'October', code: 'OCT' },
+          { id: 11, name: 'November', code: 'NOV' },
+          { id: 12, name: 'December', code: 'DEC' }
+        ];
+
+      const getFiltedData = monthsData.filter(
+        month => 
+          month.id >= ascendingOrderData[0].id && 
+          month.id <= ascendingOrderData[ascendingOrderData.length - 1].id
       );
+    
+        month = getFiltedData[dataPointIndex].id;
+       }
+        
+       }
+
+
+
+       const record = response.body.find(
+        (item: any) => item.region === regionName && item.month === month
+    );
+
 
       if (record) {
           return [
@@ -2754,7 +2489,7 @@ dataLabels: {
 
     //           // Prepare data series for each metric and region
     //           const prepareSeriesData = (data: any[], metric: string, group: string) => {
-    //               const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
+    //               const regions = ['EAST','NORTH', 'SOUTH 1' ,'SOUTH 2', 'WEST'];
     //               const metricLabels: { [key: string]: string } = {
     //                   totalRetailerCode: 'Total Retailers',
     //                   totalQTY: 'Total Qty (K)',
@@ -2844,7 +2579,7 @@ dataLabels: {
 
     //       // Prepare data series for each metric and region
     //       const prepareSeriesData = (data: any[], metric: string) => {
-    //         const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
+    //         const regions = ['EAST','NORTH', 'SOUTH 1' ,'SOUTH 2', 'WEST'];
     //         const metricLabels: { [key: string]: string } = {
     //           totalRetailerCode: 'Total Retailers',
     //           totalQTY: 'Total Qty (K)',
@@ -3010,10 +2745,11 @@ dataLabels: {
       // ],t
       colors: [
         '#007bff',
-        '#ff5733',
         '#28a745',
-        '#ffc107',  
-        '#dc3545', // Blue, red-orange, green, amber, crimson
+        '#ffc107', 
+        '#dc3545', 
+        '#ff5733',
+        // Blue, red-orange, green, amber, crimson
         // '#6f42c1',
         // '#17a2b8',
         // '#fd7e14',
@@ -3041,7 +2777,7 @@ dataLabels: {
 
           // Function to prepare series data
           // const prepareSeriesData = (data: any[], metric: string, group: string) => {
-          //   const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
+          //   const regions = ['EAST','NORTH', 'SOUTH 1' ,'SOUTH 2', 'WEST'];
           //   const metricLabels: { [key: string]: string } = {
           //     retailerGrowth: 'Retailer Growth',
           //     orderGrowth: 'Order Growth (K)',
@@ -3063,7 +2799,7 @@ dataLabels: {
           // };
 
           const prepareSeriesData = (data: any[], metric: string, group: string) => {
-            const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
+            const regions = ['EAST','NORTH', 'SOUTH 1' ,'SOUTH 2', 'WEST'];
             const metricLabels: { [key: string]: string } = {
               retailerGrowth: 'Retailer Growth',
               orderGrowth: 'Order Growth (K)',
@@ -3086,7 +2822,7 @@ dataLabels: {
           
 
 
-          const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
+          const regions = ['EAST','NORTH', 'SOUTH 1' ,'SOUTH 2', 'WEST'];
 
           // Update chart options with dynamic series and categories
           this.RegionWiseGrowthOverPreviousMonthOptions = {
@@ -3731,6 +3467,13 @@ dataLabels: {
         title: { style: { color: '#000000' } }
       },
       dataLabels: {
+
+
+        formatter: function (val: any, { seriesIndex, w }) {
+          // Apply custom scaling to data labels based on series name
+          val = val +'%'
+          return val;
+        },
         //  enabled: false
         enabled: this.isMobileView ? false : true,
         style: {
@@ -3763,10 +3506,10 @@ dataLabels: {
       // ],
       colors: [
         '#007bff',
-        '#ff5733',
         '#28a745',
-        '#ffc107',
-        '#dc3545', // Blue, red-orange, green, amber, crimson
+        '#ffc107', 
+        '#dc3545', 
+        '#ff5733',  // Blue, red-orange, green, amber, crimson
         // '#6f42c1',
         // '#17a2b8',
         // '#fd7e14',
@@ -3794,7 +3537,7 @@ dataLabels: {
 
           // Prepare data series for each metric and region
           const prepareSeriesData = (data: any[], metric: string, group: string) => {
-            const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
+            const regions = ['EAST','NORTH', 'SOUTH 1' ,'SOUTH 2', 'WEST'];
             const metricLabels: { [key: string]: string } = {
               totalRetailerCode: 'No Of Orders %',
               totalQTY: 'Total Qty (K)',
@@ -3832,9 +3575,9 @@ dataLabels: {
             yaxis: [
               {
                 title: {
-                  text: '(No Of Orders)',
+                  text: '( No Of Orders % )',
                   style: { color: '#000000' },
-                  offsetX:20
+                  offsetX:15
                 },
                 labels: {
                   formatter: (val: any) => '' + val
@@ -3853,154 +3596,6 @@ dataLabels: {
       }
     );
   };
-
-  // public RegionWiseMonthlyAvgPerOrderFn = (MonthlyTotalOrderingPayload?: any) => {
-  //   this.spinner.show();
-  //   const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  //   const categories: string[] = [];
-
-  //   // Define chart options with placeholder series (to be updated dynamically)
-  //   this.RegionWiseMonthlyAvgPerOrder = {
-  //     // series: [],
-  //     series: [
-  //       // Retailers group
-  //       { name: 'Avg Oty Per Order - East', group: 'retailers', data: [] },
-  //       { name: 'Avg Oty Per Order - South1', group: 'retailers', data: [] },
-  //       { name: 'Avg Oty Per Order - South2', group: 'retailers', data: [] },
-  //       { name: 'Avg Oty Per Order - North', group: 'retailers', data: [] },
-  //       { name: 'Avg Oty Per Order - West', group: 'retailers', data: [] },
-
-  //       // Qty group
-  //       { name: 'Avg Value Per Order - East', group: 'qty', data: [] },
-  //       { name: 'Avg Value Per Order - South1', group: 'qty', data: [] },
-  //       { name: 'Avg Value Per Order - South2', group: 'qty', data: [] },
-  //       { name: 'Avg Value Per Order - North', group: 'qty', data: [] },
-  //       { name: 'Avg Value Per Order - West', group: 'qty', data: [] },
-
-  //       // // Value group
-  //       // { name: 'Value - East', group: 'value', data: [] },
-  //       // { name: 'Value - South1', group: 'value', data: [] },
-  //       // { name: 'Value - South2', group: 'value', data: [] },
-  //       // { name: 'Value - North', group: 'value', data: [] },
-  //       // { name: 'Value - West', group: 'value', data: [] }
-  //     ],
-  //     title: {
-  //       text: 'Region Wise Monthly Avg Per Order Loading...',
-  //       align: 'center',
-  //       // style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
-  //     },
-  //     yaxis: [
-  //       {
-  //         title: {
-  //           text: '(Avg Oty Per Order) Loading...',
-  //           style: { color: '#000000' }
-  //         },
-  //         labels: {
-  //           formatter: (val: any) => '' + val
-  //         },
-  //         tickAmount: 4
-  //       }
-  //     ],
-  //     xaxis: {
-  //       labels: { trim: false },
-  //       categories: [],
-  //       title: { style: { color: '#000000' } }
-  //     },
-  //     dataLabels: { enabled: true },
-  //     chart: {
-  //       type: 'bar',
-  //       height: 350,
-  //       stacked: true
-  //     },
-  //     plotOptions: { bar: { horizontal: false } },
-  //     fill: { opacity: 1 },
-  //     colors: [
-  //       '#80c7fd',
-  //       '#008FFB',
-  //       '#80f1cb',
-  //       '#00E396',
-  //       '#feb019', // Retailers colors
-  //       '#FF5733',
-  //       '#FFBD33',
-  //       '#C70039',
-  //       '#900C3F',
-  //       '#581845', // Qty colors
-  //       '#2ECC71',
-  //       '#28B463',
-  //       '#239B56',
-  //       '#1D8348',
-  //       '#186A3B' // Value colors
-  //     ],
-  //     legend: { position: 'top', horizontalAlign: 'left' }
-  //   };
-
-  //   this.dashboardService.RegionWiseMonthlyAvgPerOrderFn(MonthlyTotalOrderingPayload).subscribe(
-  //       (response) => {
-  //           if (response && response.body) {
-  //               this.spinner.hide();
-  //               // this.RegionWiseGrowthOverPreviousMonth(MonthlyTotalOrderingPayload);
-  //               // Prepare categories based on unique months
-  //               const uniqueMonths = [...new Set(response.body.map((item: any) => item.month))];
-  //               uniqueMonths.forEach((month: any) => {
-  //                   categories.push(monthNames[month - 1]);
-  //               });
-
-  //               // Prepare data series for each metric and region
-  //               const prepareSeriesData = (data: any[], metric: string, group: string) => {
-  //                   const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
-  //                   const metricLabels: { [key: string]: string } = {
-  //                       totalRetailerCode: 'No Of Orders %',
-  //                       totalQTY: 'Avg Oty Per Order (K)',
-  //                       totalRevenue: 'Avg Value Per Order (Cr)'
-  //                   };
-
-  //                   return regions.map(region => {
-  //                       const regionData = data.filter(item => item.region === region);
-  //                       return {
-  //                           name: `${metricLabels[metric]} - ${region}`,
-  //                           group: group,
-  //                           data: regionData.map(item => {
-  //                               if (metric === 'avgQtyPerOrder') return (item.avgQtyPerOrder / 1000).toFixed(2); // Adjust units
-  //                               if (metric === 'avgPricePerOrder') return (item.avgPricePerOrder / 10000000).toFixed(2) // Adjust units
-  //                               return item.noOfOrdersPercentage;
-  //                           })
-  //                       };
-  //                   });
-  //               };
-
-  //               // Update chart options with dynamic series and categories
-  //               this.RegionWiseMonthlyAvgPerOrder = {
-  //                   ...this.RegionWiseMonthlyAvgPerOrder,
-  //                   series: [
-  //                       // ...prepareSeriesData(response.body, 'totalRetailerCode', 'No Of Orders'),
-  //                       ...prepareSeriesData(response.body, 'avgQtyPerOrder', 'qty'),
-  //                       ...prepareSeriesData(response.body, 'avgPricePerOrder', 'value')
-  //                   ],
-  //                   xaxis: { ...this.RegionWiseMonthlyAvgPerOrder.xaxis, categories },
-  //                   title: {
-  //                     text: 'Region Wise Monthly Avg Per Order.',
-  //                     align: 'center',
-  //                     // style: { fontSize: '16px', fontWeight: 'bold', color: '#333' }
-  //                 },
-  //                 yaxis: [{
-  //                   title: {
-  //                       text: '(Avg Oty Per Order)',
-  //                       style: { color: '#000000' }
-  //                   },
-  //                   labels: {
-  //                       formatter: (val: any) => '' + val
-  //                   },
-  //                   tickAmount: 4
-  //               }],
-  //               };
-  //           }
-  //       },
-  //       (error) => {
-  //           this.spinner.hide();
-  //           console.error('Error fetching region-wise monthly distribution data:', error);
-  //       }
-  //   );
-  // };
 
   public RegionWiseMonthlyAvgPerOrderFn = (MonthlyTotalOrderingPayload?: any) => {
     this.spinner.show();
@@ -4067,11 +3662,11 @@ dataLabels: {
         // '#C70039',
         // '#900C3F',
         // '#581845' // Value colors
-        '#007bff',
-        '#ff5733',
+       '#007bff',
         '#28a745',
-        '#ffc107',
-        '#dc3545',
+        '#ffc107', 
+        '#dc3545', 
+        '#ff5733', 
       ],
       legend: { position: 'bottom', horizontalAlign: 'center' }
     };
@@ -4089,7 +3684,7 @@ dataLabels: {
 
           // Prepare data series for each metric and region
           const prepareSeriesData = (data: any[], metric: string, group: string) => {
-            const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
+            const regions = ['EAST','NORTH', 'SOUTH 1' ,'SOUTH 2', 'WEST'];
             const metricLabels: { [key: string]: string } = {
               avgQtyPerOrder: 'Avg Qty Per Order',
               avgPricePerOrder: 'Avg Value Per Order (K)'
@@ -4153,7 +3748,7 @@ dataLabels: {
 
     // Find the earliest month and year
     const sortedMonths = selectedMonths.sort((a:any, b:any) => {
-        return a.year - b.year || new Date(a.month + " 1").getMonth() - new Date(b.month + " 1").getMonth();
+        return a.id - b.id;
     });
 
     const startYear =  Math.min(...selectedYears);
@@ -4168,7 +3763,34 @@ dataLabels: {
     const currentMonth = currentDate.toLocaleString('default', { month: 'long' });
     const currentYear = currentDate.getFullYear();
 
-    return `From ${startMonth} ${startYear} to ${endMonth} ${EndYear} order details.`;
+    const date = new Date(
+      parseInt(this.getLastUpdatedRecordDate.slice(0, 4)), // Year
+      parseInt(this.getLastUpdatedRecordDate.slice(4, 6)) - 1, // Month (0-indexed)
+      parseInt(this.getLastUpdatedRecordDate.slice(6, 8)) // Day
+    );
+  
+    const day = date.getDate();
+    const month = date.toLocaleString('default', { month: 'long' });
+    const year = date.getFullYear();
+  
+    // Add ordinal suffix to the day
+    const ordinalSuffix = (d:any) => {
+      if (d > 3 && d < 21) return 'th';
+      switch (d % 10) {
+        case 1: return 'st';
+        case 2: return 'nd';
+        case 3: return 'rd';
+        default: return 'th';
+      }
+    };
+  
+   const getLastUpdatedDate =  `${day}${ordinalSuffix(day)} ${month} ${year}`;
+    // if(endMonth == currentMonth){
+
+      return `From 1st ${startMonth} ${startYear} to ${getLastUpdatedDate} order details.`;
+    // }
+
+    // return `From 1st ${startMonth} ${startYear} to ${endMonth} ${EndYear} order details.`;
 }
 
 
@@ -4216,6 +3838,13 @@ dataLabels: {
     this.chartOptionslineForOrdBh = {};
     this.RegionWiseMonthlyDistibutionOptionsFOrdBh = {};
     this.RegionWiseMonthlyAvgPerOrder = {};
+    this.percentageOfOrdersOfDayInMonthOptions={};
+    this.percentageofOrdersbyWeekdayorWeekendOptionsBarchart = {};
+    this.percentageofOrdersByWeekdayorWeekendRegionWiseOptions={};
+    this.percentageofOrdersByHourOfTheDayOptionsBarchart={};
+    this.overallOrders = [];
+    this.regionTotals = [];
+    this.rsTotals = [];
   }
 
   // orders by day of the month.
@@ -5736,7 +5365,7 @@ dataLabels: {
 
           // Function to prepare series data
           const prepareSeriesData = (data: any[], metric: string, group: string) => {
-            const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
+            const regions = ['EAST','NORTH', 'SOUTH 1' ,'SOUTH 2', 'WEST'];
             const metricLabels: { [key: string]: string } = {
               retailerGrowth: 'Retailer Growth',
               orderGrowth: 'Order Growth (K)',
@@ -5758,7 +5387,7 @@ dataLabels: {
           };
 
 
-          const regions = ['EAST', 'WEST', 'NORTH', 'SOUTH 1', 'SOUTH 2'];
+          const regions = ['EAST','NORTH', 'SOUTH 1' ,'SOUTH 2', 'WEST'];
 
           // Update chart options with dynamic series and categories
           this.RegionWiseGrowthOverPreviousMonthOptionsForPrevYear = {
