@@ -6471,28 +6471,17 @@ public class UserDaoimpl implements UserDao {
 //				+ "    YEAR(OrderDate),\r\n" + "    MONTH(OrderDate),\r\n" + "    Region\r\n" + "ORDER BY\r\n"
 //				+ "    YEAR(OrderDate),\r\n" + "    MONTH(OrderDate);";
 
-		
-		String checkQuery =
-                "SELECT \r\n" + "    -- Extract Year and Month to group by month\r\n"
-				+ "    YEAR(OrderDate) AS Year,\r\n" + "    MONTH(OrderDate) AS Month,\r\n"				
-                + "    SUM(TotalPrice) AS OrderValue,\r\n" + "    SUM(OrderQty) AS TotalOrder,\r\n"
+		String checkQuery = "SELECT \r\n" + "    -- Extract Year and Month to group by month\r\n"
+				+ "    YEAR(OrderDate) AS Year,\r\n" + "    MONTH(OrderDate) AS Month,\r\n"
+				+ "    SUM(TotalPrice) AS OrderValue,\r\n" + "    SUM(OrderQty) AS TotalOrder,\r\n"
 				+ "    COUNT(DISTINCT OrderNo) AS OrderQty,\r\n" + "    COUNT(DISTINCT RetailerCode) AS Dealers,\r\n"
-				+ "    Region,\r\n"+
-                "        (SELECT MAX(OrderDate) \r\n" + 
-                "         FROM MBROrders \r\n" + 
-                "         WHERE CONVERT(VARCHAR, OrderDate, 112) <= :endDate) AS LastOrderDate\r\n" +
-                "    FROM \r\n" + 
-                "        MBROrders\r\n" + 
-                "    WHERE \r\n" +
-                "        CONVERT(VARCHAR, OrderDate, 112) >= :startDate \r\n" +
-                "        AND CONVERT(VARCHAR, OrderDate, 112) <= :endDate\r\n" + 
-                "    GROUP BY\r\n" +
-                "        YEAR(OrderDate),\r\n" + 
-                "        MONTH(OrderDate),\r\n" + 
-                "Region"+
-                "    ORDER BY\r\n" +
-                "        YEAR(OrderDate),\r\n" + 
-                "        MONTH(OrderDate);";
+				+ "    Region,\r\n" + "        (SELECT MAX(OrderDate) \r\n" + "         FROM MBROrders \r\n"
+				+ "         WHERE CONVERT(VARCHAR, OrderDate, 112) <= :endDate) AS LastOrderDate\r\n" + "    FROM \r\n"
+				+ "        MBROrders\r\n" + "    WHERE \r\n"
+				+ "        CONVERT(VARCHAR, OrderDate, 112) >= :startDate \r\n"
+				+ "        AND CONVERT(VARCHAR, OrderDate, 112) <= :endDate\r\n" + "    GROUP BY\r\n"
+				+ "        YEAR(OrderDate),\r\n" + "        MONTH(OrderDate),\r\n" + "Region" + "    ORDER BY\r\n"
+				+ "        YEAR(OrderDate),\r\n" + "        MONTH(OrderDate);";
 		// Create a native query
 		Query query = entityManager.createNativeQuery(checkQuery);
 
@@ -6517,7 +6506,7 @@ public class UserDaoimpl implements UserDao {
 				data.setDelears((Integer) row[5]);
 				data.setRegion(row[6].toString());
 				data.setEndDate(row[7].toString());
-				
+
 				outputDashboardTiles.add(data);
 				// Now, filteredData is populated with values
 			}
@@ -6541,8 +6530,7 @@ public class UserDaoimpl implements UserDao {
 				+ "            AND CONVERT(VARCHAR, OrderDate, 112) <= :endDate\r\n" + "	Group BY\r\n"
 				+ "	 YEAR(OrderDate),\r\n" + "        MONTH(OrderDate)\r\n" + "    ORDER BY\r\n"
 				+ "        YEAR(OrderDate),\r\n" + "        MONTH(OrderDate);";
-		
-		
+
 //		String checkQuery = "SELECT \r\n" + 
 //                "        -- Extract Year and Month to group by month\r\n" +
 //                "        YEAR(OrderDate) AS Year,\r\n" + 
@@ -6563,7 +6551,6 @@ public class UserDaoimpl implements UserDao {
 //                "    ORDER BY\r\n" +
 //                "        YEAR(OrderDate),\r\n" + 
 //                "        MONTH(OrderDate);";
-
 
 		// Create a native query
 		Query query = entityManager.createNativeQuery(checkQuery);
@@ -6842,7 +6829,7 @@ public class UserDaoimpl implements UserDao {
 			for (Object[] row : result) {
 				// Assuming row contains values in the correct order for mapping
 				OutputPercentageofOrdersbyWeekdayorWeekend data = new OutputPercentageofOrdersbyWeekdayorWeekend();
-				//data.setMonth((Integer) row[0]);
+				// data.setMonth((Integer) row[0]);
 				data.setDayType(row[0].toString());
 				data.setDistinctOrderCount((Integer) row[1]);
 				data.setPercentageOfOrders((BigDecimal) row[2]);
@@ -6882,7 +6869,7 @@ public class UserDaoimpl implements UserDao {
 				// Assuming row contains values in the correct order for mapping
 				OutputPercentageofOrdersByWeekdayorWeekendRegionWise data = new OutputPercentageofOrdersByWeekdayorWeekendRegionWise();
 				data.setRegion(row[0].toString());
-				//data.setMonth((Integer) row[1]);
+				// data.setMonth((Integer) row[1]);
 				data.setDayType(row[1].toString());
 				data.setDistinctOrderCount((Integer) row[2]);
 				data.setPercentageOfOrders((BigDecimal) row[3]);
@@ -6921,7 +6908,7 @@ public class UserDaoimpl implements UserDao {
 			for (Object[] row : result) {
 				// Assuming row contains values in the correct order for mapping
 				OutputPercentaageOfOrdersByHourOfTheDayOnWeekdayWeekend data = new OutputPercentaageOfOrdersByHourOfTheDayOnWeekdayWeekend();
-				//data.setMonth((Integer) row[0]);
+				// data.setMonth((Integer) row[0]);
 				data.setDayType(row[0].toString());
 				data.setOrderHour((Integer) row[1]);
 				data.setDistinctOrderCount((Integer) row[2]);
@@ -7869,8 +7856,8 @@ public class UserDaoimpl implements UserDao {
 		if (retailerType != null && !retailerType.isEmpty()) {
 			conditions.append(" AND RetailerCode LIKE '").append(retailerType.equals("IDD") ? "9%" : "1%").append("'");
 		}
-
-		// Build the final query
+		if (rsNameList.isEmpty() && abmNameList.isEmpty()) {
+			// Build the final query
 //		String finalQuery = "WITH MonthlyRegionOrderQty AS (\r\n" + "    SELECT \r\n"
 //				+ "        YEAR(OrderDate) AS OrderYear,\r\n" + "        MONTH(OrderDate) AS OrderMonth,\r\n"
 //				+ "        Region,\r\n" + "        SUM(OrderQty) AS RegionOrderQty,\r\n"
@@ -7888,43 +7875,82 @@ public class UserDaoimpl implements UserDao {
 //				+ "    mrq.OrderYear = mtq.OrderYear\r\n" + "    AND mrq.OrderMonth = mtq.OrderMonth\r\n"
 //				+ "ORDER BY \r\n" + "    mrq.OrderYear,\r\n" + "    mrq.OrderMonth,\r\n" + "    mrq.Region;";
 
-		String finalQuery = "WITH MonthlyRegionOrderQty AS (\r\n" + "    SELECT \r\n"
-				+ "        YEAR(OrderDate) AS OrderYear,\r\n" + "        MONTH(OrderDate) AS OrderMonth,\r\n"
-				+ "        Region,\r\n" + "        SUM(OrderQty) AS RegionOrderQty,\r\n"
-				+ "        COUNT(DISTINCT OrderNo) AS DistinctOrderCount\r\n" + "    FROM \r\n"
-				+ "        MBROrders (NOLOCK)\r\n" + "    WHERE " + conditions.toString() + "\r\n" + // Exclude region
-																										// filter here
-				"    GROUP BY YEAR(OrderDate), MONTH(OrderDate), Region\r\n" + "),\r\n"
-				+ "MonthlyTotalOrderQty AS (\r\n" + "    SELECT \r\n" + "        OrderYear,\r\n"
-				+ "        OrderMonth,\r\n" + "        SUM(RegionOrderQty) AS TotalOrderQtyForMonth\r\n"
-				+ "    FROM \r\n" + "        MonthlyRegionOrderQty\r\n" + "    GROUP BY OrderYear, OrderMonth\r\n"
-				+ ")\r\n" + "SELECT \r\n" + "    mrq.OrderYear,\r\n" + "    mrq.OrderMonth,\r\n" + "    mrq.Region,\r\n"
-				+ "    mrq.DistinctOrderCount,\r\n" + "    mrq.RegionOrderQty,\r\n" + "    CASE \r\n"
-				+ "        WHEN mtq.TotalOrderQtyForMonth > 0 THEN (mrq.RegionOrderQty * 100.0) / mtq.TotalOrderQtyForMonth\r\n"
-				+ "        ELSE 0\r\n" + "    END AS RegionOrderQtyPercentage\r\n" + "FROM \r\n"
-				+ "    MonthlyRegionOrderQty mrq\r\n" + "JOIN \r\n" + "    MonthlyTotalOrderQty mtq\r\n" + "ON \r\n"
-				+ "    mrq.OrderYear = mtq.OrderYear\r\n" + "    AND mrq.OrderMonth = mtq.OrderMonth\r\n" + "WHERE \r\n"
-				+ conditions1.toString() + // Apply region filter only here
-				"ORDER BY \r\n" + "    mrq.OrderYear,\r\n" + "    mrq.OrderMonth,\r\n" + "    mrq.Region;";
+			String finalQuery = "WITH MonthlyRegionOrderQty AS (\r\n" + "    SELECT \r\n"
+					+ "        YEAR(OrderDate) AS OrderYear,\r\n" + "        MONTH(OrderDate) AS OrderMonth,\r\n"
+					+ "        Region,\r\n" + "        SUM(OrderQty) AS RegionOrderQty,\r\n"
+					+ "        COUNT(DISTINCT OrderNo) AS DistinctOrderCount\r\n" + "    FROM \r\n"
+					+ "        MBROrders (NOLOCK)\r\n" + "    WHERE " + conditions.toString() + "\r\n" + // Exclude
+																											// region
+																											// filter
+																											// here
+					"    GROUP BY YEAR(OrderDate), MONTH(OrderDate), Region\r\n" + "),\r\n"
+					+ "MonthlyTotalOrderQty AS (\r\n" + "    SELECT \r\n" + "        OrderYear,\r\n"
+					+ "        OrderMonth,\r\n" + "        SUM(RegionOrderQty) AS TotalOrderQtyForMonth\r\n"
+					+ "    FROM \r\n" + "        MonthlyRegionOrderQty\r\n" + "    GROUP BY OrderYear, OrderMonth\r\n"
+					+ ")\r\n" + "SELECT \r\n" + "    mrq.OrderYear,\r\n" + "    mrq.OrderMonth,\r\n"
+					+ "    mrq.Region,\r\n" + "    mrq.DistinctOrderCount,\r\n" + "    mrq.RegionOrderQty,\r\n"
+					+ "    CASE \r\n"
+					+ "        WHEN mtq.TotalOrderQtyForMonth > 0 THEN (mrq.RegionOrderQty * 100.0) / mtq.TotalOrderQtyForMonth\r\n"
+					+ "        ELSE 0\r\n" + "    END AS RegionOrderQtyPercentage\r\n" + "FROM \r\n"
+					+ "    MonthlyRegionOrderQty mrq\r\n" + "JOIN \r\n" + "    MonthlyTotalOrderQty mtq\r\n" + "ON \r\n"
+					+ "    mrq.OrderYear = mtq.OrderYear\r\n" + "    AND mrq.OrderMonth = mtq.OrderMonth\r\n"
+					+ "WHERE \r\n" + conditions1.toString() + // Apply region filter only here
+					"ORDER BY \r\n" + "    mrq.OrderYear,\r\n" + "    mrq.OrderMonth,\r\n" + "    mrq.Region;";
 
-		// Execute query and map results
-		Query query = entityManager.createNativeQuery(finalQuery);
+			Query query = entityManager.createNativeQuery(finalQuery);
 
-		try {
-			List<Object[]> result = query.getResultList();
-			for (Object[] row : result) {
-				OutputRegionWiseMonthlyDistributionNoofOrders data = new OutputRegionWiseMonthlyDistributionNoofOrders();
-				data.setYear((Integer) row[0]);
-				data.setMonth((Integer) row[1]);
-				data.setRegion(row[2].toString().toUpperCase());
-				data.setNoOfOrders((Integer) row[3]);
-				data.setNoOfOrdersPercentage(((BigDecimal) row[5]));
+			try {
+				List<Object[]> result = query.getResultList();
+				for (Object[] row : result) {
+					OutputRegionWiseMonthlyDistributionNoofOrders data = new OutputRegionWiseMonthlyDistributionNoofOrders();
+					data.setYear((Integer) row[0]);
+					data.setMonth((Integer) row[1]);
+					data.setRegion(row[2].toString().toUpperCase());
+					data.setNoOfOrders((Integer) row[3]);
+					data.setNoOfOrdersPercentage(((BigDecimal) row[5]));
 
-				regionWiseMonthlyDistributionData.add(data);
+					regionWiseMonthlyDistributionData.add(data);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+		if (!rsNameList.isEmpty() || !abmNameList.isEmpty()) {
+			String finalQuery = "WITH MonthlyRegionOrderQty AS (\r\n" + "    SELECT \r\n"
+					+ "        YEAR(OrderDate) AS OrderYear,\r\n" + "        MONTH(OrderDate) AS OrderMonth,\r\n"
+					+ "        Region,\r\n" + "        SUM(OrderQty) AS RegionOrderQty,\r\n"
+					+ "        COUNT(DISTINCT OrderNo) AS DistinctOrderCount\r\n" + "    FROM \r\n"
+					+ "        MBROrders (NOLOCK)\r\n" + "    WHERE  \r\n" + conditions.toString()
+					+ "    GROUP BY YEAR(OrderDate), MONTH(OrderDate), Region\r\n" + "),\r\n"
+					+ "MonthlyTotalOrderQty AS (\r\n" + "    SELECT \r\n" + "        SUM(OrderQty) AS TotalOrderQty\r\n"
+					+ "    FROM \r\n" + "        MBROrders (NOLOCK)\r\n" + "    WHERE  \r\n" + conditions.toString()
+					+ ")\r\n" + "SELECT \r\n" + "    mrq.OrderYear,\r\n" + "    mrq.OrderMonth,\r\n"
+					+ "    mrq.Region,\r\n" + "    mrq.DistinctOrderCount,\r\n" + "    mrq.RegionOrderQty, \r\n"
+					+ "    mtq.TotalOrderQty,\r\n" + "    CASE \r\n"
+					+ "        WHEN mtq.TotalOrderQty > 0 THEN (mrq.RegionOrderQty * 100.0) / mtq.TotalOrderQty\r\n"
+					+ "        ELSE 0 \r\n" + "    END AS RegionOrderQtyPercentage\r\n" + "FROM \r\n"
+					+ "    MonthlyRegionOrderQty mrq,\r\n" + "    MonthlyTotalOrderQty mtq\r\n" + "ORDER BY \r\n"
+					+ "    mrq.OrderYear,\r\n" + "    mrq.OrderMonth,\r\n" + "    mrq.Region;";
+
+			Query query = entityManager.createNativeQuery(finalQuery);
+
+			try {
+				List<Object[]> result = query.getResultList();
+				for (Object[] row : result) {
+					OutputRegionWiseMonthlyDistributionNoofOrders data = new OutputRegionWiseMonthlyDistributionNoofOrders();
+					data.setYear((Integer) row[0]);
+					data.setMonth((Integer) row[1]);
+					data.setRegion(row[2].toString().toUpperCase());
+					data.setNoOfOrders((Integer) row[3]);
+					data.setNoOfOrdersPercentage(((BigDecimal) row[6]));
+
+					regionWiseMonthlyDistributionData.add(data);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		// Execute query and map results
 
 		return regionWiseMonthlyDistributionData;
 	}
