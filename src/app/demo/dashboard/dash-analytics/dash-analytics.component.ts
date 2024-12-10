@@ -620,7 +620,7 @@ console.log(MonthlyToalOrdaringPayload);
       this.selectedRetailerTypes = [];
       this.selectedMonths = [];
 
-      if(this.dashboardService.selectedData === '4'){
+      if(this.dashboardService.selectedData === '4' || this.dashboardService.selectedData === '5'){
         const today = new Date();
         const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
         const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
@@ -5519,36 +5519,10 @@ dataLabels: {
 
   selectImage(data: any,index:any) {
     this.selectedOrder = data.productCode;
-    
-    const selectedImage = [
-      'assets/images/1802NL02/1802SL12_2.jpg',
-      'assets/images/1802NL02/1802NL02_1.jpg',
-      'assets/images/1802NL02/1802SL12_3.jpg',
-      'assets/images/1802NL02/1802SL12_4.jpg',
-    ];
-  
+    let result =  data.productCode.includes("/") ?  data.productCode.replace("/", "") :  data.productCode;
+    const selectedImage = `assets/skuimages/${result}.jpg`
     this.currentOverallLevel = index;
-    // Initialize the index
-    let currentIndex = 0;
-    this.selectedImageSource = selectedImage[currentIndex];
-  
-    // Set an interval to update the image every 3 seconds
-    const interval = setInterval(() => {
-      currentIndex++;
-      if (currentIndex >= selectedImage.length) {
-        currentIndex = 0; // Reset to the first image when reaching the end
-      }
-      this.selectedImageSource = selectedImage[currentIndex];
-    }, 3000);
-  
-    // Optionally clear the interval after some time (e.g., when the user navigates away or the component is destroyed)
-    // this will prevent the interval from running forever.
-    // You can use lifecycle hooks like ngOnDestroy to clear the interval.
-  
-    // Example to clear after 15 seconds (or any other condition you choose):
-    setTimeout(() => {
-      clearInterval(interval);
-    }, 15000); // clears interval after 15 seconds
+    this.selectedImageSource = selectedImage;
   }
   
 // this is for image for regionwise
@@ -5601,22 +5575,22 @@ dataLabels: {
     this.selectedImageSourceForRs = selectedImage[currentIndex];
   
     // Set an interval to update the image every 3 seconds
-    const interval = setInterval(() => {
-      currentIndex++;
-      if (currentIndex >= selectedImage.length) {
-        currentIndex = 0; // Reset to the first image when reaching the end
-      }
+    // const interval = setInterval(() => {
+      // currentIndex++;
+      // if (currentIndex >= selectedImage.length) {
+      //   currentIndex = 0; // Reset to the first image when reaching the end
+      // }
       this.selectedImageSourceForRegion = selectedImage[currentIndex];
-    }, 3000);
+    // }, 3000);
   
     // Optionally clear the interval after some time (e.g., when the user navigates away or the component is destroyed)
     // this will prevent the interval from running forever.
     // You can use lifecycle hooks like ngOnDestroy to clear the interval.
   
     // Example to clear after 15 seconds (or any other condition you choose):
-    setTimeout(() => {
-      clearInterval(interval);
-    }, 15000); // clears interval after 15 seconds
+    // setTimeout(() => {
+      // clearInterval(interval);
+    // }, 15000); // clears interval after 15 seconds
   }
   
 }

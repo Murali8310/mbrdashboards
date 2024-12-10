@@ -2128,7 +2128,7 @@ text-align: center;
     </app-card>
 
     <div class="row" style="margin-top: 20px;">
-      <div class="col-lg-6  col-md-12 table-responsive" *ngIf="overallOrders && overallOrders.length > 0">
+      <div class="col-lg-8  col-md-12 table-responsive" *ngIf="overallOrders && overallOrders.length > 0">
         <!-- Overall Orders Table -->
         <table class="summary-table">
           <thead>
@@ -2157,13 +2157,14 @@ text-align: center;
           </tbody>
         </table>
       </div>
-      <div class="col-lg-6 col-md-12"  *ngIf="overallOrders && overallOrders.length > 0">
+      <div class="col-lg-4 col-md-12 imgStyles" style="text-align: center;"  *ngIf="overallOrders && overallOrders.length > 0">
        
-       <div class="headerStyles">
+       <div class="headerStyles" *ngIf="false">
        <h4 style="text-align: center;border-radius: 7px;color: white;
        " class="ng-star-inserted">Top {{currentOverallLevel + 1}} ND2011324/P  Image Details</h4>
        </div>
-        <img  src="{{selectedImageSource}}" alt="logo-img" class="logo" style="height:337px;width: 100%;border-radius: 13px;">
+        <img  src="{{selectedImageSource}}" alt="logo-img" class="logo"
+        style="height: 200px;width: 200px;border-radius: 13px;justify-content: center;align-items: center;/* margin-top: 59px; */">
         <!-- <img  src="assets/images/1802NL02/1802SL12_2.jpg" alt="logo-img" class="logo" style="height: 33px; width: 33px;"> -->
       </div>
     </div>
@@ -2175,7 +2176,7 @@ text-align: center;
       "> {{regionTotals && regionTotals.length > 0 ? 'Region Wise Details' : 'Region Wise Details Loading...'}} </h4>
     </app-card>
     <div class="row" style="margin-top: 20px;">
-    <div class="col-lg-6  col-md-12 table-responsive" *ngIf="regionTotals && regionTotals.length > 0">
+    <div class="col-lg-8  col-md-12 table-responsive" *ngIf="regionTotals && regionTotals.length > 0">
       <!-- Region-wise Orders Table -->
       <table class="summary-table">
         <thead>
@@ -2202,12 +2203,12 @@ text-align: center;
         </tbody>
       </table>
     </div>
-    <div class="col-lg-6 col-md-12"  *ngIf="regionTotals && regionTotals.length > 0">
-      <div class="headerStyles">
+    <div class="col-lg-4 col-md-12 imgStyles"  *ngIf="regionTotals && regionTotals.length > 0">
+      <!-- <div class="headerStyles">
         <h4 style="text-align: center;border-radius: 7px;color: white;
         " class="ng-star-inserted">Top 1 ND2011324/P  Image Details.</h4>
-        </div>
-              <img  src="{{selectedImageSourceForRegion}}" alt="logo-img" class="logo" style="height:337px;width: 100%;border-radius: 13px;">
+        </div> -->
+              <img   src="{{selectedImageSourceForRegion}}" alt="logo-img" class="logo" style="height: 200px;width: 200px;border-radius: 13px;justify-content: center;align-items: center;/* margin-top: 59px; */">
       <!-- <img  src="assets/images/1802NL02/1802SL12_2.jpg" alt="logo-img" class="logo" style="height: 33px; width: 33px;"> -->
     </div>
   </div>
@@ -2220,7 +2221,7 @@ text-align: center;
     ">{{rsTotals && rsTotals.length > 0 ? 'RS Wise Details' : 'RS Wise Details Loading...'}}  </h4>
   </app-card>
   <div class="row" style="margin-top: 20px;">
-    <div class="col-lg-6  col-md-12 table-responsive" *ngIf="rsTotals && rsTotals.length > 0">
+    <div class="col-lg-8  col-md-12 table-responsive" *ngIf="rsTotals && rsTotals.length > 0">
       <!-- RS-wise Orders Table -->
       <table class="summary-table">
         <thead>
@@ -2249,12 +2250,12 @@ text-align: center;
         </tbody>
       </table>
     </div>
-    <div class="col-lg-6 col-md-12"  *ngIf="rsTotals && rsTotals.length > 0">
-      <div class="headerStyles">
+    <div class="col-lg-4 col-md-12 imgStyles"  *ngIf="rsTotals && rsTotals.length > 0">
+      <!-- <div class="headerStyles">
         <h4 style="text-align: center;border-radius: 7px;color: white;
         " class="ng-star-inserted">Top 1 ND2011324/P  Image Details</h4>
-        </div>
-              <img  src="{{selectedImageSourceForRs}}" alt="logo-img" class="logo" style="height:337px;width: 100%;border-radius: 13px;">
+        </div> -->
+              <img  src="{{selectedImageSourceForRs}}" alt="logo-img" class="logo" style="height: 200px;width: 200px;border-radius: 13px;justify-content: center;align-items: center;/* margin-top: 59px; */">
       <!-- <img  src="assets/images/1802NL02/1802SL12_2.jpg" alt="logo-img" class="logo" style="height: 33px; width: 33px;"> -->
     </div>
     </div>
