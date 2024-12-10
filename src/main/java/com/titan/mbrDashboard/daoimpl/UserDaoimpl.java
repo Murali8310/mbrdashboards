@@ -6166,6 +6166,8 @@ public class UserDaoimpl implements UserDao {
 		data.setAbmName(ABMName);
 		if (!filter.getRegionList().isEmpty() || !filter.getAbmName().isEmpty()) {
 			MasterData filterData = getFilterData(filter);
+			filterData.setAbmName(ABMName);
+			filterData.setBrand(brandName);
 			return filterData;
 		}
 
@@ -6231,6 +6233,14 @@ public class UserDaoimpl implements UserDao {
 	private List<ABMName> selectABMNameForMaster() {
 		List<ABMName> ABMName = null;
 		String checkSql = "select UserName, Name, Region from MBRUsers (nolock) where Desig_Id=7 or Desig_Id=6 order by Name;";
+		Query checkQuery = entityManager.createNativeQuery(checkSql);
+		ABMName = checkQuery.getResultList();
+		return ABMName;
+	}
+
+	private List<ABMName> selectABMNameForMasterForFilter() {
+		List<ABMName> ABMName = null;
+		String checkSql = "select UserName, Name, Region from MBRUsers (nolock) where Desig_Id=7 or Desig_Id=6  order by Name;";
 		Query checkQuery = entityManager.createNativeQuery(checkSql);
 		ABMName = checkQuery.getResultList();
 		return ABMName;
@@ -6594,6 +6604,10 @@ public class UserDaoimpl implements UserDao {
 																									// each region
 				.collect(Collectors.toList());
 
+		List<String> ABMList = Arrays.stream(data.getAbmName().split(",")).map(String::trim) // Trim spaces around
+				// each region
+				.collect(Collectors.toList());
+
 		if (!data.getRegionList().isEmpty() && data.getAbmName().isEmpty()) {
 			String checkSql = "SELECT UserName, Name, Region FROM MBRUsers " + "WHERE Region IN (:region) "
 					+ "AND (desig_id = 6 OR desig_id = 7) order by Name";
@@ -6625,10 +6639,34 @@ public class UserDaoimpl implements UserDao {
 		else if (!data.getRegionList().isEmpty() && !data.getAbmName().isEmpty()) {
 
 			String checksql = "SELECT Name, UserName, Region FROM MBRUsers WHERE Region IN (:region)"
-					+ "AND Desig_Id = 5 AND (ABMEMM = :ABMName OR ABMKAM = :ABMName) order by Name;";
+					+ "AND Desig_Id = 5 AND (ABMEMM IN (:ABMName) OR ABMKAM IN (:ABMName)) order by Name;";
 			Query checkQuery = entityManager.createNativeQuery(checksql);
 			checkQuery.setParameter("region", regionList);
-			checkQuery.setParameter("ABMName", data.getAbmName());
+			//checkQuery.setParameter("ABMName", data.getAbmName());
+			checkQuery.setParameter("ABMName", ABMList);
+			// rsName=checkQuery.getResultList();
+
+			List<RSName> resultList = checkQuery.getResultList();
+//			for (Object[] row : resultList) {
+//				RSName rsm = new RSName();
+//				rsm.setRsName((String) row[0]); // Assuming Name is the first column
+//				rsm.setRegion((String) row[1]); // Assuming UserName is the second column
+//				rsm.setUserName((String) row[1]);
+//
+//				rsName.add(rsm); // Add to the list
+//		    }
+			dataoutput.setRsName(resultList);
+
+			return dataoutput;
+		}
+
+		else if (data.getRegionList().isEmpty() && !data.getAbmName().isEmpty()) {
+
+			String checksql = "SELECT Name, UserName FROM MBRUsers WHERE Desig_Id = 5 AND (ABMEMM IN( :ABMList) OR ABMKAM IN( :ABMList)) order by Name;";
+			Query checkQuery = entityManager.createNativeQuery(checksql);
+			// checkQuery.setParameter("region", regionList);
+			//checkQuery.setParameter("ABMName", data.getAbmName());
+			checkQuery.setParameter("ABMList", ABMList);
 			// rsName=checkQuery.getResultList();
 
 			List<RSName> resultList = checkQuery.getResultList();
