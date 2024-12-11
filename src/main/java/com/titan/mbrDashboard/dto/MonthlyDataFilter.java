@@ -8,6 +8,8 @@ public class MonthlyDataFilter {
 	private String rsNameList;
 	private String abmName;
 	private String retailerType;
+	private String selectedMonths;
+	private String selectedYears;
 	
 	
 
@@ -22,6 +24,18 @@ public class MonthlyDataFilter {
 	}
 	public String getBrandList() {
 		return brandList;
+	}
+	public String getSelectedMonths() {
+		return selectedMonths;
+	}
+	public String getSelectedYears() {
+		return selectedYears;
+	}
+	public void setSelectedMonths(String selectedMonths) {
+		this.selectedMonths = selectedMonths;
+	}
+	public void setSelectedYears(String selectedYears) {
+		this.selectedYears = selectedYears;
 	}
 	public String getRsNameList() {
 		return rsNameList;

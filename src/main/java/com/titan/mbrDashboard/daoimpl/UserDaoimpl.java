@@ -6471,31 +6471,18 @@ public class UserDaoimpl implements UserDao {
 	public List<OutputDashboardTiles> OutputDashboardTiles(MonthlyDataFilter filter) {
 		// TODO Auto-generated method stub
 		List<OutputDashboardTiles> outputDashboardTiles = new ArrayList<>();
-//		String checkQuery = "SELECT \r\n" + "    -- Extract Year and Month to group by month\r\n"
-//				+ "    YEAR(OrderDate) AS Year,\r\n" + "    MONTH(OrderDate) AS Month,\r\n"
-//				+ "    SUM(TotalPrice) AS OrderValue,\r\n" + "    SUM(OrderQty) AS TotalOrder,\r\n"
-//				+ "    COUNT(DISTINCT OrderNo) AS OrderQty,\r\n" + "    COUNT(DISTINCT RetailerCode) AS Dealers,\r\n"
-//				+ "    Region\r\n" + "FROM \r\n" + "    MBROrders\r\n" + "WHERE \r\n"
-//				+ "    CONVERT(VARCHAR, OrderDate, 112) >= :startDate    -- Compare OrderDate with StartDate\r\n"
-//				+ "    AND CONVERT(VARCHAR, OrderDate, 112) <= :endDate \r\n" + "GROUP BY\r\n"
-//				+ "    YEAR(OrderDate),\r\n" + "    MONTH(OrderDate),\r\n" + "    Region\r\n" + "ORDER BY\r\n"
-//				+ "    YEAR(OrderDate),\r\n" + "    MONTH(OrderDate);";
-
 		String checkQuery = "SELECT \r\n" + "    -- Extract Year and Month to group by month\r\n"
 				+ "    YEAR(OrderDate) AS Year,\r\n" + "    MONTH(OrderDate) AS Month,\r\n"
 				+ "    SUM(TotalPrice) AS OrderValue,\r\n" + "    SUM(OrderQty) AS TotalOrder,\r\n"
 				+ "    COUNT(DISTINCT OrderNo) AS OrderQty,\r\n" + "    COUNT(DISTINCT RetailerCode) AS Dealers,\r\n"
-				+ "    Region,\r\n" + "        (SELECT MAX(OrderDate) \r\n" + "         FROM MBROrders \r\n"
-				+ "         WHERE CONVERT(VARCHAR, OrderDate, 112) <= :endDate) AS LastOrderDate\r\n" + "    FROM \r\n"
-				+ "        MBROrders\r\n" + "    WHERE \r\n"
-				+ "        CONVERT(VARCHAR, OrderDate, 112) >= :startDate \r\n"
-				+ "        AND CONVERT(VARCHAR, OrderDate, 112) <= :endDate\r\n" + "    GROUP BY\r\n"
-				+ "        YEAR(OrderDate),\r\n" + "        MONTH(OrderDate),\r\n" + "Region" + "    ORDER BY\r\n"
-				+ "        YEAR(OrderDate),\r\n" + "        MONTH(OrderDate);";
-		// Create a native query
-		Query query = entityManager.createNativeQuery(checkQuery);
+				+ "    Region\r\n" + "FROM \r\n" + "    MBROrders\r\n" + "WHERE \r\n"
+				+ "    CONVERT(VARCHAR, OrderDate, 112) >= :startDate    -- Compare OrderDate with StartDate\r\n"
+				+ "    AND CONVERT(VARCHAR, OrderDate, 112) <= :endDate \r\n" + "GROUP BY\r\n"
+				+ "    YEAR(OrderDate),\r\n" + "    MONTH(OrderDate),\r\n" + "    Region\r\n" + "ORDER BY\r\n"
+				+ "    YEAR(OrderDate),\r\n" + "    MONTH(OrderDate);";
+			Query query = entityManager.createNativeQuery(checkQuery);
 
-		// Set the parameters for the stored procedure call
+//		// Set the parameters for the stored procedure call
 		query.setParameter("startDate", filter.getStartDate()); // @StartDate (e.g., 20240601)
 		query.setParameter("endDate", filter.getEndDate()); // @EndDate (e.g., 20240630)
 		// @RSNameList (e.g., '' or some value)
@@ -6642,7 +6629,7 @@ public class UserDaoimpl implements UserDao {
 					+ "AND Desig_Id = 5 AND (ABMEMM IN (:ABMName) OR ABMKAM IN (:ABMName)) order by Name;";
 			Query checkQuery = entityManager.createNativeQuery(checksql);
 			checkQuery.setParameter("region", regionList);
-			//checkQuery.setParameter("ABMName", data.getAbmName());
+			// checkQuery.setParameter("ABMName", data.getAbmName());
 			checkQuery.setParameter("ABMName", ABMList);
 			// rsName=checkQuery.getResultList();
 
@@ -6665,7 +6652,7 @@ public class UserDaoimpl implements UserDao {
 			String checksql = "SELECT Name, UserName FROM MBRUsers WHERE Desig_Id = 5 AND (ABMEMM IN( :ABMList) OR ABMKAM IN( :ABMList)) order by Name;";
 			Query checkQuery = entityManager.createNativeQuery(checksql);
 			// checkQuery.setParameter("region", regionList);
-			//checkQuery.setParameter("ABMName", data.getAbmName());
+			// checkQuery.setParameter("ABMName", data.getAbmName());
 			checkQuery.setParameter("ABMList", ABMList);
 			// rsName=checkQuery.getResultList();
 
@@ -8536,4 +8523,73 @@ public class UserDaoimpl implements UserDao {
 		return growthOverPreviousMonthData;
 	}
 
+	@Override
+	public List<OutputDashboardTiles> OutputDashboardTilesMonthAndYearFilter(MonthlyDataFilter filter) {
+		List<OutputDashboardTiles> outputDashboardTiles = new ArrayList<>();
+		StringBuilder conditions = new StringBuilder(); // Using StringBuilder for efficient string concatenation
+
+		// Assuming the user input for startDate and endDate
+		Integer startDate = filter.getStartDate(); // User-provided start date (e.g., "20240601")
+		Integer endDate = filter.getEndDate(); // User-provided end date (e.g., "20240630")
+		String regionList = filter.getRegionList();
+		String brandList = filter.getBrandList();
+		String abmNameList = filter.getAbmName();
+		String rsNameList = filter.getRsNameList();
+		String retailerType = filter.getRetailerType();
+		String selectedMonths = filter.getSelectedMonths();
+		String selectedYears = filter.getSelectedYears();
+
+		if (selectedMonths != null && !selectedMonths.isEmpty()) {
+			conditions.append("MONTH(OrderDate) IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('")
+					.append(selectedMonths).append("', ',')) ");
+		}
+
+		if (selectedYears != null && !selectedYears.isEmpty()) {
+			conditions.append("AND YEAR(OrderDate) IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('")
+					.append(selectedYears).append("', ',')) ");
+		}
+
+		String checkQuery = "SELECT \r\n" + "    -- Extract Year and Month to group by month\r\n"
+				+ "    YEAR(OrderDate) AS Year,\r\n" + "    MONTH(OrderDate) AS Month,\r\n"
+				+ "    SUM(TotalPrice) AS OrderValue,\r\n" + "    SUM(OrderQty) AS TotalOrder,\r\n"
+				+ "    COUNT(DISTINCT OrderNo) AS OrderQty,\r\n" + "    COUNT(DISTINCT RetailerCode) AS Dealers,\r\n"
+				+ "    Region,\r\n" + "        (SELECT MAX(OrderDate) \r\n" + "         FROM MBROrders \r\n"
+				+ "         WHERE CONVERT(VARCHAR, OrderDate, 112) <= :endDate) AS LastOrderDate\r\n" + "    FROM \r\n"
+				+ "        MBROrders\r\n" + "    WHERE \r\n" + conditions.toString()
+				+ "    GROUP BY\r\n" + "        YEAR(OrderDate),\r\n" + "        MONTH(OrderDate),\r\n" + "Region"
+				+ "    ORDER BY\r\n" + "        YEAR(OrderDate),\r\n" + "        MONTH(OrderDate);";
+		// Create a native query
+		Query query = entityManager.createNativeQuery(checkQuery);
+
+		// @StartDate (e.g., 20240601)
+		query.setParameter("endDate", filter.getEndDate()); // @EndDate (e.g., 20240630)
+		// @RSNameList (e.g., '' or some value)
+
+		// Execute the query to invoke the stored procedure
+		try {
+			List<Object[]> result = query.getResultList();
+			// filteredData = (OutputForMontlyFilter) query.getSingleResult();
+
+			for (Object[] row : result) {
+				// Assuming row contains values in the correct order for mapping
+				OutputDashboardTiles data = new OutputDashboardTiles();
+				data.setYear((Integer) row[0]);
+				data.setMonth((Integer) row[1]);
+				data.setOrderValue((BigDecimal) row[2]);
+				data.setTotalOrder((Integer) row[4]);
+				data.setOrderQuentity((Integer) row[3]);
+				data.setDelears((Integer) row[5]);
+				data.setRegion(row[6].toString());
+				data.setEndDate(row[7].toString());
+
+				outputDashboardTiles.add(data);
+				// Now, filteredData is populated with values
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return outputDashboardTiles;
+
+	}
 }
