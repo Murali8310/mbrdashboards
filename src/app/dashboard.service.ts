@@ -367,5 +367,13 @@ public  topSKUOrderedRSNameSelected(MonthlyToalOrdaringPayload?:any) {
       }
     );      
 }
+
+
+// Method to check if the image exists
+checkImageExists(imageUrl: string): Promise<boolean> {
+  return this.http.get(imageUrl, { observe: 'response', responseType: 'blob' }).toPromise()
+    .then((response:any) => response.status === 200)  // Image exists if status is 200
+    .catch(() => false);  // If error occurs (e.g., 404), return false
+}
   
 }

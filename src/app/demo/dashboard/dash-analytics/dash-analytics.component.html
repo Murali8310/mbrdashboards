@@ -684,7 +684,7 @@ text-align: center;
   </div>
   
   <div class="col-xl-12 col-md-12" *ngIf="chartOptionsline && chartOptionsline && chartOptionsline.series && chartOptionsline.series.length > 0">
-    <app-card cardTitle="" [options]="false">
+    <app-card [cardTitle]="chartOptionsline?.title?.text || ''" [options]="false">
     <div id="chart">
       <apx-chart
       [series]="chartOptionsline.series"
@@ -697,7 +697,6 @@ text-align: center;
       [stroke]="chartOptionsline.stroke"
       [tooltip]="chartOptionsline.tooltip"
       [xaxis]="chartOptionsline.xaxis"
-      [title]="chartOptionsline.title"
       [subtitle]="chartOptionsline.subtitle">
     ></apx-chart>
     </div>
@@ -706,7 +705,7 @@ text-align: center;
   </div>
 
   <div class="col-xl-12 col-md-12"  *ngIf="chartOptions && chartOptions && chartOptions.series && chartOptions.series.length > 0">
-    <app-card cardTitle="" [options]="false">
+    <app-card [cardTitle]="chartOptions?.title?.text || ''" [options]="false">
       
     <div id="chart2">
       <apx-chart
@@ -720,7 +719,7 @@ text-align: center;
         [stroke]="chartOptions.stroke"
         [tooltip]="chartOptions.tooltip"
         [xaxis]="chartOptions.xaxis"
-        [title]="chartOptions.title">
+        >
 
       ></apx-chart>
     </div>
@@ -729,7 +728,7 @@ text-align: center;
 
 
   <div class="col-xl-12 col-md-12"  *ngIf="growthOverPreviousMonthYear && growthOverPreviousMonthYear && growthOverPreviousMonthYear.series && growthOverPreviousMonthYear.series.length > 0">
-    <app-card cardTitle="" [options]="false">
+    <app-card  [cardTitle]="growthOverPreviousMonthYear?.title?.text || ''" [options]="false">
       
     <div id="chart2">
       <apx-chart
@@ -743,7 +742,7 @@ text-align: center;
         [stroke]="growthOverPreviousMonthYear.stroke"
         [tooltip]="growthOverPreviousMonthYear.tooltip"
         [xaxis]="growthOverPreviousMonthYear.xaxis"
-        [title]="growthOverPreviousMonthYear.title">
+        >
 
       ></apx-chart>
     </div>
@@ -751,7 +750,7 @@ text-align: center;
   </div>
 
   <div class="col-xl-12 col-md-12"  *ngIf="RegionWiseMonthlyDistibutionOptions && RegionWiseMonthlyDistibutionOptions && RegionWiseMonthlyDistibutionOptions.series && RegionWiseMonthlyDistibutionOptions.series.length > 0">
-    <app-card cardTitle="" [options]="false">
+    <app-card  [cardTitle]="RegionWiseMonthlyDistibutionOptions?.title?.text || ''"  [options]="false">
     <div id="chart2">
       <apx-chart
       [series]="RegionWiseMonthlyDistibutionOptions.series"
@@ -766,14 +765,14 @@ text-align: center;
       [legend]="RegionWiseMonthlyDistibutionOptions.legend"
       [tooltip]="RegionWiseMonthlyDistibutionOptions.tooltip"
       [xaxis]="RegionWiseMonthlyDistibutionOptions.xaxis"
-      [title]="RegionWiseMonthlyDistibutionOptions.title">
+      >
     </apx-chart>
     </div>
     </app-card>
   </div>
   
   <div class="col-xl-12 col-md-12" *ngIf="RegionWiseGrowthOverPreviousMonthOptions && RegionWiseGrowthOverPreviousMonthOptions && RegionWiseGrowthOverPreviousMonthOptions.series && RegionWiseGrowthOverPreviousMonthOptions.series.length > 0">
-    <app-card cardTitle="" [options]="false">
+    <app-card  [cardTitle]="RegionWiseGrowthOverPreviousMonthOptions?.title?.text || ''" [options]="false">
     <div id="chart2">
       <apx-chart
       [series]="RegionWiseGrowthOverPreviousMonthOptions.series"
@@ -788,7 +787,6 @@ text-align: center;
       [legend]="RegionWiseGrowthOverPreviousMonthOptions.legend"
       [tooltip]="RegionWiseGrowthOverPreviousMonthOptions.tooltip"
       [xaxis]="RegionWiseGrowthOverPreviousMonthOptions.xaxis"
-      [title]="RegionWiseGrowthOverPreviousMonthOptions.title"
       >
     </apx-chart>
     </div>
@@ -796,7 +794,7 @@ text-align: center;
   </div>
 
   <div class="col-xl-12 col-md-12" *ngIf="RegionWiseGrowthOverPreviousMonthOptionsForPrevYear && RegionWiseGrowthOverPreviousMonthOptionsForPrevYear && RegionWiseGrowthOverPreviousMonthOptionsForPrevYear.series && RegionWiseGrowthOverPreviousMonthOptionsForPrevYear.series.length > 0">
-    <app-card cardTitle="" [options]="false">
+    <app-card  [cardTitle]="RegionWiseGrowthOverPreviousMonthOptionsForPrevYear?.title?.text || ''" [options]="false">
     <div id="chart2">
       <apx-chart
       [series]="RegionWiseGrowthOverPreviousMonthOptionsForPrevYear.series"
@@ -811,7 +809,6 @@ text-align: center;
       [legend]="RegionWiseGrowthOverPreviousMonthOptionsForPrevYear.legend"
       [tooltip]="RegionWiseGrowthOverPreviousMonthOptionsForPrevYear.tooltip"
       [xaxis]="RegionWiseGrowthOverPreviousMonthOptionsForPrevYear.xaxis"
-      [title]="RegionWiseGrowthOverPreviousMonthOptionsForPrevYear.title"
       >
     </apx-chart>
     </div>
@@ -820,7 +817,7 @@ text-align: center;
 
 
   <div class="col-xl-12 col-md-12" *ngIf="chartOptionsRegionwiseGrowth && false">
-    <app-card cardTitle="" [options]="false">
+    <app-card  [cardTitle]="chartOptionsRegionwiseGrowth?.title?.text || ''" [options]="false">
       
     <div id="chart2">
       <apx-chart
@@ -834,7 +831,6 @@ text-align: center;
         [stroke]="chartOptionsRegionwiseGrowth.stroke"
         [tooltip]="chartOptionsRegionwiseGrowth.tooltip"
         [xaxis]="chartOptionsRegionwiseGrowth.xaxis"
-        [title]="chartOptionsRegionwiseGrowth.title">
 
       ></apx-chart>
     </div>
@@ -1204,7 +1200,7 @@ text-align: center;
   </div>
   
   <div class="col-xl-12 col-md-12"  *ngIf="chartOptionslineForOrdBh && chartOptionslineForOrdBh.series && chartOptionslineForOrdBh.series.length > 0">
-    <app-card cardTitle="" [options]="false">
+    <app-card [cardTitle]="chartOptionslineForOrdBh?.title?.text || ''" [options]="false">
     <div id="chart">
       <apx-chart
       [series]="chartOptionslineForOrdBh.series"
@@ -1217,7 +1213,6 @@ text-align: center;
       [stroke]="chartOptionslineForOrdBh.stroke"
       [tooltip]="chartOptionslineForOrdBh.tooltip"
       [xaxis]="chartOptionslineForOrdBh.xaxis"
-      [title]="chartOptionslineForOrdBh.title"
       [subtitle]="chartOptionslineForOrdBh.subtitle">
     ></apx-chart>
     </div>
@@ -1225,7 +1220,7 @@ text-align: center;
     </app-card>
   </div>
   <div class="col-xl-12 col-md-12"   *ngIf="RegionWiseMonthlyDistibutionOptionsFOrdBh && RegionWiseMonthlyDistibutionOptionsFOrdBh.series && RegionWiseMonthlyDistibutionOptionsFOrdBh.series.length > 0" >
-    <app-card cardTitle="" [options]="false">
+    <app-card [cardTitle]="RegionWiseMonthlyDistibutionOptionsFOrdBh?.title?.text || ''" [options]="false">
 
     <div id="chart2">
       <apx-chart
@@ -1241,14 +1236,14 @@ text-align: center;
       [legend]="RegionWiseMonthlyDistibutionOptionsFOrdBh.legend"
       [tooltip]="RegionWiseMonthlyDistibutionOptionsFOrdBh.tooltip"
       [xaxis]="RegionWiseMonthlyDistibutionOptionsFOrdBh.xaxis"
-      [title]="RegionWiseMonthlyDistibutionOptionsFOrdBh.title">
+      >
     </apx-chart>
     </div>
     </app-card>
   </div>
   
   <div class="col-xl-12 col-md-12"  *ngIf="RegionWiseMonthlyAvgPerOrder && RegionWiseMonthlyAvgPerOrder && RegionWiseMonthlyAvgPerOrder.series && RegionWiseMonthlyAvgPerOrder.series.length > 0">
-    <app-card cardTitle="" [options]="false">
+    <app-card [cardTitle]="RegionWiseMonthlyAvgPerOrder?.title?.text || ''" [options]="false">
     <div id="chart2">
       <apx-chart
       [series]="RegionWiseMonthlyAvgPerOrder.series"
@@ -1263,7 +1258,6 @@ text-align: center;
       [legend]="RegionWiseMonthlyAvgPerOrder.legend"
       [tooltip]="RegionWiseMonthlyAvgPerOrder.tooltip"
       [xaxis]="RegionWiseMonthlyAvgPerOrder.xaxis"
-      [title]="RegionWiseMonthlyAvgPerOrder.title"
       >
     </apx-chart>
     </div>
@@ -1635,7 +1629,7 @@ text-align: center;
   </div>
   
   <div class="col-xl-12 col-md-12"  *ngIf="percentageOfOrdersOfDayInMonthOptions && percentageOfOrdersOfDayInMonthOptions.series && percentageOfOrdersOfDayInMonthOptions.series.length > 0">
-    <app-card cardTitle="" [options]="false">
+    <app-card [cardTitle]="percentageOfOrdersOfDayInMonthOptions?.title?.text || ''" [options]="false">
     <div id="chart">
       <apx-chart
       [series]="percentageOfOrdersOfDayInMonthOptions.series"
@@ -1648,7 +1642,6 @@ text-align: center;
       [stroke]="percentageOfOrdersOfDayInMonthOptions.stroke"
       [tooltip]="percentageOfOrdersOfDayInMonthOptions.tooltip"
       [xaxis]="percentageOfOrdersOfDayInMonthOptions.xaxis"
-      [title]="percentageOfOrdersOfDayInMonthOptions.title"
       [subtitle]="percentageOfOrdersOfDayInMonthOptions.subtitle">
     ></apx-chart>
     </div>
@@ -1694,7 +1687,7 @@ text-align: center;
   </div> -->
   
   <div class="col-xl-12 col-md-12"  *ngIf="percentageofOrdersbyWeekdayorWeekendOptionsBarchart && percentageofOrdersbyWeekdayorWeekendOptionsBarchart && percentageofOrdersbyWeekdayorWeekendOptionsBarchart.series && percentageofOrdersbyWeekdayorWeekendOptionsBarchart.series.length > 0">
-    <app-card cardTitle="" [options]="false">
+    <app-card [cardTitle]="percentageofOrdersbyWeekdayorWeekendOptionsBarchart?.title?.text || ''" [options]="false">
     <div id="chart2">
       <apx-chart
       [series]="percentageofOrdersbyWeekdayorWeekendOptionsBarchart.series"
@@ -1709,7 +1702,6 @@ text-align: center;
       [legend]="percentageofOrdersbyWeekdayorWeekendOptionsBarchart.legend"
       [tooltip]="percentageofOrdersbyWeekdayorWeekendOptionsBarchart.tooltip"
       [xaxis]="percentageofOrdersbyWeekdayorWeekendOptionsBarchart.xaxis"
-      [title]="percentageofOrdersbyWeekdayorWeekendOptionsBarchart.title"
       >
     </apx-chart>
     </div>
@@ -1717,7 +1709,7 @@ text-align: center;
   </div>
 
   <div class="col-xl-12 col-md-12" *ngIf="percentageofOrdersByWeekdayorWeekendRegionWiseOptions && percentageofOrdersByWeekdayorWeekendRegionWiseOptions.series && percentageofOrdersByWeekdayorWeekendRegionWiseOptions.series.length > 0">
-    <app-card cardTitle="Order Count by Region (Weekday vs Weekend)" [options]="false">
+    <app-card [cardTitle]="percentageofOrdersByWeekdayorWeekendRegionWiseOptions?.title?.text || ''" cardTitle="Order Count by Region (Weekday vs Weekend)" [options]="false">
       <div id="chart2">
         <apx-chart
           [series]="percentageofOrdersByWeekdayorWeekendRegionWiseOptions.series"
@@ -1726,7 +1718,6 @@ text-align: center;
           [xaxis]="percentageofOrdersByWeekdayorWeekendRegionWiseOptions.xaxis"
           [yaxis]="percentageofOrdersByWeekdayorWeekendRegionWiseOptions.yaxis"
           [tooltip]="percentageofOrdersByWeekdayorWeekendRegionWiseOptions.tooltip"
-          [title]="percentageofOrdersByWeekdayorWeekendRegionWiseOptions.title"
           [legend]="percentageofOrdersByWeekdayorWeekendRegionWiseOptions.legend">
         </apx-chart>
       </div>
@@ -1736,7 +1727,7 @@ text-align: center;
   class="col-xl-12 col-md-12"
   *ngIf="percentageofOrdersByHourOfTheDayOptionsBarchart && percentageofOrdersByHourOfTheDayOptionsBarchart.series && percentageofOrdersByHourOfTheDayOptionsBarchart.series.length"
 >
-  <app-card cardTitle="Order Count by Hour of the Day" [options]="false">
+  <app-card [cardTitle]="percentageofOrdersByHourOfTheDayOptionsBarchart?.title?.text || ''" [options]="false">
     <div id="chart3">
       <apx-chart
         [series]="percentageofOrdersByHourOfTheDayOptionsBarchart.series"
@@ -1745,7 +1736,6 @@ text-align: center;
         [xaxis]="percentageofOrdersByHourOfTheDayOptionsBarchart.xaxis"
         [yaxis]="percentageofOrdersByHourOfTheDayOptionsBarchart.yaxis"
         [tooltip]="percentageofOrdersByHourOfTheDayOptionsBarchart.tooltip"
-        [title]="percentageofOrdersByHourOfTheDayOptionsBarchart.title"
         [legend]="percentageofOrdersByHourOfTheDayOptionsBarchart.legend"
         [labels]="percentageofOrdersByHourOfTheDayOptionsBarchart.labels"
       >
@@ -2120,13 +2110,11 @@ text-align: center;
   <!-- order-summary.component.html -->
   <div class="order-summary-container">
 
-    <app-card class="col-md-6 col-xl-12" >
-      <h4 *ngIf="dashboardService.selectedData === '5'" style="
+    <app-card class="col-md-6 col-xl-12" [cardTitle]="overallOrders && overallOrders.length > 0 ? 'Over All Details' : 'Over All Details Loading...'" >
+      <!-- <h4 *ngIf="dashboardService.selectedData === '5'" style="
       text-align: center;
       /* margin-top: 12px; */
-      ">{{overallOrders && overallOrders.length > 0 ? 'Over All Details' : 'Over All Details Loading...'}} </h4>
-    </app-card>
-
+      ">{{overallOrders && overallOrders.length > 0 ? 'Over All Details' : 'Over All Details Loading...'}} </h4> -->
     <div class="row" style="margin-top: 20px;">
       <div class="col-lg-8  col-md-12 table-responsive" *ngIf="overallOrders && overallOrders.length > 0">
         <!-- Overall Orders Table -->
@@ -2141,11 +2129,14 @@ text-align: center;
           </thead>
           <tbody>
             <!-- Loop through each product to display its data -->
-            <tr *ngFor="let order of overallOrders;index as i" style="cursor: pointer;" [class.green]="selectedOrder == order.productCode" (click)="selectImage(order,i)">
+            <tr *ngFor="let order of overallOrders;index as i" style="cursor: pointer;" [class.pointernone]="order.errorImg"  [class.green]="selectedOrder == order.productCode" (click)="selectImage(order,i)">
               <td style="text-align: left;">{{i + 1}}</td>
               <td class="allign-left">{{ order.productCode }}</td>
-              <td>{{ order.totalOrderQty }}</td>
-              <td ><img  src="assets/images/1802NL02/1802SL12_2.jpg" alt="logo-img" class="logo" style="height: 33px; width: 33px;border-radius: 2px;"></td>
+              <td class="allign-left">{{ order.totalOrderQty }}</td>
+              <td class="allign-left">
+                <img  *ngIf="!order.errorImg" [src]="order.imageSrc" alt="logo-img" class="logo" style="height: 33px; width: 33px;border-radius: 2px;">
+                <p *ngIf="order.errorImg" style="color: red;">No image found</p>
+              </td>
             </tr>
             <!-- Grand Total Row -->
             <tr class="grand-total">
@@ -2163,102 +2154,119 @@ text-align: center;
        <h4 style="text-align: center;border-radius: 7px;color: white;
        " class="ng-star-inserted">Top {{currentOverallLevel + 1}} ND2011324/P  Image Details</h4>
        </div>
-        <img  src="{{selectedImageSource}}" alt="logo-img" class="logo"
+
+        <img  src="{{selectedImageSource}}"  (error)="onImageError($event)" alt="logo-img" class="logo"
         style="height: 200px;width: 200px;border-radius: 13px;justify-content: center;align-items: center;/* margin-top: 59px; */">
         <!-- <img  src="assets/images/1802NL02/1802SL12_2.jpg" alt="logo-img" class="logo" style="height: 33px; width: 33px;"> -->
       </div>
     </div>
+  </app-card>
 
-    <app-card class="col-md-6 col-xl-12" >
-      <h4 *ngIf="dashboardService.selectedData === '5'" style="
+    
+
+    <app-card class="col-md-6 col-xl-12" [cardTitle]="regionTotals && regionTotals.length > 0 ? 'Region Wise Details' : 'Region Wise Details Loading...'" >
+      <!-- <h4 *ngIf="dashboardService.selectedData === '5'" style="
       text-align: center;
       /* margin-top: 12px; */
-      "> {{regionTotals && regionTotals.length > 0 ? 'Region Wise Details' : 'Region Wise Details Loading...'}} </h4>
-    </app-card>
-    <div class="row" style="margin-top: 20px;">
-    <div class="col-lg-8  col-md-12 table-responsive" *ngIf="regionTotals && regionTotals.length > 0">
-      <!-- Region-wise Orders Table -->
-      <table class="summary-table">
-        <thead>
-          <tr>
-            <th>Sr No</th>
-            <th>Region</th>
-            <th>Sum of Order Qty</th>
-            <th>Image Details</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let order of regionTotals;index as rgindx" [class.green]="selectedOrder == order.productCode" (click)="selectImageforregion(order)">
-              <td style="text-align: left;">{{rgindx + 1}}</td>
-            <td class="allign-left">{{ order.productCode }}</td>
-            <td>{{ order.totalOrderQty }}</td>
-            <td ><img  src="assets/images/1802NL02/1802SL12_2.jpg" alt="logo-img" class="logo" style="height: 33px; width: 33px;border-radius: 2px;"></td>
-          </tr>
-          <tr class="grand-total">
-            <td></td>
-            <td></td>
-            <td class="allign-left"><strong>Grand Total</strong></td>
-            <td>{{ overallRegionGrandTotal }}</td> <!-- Grand Total for Region -->
-          </tr>
-        </tbody>
-      </table>
+      "> {{regionTotals && regionTotals.length > 0 ? 'Region Wise Details' : 'Region Wise Details Loading...'}} </h4> -->
+     <div class="row" style="margin-top: 20px;">
+      <div class="col-lg-8  col-md-12 table-responsive" *ngIf="regionTotals && regionTotals.length > 0">
+        <!-- Region-wise Orders Table -->
+        <table class="summary-table">
+          <thead>
+            <tr>
+              <th>Sr No</th>
+              <th>Region</th>
+              <th>Sum of Order Qty</th>
+              <th>Image Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of regionTotals;index as rgindx" [class.green]="selectedOrder == order.productCode" (click)="selectImageforregion(order)">
+                <td style="text-align: left;">{{rgindx + 1}}</td>
+              <td class="allign-left">{{ order.productCode }}</td>
+              <td class="allign-left">{{ order.totalOrderQty }}</td>
+              <td class="allign-left">
+                <img  *ngIf="!order.errorImg" [src]="order.imageSrc" alt="logo-img" class="logo" style="height: 33px; width: 33px;border-radius: 2px;">
+                <p *ngIf="order.errorImg" style="color: red;">No image found</p>
+  
+              </td>
+          
+              </tr>
+            <tr class="grand-total">
+              <td></td>
+              <td></td>
+              <td class="allign-left"><strong>Grand Total</strong></td>
+              <td>{{ overallRegionGrandTotal }}</td> <!-- Grand Total for Region -->
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-lg-4 col-md-12 imgStyles"  *ngIf="regionTotals && regionTotals.length > 0">
+        <!-- <div class="headerStyles">
+          <h4 style="text-align: center;border-radius: 7px;color: white;
+          " class="ng-star-inserted">Top 1 ND2011324/P  Image Details.</h4>
+          </div> -->
+                <img   src="{{selectedImageSourceForRegion}}" alt="logo-img" class="logo" style="height: 200px;width: 200px;border-radius: 13px;justify-content: center;align-items: center;/* margin-top: 59px; */">
+        <!-- <img  src="assets/images/1802NL02/1802SL12_2.jpg" alt="logo-img" class="logo" style="height: 33px; width: 33px;"> -->
+      </div>
     </div>
-    <div class="col-lg-4 col-md-12 imgStyles"  *ngIf="regionTotals && regionTotals.length > 0">
-      <!-- <div class="headerStyles">
-        <h4 style="text-align: center;border-radius: 7px;color: white;
-        " class="ng-star-inserted">Top 1 ND2011324/P  Image Details.</h4>
-        </div> -->
-              <img   src="{{selectedImageSourceForRegion}}" alt="logo-img" class="logo" style="height: 200px;width: 200px;border-radius: 13px;justify-content: center;align-items: center;/* margin-top: 59px; */">
-      <!-- <img  src="assets/images/1802NL02/1802SL12_2.jpg" alt="logo-img" class="logo" style="height: 33px; width: 33px;"> -->
-    </div>
-  </div>
+  </app-card>
+   
 
 
-  <app-card class="col-md-6 col-xl-12" >
-    <h4 *ngIf="dashboardService.selectedData === '5'" style="
+  <app-card class="col-md-6 col-xl-12" [cardTitle]="rsTotals && rsTotals.length > 0 ? 'RS Wise Details' : 'RS Wise Details Loading...'" >
+    <!-- <h4 *ngIf="dashboardService.selectedData === '5'" style="
     text-align: center;
     /* margin-top: 12px; */
-    ">{{rsTotals && rsTotals.length > 0 ? 'RS Wise Details' : 'RS Wise Details Loading...'}}  </h4>
-  </app-card>
-  <div class="row" style="margin-top: 20px;">
-    <div class="col-lg-8  col-md-12 table-responsive" *ngIf="rsTotals && rsTotals.length > 0">
-      <!-- RS-wise Orders Table -->
-      <table class="summary-table">
-        <thead>
-          <tr>
-            <th>Sr No</th>
-            <th>RS</th>
-            <th>Sum of Order Qty</th>
-            <th>Image Details</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let order of rsTotals;index as rsidx" [class.green]="selectedOrder == order.productCode" (click)="selectedImageSourceForRsFn(order)">
-            <td style="text-align: left;">
-              {{rsidx + 1}}
-            </td>
-            <td class="allign-left">{{ order.productCode }}</td>
-            <td>{{ order.totalOrderQty }}</td>
-            <td ><img  src="assets/images/1802NL02/1802SL12_2.jpg" alt="logo-img" class="logo" style="height: 33px; width: 33px;border-radius: 2px;"></td>
-          </tr>
-          <tr class="grand-total">
-            <td></td>
-            <td></td>
-            <td class="allign-left"><strong>Grand Total</strong></td>
-            <td>{{ overallRsGrandTotal }}</td> <!-- Grand Total for RS -->
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="col-lg-4 col-md-12 imgStyles"  *ngIf="rsTotals && rsTotals.length > 0">
-      <!-- <div class="headerStyles">
-        <h4 style="text-align: center;border-radius: 7px;color: white;
-        " class="ng-star-inserted">Top 1 ND2011324/P  Image Details</h4>
-        </div> -->
-              <img  src="{{selectedImageSourceForRs}}" alt="logo-img" class="logo" style="height: 200px;width: 200px;border-radius: 13px;justify-content: center;align-items: center;/* margin-top: 59px; */">
-      <!-- <img  src="assets/images/1802NL02/1802SL12_2.jpg" alt="logo-img" class="logo" style="height: 33px; width: 33px;"> -->
-    </div>
-    </div>
+    ">{{rsTotals && rsTotals.length > 0 ? 'RS Wise Details' : 'RS Wise Details Loading...'}}  </h4> -->
+ 
+ <div class="row" style="margin-top: 20px;">
+  <div class="col-lg-8  col-md-12 table-responsive" *ngIf="rsTotals && rsTotals.length > 0">
+    <!-- RS-wise Orders Table -->
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th>Sr No</th>
+          <th>RS</th>
+          <th>Sum of Order Qty</th>
+          <th>Image Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of rsTotals;index as rsidx" [class.green]="selectedOrder == order.productCode" (click)="selectedImageSourceForRsFn(order)">
+          <td style="text-align: left;">
+            {{rsidx + 1}}
+          </td>
+          <td class="allign-left">{{ order.productCode }}</td>
+          <td>{{ order.totalOrderQty }}</td>
+          <td >
+            <img  *ngIf="order.errorImg" [src]="order.imageSrc" alt="logo-img" class="logo" style="height: 33px; width: 33px;border-radius: 2px;">
+            <p *ngIf="order.errorImg" style="color: red;">No image found</p>
+
+          </td>
+
+        </tr>
+        <tr class="grand-total">
+          <td></td>
+          <td></td>
+          <td class="allign-left"><strong>Grand Total</strong></td>
+          <td>{{ overallRsGrandTotal }}</td> <!-- Grand Total for RS -->
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-lg-4 col-md-12 imgStyles"  *ngIf="rsTotals && rsTotals.length > 0">
+    <!-- <div class="headerStyles">
+      <h4 style="text-align: center;border-radius: 7px;color: white;
+      " class="ng-star-inserted">Top 1 ND2011324/P  Image Details</h4>
+      </div> -->
+            <img  src="{{selectedImageSourceForRs}}" alt="logo-img" class="logo" style="height: 200px;width: 200px;border-radius: 13px;justify-content: center;align-items: center;/* margin-top: 59px; */">
+    <!-- <img  src="assets/images/1802NL02/1802SL12_2.jpg" alt="logo-img" class="logo" style="height: 33px; width: 33px;"> -->
+  </div>
+  </div>
+</app-card>
+ 
   </div>
 
   

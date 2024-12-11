@@ -51,7 +51,7 @@ import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 })
 export class CardComponent implements OnInit {
   // public props
-  @Input() cardTitle: string;
+  @Input() cardTitle?: string;
   @Input() cardClass!: string;
   @Input() blockClass!: string;
   @Input() headerClass!: string;
@@ -70,7 +70,7 @@ export class CardComponent implements OnInit {
   collapsedIcon: string;
   loadCard: boolean;
   cardRemove: string;
-
+  enableLoading:any;
   // constructor
   constructor(/*animationService: AnimationService,*/ config: NgbDropdownConfig) {
     config.placement = 'bottom-right';
@@ -78,7 +78,14 @@ export class CardComponent implements OnInit {
     this.customDate = false;
     this.options = true;
     this.hidHeader = false;
-    this.cardTitle = 'Card Title';
+    this.cardTitle = '';
+
+    if(this.cardTitle.includes('Loading')){
+    this.enableLoading = true;
+    } else {
+    this.enableLoading = false;
+    }
+
     this.fullIcon = 'icon-maximize';
     this.isAnimating = false;
     this.isCardFooter = false;

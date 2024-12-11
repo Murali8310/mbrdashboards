@@ -392,7 +392,15 @@ input {
 }
 
 .green {
-  background-color: green !important;
+  background-color: #a9f7a9 !important;
+}
+
+.green td {
+  background-color: #a9f7a9 !important;
+  // color: white !important;
+}
+.pointernone {
+  pointer-events: none;
 }
 .headerStyles {
   // height: 51px;

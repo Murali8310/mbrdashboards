@@ -369,7 +369,7 @@ export default class DashAnalyticsComponent {
   getLastUpdatedRecordDate: string = '';
 selectedOrder:any = 'ND2011324/P';
 currentOverallLevel:any = 0;
-selectedImageSource:any = 'assets/images/1802NL02/1802SL12_3.jpg';
+selectedImageSource:any = '';
 selectedImageSourceForRegion:any = 'assets/images/1802NL02/1802SL12_3.jpg';
 selectedImageSourceForRs:any = 'assets/images/1802NL02/1802SL12_3.jpg';
 LoadingDataForSku:any={};
@@ -408,12 +408,7 @@ LoadingDataForSku:any={};
         const formatDate = (date: Date) => 
           date.getFullYear() * 10000 + (date.getMonth() + 1) * 100 + date.getDate();
     
-        // Prepare payload
-        const GrowthOverPreviousMonthPayload: any = {
-          startDate: formatDate(startDate),
-          endDate: formatDate(endDate),
-          // Add other fields if required
-        };
+       
     
         // Set selected month
         const currentMonthId = today.getMonth() + 1;
@@ -424,7 +419,18 @@ LoadingDataForSku:any={};
         const currentYear = today.getFullYear();
         const currentYearInList = this.yearsList.find((year) => year === currentYear);
         this.selectedYears = currentYearInList ? [currentYearInList] : [];
-    
+
+        const selectedMonths = this.selectedMonths.map((item) => item.id).join(', ');
+        const selectedYears = this.selectedYears.map((item) => item).join(', ');
+
+     // Prepare payload
+     const GrowthOverPreviousMonthPayload: any = {
+      startDate: formatDate(startDate),
+      endDate: formatDate(endDate),
+      selectedMonths:selectedMonths,
+      selectedYears:selectedYears
+      // Add other fields if required
+    };
         // Fetch initial dashboard data
         this.dashBoardInitalDataFn(GrowthOverPreviousMonthPayload);
       } else if (params['id']) {
@@ -548,6 +554,10 @@ LoadingDataForSku:any={};
     let retailerTypeList: any = '';
     let payloadForMaster: any;
     if (data === 'search') {
+
+      const selectedMonths = this.selectedMonths.map((item) => item.id).join(', ');
+      const selectedYears = this.selectedYears.map((item) => item).join(', ');
+
       // Prepare comma-separated strings for each array
       abmNameList = this.selectedAbmNames.map((item) => item.id).join(', ');
       brandList = this.selectedBrands.map((item) => item.name).join(', ');
@@ -563,7 +573,9 @@ LoadingDataForSku:any={};
         brandList: brandList, //// default casen ""
         rsNameList: rsNameList, //// default casen ""
         abmName: abmNameList,
-        retailerType: retailerTypeList
+        retailerType: retailerTypeList,
+        selectedMonths:selectedMonths,
+        selectedYears:selectedYears
       };
       payloadForMaster = {
         regionList: regionList,
@@ -649,11 +661,7 @@ console.log(MonthlyToalOrdaringPayload);
                 const formatDate = (date: Date) => 
             date.getFullYear() * 10000 + (date.getMonth() + 1) * 100 + date.getDate();
       
-                GrowthOverPreviousMonthPayload = {
-            startDate: formatDate(startDate),
-            endDate: formatDate(endDate),
-            // Add other fields if required
-          };
+            
       
           // Set selected month
           const currentMonthId = today.getMonth() + 1;
@@ -664,6 +672,24 @@ console.log(MonthlyToalOrdaringPayload);
           const currentYear = today.getFullYear();
           const currentYearInList = this.yearsList.find((year) => year === currentYear);
           this.selectedYears = currentYearInList ? [currentYearInList] : [];
+          const selectedMonths = this.selectedMonths.map((item) => item.id).join(', ');
+          const selectedYears = this.selectedYears.map((item) => item).join(', ');
+  
+      //  // Prepare payload
+      //  const GrowthOverPreviousMonthPayload: any = {
+      //   startDate: formatDate(startDate),
+      //   endDate: formatDate(endDate),
+      //   selectedMonths:selectedMonths,
+      //   selectedYears:selectedYears
+      //   // Add other fields if required
+      // };
+          GrowthOverPreviousMonthPayload = {
+            startDate: formatDate(startDate),
+            endDate: formatDate(endDate),
+            selectedMonths:selectedMonths,
+            selectedYears:selectedYears
+            // Add other fields if required
+          };
       }
       this.dashBoardInitalDataFn(data != 'search' ? GrowthOverPreviousMonthPayload : MonthlyToalOrdaringPayload);
       return;
@@ -4305,64 +4331,7 @@ dataLabels: {
       }
     };
 
-    // Define Bar Chart options
-    // this.percentageofOrdersbyWeekdayorWeekendOptionsBarchart = {
-    //   series: [
-    //     {
-    //       name: 'Percentage of Orders',
-    //       data: barSeriesData // We will only show percentage here
-    //     }
-    //   ],
-    //   chart: {
-    //     height: 500,
-    //     type: 'bar'
-    //   },
-    //   dataLabels: {
-    //     enabled: true,
-    //     formatter: (val: any) => `${val.toFixed(2)}%`
-    //   },
-    //   title: {
-    //     text: 'Order Count by Weekday/Weekend',
-    //     align: 'center'
-    //   },
-    //   xaxis: {
-    //     categories: barCategories,
-    //     title: {
-    //       text: 'Day Type'
-    //     }
-    //   },
-    //   yaxis: {
-    //     title: {
-    //       text: 'Percentage of Orders'
-    //     },
-    //     labels: {
-    //       formatter: (val: any) => `${val.toFixed(2)}%`
-    //     }
-    //   },
-    //   colors: [
-    //     '#80c7fd', '#008FFB', // Qty colors
-    //   ],
-    //   tooltip: {
-    //     shared: true,
-    //     intersect: false,
-    //     custom: ({ series, seriesIndex, dataPointIndex, w }) => {
-    //       const distinctOrderCount = distinctOrderCounts[dataPointIndex] || 0;
-    //       return `
-    //         <div style="padding: 10px; border-radius: 5px; background-color: #f4f4f4; color: #333;">
-    //           <strong>${barCategories[dataPointIndex]}</strong><br>
-    //           Order %: ${series[seriesIndex][dataPointIndex].toFixed(2)}%<br>
-    //           Orders: ${distinctOrderCount}
-    //         </div>
-    //       `;
-    //     }
-    //   },
-    //   markers: {
-    //     size: 5
-    //   },
-    //   legend: {
-    //     position: 'top'
-    //   }
-    // };
+    
     this.percentageofOrdersbyWeekdayorWeekendOptionsBarchart = {
       series: [
         {
@@ -4389,7 +4358,7 @@ dataLabels: {
         formatter: (val: any) => `${val.toFixed(2)}%`
       },
       title: {
-        text: 'Order Count by Weekday/Weekend',
+        text: 'Order Count by Weekday/Weekend Loading...',
         align: 'center'
       },
       xaxis: {
@@ -4583,7 +4552,7 @@ dataLabels: {
         formatter: (val: any) => `${val.toFixed(2)}%` // Display percentage
       },
       title: {
-        text: 'Order Count by Region (Weekday vs Weekend)',
+        text: 'Order Count by Region (Weekday vs Weekend) Loading...',
         align: 'center'
       },
       xaxis: {
@@ -4733,7 +4702,7 @@ dataLabels: {
         }
       },
       title: {
-        text: 'Order Percentage by Hour (Weekday vs Weekend)',
+        text: 'Order Percentage by Hour (Weekday vs Weekend) Loading...',
         align: 'center'
       },
       xaxis: {
@@ -4872,9 +4841,42 @@ dataLabels: {
     this.spinner.show();
     this.overallOrders = [];
     this.dashboardService.topSKUOrderedOverall(MonthlyTotalOrderingPayload).subscribe(
-      (response) => {
+      async (response) => {
         if (response && response.body) {
-          this.overallOrders = response.body;
+          // this.overallOrders = response.body.map((order:any) => {
+          //   // Process productCode to remove slash if present
+          //   let result = order.productCode.includes("/") ? order.productCode.replace("/", "") : order.productCode;
+          //   // Create the image source URL based on the processed productCode
+          //   const selectedImage = `assets/skuimages/${result}.jpg`;
+          //   // Return the modified order with the new imageSrc field
+          //   return {
+          //     ...order,
+          //     imageSrc: selectedImage
+          //   };
+          // });
+
+
+         const overallOrders = await Promise.all(response.body.map(async (order: any) => {
+            // Process productCode to remove slash if present
+            let result = order.productCode.includes("/") ? order.productCode.replace("/", "") : order.productCode;
+          
+            // Create the image source URL based on the processed productCode
+            const selectedImage = `assets/skuimages/${result}.jpg`;
+          
+            // Check if the image exists
+            const imageExists = await this.dashboardService.checkImageExists(selectedImage);
+          
+            // Return the modified order with the new imageSrc and errorImg field
+            return {
+              ...order,
+              imageSrc: selectedImage,
+              errorImg: !imageExists // If image doesn't exist, set errorImg to true
+            };
+           
+          }));
+
+this.overallOrders = overallOrders;
+this.selectImage(this.overallOrders[0],0);
           this.calculateOverallGrandTotal();
           this.topSKUOrderedRegionSelected(MonthlyTotalOrderingPayload);
         }
@@ -4892,9 +4894,27 @@ dataLabels: {
     this.spinner.show();
     this.regionTotals = [];
     this.dashboardService.topSKUOrderedRegionSelected(MonthlyTotalOrderingPayload).subscribe(
-      (response) => {
+      async (response) => {
         if (response && response.body) {
           this.regionTotals = response.body;
+
+          this.regionTotals = await Promise.all(response.body.map(async (order: any) => {
+            // Process productCode to remove slash if present
+            let result = order.productCode.includes("/") ? order.productCode.replace("/", "") : order.productCode;
+          
+            // Create the image source URL based on the processed productCode
+            const selectedImage = `assets/skuimages/${result}.jpg`;
+          
+            // Check if the image exists
+            const imageExists = await this.dashboardService.checkImageExists(selectedImage);
+          
+            // Return the modified order with the new imageSrc and errorImg field
+            return {
+              ...order,
+              imageSrc: selectedImage,
+              errorImg: !imageExists // If image doesn't exist, set errorImg to true
+            };
+          }));
           this.getRegionGrandTotal();
           this.topSKUOrderedRSNameSelected(MonthlyTotalOrderingPayload);
         }
@@ -4926,9 +4946,28 @@ dataLabels: {
     this.spinner.show();
     this.rsTotals = [];
     this.dashboardService.topSKUOrderedRSNameSelected(MonthlyTotalOrderingPayload).subscribe(
-      (response) => {
+      async (response) => {
         if (response && response.body) {
+
+          
           this.rsTotals = response.body;
+          this.rsTotals = await Promise.all(response.body.map(async (order: any) => {
+            // Process productCode to remove slash if present
+            let result = order.productCode.includes("/") ? order.productCode.replace("/", "") : order.productCode;
+          
+            // Create the image source URL based on the processed productCode
+            const selectedImage = `assets/skuimages/${result}.jpg`;
+          
+            // Check if the image exists
+            const imageExists = await this.dashboardService.checkImageExists(selectedImage);
+          
+            // Return the modified order with the new imageSrc and errorImg field
+            return {
+              ...order,
+              imageSrc: selectedImage,
+              errorImg: !imageExists // If image doesn't exist, set errorImg to true
+            };
+          }));
           this.getRSGrandTotal();
         }
       },
@@ -5592,5 +5631,16 @@ dataLabels: {
       // clearInterval(interval);
     // }, 15000); // clears interval after 15 seconds
   }
+
+// Method to handle image load errors
+onImageError(event: Event): void {
+  const imgElement = event.target as HTMLImageElement;
+  console.log('Image failed to load:', imgElement.src);
+  // this.overallOrders[this.currentOverallLevel].errorImg = true;
+  // Set the fallback image or flag the error
+  // this.imageSrc = 'assets/no-image-found.jpg';  // Fallback image
+  // this.imageNotFound = true; // Display "No image found" message
+}
+  
   
 }

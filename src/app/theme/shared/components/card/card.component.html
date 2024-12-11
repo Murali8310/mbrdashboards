@@ -1,6 +1,6 @@
 <div class="card" [ngClass]="cardClass" [@cardRemove]="cardRemove" #toAnimate>
-  <div class="card-header" *ngIf="!hidHeader" [ngClass]="headerClass">
-    <h5 *ngIf="!customHeader">{{ cardTitle }}</h5>
+  <div *ngIf="false" class="card-header"  [ngClass]="headerClass">
+   
     <span *ngIf="!customDate" class="d-block">{{ CardDate }}</span>
     <div class="card-header-right" *ngIf="this.options && !customHeader">
       <div class="btn-group card-option dropdown" ngbDropdown>
@@ -36,8 +36,12 @@
     <ng-content *ngIf="customDate" select=".app-card-subheader"></ng-content>
   </div>
 
+  <div class="loading-bar" *ngIf="cardTitle != null && cardTitle.toLowerCase().includes('loading')">
+    <div class="progress"></div>
+  </div>
   <div [@collapsedCard]="collapsedCard">
     <div class="card-body" [ngClass]="blockClass">
+      <h5 style="text-align: center;font-weight: bold;">{{ cardTitle ? cardTitle : '' }}</h5>
       <ng-content></ng-content>
     </div>
   </div>
