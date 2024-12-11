@@ -1801,7 +1801,7 @@ text-align: center;
         <!-- </div> -->
       </div>
       
-      <div class="form-group col-md-3">
+      <div class="form-group col-md-3" *ngIf="false">
         <!-- <div class="row"> -->
           <!-- <div class="col-xl-2"> -->
             <label style="margin-top: 10px;
@@ -2142,8 +2142,8 @@ text-align: center;
             <tr class="grand-total">
               <td></td>
               <td></td>
-              <td><strong>Grand Total</strong></td>
-              <td>{{ overallGrandTotal }}</td>
+              <td class="allign-left"><strong>Grand Total</strong></td>
+              <td class="allign-left">{{ overallGrandTotal }}</td>
             </tr>
           </tbody>
         </table>
@@ -2182,7 +2182,7 @@ text-align: center;
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let order of regionTotals;index as rgindx" [class.green]="selectedOrder == order.productCode" (click)="selectImageforregion(order)">
+            <tr *ngFor="let order of regionTotals;index as rgindx" style="cursor: pointer;" [class.pointernone]="order.errorImg" [class.green]="selectedOrderForRegion == order.productCode" (click)="selectImageforregion(order,rgindx)">
                 <td style="text-align: left;">{{rgindx + 1}}</td>
               <td class="allign-left">{{ order.productCode }}</td>
               <td class="allign-left">{{ order.totalOrderQty }}</td>
@@ -2197,7 +2197,7 @@ text-align: center;
               <td></td>
               <td></td>
               <td class="allign-left"><strong>Grand Total</strong></td>
-              <td>{{ overallRegionGrandTotal }}</td> <!-- Grand Total for Region -->
+              <td class="allign-left">{{ overallRegionGrandTotal }}</td> <!-- Grand Total for Region -->
             </tr>
           </tbody>
         </table>
@@ -2234,14 +2234,14 @@ text-align: center;
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let order of rsTotals;index as rsidx" [class.green]="selectedOrder == order.productCode" (click)="selectedImageSourceForRsFn(order)">
+        <tr *ngFor="let order of rsTotals;index as rsidx" style="cursor: pointer;" [class.pointernone]="order.errorImg" [class.green]="selectedOrderForRs == order.productCode" (click)="selectedImageSourceForRsFn(order,rsidx)">
           <td style="text-align: left;">
             {{rsidx + 1}}
           </td>
           <td class="allign-left">{{ order.productCode }}</td>
-          <td>{{ order.totalOrderQty }}</td>
-          <td >
-            <img  *ngIf="order.errorImg" [src]="order.imageSrc" alt="logo-img" class="logo" style="height: 33px; width: 33px;border-radius: 2px;">
+          <td class="allign-left">{{ order.totalOrderQty }}</td>
+          <td class="allign-left">
+            <img  *ngIf="!order.errorImg" [src]="order.imageSrc" alt="logo-img" class="logo" style="height: 33px; width: 33px;border-radius: 2px;">
             <p *ngIf="order.errorImg" style="color: red;">No image found</p>
 
           </td>
@@ -2251,7 +2251,7 @@ text-align: center;
           <td></td>
           <td></td>
           <td class="allign-left"><strong>Grand Total</strong></td>
-          <td>{{ overallRsGrandTotal }}</td> <!-- Grand Total for RS -->
+          <td class="allign-left">{{ overallRsGrandTotal }}</td> <!-- Grand Total for RS -->
         </tr>
       </tbody>
     </table>

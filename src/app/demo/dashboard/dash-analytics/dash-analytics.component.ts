@@ -367,11 +367,13 @@ export default class DashAnalyticsComponent {
   isMobileView = window.innerWidth <= 768;
   currentMonthToDateText: string = 'Loading...';
   getLastUpdatedRecordDate: string = '';
-selectedOrder:any = 'ND2011324/P';
+selectedOrder:any = '';
+selectedOrderForRegion:any='';
+selectedOrderForRs:any='';
 currentOverallLevel:any = 0;
 selectedImageSource:any = '';
-selectedImageSourceForRegion:any = 'assets/images/1802NL02/1802SL12_3.jpg';
-selectedImageSourceForRs:any = 'assets/images/1802NL02/1802SL12_3.jpg';
+selectedImageSourceForRegion:any = '';
+selectedImageSourceForRs:any = '';
 LoadingDataForSku:any={};
 
   // constructor
@@ -4915,6 +4917,9 @@ this.selectImage(this.overallOrders[0],0);
               errorImg: !imageExists // If image doesn't exist, set errorImg to true
             };
           }));
+          if(this.regionTotals && this.regionTotals.length>0){
+            this.selectImageforregion(this.regionTotals[0],0);
+          }
           this.getRegionGrandTotal();
           this.topSKUOrderedRSNameSelected(MonthlyTotalOrderingPayload);
         }
@@ -4968,6 +4973,10 @@ this.selectImage(this.overallOrders[0],0);
               errorImg: !imageExists // If image doesn't exist, set errorImg to true
             };
           }));
+
+          if(this.rsTotals && this.rsTotals.length>0){
+            this.selectedImageSourceForRsFn(this.rsTotals[0],0);
+          }
           this.getRSGrandTotal();
         }
       },
@@ -4977,6 +4986,7 @@ this.selectImage(this.overallOrders[0],0);
       }
     );
   };
+
   getCurrentMonthToDate() {
     const currentDate = new Date();
     const currentMonth = this.datePipe.transform(currentDate, 'MMMM'); // Get current month name (e.g., 'November')
@@ -5565,82 +5575,26 @@ this.selectImage(this.overallOrders[0],0);
   }
   
 // this is for image for regionwise
-  selectImageforregion(data: any) {
-    this.selectedOrder = data.productCode;
-    
-    const selectedImage = [
-      'assets/images/1802NL02/1802SL12_2.jpg',
-      'assets/images/1802NL02/1802NL02_1.jpg',
-      'assets/images/1802NL02/1802SL12_3.jpg',
-      'assets/images/1802NL02/1802SL12_4.jpg',
-    ];
-  
-    // Initialize the index
-    let currentIndex = 0;
-    this.selectedImageSource = selectedImage[currentIndex];
-  
-    // Set an interval to update the image every 3 seconds
-    const interval = setInterval(() => {
-      currentIndex++;
-      if (currentIndex >= selectedImage.length) {
-        currentIndex = 0; // Reset to the first image when reaching the end
-      }
-      this.selectedImageSourceForRegion = selectedImage[currentIndex];
-    }, 3000);
-  
-    // Optionally clear the interval after some time (e.g., when the user navigates away or the component is destroyed)
-    // this will prevent the interval from running forever.
-    // You can use lifecycle hooks like ngOnDestroy to clear the interval.
-  
-    // Example to clear after 15 seconds (or any other condition you choose):
-    setTimeout(() => {
-      clearInterval(interval);
-    }, 15000); // clears interval after 15 seconds
+  selectImageforregion(data: any,index:any) {
+    this.selectedOrderForRegion = data.productCode;
+    let result =  data.productCode.includes("/") ?  data.productCode.replace("/", "") :  data.productCode;
+    const selectedImage = `assets/skuimages/${result}.jpg`
+    // this.currentOverallLevel = index;
+    this.selectedImageSourceForRegion = selectedImage;
   }
 
   // this is for image for regionwise
-  selectedImageSourceForRsFn(data: any) {
-    this.selectedOrder = data.productCode;
-    
-    const selectedImage = [
-      'assets/images/1802NL02/1802SL12_2.jpg',
-      'assets/images/1802NL02/1802NL02_1.jpg',
-      'assets/images/1802NL02/1802SL12_3.jpg',
-      'assets/images/1802NL02/1802SL12_4.jpg',
-    ];
-  
-    // Initialize the index
-    let currentIndex = 0;
-    this.selectedImageSourceForRs = selectedImage[currentIndex];
-  
-    // Set an interval to update the image every 3 seconds
-    // const interval = setInterval(() => {
-      // currentIndex++;
-      // if (currentIndex >= selectedImage.length) {
-      //   currentIndex = 0; // Reset to the first image when reaching the end
-      // }
-      this.selectedImageSourceForRegion = selectedImage[currentIndex];
-    // }, 3000);
-  
-    // Optionally clear the interval after some time (e.g., when the user navigates away or the component is destroyed)
-    // this will prevent the interval from running forever.
-    // You can use lifecycle hooks like ngOnDestroy to clear the interval.
-  
-    // Example to clear after 15 seconds (or any other condition you choose):
-    // setTimeout(() => {
-      // clearInterval(interval);
-    // }, 15000); // clears interval after 15 seconds
+  selectedImageSourceForRsFn(data: any,index:any) {
+    this.selectedOrderForRs = data.productCode;
+    let result =  data.productCode.includes("/") ?  data.productCode.replace("/", "") :  data.productCode;
+    const selectedImage = `assets/skuimages/${result}.jpg`
+    // this.currentOverallLevel = index;
+    this.selectedImageSourceForRs = selectedImage;
   }
 
 // Method to handle image load errors
 onImageError(event: Event): void {
   const imgElement = event.target as HTMLImageElement;
   console.log('Image failed to load:', imgElement.src);
-  // this.overallOrders[this.currentOverallLevel].errorImg = true;
-  // Set the fallback image or flag the error
-  // this.imageSrc = 'assets/no-image-found.jpg';  // Fallback image
-  // this.imageNotFound = true; // Display "No image found" message
-}
-  
-  
+} 
 }
