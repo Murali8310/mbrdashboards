@@ -1879,11 +1879,11 @@ public class UserController {
 		// System.out.println("seventhDay : "+seventhDay.get(0) );
 		System.out.println("Current time is ::: " + formattedDateTime);
 		if (seventhDay != null && !seventhDay.isEmpty() && seventhDay.get(0).equals(formattedDateTime)) {
-			userService.sevenDayMailTrigger();
+			//userService.sevenDayMailTrigger();
 			System.out.println("Proceeding further...");
 		} else {
 			// userService.sevenDayMailTrigger();
-			System.out.println("seventhDay and formattedDateTime do not match.");
+			System.out.println("application started");
 		}
 
 		try {

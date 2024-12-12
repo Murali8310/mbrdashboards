@@ -21,8 +21,8 @@ public class Task {
 	  public void run() {  
 	//	this.userController.get7thworkingDay();
 		 //  System.out.println("this.userController.get7thworkingDay() ::: " + this.userController.get7thworkingDay());
-	   System.out.println("Current time is ::: " + LocalDateTime.now());
-	   this.userController.sevenDayMailTrigger();
+	   //System.out.println("Current time is ::: " + LocalDateTime.now());
+	   //this.userController.sevenDayMailTrigger();
 	  }
 	
 
