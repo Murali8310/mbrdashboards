@@ -201,6 +201,8 @@ export default class DashAnalyticsComponent {
     { id: 5, name: 'West' }
   ];
 
+
+  
   availableRegions: any = [
     { id: 1, name: 'East' },
     { id: 2, name: 'North' },
