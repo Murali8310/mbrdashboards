@@ -952,9 +952,9 @@ console.log(MonthlyToalOrdaringPayload);
         {
           title: {
             text: 'Quantity (K) Loading...', // Left y-axis title
-            style: {
-              color: '#000000' // Change color as needed
-            }
+            style: { 
+              fontFamily:'unset'
+           }
           },
           min: 0, // Minimum value for left y-axis
           labels: {
@@ -1190,7 +1190,7 @@ console.log(MonthlyToalOrdaringPayload);
               title: {
                 text: 'Values',
                 style: {
-                  color: '#000000'
+                 fontFamily:'unset'
                 }
               },
               min: 0,
@@ -1340,9 +1340,9 @@ console.log(MonthlyToalOrdaringPayload);
         {
           title: {
             text: '(Growth Value) Loading...', // Left y-axis title
-            style: {
-              color: '#000000' // Change color as needed
-            }
+            style: { 
+              fontFamily:'unset'
+           }
           },
           // min: 0, // Minimum value for left y-axis
           labels: {
@@ -1486,10 +1486,11 @@ console.log(MonthlyToalOrdaringPayload);
                 floating: false,
                 title: {
                   text: ' (Growth Value)', // Left y-axis title
-                  // style: {
-                  //   color: '#000000' // Change color as needed
-                  // }
-                  offsetX:20
+                  style: { 
+                    fontFamily:'unset'
+                 },
+                  offsetX:20,
+
                 },
                 // min: 0, // Set minimum value for the y-axis
                 //max: 800, // Set maximum value for the y-axis (adjust as needed)
@@ -2209,7 +2210,9 @@ let lastHoveredDataPointIndex:any = '';
         {
           title: {
             text: '(Quantity) Loading...',
-            style: { color: '#000000' }
+            style: { 
+              fontFamily:'unset'
+           }
           },
           labels: {
             show: false,
@@ -2371,9 +2374,11 @@ let lastHoveredDataPointIndex:any = '';
                   },
                   yaxis: [{
                     title: {
-                        text: '(Value (Cr))',
-                        style: { color: '#000000' },
-                        offsetX:20
+                        text: 'Value (Cr)',
+                        style: { 
+                          fontFamily:'unset'
+                       },
+                        offsetX:10
                     },
                     labels: {
                         formatter: (val: any) => '' + val
@@ -2779,7 +2784,9 @@ dataLabels: {
         {
           title: {
             text: '(Growth Value)',
-            style: { color: '#000000' }
+            style: { 
+              fontFamily:'unset'
+           }
           },
           labels: {
             show: false,
@@ -2913,8 +2920,10 @@ dataLabels: {
             yaxis: [
               {
                 title: {
-                  text: '(Quantity)',
-                  style: { color: '#000000' },
+                  text: 'Price (Crs)',
+                  style: { 
+                    fontFamily:'unset'
+                 },
                   offsetX:20
                 },
                 labels: {
@@ -3142,7 +3151,8 @@ dataLabels: {
         title: {
           text: 'Monthly Orders Trend Loading...', // Left y-axis title
           style: {
-            color: '#000000' // Change color as needed
+            // color: '#000000',
+            fontFamily:'unset' // Change color as needed
           }
         }
       },
@@ -3150,9 +3160,9 @@ dataLabels: {
         {
           title: {
             text: 'Quantity (K) Loading...', // Left y-axis title
-            style: {
-              color: '#000000' // Change color as needed
-            }
+            style: { 
+              fontFamily:'unset'
+           }
           },
           min: 0, // Minimum value for left y-axis
           labels: {
@@ -3366,7 +3376,7 @@ dataLabels: {
               }
             ],
             chart: {
-              height: 700,
+              height: 500,
               type: 'line',
               zoom: {
                 enabled: false
@@ -3462,7 +3472,8 @@ dataLabels: {
               title: {
                 text: 'Values',
                 style: {
-                  color: '#000000'
+                  // color: '#000000',
+                  fontFamily:'unset'
                 }
               },
               min: 0,
@@ -3540,7 +3551,9 @@ dataLabels: {
         {
           title: {
             text: '(No Of Orders) Loading...',
-            style: { color: '#000000' }
+            style: { 
+              fontFamily:'unset'
+           }
           },
           labels: {
             show: false,
@@ -3665,7 +3678,7 @@ dataLabels: {
               {
                 title: {
                   text: '( No Of Orders % )',
-                  style: { color: '#000000' },
+                  style: { fontFamily:'unset'},
                   offsetX:15
                 },
                 labels: {
@@ -3716,7 +3729,9 @@ dataLabels: {
         {
           title: {
             text: '(Avg Qty/Value Per Order)',
-            style: { color: '#000000' }
+            style: { color: '#000000',
+              fontFamily:'unset'
+             }
           },
           labels: {
             show: false,
@@ -3806,7 +3821,9 @@ dataLabels: {
               {
                 title: {
                   text: '(Avg Qty/Value Per Order)',
-                  style: { color: '#000000' }
+                  style: { 
+                    fontFamily:'unset'
+                 }
                 },
                 labels: { formatter: (val: any) => '' + val },
                 tickAmount: 4
@@ -4255,7 +4272,8 @@ dataLabels: {
         title: {
           text: 'Order Percentage',
           style: {
-            color: '#000000'
+            // color: '#000000',
+            fontFamily:'unset'
           }
         },
         labels: {
@@ -4437,7 +4455,10 @@ dataLabels: {
       },
       yaxis: {
         title: {
-          text: 'Percentage of Orders'
+          text: 'Percentage of Orders',
+          style:{
+             fontFamily:'unset'
+          }
         },
         labels: {
           formatter: (val: any) => `${val.toFixed(0)}%`
@@ -4626,7 +4647,10 @@ dataLabels: {
       },
       yaxis: {
         title: {
-          text: 'Percentage of Orders'
+          text: 'Percentage of Orders',
+          style:{
+            fontFamily:'unset'
+         },
         },
         labels: {
           formatter: (val: any) => `${val.toFixed(0)}%`
@@ -4783,7 +4807,10 @@ dataLabels: {
       },
       yaxis: {
         title: {
-          text: 'Percentage of Orders'
+          text: 'Percentage of Orders',
+          style:{
+            fontFamily:'unset'
+         },
         },
         labels: {
           formatter: (val: any) => `${val.toFixed(0)}%`
@@ -5172,7 +5199,8 @@ this.selectImage(this.overallOrders[0],0);
           title: {
             text: '(Growth Value) Loading...', // Left y-axis title
             style: {
-              color: '#000000' // Change color as needed
+              // color: '#000000',
+              fontFamily:'unset' // Change color as needed
             }
           },
           // min: 0, // Minimum value for left y-axis
@@ -5406,7 +5434,10 @@ this.selectImage(this.overallOrders[0],0);
         {
           title: {
             text: '(Growth Value)',
-            style: { color: '#000000' }
+            style: { 
+
+                fontFamily:'unset'
+             }
           },
           labels: {
             show: false,
