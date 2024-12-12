@@ -169,7 +169,7 @@
 </plugin>
 
 		</plugins>
-		<finalName>stationary</finalName>
+		<finalName>mbrdashboardbackend</finalName>
 	</build>
 
 </project>
