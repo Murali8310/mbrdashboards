@@ -18,7 +18,9 @@ type DropdownFlag =
   | 'isDropdownOpen'
   | 'isDropdownOpenForAbm'
   | 'isDropdownOpenForMonth'
-  | 'isDropdownOpenForYear';
+  | 'isDropdownOpenForYear'
+  | 'isDropdownOpenForState'
+  | 'isDropdownOpenForCity';
 
 interface Brand {
   id: number;
@@ -145,7 +147,11 @@ export default class DashAnalyticsComponent {
       targetElement.closest('#monthDropdownmenu') ||
       targetElement.closest('#monthDropdown') ||
       targetElement.closest('#yearDropdown') ||
-      targetElement.closest('#yearDropdownmenu')
+      targetElement.closest('#yearDropdownmenu')||
+      targetElement.closest('#stateDropdown')||
+      targetElement.closest('#stateDropdownmenu')||
+      targetElement.closest('#cityDropdown') ||
+      targetElement.closest('#cityDropdownmenu')
     ) {
       return; // Ignore clicks on this button and its children
     }
@@ -173,6 +179,12 @@ export default class DashAnalyticsComponent {
 
     if (this.isDropdownOpenForYear) {
       this.isDropdownOpenForYear = !this.isDropdownOpenForYear;
+    }
+    if(this.isDropdownOpenForState){
+      this.isDropdownOpenForState = !this.isDropdownOpenForState;
+    }
+    if(this.isDropdownOpenForCity){
+      this.isDropdownOpenForCity = !this.isDropdownOpenForCity;   
     }
   }
   isOpen = false;
@@ -376,6 +388,44 @@ selectedImageSourceForRegion:any = '';
 selectedImageSourceForRs:any = '';
 LoadingDataForSku:any={};
 
+
+
+
+
+
+
+
+// this is for state filter 
+
+isDropdownOpenForState = false;
+  selectedStates: string[] = [];
+  availableStates: string[] = [];
+  filteredStatesList: string[] = [...this.availableStates];
+  areAllStatesSelected = false;
+  searchInputValueForState = '';
+
+
+  isDropdownOpenForCity = false;
+  selectedCities: string[] = [];
+  availableCities: string[] = [
+    // "Agarmalwa",
+    // "AGARTALA",
+    // "AJEETGARH",
+    // "AKHNOOR",
+    // "AKOLA",
+    // "ALAMBAZAR",
+    // "ALUVA",
+  ];
+  filteredCitiesList: string[] = [...this.availableCities];
+  areAllCitiesSelected = false;
+  searchInputValueForCity = '';
+
+
+
+
+
+
+
   // constructor
   constructor(
     public dashboardService: DashboardService,
@@ -394,11 +444,11 @@ LoadingDataForSku:any={};
     this.getCurrentMonthToDate();
     this.route.queryParams.subscribe((params) => {
       this.dashboardService.selectedData = params['id'];
+      this.initializeYears();
     
       if (params['id'] === '1') {
         // Initialize years
-        this.initializeYears();
-    
+       
         // Get the current date
         const today = new Date();
     
@@ -555,6 +605,9 @@ LoadingDataForSku:any={};
     let regionList: any = '';
     let retailerTypeList: any = '';
     let payloadForMaster: any;
+    const selectedCities = this.selectedCities.map((item) => item).join(', ');
+    const selectedStates = this.selectedStates.map((item) => item).join(', ');
+
     if (data === 'search') {
 
       const selectedMonths = this.selectedMonths.map((item) => item.id).join(', ');
@@ -577,7 +630,9 @@ LoadingDataForSku:any={};
         abmName: abmNameList,
         retailerType: retailerTypeList,
         selectedMonths:selectedMonths,
-        selectedYears:selectedYears
+        selectedYears:selectedYears,
+        selectedCity:selectedCities,
+        selectedState:selectedStates
       };
       payloadForMaster = {
         regionList: regionList,
@@ -585,17 +640,8 @@ LoadingDataForSku:any={};
       };
 
     } else {
-      // MonthlyToalOrdaringPayload = {
-      //   regionList: 'EAST, WEST,NORTH,SOUTH 1,SOUTH 2', /// default all regions
-      //   startDate: 20240401, /// default case start date of financial year in integer format
-      //   endDate: 202401030, ////  default case end date of financial year in integer format
-      //   brandList: '', //// default casen ""
-      //   rsNameList: '', //// default casen ""
-      //   abmName: '',
-      //   retailerType: ''
-      // };
-
-      const today = new Date();
+     
+const today = new Date();
 const year = today.getFullYear();
 const month = today.getMonth(); // 0-based, January is 0
 
@@ -618,7 +664,12 @@ MonthlyToalOrdaringPayload = {
   brandList: '', // default case ""
   rsNameList: '', // default case ""
   abmName: '',
-  retailerType: ''
+  retailerType: '',
+  selectedMonths:'',
+  selectedYears:'',
+  selectedCity:'',
+  selectedState:''
+
 };
 
 console.log(MonthlyToalOrdaringPayload);
@@ -633,6 +684,9 @@ console.log(MonthlyToalOrdaringPayload);
       this.selectedRegions = [];
       this.selectedRetailerTypes = [];
       this.selectedMonths = [];
+      this.selectedCities = [];
+      this.selectedStates = [];
+       this.selectedYears = [];
 
       if(this.dashboardService.selectedData === '4' || this.dashboardService.selectedData === '5'){
         const today = new Date();
@@ -706,6 +760,8 @@ console.log(MonthlyToalOrdaringPayload);
 
   // Populate years dynamically
   initializeYears() {
+    this.yearsList = [];
+    this.selectedYears = [];
     const currentYear = new Date().getFullYear();
     for (let year = currentYear - 1; year <= currentYear; year++) {
       this.yearsList.push(year);
@@ -1700,6 +1756,8 @@ console.log(MonthlyToalOrdaringPayload);
       this.isDropdownOpenForAbm = false;
       this.isDropdownOpenForMonth = false;
       this.isDropdownOpenForYear = false;
+      this.isDropdownOpenForState = false;
+      this.isDropdownOpenForCity =false;
       // Open the selected dropdown
       this[selectedDropdown] = true;
     }
@@ -1958,6 +2016,38 @@ console.log(MonthlyToalOrdaringPayload);
         }else {
           this.availableAbmNames = [];
         }
+
+        if (response && response.body && response.body.city && response.body.city.length > 0) {
+          // Step 3: Transform the data with type assertion
+          // const availableAbmNames: Brand[] = response.body.abmName.map(([id, name, region]: [string, string, string]) => {
+          //   return {
+          //     id: id, // Convert ID to a number
+          //     name: name, // Keep the name as is
+          //     region: region
+          //   };
+          // });
+
+          this.availableCities = response.body.city;
+        }else {
+          this.availableCities = [];
+        }
+
+        if (response && response.body && response.body.state && response.body.state.length > 0) {
+          // Step 3: Transform the data with type assertion
+          // const availableAbmNames: Brand[] = response.body.abmName.map(([id, name, region]: [string, string, string]) => {
+          //   return {
+          //     id: id, // Convert ID to a number
+          //     name: name, // Keep the name as is
+          //     region: region
+          //   };
+          // });
+
+          this.availableStates = response.body.state;
+        }else {
+          this.availableStates = [];
+        }
+
+        
       },
       (error) => {
         // this.errorMessage = 'An error occurred during login';
@@ -5689,4 +5779,93 @@ onImageError(event: Event): void {
   const imgElement = event.target as HTMLImageElement;
   console.log('Image failed to load:', imgElement.src);
 } 
+
+
+
+
+// this is for state filter.
+
+toggleDropdownVisibilityForState() {
+  // this.isDropdownOpenForState = !this.isDropdownOpenForState;
+
+  this.toggleDropdownVisibility1('isDropdownOpenForState');
+  if (this.isDropdownOpenForState) {
+    this.filteredStatesList = this.availableStates; // Reset filtered list on opening
+  }
+}
+
+toggleAllStateSelection(event: Event) {
+  this.areAllStatesSelected = (event.target as HTMLInputElement).checked;
+  this.selectedStates = this.areAllStatesSelected
+    ? [...this.filteredStatesList]
+    : [];
+}
+
+toggleStateSelection(state: string) {
+  if (this.selectedStates.includes(state)) {
+    this.selectedStates = this.selectedStates.filter((s) => s !== state);
+  } else {
+    this.selectedStates.push(state);
+  }
+  this.areAllStatesSelected = this.selectedStates.length === this.filteredStatesList.length;
+}
+
+removeSelectedState(state: string, event: Event) {
+  event.stopPropagation();
+  this.selectedStates = this.selectedStates.filter((s) => s !== state);
+  this.areAllStatesSelected = false;
+}
+
+filterAvailableStates() {
+  const searchValue = this.searchInputValueForState.toLowerCase();
+  this.filteredStatesList = this.availableStates.filter((state) =>
+    state.toLowerCase().includes(searchValue)
+  );
+  this.areAllStatesSelected = this.filteredStatesList.length > 0 &&
+    this.selectedStates.length === this.filteredStatesList.length;
+}
+
+// this is for city filter functionality.
+
+
+toggleDropdownVisibilityForCity() {
+  this.toggleDropdownVisibility1('isDropdownOpenForCity');
+  if (this.isDropdownOpenForCity) {
+    this.filteredCitiesList = this.availableCities; // Reset filtered list on opening
+  }
+}
+
+toggleAllCitySelection(event: Event) {
+  this.areAllCitiesSelected = (event.target as HTMLInputElement).checked;
+  this.selectedCities = this.areAllCitiesSelected
+    ? [...this.filteredCitiesList]
+    : [];
+}
+
+toggleCitySelection(city: string) {
+  if (this.selectedCities.includes(city)) {
+    this.selectedCities = this.selectedCities.filter((c) => c !== city);
+  } else {
+    this.selectedCities.push(city);
+  }
+  this.areAllCitiesSelected =
+    this.selectedCities.length === this.filteredCitiesList.length;
+}
+
+removeSelectedCity(city: string, event: Event) {
+  event.stopPropagation();
+  this.selectedCities = this.selectedCities.filter((c) => c !== city);
+  this.areAllCitiesSelected = false;
+}
+
+filterAvailableCities() {
+  const searchValue = this.searchInputValueForCity.toLowerCase();
+  this.filteredCitiesList = this.availableCities.filter((city) =>
+    city.toLowerCase().includes(searchValue)
+  );
+  this.areAllCitiesSelected =
+    this.filteredCitiesList.length > 0 &&
+    this.selectedCities.length === this.filteredCitiesList.length;
+}
+
 }
