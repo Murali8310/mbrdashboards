@@ -196,8 +196,8 @@ export default class DashAnalyticsComponent {
   regions = [
     { id: 1, name: 'East' },
     { id: 2, name: 'North' },
-    { id: 3, name: 'South1' },
-    { id: 4, name: 'South2' },
+    { id: 3, name: 'South 1' },
+    { id: 4, name: 'South 2' },
     { id: 5, name: 'West' }
   ];
 
@@ -636,7 +636,9 @@ isDropdownOpenForState = false;
       };
       payloadForMaster = {
         regionList: regionList,
-        abmName: abmNameList
+        abmName: abmNameList,
+        selectedCity:selectedCities,
+        selectedState:selectedStates
       };
 
     } else {
@@ -676,7 +678,9 @@ console.log(MonthlyToalOrdaringPayload);
 
       payloadForMaster = {
         regionList: '',
-        abmName: ''
+        abmName: '',
+  selectedCity:'',
+  selectedState:''
       };
       this.selectedAbmNames = [];
       this.selectedBrands = [];
@@ -743,7 +747,9 @@ console.log(MonthlyToalOrdaringPayload);
             startDate: formatDate(startDate),
             endDate: formatDate(endDate),
             selectedMonths:selectedMonths,
-            selectedYears:selectedYears
+            selectedYears:selectedYears,
+            selectedCity:selectedCities,
+            selectedState:selectedStates
             // Add other fields if required
           };
       }
@@ -1970,7 +1976,7 @@ console.log(MonthlyToalOrdaringPayload);
               name: region.replace(' ', '') // Replace space in 'SOUTH 1' and 'SOUTH 2' with empty string
             };
           });
-          this.availableRegions = availableRegions;
+          // this.availableRegions = availableRegions;
         } else {
           // this.availableRegions = [];
         }
@@ -3140,7 +3146,9 @@ dataLabels: {
       rsNameList = this.selectedRSNames.map((item) => item.name).join(', ');
       regionList = this.selectedRegions.map((item) => item.name).join(', ');
       retailerTypeList = this.selectedRetailerTypes.map((item) => item.name).join(', ');
-
+      const selectedCities = this.selectedCities.map((item) => item).join(', ');
+      const selectedStates = this.selectedStates.map((item) => item).join(', ');
+  
       MonthlyToalOrdaringPayload = {
         regionList: regionList, /// default all regions
         startDate: 20240401, /// default case start date of financial year in integer format
@@ -3148,16 +3156,22 @@ dataLabels: {
         brandList: brandList, //// default casen ""
         rsNameList: rsNameList, //// default casen ""
         abmName: abmNameList,
-        retailerType: retailerTypeList
+        retailerType: retailerTypeList,
+        selectedCity:selectedCities,
+        selectedState:selectedStates
       };
       payloadForMaster = {
         regionList: regionList,
-        abmName: abmNameList
+        abmName: abmNameList,
+        selectedCity:selectedCities,
+        selectedState:selectedStates
       };
     } else {
       payloadForMaster = {
         regionList: '',
-        abmName: ''
+        abmName: '',
+        selectedCity:'',
+        selectedState:''
       };
     }
     this.GetMasterData(payloadForMaster, MonthlyToalOrdaringPayload, true);
