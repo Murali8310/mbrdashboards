@@ -5823,6 +5823,7 @@ toggleStateSelection(state: string) {
   } else {
     this.selectedStates.push(state);
   }
+  this.getMasterDataForFilter('search');
   this.areAllStatesSelected = this.selectedStates.length === this.filteredStatesList.length;
 }
 
@@ -5864,6 +5865,8 @@ toggleCitySelection(city: string) {
   } else {
     this.selectedCities.push(city);
   }
+
+  this.getMasterDataForFilter('search');
   this.areAllCitiesSelected =
     this.selectedCities.length === this.filteredCitiesList.length;
 }
