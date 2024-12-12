@@ -367,5 +367,9 @@ public interface UserDao {
 	List<OutputGrowthOverPreviousMonth> growthOverPreviousYearMonthly(MonthlyDataFilter filter);
 
 
+	List<com.titan.mbrDashboard.dto.OutputDashboardTiles> OutputDashboardTilesMonthAndYearFilter(
+			MonthlyDataFilter filter);
+
+
 
 }

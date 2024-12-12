@@ -1138,7 +1138,16 @@ public class UserServiceimpl implements Userservice {
 	@Override
 	public List<OutputDashboardTiles> OutputDashboardTiles(MonthlyDataFilter filter) {
 		// TODO Auto-generated method stub
-		return userDao.OutputDashboardTiles(filter);
+		
+		
+
+		/*without month and year filter approach*/
+		//return userDao.OutputDashboardTiles(filter);
+		
+		
+		/*with month and year filter approach*/
+		return userDao.OutputDashboardTilesMonthAndYearFilter(filter);
+		//
 	}
 
 	@Override

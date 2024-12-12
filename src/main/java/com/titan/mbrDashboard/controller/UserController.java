@@ -2965,15 +2965,15 @@ public List<OutputForMontlyFilter> MonthlyTrendRegular(HttpServletRequest reques
 
 		HttpSession session = request.getSession();
 		String loginId = "";
-//			try {
-//				Map<String, Object> userMap = (Map) session.getAttribute("userMap");
-//				loginId = (String) userMap.get("login_id");
-//			} catch (Exception er) {
-//				er.printStackTrace();
-//				//return new StringBuilder("Session is timeout, <a href='login' >click here</a> to login");
-//			}
-
+		
+		/*without month and year filter approach*/
+		//result = userService.OutputDashboardTiles(filter);
+		
+		
+		/*with month and year filter approach*/
 		result = userService.OutputDashboardTiles(filter);
+
+		
 		redirect.addFlashAttribute("MESSAGE", result);
 		model.addAttribute("MESSAGE", result);
 		return result;
