@@ -6159,11 +6159,16 @@ public class UserDaoimpl implements UserDao {
 		List<Region> regionName = selectRegionforMaster();
 		List<RSName> rsName = selectRsNameForMaster();
 		List<ABMName> ABMName = selectABMNameForMaster();
+		List<State> state = selectStateForMaster();
+		List<City> city = selectCityForMaster();
+
 
 		data.setBrand(brandName);
 		// data.setRegion(regionName);
 		data.setRsName(rsName);
 		data.setAbmName(ABMName);
+		data.setState(state);
+		data.setCity(city);;
 		if (!filter.getRegionList().isEmpty() || !filter.getAbmName().isEmpty()) {
 			MasterData filterData = getFilterData(filter);
 			filterData.setAbmName(ABMName);
@@ -6238,6 +6243,22 @@ public class UserDaoimpl implements UserDao {
 		return ABMName;
 	}
 
+	
+	private List<State> selectStateForMaster() {
+		List<State> state = null;
+		String checkSql = "select distinct State from MBROrders;;";
+		Query checkQuery = entityManager.createNativeQuery(checkSql);
+		state = checkQuery.getResultList();
+		return state;
+	}
+	private List<City> selectCityForMaster() {
+		List<City> city = null;
+		String checkSql = "select distinct City from MBROrders;;";
+		Query checkQuery = entityManager.createNativeQuery(checkSql);
+		city = checkQuery.getResultList();
+		return city;
+	}
+	
 	private List<ABMName> selectABMNameForMasterForFilter() {
 		List<ABMName> ABMName = null;
 		String checkSql = "select UserName, Name, Region from MBRUsers (nolock) where Desig_Id=7 or Desig_Id=6  order by Name;";
