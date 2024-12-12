@@ -1086,11 +1086,34 @@ console.log(MonthlyToalOrdaringPayload);
                 enabled: true,
                 foreColor: '#000000'
               },
-              formatter: function (val: any, { seriesIndex, w }) {
+              // formatter: function (val: any, { seriesIndex, w }) {
+              //   // Apply custom scaling to data labels based on series name
+              //   const seriesName = w.config.series[seriesIndex].name;
+              //   let scaledValue = val;
+
+              //   // Apply custom scaling for each series
+              //   if (seriesName === 'Quantity (k)') {
+              //     scaledValue = (val * 10).toFixed(2); // Scale Quantity by 10
+              //   } else if (seriesName === 'Retailers') {
+              //     scaledValue = (val * 100).toFixed(0); // Scale Retailers by 100
+              //   } else {
+              //     scaledValue = val.toFixed(2); // No scaling for other series
+              //   }
+
+              //   // Offset Y based on series index
+              //   const dataLabelOffsetsY = [0, 35, 0]; // Customize offsets per series index
+              //   const offsetY = dataLabelOffsetsY[seriesIndex] || 0; // Use the default offset if none provided
+
+              //   // Update the offsetY dynamically
+              //   w.config.dataLabels.offsetX = offsetY;
+              //   return scaledValue;
+              // }
+
+              formatter: function (val: any, { seriesIndex, w, dataPointIndex }) {
                 // Apply custom scaling to data labels based on series name
                 const seriesName = w.config.series[seriesIndex].name;
                 let scaledValue = val;
-
+              
                 // Apply custom scaling for each series
                 if (seriesName === 'Quantity (k)') {
                   scaledValue = (val * 10).toFixed(2); // Scale Quantity by 10
@@ -1099,15 +1122,35 @@ console.log(MonthlyToalOrdaringPayload);
                 } else {
                   scaledValue = val.toFixed(2); // No scaling for other series
                 }
+              
+                // // Offset Y based on series index, customize for last data point
+                // const dataLabelOffsetsY = [0, 35, 0]; // Default offsets per series index
+                // const isLastPoint = dataPointIndex === w.config.series[seriesIndex].data.length - 1;
+              
+                // // Adjust offset dynamically for the last data point
+                // const offsetY = isLastPoint && seriesIndex === 1 ? -35 : dataLabelOffsetsY[seriesIndex] || 0;
 
-                // Offset Y based on series index
-                const dataLabelOffsetsY = [0, 35, 0]; // Customize offsets per series index
-                const offsetY = dataLabelOffsetsY[seriesIndex] || 0; // Use the default offset if none provided
 
+  // Default offsets per series index
+  const dataLabelOffsetsY = [0, 35, 0]; 
+  let offsetY;
+
+  // Adjust offset dynamically based on conditions
+  if (seriesIndex === 1 && dataPointIndex === w.config.series[seriesIndex].data.length - 1) {
+    offsetY = -35; // Last data point for series index 1
+  } else if (seriesIndex === 2 && dataPointIndex === 0) {
+    offsetY = 50; // First data point for series index 2
+  } else {
+    offsetY = dataLabelOffsetsY[seriesIndex] || 0; // Default offsets
+  }
+
+              
                 // Update the offsetY dynamically
                 w.config.dataLabels.offsetX = offsetY;
+              
                 return scaledValue;
               }
+              
             },
             stroke: {
               width: 5,
@@ -1161,11 +1204,12 @@ console.log(MonthlyToalOrdaringPayload);
             },
             tooltip: {
               shared: true,
-              intersect: false,
+              // intersect: true,
               y: {
-                formatter: function (value, { series, seriesIndex }) {
+                formatter: function (value, { series, seriesIndex,dataPointIndex }) {
                   // Apply scaling based on series name in the tooltip
                   const seriesName = series[seriesIndex].name;
+                  
                   if (seriesIndex === 0) {
                     return (value * 10).toFixed(2); // Scale Quantity by 10
                   } else if (seriesIndex === 1) {
@@ -3342,7 +3386,7 @@ dataLabels: {
                 enabled: true,
                 foreColor: '#000000'
               },
-              formatter: function (val: any, { seriesIndex, w }) {
+              formatter: function (val: any, { seriesIndex, w,dataPointIndex }) {
                 const seriesName = w.config.series[seriesIndex].name;
                 if (val === 'Avg Value Per Order (K)') {
                   val = val * 1000;
@@ -3353,9 +3397,26 @@ dataLabels: {
                   val = val.toFixed(0);
                 }
                 // Offset Y based on series index
-                const dataLabelOffsetsY = [0, 0, 35]; // Customize offsets per series index
-                const offsetY = dataLabelOffsetsY[seriesIndex] || 0; // Use the default offset if none provided
+                // const dataLabelOffsetsY = [0, 0, 35]; // Customize offsets per series index
+                // const offsetY = dataLabelOffsetsY[seriesIndex] || 0; // Use the default offset if none provided
 
+
+
+                
+  // Default offsets per series index
+  const dataLabelOffsetsY = [0, 0, 35]; 
+  let offsetY;
+
+  // Adjust offset dynamically based on conditions
+  if (seriesIndex === 2 && dataPointIndex === w.config.series[seriesIndex].data.length - 1) {
+    offsetY = -35; // Last data point for series index 1
+  } else {
+    offsetY = dataLabelOffsetsY[seriesIndex] || 0; // Default offsets
+  }
+
+  // else if (seriesIndex === 1 && dataPointIndex === 0) {
+  //   offsetY = 50; // First data point for series index 2
+  // } 
                 // Update the offsetY dynamically
                 w.config.dataLabels.offsetX = offsetY;
                 return val.toFixed(2); // No scaling for Avg Value
