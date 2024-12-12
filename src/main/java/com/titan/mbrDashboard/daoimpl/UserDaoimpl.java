@@ -6671,6 +6671,14 @@ public class UserDaoimpl implements UserDao {
 
 			    List<State> resultList1 = checkQuery1.getResultList();
 			    dataoutput.setState(resultList1);
+			    
+			    
+			    String checksql2 = "SELECT distinct(City) FROM MBROrders WHERE Region IN (:region);";
+			    Query checkQuery2 = entityManager.createNativeQuery(checksql2);
+			    checkQuery2.setParameter("region", regionList);
+
+			    List<City> resultList2 = checkQuery2.getResultList();
+			    dataoutput.setCity(resultList2);
 			}
 
 			if (!data.getRegionList().isEmpty() && !data.getSelectedState().isEmpty()) {
