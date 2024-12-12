@@ -6162,16 +6162,40 @@ public class UserDaoimpl implements UserDao {
 		List<State> state = selectStateForMaster();
 		List<City> city = selectCityForMaster();
 
-
 		data.setBrand(brandName);
 		// data.setRegion(regionName);
 		data.setRsName(rsName);
 		data.setAbmName(ABMName);
 		data.setState(state);
-		data.setCity(city);;
-		if (!filter.getRegionList().isEmpty() || !filter.getAbmName().isEmpty()) {
+		data.setCity(city);
+		
+		if (!filter.getRegionList().isEmpty() || !filter.getAbmName().isEmpty()
+				|| !filter.getSelectedState().isEmpty()) {
 			MasterData filterData = getFilterData(filter);
-			filterData.setAbmName(ABMName);
+			
+			if (filterData.getAbmName() == null) {
+			    filterData.setAbmName(new ArrayList<>());
+			}
+
+			if (filterData.getAbmName().isEmpty()) {
+			    filterData.getAbmName().addAll(ABMName);
+			}
+
+			if (filterData.getRegion() == null) {
+			    filterData.setRegion(regionName);;
+			}
+
+			if (filterData.getRegion().isEmpty()) {
+			    filterData.getRegion();
+			}			
+			if (filterData.getState() == null) {
+			    filterData.setState(state);
+			}
+
+			if (filterData.getState().isEmpty()) {
+			    filterData.getState().addAll(state);
+			}
+
 			filterData.setBrand(brandName);
 			return filterData;
 		}
@@ -6243,7 +6267,6 @@ public class UserDaoimpl implements UserDao {
 		return ABMName;
 	}
 
-	
 	private List<State> selectStateForMaster() {
 		List<State> state = null;
 		String checkSql = "select distinct State from MBROrders;;";
@@ -6251,6 +6274,7 @@ public class UserDaoimpl implements UserDao {
 		state = checkQuery.getResultList();
 		return state;
 	}
+
 	private List<City> selectCityForMaster() {
 		List<City> city = null;
 		String checkSql = "select distinct City from MBROrders;;";
@@ -6258,7 +6282,7 @@ public class UserDaoimpl implements UserDao {
 		city = checkQuery.getResultList();
 		return city;
 	}
-	
+
 	private List<ABMName> selectABMNameForMasterForFilter() {
 		List<ABMName> ABMName = null;
 		String checkSql = "select UserName, Name, Region from MBRUsers (nolock) where Desig_Id=7 or Desig_Id=6  order by Name;";
@@ -6501,7 +6525,7 @@ public class UserDaoimpl implements UserDao {
 				+ "    AND CONVERT(VARCHAR, OrderDate, 112) <= :endDate \r\n" + "GROUP BY\r\n"
 				+ "    YEAR(OrderDate),\r\n" + "    MONTH(OrderDate),\r\n" + "    Region\r\n" + "ORDER BY\r\n"
 				+ "    YEAR(OrderDate),\r\n" + "    MONTH(OrderDate);";
-			Query query = entityManager.createNativeQuery(checkQuery);
+		Query query = entityManager.createNativeQuery(checkQuery);
 
 //		// Set the parameters for the stored procedure call
 		query.setParameter("startDate", filter.getStartDate()); // @StartDate (e.g., 20240601)
@@ -6616,6 +6640,11 @@ public class UserDaoimpl implements UserDao {
 				// each region
 				.collect(Collectors.toList());
 
+		List<String> StateList = Arrays.stream(data.getSelectedState().split(",")).map(String::trim) // Trim spaces
+																										// around
+				// each region
+				.collect(Collectors.toList());
+
 		if (!data.getRegionList().isEmpty() && data.getAbmName().isEmpty()) {
 			String checkSql = "SELECT UserName, Name, Region FROM MBRUsers " + "WHERE Region IN (:region) "
 					+ "AND (desig_id = 6 OR desig_id = 7) order by Name";
@@ -6628,19 +6657,40 @@ public class UserDaoimpl implements UserDao {
 			// Execute the query and get the result list
 			List<ABMName> resultList = checkQuery.getResultList();
 
-			// Process each result row to map to ABMName objects
-//		    for (Object[] row : resultList) {
-//		        ABMName abm = new ABMName();
-//		        abm.setName((String) row[0]); // Assuming Name is the first column
-//		        abm.setUserName((String) row[1]); // Assuming UserName is the second column
-//
-//		        ABMName.add(abm); // Add to the list
-//		    }
 			rsName = selectRsNameForMaster();
 			// Set the ABMName list into dataoutput
 			dataoutput.setAbmName(resultList);
 			dataoutput.setRsName(rsName);
 			// Return the populated MasterData object
+			// return dataoutput;
+
+			if (!data.getRegionList().isEmpty() && data.getSelectedState().isEmpty()) {
+			    String checksql1 = "SELECT distinct(State) FROM MBROrders WHERE Region IN (:region);";
+			    Query checkQuery1 = entityManager.createNativeQuery(checksql1);
+			    checkQuery1.setParameter("region", regionList);
+
+			    List<State> resultList1 = checkQuery1.getResultList();
+			    dataoutput.setState(resultList1);
+			}
+
+			if (!data.getRegionList().isEmpty() && !data.getSelectedState().isEmpty()) {
+			    String checksql2 = "SELECT distinct(City) FROM MBROrders WHERE Region IN (:region) and State IN(:state);";
+			    Query checkQuery2 = entityManager.createNativeQuery(checksql2);
+			    checkQuery2.setParameter("region", regionList);
+			    checkQuery2.setParameter("state", StateList);
+
+			    List<City> resultList2 = checkQuery2.getResultList();
+
+			    // Recalculating resultList1 within the second condition
+			    String checksql1 = "SELECT distinct(State) FROM MBROrders WHERE Region IN (:region);";
+			    Query checkQuery1 = entityManager.createNativeQuery(checksql1);
+			    checkQuery1.setParameter("region", regionList);
+
+			    List<State> resultList1 = checkQuery1.getResultList();
+			    dataoutput.setState(resultList1);
+			    dataoutput.setCity(resultList2);
+			}
+
 			return dataoutput;
 		}
 
@@ -6664,8 +6714,9 @@ public class UserDaoimpl implements UserDao {
 //				rsName.add(rsm); // Add to the list
 //		    }
 			dataoutput.setRsName(resultList);
-
 			return dataoutput;
+
+			// return dataoutput;
 		}
 
 		else if (data.getRegionList().isEmpty() && !data.getAbmName().isEmpty()) {
@@ -6689,7 +6740,86 @@ public class UserDaoimpl implements UserDao {
 			dataoutput.setRsName(resultList);
 			return dataoutput;
 		}
+
+		if (!data.getRegionList().isEmpty() && data.getSelectedState().isEmpty()) {
+
+			String checksql = "SELECt distinct(State) FROM MBROrders WHERE Region IN (:region);";
+			Query checkQuery = entityManager.createNativeQuery(checksql);
+			checkQuery.setParameter("region", regionList);
+			// checkQuery.setParameter("ABMName", data.getAbmName());
+			// checkQuery.setParameter("ABMList", ABMList);
+			// rsName=checkQuery.getResultList();
+
+			List<State> resultList = checkQuery.getResultList();
+//			for (Object[] row : resultList) {
+//				RSName rsm = new RSName();
+//				rsm.setRsName((String) row[0]); // Assuming Name is the first column
+//				rsm.setRegion((String) row[1]); // Assuming UserName is the second column
+//				rsm.setUserName((String) row[1]);
+//
+//				rsName.add(rsm); // Add to the list
+//		    }
+			// dataoutput.setRsName(resultList);
+			dataoutput.setState(resultList);
+			return dataoutput;
+		}
+		
+		
+		else if (data.getRegionList().isEmpty() && data.getAbmName().isEmpty()) {
+			if (!data.getRegionList().isEmpty() && data.getSelectedState().isEmpty()) {
+			    String checksql1 = "SELECT distinct(State) FROM MBROrders WHERE Region IN (:region);";
+			    Query checkQuery1 = entityManager.createNativeQuery(checksql1);
+			    checkQuery1.setParameter("region", regionList);
+
+			    List<State> resultList1 = checkQuery1.getResultList();
+			    dataoutput.setState(resultList1);
+			}
+
+			if (!data.getRegionList().isEmpty() && !data.getSelectedState().isEmpty()) {
+			    String checksql2 = "SELECT distinct(City) FROM MBROrders WHERE Region IN (:region) and State IN(:state);";
+			    Query checkQuery2 = entityManager.createNativeQuery(checksql2);
+			    checkQuery2.setParameter("region", regionList);
+			    checkQuery2.setParameter("state", StateList);
+
+			    List<City> resultList2 = checkQuery2.getResultList();
+
+			    // Recalculating resultList1 within the second condition
+			    String checksql1 = "SELECT distinct(State) FROM MBROrders WHERE Region IN (:region);";
+			    Query checkQuery1 = entityManager.createNativeQuery(checksql1);
+			    checkQuery1.setParameter("region", regionList);
+
+			    List<State> resultList1 = checkQuery1.getResultList();
+			    dataoutput.setState(resultList1);
+			    dataoutput.setCity(resultList2);
+			}
+			
+			
+			
+			if (data.getRegionList().isEmpty() && !data.getSelectedState().isEmpty()) {
+			    String checksql2 = "SELECT distinct(City) FROM MBROrders WHERE State IN(:state);";
+			    Query checkQuery2 = entityManager.createNativeQuery(checksql2);
+			    //checkQuery2.setParameter("region", regionList);
+			    checkQuery2.setParameter("state", StateList);
+
+			    List<City> resultList2 = checkQuery2.getResultList();
+
+			    // Recalculating resultList1 within the second condition
+//			    String checksql1 = "SELECT distinct(State) FROM MBROrders WHERE Region IN (:region);";
+//			    Query checkQuery1 = entityManager.createNativeQuery(checksql1);
+//			    checkQuery1.setParameter("region", regionList);
+//
+//			    List<State> resultList1 = checkQuery1.getResultList();
+//			    dataoutput.setState(resultList1);
+			    dataoutput.setCity(resultList2);
+			}
+
+			return dataoutput;
+
+			
+		}
+
 		return dataoutput;
+
 	}
 
 	@Override
@@ -8576,9 +8706,9 @@ public class UserDaoimpl implements UserDao {
 				+ "    COUNT(DISTINCT OrderNo) AS OrderQty,\r\n" + "    COUNT(DISTINCT RetailerCode) AS Dealers,\r\n"
 				+ "    Region,\r\n" + "        (SELECT MAX(OrderDate) \r\n" + "         FROM MBROrders \r\n"
 				+ "         WHERE CONVERT(VARCHAR, OrderDate, 112) <= :endDate) AS LastOrderDate\r\n" + "    FROM \r\n"
-				+ "        MBROrders\r\n" + "    WHERE \r\n" + conditions.toString()
-				+ "    GROUP BY\r\n" + "        YEAR(OrderDate),\r\n" + "        MONTH(OrderDate),\r\n" + "Region"
-				+ "    ORDER BY\r\n" + "        YEAR(OrderDate),\r\n" + "        MONTH(OrderDate);";
+				+ "        MBROrders\r\n" + "    WHERE \r\n" + conditions.toString() + "    GROUP BY\r\n"
+				+ "        YEAR(OrderDate),\r\n" + "        MONTH(OrderDate),\r\n" + "Region" + "    ORDER BY\r\n"
+				+ "        YEAR(OrderDate),\r\n" + "        MONTH(OrderDate);";
 		// Create a native query
 		Query query = entityManager.createNativeQuery(checkQuery);
 

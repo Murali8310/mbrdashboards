@@ -10,9 +10,23 @@ public class MonthlyDataFilter {
 	private String retailerType;
 	private String selectedMonths;
 	private String selectedYears;
+	private String selectedState;
+	private String selectedCity;
 	
 	
 
+	public String getSelectedState() {
+		return selectedState;
+	}
+	public String getSelectedCity() {
+		return selectedCity;
+	}
+	public void setSelectedState(String selectedState) {
+		this.selectedState = selectedState;
+	}
+	public void setSelectedCity(String selectedCity) {
+		this.selectedCity = selectedCity;
+	}
 	public String getRegionList() {
 		return regionList;
 	}
