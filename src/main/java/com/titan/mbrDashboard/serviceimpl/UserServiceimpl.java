@@ -1294,5 +1294,29 @@ public class UserServiceimpl implements Userservice {
 		// TODO Auto-generated method stub
 		userDao.auditLog(log);
 		
+		
+		/*-----------------------------*/
+		
+		
+		
+		
+	}
+
+	@Override
+	public List<OutputTopSKUOrderedOverall> topSKUOrderedOverallpriceWise(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		return userDao.topSKUOrderedOverallpriceWise(filter);
+	}
+
+	@Override
+	public List<OutputTopSKUOrderedOverall> topSKUOrderedRegionSelectedpriceWise(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		return userDao.topSKUOrderedRegionSelectedpriceWise(filter);
+	}
+
+	@Override
+	public List<OutputTopSKUOrderedOverall> topSKUOrderedRSNameSelectedpriceWise(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		return userDao.topSKUOrderedRSNameSelectedpriceWise(filter);
 	}
 }

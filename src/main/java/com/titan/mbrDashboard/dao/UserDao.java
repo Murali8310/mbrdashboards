@@ -378,5 +378,14 @@ public interface UserDao {
 	void auditLog(AuditLog log);
 
 
+	List<OutputTopSKUOrderedOverall> topSKUOrderedOverallpriceWise(MonthlyDataFilter filter);
+
+
+	List<OutputTopSKUOrderedOverall> topSKUOrderedRegionSelectedpriceWise(MonthlyDataFilter filter);
+
+
+	List<OutputTopSKUOrderedOverall> topSKUOrderedRSNameSelectedpriceWise(MonthlyDataFilter filter);
+
+
 
 }

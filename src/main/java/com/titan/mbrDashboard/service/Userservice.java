@@ -328,6 +328,15 @@ public interface Userservice {
 	List<OutputRegionWiseGrowthOverPreviousMonth> regionwiseGrowthOverPreviousYearMonthly(MonthlyDataFilter filter);
 
 
-	void auditLog(AuditLog log);	
+	void auditLog(AuditLog log);
+
+
+	List<OutputTopSKUOrderedOverall> topSKUOrderedOverallpriceWise(MonthlyDataFilter filter);
+
+
+	List<OutputTopSKUOrderedOverall> topSKUOrderedRegionSelectedpriceWise(MonthlyDataFilter filter);
+
+
+	List<OutputTopSKUOrderedOverall> topSKUOrderedRSNameSelectedpriceWise(MonthlyDataFilter filter);	
 
 }
