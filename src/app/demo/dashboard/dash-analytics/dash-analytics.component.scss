@@ -420,3 +420,11 @@ input {
     display: flex
 ;
 }
+
+::ng-deep .apexcharts-legend {
+  width: 1080px !important;
+}
+
+.pointerEvents {
+  pointer-events: none;
+}

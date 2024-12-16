@@ -713,6 +713,27 @@ console.log(MonthlyToalOrdaringPayload);
         MonthlyToalOrdaringPayload.startDate =  formatDate(startDate); /// default case start date of financial year in integer format
         MonthlyToalOrdaringPayload.endDate = formatDate(endDate);
       }
+
+      if(['2','3'].indexOf(this.dashboardService.selectedData) != -1){
+
+        this.selectedMonths = []; // Initialize selectedMonths array
+    // Set selected months to the last 5 months from the current month
+    const today = new Date();
+    const currentMonthId = today.getMonth() + 1; // Get current month (1-12)
+  for (let i = 0; i < 5; i++) {
+    const monthId = (currentMonthId - i - 1 + 12) % 12 + 1; // Handle wrapping around to the previous year
+    const month = this.availableMonths.find((m) => m.id === monthId);
+    if (month) {
+      this.selectedMonths.push(month);
+    }
+  }
+  
+  // Ensure months are ordered from oldest to newest
+     this.selectedMonths.reverse();
+      const payload = this.generateFinancialYearPayload(this.selectedMonths);
+      MonthlyToalOrdaringPayload.startDate =    payload.startDate, /// default case start date of financial year in integer format
+      MonthlyToalOrdaringPayload.endDate = payload.endDate;
+  }
     }
     let GrowthOverPreviousMonthPayload;
     if (this.dashboardService.selectedData === '1') {
@@ -1434,8 +1455,8 @@ console.log(MonthlyToalOrdaringPayload);
       (response) => {
         if (response && response.body) {
           this.spinner.hide();
-          this.RegionWiseMonthlyDistribution(MonthlyToalOrdaringPayload);
-// this.GrowthOverPreviousYear(MonthlyToalOrdaringPayload);
+          // this.RegionWiseMonthlyDistribution(MonthlyToalOrdaringPayload);
+this.GrowthOverPreviousYear(MonthlyToalOrdaringPayload);
           response.body.forEach((item: any) => {
             // Push values to each series array
             // retailersData.push(item.retailerGrowth);
@@ -1465,9 +1486,15 @@ console.log(MonthlyToalOrdaringPayload);
                   pan: true, // Enable panning
                   reset: true // Reset zoom and pan to the initial state
                 }
-                // autoSelected: 'zoom'    // Set default tool to zoom
               }
             },
+            colors: [
+              '#007bff',
+        '#28a745',
+        '#ffc107', 
+        '#dc3545', 
+        '#ff5733', 
+            ],
             title: {
               text: 'Growth Over Previous Month', // Chart title
               align: 'center',
@@ -1506,20 +1533,6 @@ console.log(MonthlyToalOrdaringPayload);
                 }
               }
             },
-            // dataLabels: {
-            //   // enabled: true,
-            //   enabled: this.isMobileView ? false: true,
-
-            //   //  offsetY: -10,
-
-            //   style: {
-            //     fontSize: "10px",
-            //     fontWeight: 'normal' // Remove bold styling by setting fontWeight to normal
-
-            //   },
-
-            // },
-
             dataLabels: {
               enabled: this.isMobileView ? false : true,
               style: {
@@ -1527,13 +1540,9 @@ console.log(MonthlyToalOrdaringPayload);
                 fontWeight: 'normal' // Set the color of the data labels to black
               },
               formatter: function (val: any, { seriesIndex }) {
-                // Check if the current series is for retailer values (this can be based on seriesIndex or other criteria)
                 if (seriesIndex === 0) {
-                  // Assuming '0' is the index for retailer data series
                   val = val * 6; // Multiply the value by 6 for retailer values
                 }
-
-                // Return the formatted value, rounding as needed
                 return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
               }
             },
@@ -1550,46 +1559,34 @@ console.log(MonthlyToalOrdaringPayload);
                 floating: false,
                 title: {
                   text: ' (Growth Value)', // Left y-axis title
-                  style: { 
-                    fontFamily:'unset'
-                 },
-                  offsetX:20,
-
+                  style: {
+                    fontFamily: 'unset'
+                  },
+                  offsetX: 20
                 },
-                // min: 0, // Set minimum value for the y-axis
-                //max: 800, // Set maximum value for the y-axis (adjust as needed)
                 tickAmount: 10, // Adjust the number of ticks based on the range
                 labels: {
                   formatter: function (val) {
                     return val.toFixed(0);
                   }
-                },
-              },
+                }
+              }
             ],
             fill: {
               opacity: 1
             },
             tooltip: {
-              //   y: {
-              //     formatter: function (val) {
-              //       return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
-              //     }
-              //   }
-              // }
               y: {
                 formatter: function (val, { seriesIndex }) {
-                  // Check if the current series is for retailer values (this can be based on seriesIndex or other criteria)
                   if (seriesIndex === 0) {
-                    // Assuming '0' is the index for retailer data series
                     val = val * 6; // Multiply the value by 6 for retailer values
                   }
-
-                  // Return the formatted value, rounding as needed
                   return val % 1 === 0 ? val.toFixed(0) : val.toFixed(2);
                 }
               }
             }
           };
+          
         }
         console.log('this is for checking');
       },
@@ -3878,7 +3875,19 @@ dataLabels: {
         '#dc3545', 
         '#ff5733', 
       ],
-      legend: { position: 'bottom', horizontalAlign: 'center' }
+    legend: {
+      position: 'bottom',
+      horizontalAlign: 'left',
+      fontSize: '12px',
+      itemMargin: {
+        horizontal: 5,
+        vertical: 5,
+      },
+      formatter: (seriesName, opts) => seriesName,
+      onItemClick: {
+        toggleDataSeries: true,
+      },
+    },
     };
 
     this.dashboardService.RegionWiseMonthlyAvgPerOrderFn(MonthlyTotalOrderingPayload).subscribe(
