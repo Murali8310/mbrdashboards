@@ -7222,7 +7222,6 @@ public class UserDaoimpl implements UserDao {
 		String cityList = filter.getSelectedCity();
 		String stateList = filter.getSelectedState();
 
-	
 		// Add startDate and endDate conditions if provided
 		// Add startDate and endDate conditions if provided
 //		if (startDate != null && endDate != null) {
@@ -7263,7 +7262,7 @@ public class UserDaoimpl implements UserDao {
 		if (retailerType != null && !retailerType.isEmpty()) {
 			conditions.append("AND RetailerCode LIKE '").append(retailerType.equals("IDD") ? "9%" : "1%").append("' ");
 		}
-		
+
 		if (stateList != null && !stateList.isEmpty()) {
 			conditions.append("AND State IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(stateList)
 					.append("', ',')) ");
@@ -7275,148 +7274,53 @@ public class UserDaoimpl implements UserDao {
 		}
 
 		// Build the final query with dynamic conditions
-		/*
+
 		String finalQuery = "WITH MonthlySummary AS (\r\n" + "    SELECT \r\n" + "        YEAR(OrderDate) AS Year,\r\n"
 				+ "        MONTH(OrderDate) AS Month,\r\n" + "        SUM(TotalPrice) AS TotalPriceSum,\r\n"
 				+ "        SUM(OrderQty) AS TotalOrderQty,\r\n"
 				+ "        COUNT(DISTINCT RetailerCode) AS DistinctRetailerCount\r\n" + "    FROM \r\n"
-				+ "        MBROrders (NOLOCK)\r\n" + "    WHERE \r\n" + conditions.toString() // Add dynamic conditions
-				+ "    GROUP BY \r\n" + "        YEAR(OrderDate),\r\n" + "        MONTH(OrderDate)\r\n" + ")\r\n"
-				+ "SELECT \r\n" + "    Year,\r\n" + "    Month,\r\n" + "    TotalPriceSum,\r\n"
-				+ "    TotalOrderQty,\r\n" + "    DistinctRetailerCount,\r\n" + "\r\n"
-				+ "    -- Calculate the percentage growth in DistinctRetailerCount (month-over-month growth)\r\n"
-				+ "    CASE \r\n"
-				+ "        WHEN LAG(DistinctRetailerCount, 1) OVER (ORDER BY Year, Month) = 0 THEN NULL\r\n"
-				+ "        WHEN LAG(DistinctRetailerCount, 1) OVER (ORDER BY Year, Month) IS NULL THEN NULL\r\n"
-				+ "        ELSE \r\n"
-				+ "            ((DistinctRetailerCount - LAG(DistinctRetailerCount, 1) OVER (ORDER BY Year, Month)) * 1.0 / LAG(DistinctRetailerCount, 1) OVER (ORDER BY Year, Month)) * 100\r\n"
-				+ "    END AS RetailerGrowthPercentage,\r\n" + "\r\n"
-				+ "    -- Calculate the growth in TotalPrice (month-over-month growth)\r\n" + "    CASE \r\n"
-				+ "        WHEN LAG(TotalPriceSum, 1) OVER (ORDER BY Year, Month) = 0 THEN NULL\r\n"
-				+ "        WHEN LAG(TotalPriceSum, 1) OVER (ORDER BY Year, Month) IS NULL THEN NULL\r\n"
-				+ "        ELSE \r\n"
-				+ "            (TotalPriceSum - LAG(TotalPriceSum, 1) OVER (ORDER BY Year, Month))\r\n"
-				+ "    END AS PriceGrowth,\r\n" + "\r\n"
-				+ "    -- Calculate the growth in TotalOrderQty (month-over-month growth)\r\n" + "    CASE \r\n"
-				+ "        WHEN LAG(TotalOrderQty, 1) OVER (ORDER BY Year, Month) = 0 THEN NULL\r\n"
-				+ "        WHEN LAG(TotalOrderQty, 1) OVER (ORDER BY Year, Month) IS NULL THEN NULL\r\n"
-				+ "        ELSE \r\n"
-				+ "            (TotalOrderQty - LAG(TotalOrderQty, 1) OVER (ORDER BY Year, Month))\r\n"
-				+ "    END AS OrderGrowth,\r\n" + "\r\n"
-				+ "    -- Calculate the growth in DistinctRetailerCount (month-over-month growth)\r\n" + "    CASE \r\n"
-				+ "        WHEN LAG(DistinctRetailerCount, 1) OVER (ORDER BY Year, Month) = 0 THEN NULL\r\n"
-				+ "        WHEN LAG(DistinctRetailerCount, 1) OVER (ORDER BY Year, Month) IS NULL THEN NULL\r\n"
-				+ "        ELSE\r\n"
-				+ "            (DistinctRetailerCount - LAG(DistinctRetailerCount, 1) OVER (ORDER BY Year, Month))\r\n"
-				+ "    END AS RetailerGrowth,\r\n" + "\r\n"
-				+ "    -- Calculate the percentage growth in TotalPrice (month-over-month growth)\r\n" + "    CASE \r\n"
-				+ "        WHEN LAG(TotalPriceSum, 1) OVER (ORDER BY Year, Month) = 0 THEN NULL\r\n"
-				+ "        WHEN LAG(TotalPriceSum, 1) OVER (ORDER BY Year, Month) IS NULL THEN NULL\r\n"
-				+ "        ELSE \r\n"
-				+ "            ((TotalPriceSum - LAG(TotalPriceSum, 1) OVER (ORDER BY Year, Month)) * 1.0 / LAG(TotalPriceSum, 1) OVER (ORDER BY Year, Month)) * 100\r\n"
-				+ "    END AS PriceGrowthPercentage,\r\n" + "\r\n"
-				+ "    -- Calculate the percentage growth in TotalOrderQty (month-over-month growth)\r\n"
-				+ "    CASE \r\n" + "        WHEN LAG(TotalOrderQty, 1) OVER (ORDER BY Year, Month) = 0 THEN NULL\r\n"
-				+ "        WHEN LAG(TotalOrderQty, 1) OVER (ORDER BY Year, Month) IS NULL THEN NULL\r\n"
-				+ "        ELSE \r\n"
-				+ "            ((TotalOrderQty - LAG(TotalOrderQty, 1) OVER (ORDER BY Year, Month)) * 1.0 / LAG(TotalOrderQty, 1) OVER (ORDER BY Year, Month)) * 100\r\n"
-				+ "    END AS OrderQtyGrowthPercentage\r\n" + "FROM \r\n" + "    MonthlySummary\r\n" + "ORDER BY\r\n"
-				+ "    Year,\r\n" + "    Month;";
-*/
-	
-		
-		String finalQuery= "WITH MonthlySummary AS (\r\n"
-				+ "    SELECT \r\n"
-				+ "        YEAR(OrderDate) AS Year,\r\n"
-				+ "        MONTH(OrderDate) AS Month,\r\n"
-				+ "        SUM(TotalPrice) AS TotalPriceSum,\r\n"
-				+ "        SUM(OrderQty) AS TotalOrderQty,\r\n"
-				+ "        COUNT(DISTINCT RetailerCode) AS DistinctRetailerCount\r\n"
-				+ "    FROM \r\n"
-				+ "        MBROrders (NOLOCK)\r\n"
-				+ "    WHERE \r\n"
+				+ "        MBROrders (NOLOCK)\r\n" + "    WHERE \r\n"
 				+ "         CONVERT(VARCHAR, OrderDate, 112) >= :startDate AND CONVERT(VARCHAR, OrderDate, 112) <= :endDate\r\n"
-				+ conditions.toString()
-				+ "    GROUP BY \r\n"
-				+ "        YEAR(OrderDate),\r\n"
-				+ "        MONTH(OrderDate)\r\n"
-				+ "),\r\n"
-				+ "\r\n"
-				+ "PreviousMonthlySummary AS (\r\n"
-				+ "    SELECT \r\n"
-				+ "        YEAR(OrderDate) AS Year,\r\n"
-				+ "        MONTH(OrderDate) AS Month,\r\n"
+				+ conditions.toString() + "    GROUP BY \r\n" + "        YEAR(OrderDate),\r\n"
+				+ "        MONTH(OrderDate)\r\n" + "),\r\n" + "\r\n" + "PreviousMonthlySummary AS (\r\n"
+				+ "    SELECT \r\n" + "        YEAR(OrderDate) AS Year,\r\n" + "        MONTH(OrderDate) AS Month,\r\n"
 				+ "        SUM(TotalPrice) AS PreviousTotalPriceSum,\r\n"
 				+ "        SUM(OrderQty) AS PreviousTotalOrderQty,\r\n"
-				+ "        COUNT(DISTINCT RetailerCode) AS PreviousDistinctRetailerCount\r\n"
-				+ "    FROM \r\n"
-				+ "        MBROrders (NOLOCK)\r\n"
-				+ "    WHERE \r\n"
+				+ "        COUNT(DISTINCT RetailerCode) AS PreviousDistinctRetailerCount\r\n" + "    FROM \r\n"
+				+ "        MBROrders (NOLOCK)\r\n" + "    WHERE \r\n"
 				+ "        OrderDate BETWEEN DATEADD(MONTH, -1,CAST(CONVERT(VARCHAR, :startDate) AS DATE))\r\n"
 				+ "                      AND DATEADD(DAY, -1,  CAST(CONVERT(VARCHAR, :startDate) AS DATE))\r\n"
-				+ conditions.toString()
-				+ "    GROUP BY \r\n"
-				+ "        YEAR(OrderDate),\r\n"
-				+ "        MONTH(OrderDate)\r\n"
-				+ ")\r\n"
-				+ "\r\n"
-				+ "SELECT \r\n"
-				+ "    MS.Year,\r\n"
-				+ "    MS.Month,\r\n"
-				+ "    MS.TotalPriceSum,\r\n"
-				+ "    MS.TotalOrderQty,\r\n"
-				+ "    MS.DistinctRetailerCount,\r\n"
-				+ "	\r\n"
-				+ "   CASE \r\n"
-				+ "        WHEN PDS.PreviousDistinctRetailerCount = 0 THEN NULL\r\n"
-				+ "        ELSE \r\n"
+				+ conditions.toString() + "    GROUP BY \r\n" + "        YEAR(OrderDate),\r\n"
+				+ "        MONTH(OrderDate)\r\n" + ")\r\n" + "\r\n" + "SELECT \r\n" + "    MS.Year,\r\n"
+				+ "    MS.Month,\r\n" + "    MS.TotalPriceSum,\r\n" + "    MS.TotalOrderQty,\r\n"
+				+ "    MS.DistinctRetailerCount,\r\n" + "	\r\n" + "   CASE \r\n"
+				+ "        WHEN PDS.PreviousDistinctRetailerCount = 0 THEN NULL\r\n" + "        ELSE \r\n"
 				+ "            ((MS.DistinctRetailerCount - PDS.PreviousDistinctRetailerCount) * 1.0 / PDS.PreviousDistinctRetailerCount) * 100\r\n"
-				+ "    END AS RetailerGrowthPercentage,\r\n"
-				+ "\r\n"
-				+ "    -- Price Growth\r\n"
-				+ "    CASE \r\n"
+				+ "    END AS RetailerGrowthPercentage,\r\n" + "\r\n" + "    -- Price Growth\r\n" + "    CASE \r\n"
 				+ "    WHEN LAG(TotalPriceSum, 1) OVER (ORDER BY MS.Year, MS.Month) IS NULL THEN (MS.TotalPriceSum - PDS.PreviousTotalPriceSum)\r\n"
 				+ "    WHEN LAG(TotalPriceSum, 1) OVER (ORDER BY MS.Year, MS.Month) = 0 THEN (MS.TotalPriceSum - PDS.PreviousTotalPriceSum)\r\n"
 				+ "    ELSE \r\n"
 				+ "        (TotalPriceSum - LAG(TotalPriceSum, 1) OVER (ORDER BY MS.Year, MS.Month))\r\n"
-				+ "END AS PriceGrowth,"
-				+ "\r\n"
-				+ "    -- Order Growth\r\n"
-				+ "     CASE \r\n"
+				+ "END AS PriceGrowth," + "\r\n" + "    -- Order Growth\r\n" + "     CASE \r\n"
 				+ "    WHEN LAG(TotalOrderQty, 1) OVER (ORDER BY MS.Year, MS.Month) IS NULL THEN (MS.TotalOrderQty - PDS.PreviousTotalOrderQty)\r\n"
 				+ "    WHEN LAG(TotalOrderQty, 1) OVER (ORDER BY MS.Year, MS.Month) = 0 THEN (MS.TotalOrderQty - PDS.PreviousTotalOrderQty)\r\n"
 				+ "    ELSE \r\n"
 				+ "        (TotalOrderQty - LAG(TotalOrderQty, 1) OVER (ORDER BY MS.Year, MS.Month))\r\n"
-				+ "END AS OrderGrowth,"
-				+ "\r\n"
-				+ "    -- Retailer Growth\r\n"
-				+ "    CASE \r\n"
+				+ "END AS OrderGrowth," + "\r\n" + "    -- Retailer Growth\r\n" + "    CASE \r\n"
 				+ "       WHEN  LAG(DistinctRetailerCount, 1) OVER (ORDER BY MS.Year, MS.Month) IS NULL THEN (MS.DistinctRetailerCount - PDS.PreviousDistinctRetailerCount)\r\n"
 				+ "    WHEN LAG(DistinctRetailerCount, 1) OVER (ORDER BY MS.Year, MS.Month) = 0 THEN (MS.DistinctRetailerCount - PDS.PreviousDistinctRetailerCount)\r\n"
 				+ "    ELSE \r\n"
 				+ "        (DistinctRetailerCount - LAG(DistinctRetailerCount, 1) OVER (ORDER BY MS.Year, MS.Month))\r\n"
-				+ "    END AS RetailerGrowth,\r\n"
-				+ "\r\n"
-				+ "    -- Price Growth Percentage\r\n"
-				+ "    CASE \r\n"
-				+ "        WHEN PDS.PreviousTotalPriceSum = 0 THEN NULL\r\n"
-				+ "        ELSE \r\n"
+				+ "    END AS RetailerGrowth,\r\n" + "\r\n" + "    -- Price Growth Percentage\r\n" + "    CASE \r\n"
+				+ "        WHEN PDS.PreviousTotalPriceSum = 0 THEN NULL\r\n" + "        ELSE \r\n"
 				+ "            ((MS.TotalPriceSum - PDS.PreviousTotalPriceSum) * 1.0 / PDS.PreviousTotalPriceSum) * 100\r\n"
-				+ "    END AS PriceGrowthPercentage,\r\n"
-				+ "\r\n"
-				+ "    -- Order Quantity Growth Percentage\r\n"
-				+ "    CASE \r\n"
-				+ "        WHEN PDS.PreviousTotalOrderQty = 0 THEN NULL\r\n"
-				+ "        ELSE \r\n"
+				+ "    END AS PriceGrowthPercentage,\r\n" + "\r\n" + "    -- Order Quantity Growth Percentage\r\n"
+				+ "    CASE \r\n" + "        WHEN PDS.PreviousTotalOrderQty = 0 THEN NULL\r\n" + "        ELSE \r\n"
 				+ "            ((MS.TotalOrderQty - PDS.PreviousTotalOrderQty) * 1.0 / PDS.PreviousTotalOrderQty) * 100\r\n"
-				+ "    END AS OrderQtyGrowthPercentage\r\n"
-				+ "FROM \r\n"
-				+ "    MonthlySummary MS\r\n"
-				+ "     JOIN PreviousMonthlySummary PDS ON MS.Year = PDS.Year \r\n"
-				+ "ORDER BY\r\n"
-				+ "    MS.Year,\r\n"
-				+ "    MS.Month;";
-		
+				+ "    END AS OrderQtyGrowthPercentage\r\n" + "FROM \r\n" + "    MonthlySummary MS\r\n"
+				+ "     JOIN PreviousMonthlySummary PDS ON MS.Year = PDS.Year \r\n" + "ORDER BY\r\n"
+				+ "    MS.Year,\r\n" + "    MS.Month;";
+
 		// Create a native query and execute it
 		Query query = entityManager.createNativeQuery(finalQuery);
 		query.setParameter("startDate", startDate);
@@ -7568,10 +7472,10 @@ public class UserDaoimpl implements UserDao {
 		String stateList = filter.getSelectedState();
 
 		// Add startDate and endDate conditions if provided
-		if (startDate != null && endDate != null) {
-			conditions.append("CONVERT(VARCHAR, OrderDate, 112) >= ").append(startDate)
-					.append(" AND CONVERT(VARCHAR, OrderDate, 112) <= ").append(endDate).append(" ");
-		}
+//		if (startDate != null && endDate != null) {
+//			conditions.append("CONVERT(VARCHAR, OrderDate, 112) >= ").append(startDate)
+//					.append(" AND CONVERT(VARCHAR, OrderDate, 112) <= ").append(endDate).append(" ");
+//		}
 
 		// Assuming the user input for regionList (e.g., "North,South,East,West")
 		// User-provided region list
@@ -7615,64 +7519,59 @@ public class UserDaoimpl implements UserDao {
 			conditions.append("AND City IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(cityList)
 					.append("', ',')) ");
 		}
-		String finalQuery = "WITH MonthlySummary AS (\r\n"
-				+ "        -- Select the sum of TotalPrice, sum of OrderQty, and count of distinct RetailerCode per month\r\n"
-				+ "        SELECT \r\n" + "            YEAR(OrderDate) AS Year,\r\n"
-				+ "            MONTH(OrderDate) AS Month,\r\n" + "            Region,\r\n"
-				+ "            SUM(TotalPrice) AS TotalPriceSum,\r\n"
-				+ "            SUM(OrderQty) AS TotalOrderQty,\r\n"
-				+ "            COUNT(DISTINCT RetailerCode) AS DistinctRetailerCount\r\n" + "        FROM \r\n"
-				+ "            MBROrders(nolock)\r\n" + "        WHERE \r\n" + conditions + "        GROUP BY\r\n"
-				+ "            YEAR(OrderDate),\r\n" + "            MONTH(OrderDate),\r\n" + "            Region\r\n"
-				+ "    )\r\n"
-				+ "    -- Now, calculate the growth over the previous month using the LAG function and compute percentage growth\r\n"
-				+ "    SELECT \r\n" + "        Year,\r\n" + "        Month,\r\n" + "        Region,\r\n"
-				+ "        TotalPriceSum,\r\n" + "        TotalOrderQty,\r\n" + "        DistinctRetailerCount,\r\n"
-				+ "        \r\n"
-				+ "        -- Calculate the percentage growth in TotalPrice (month-over-month growth)\r\n"
-				+ "        CASE \r\n"
-				+ "            WHEN LAG(TotalPriceSum, 1) OVER (PARTITION BY Region ORDER BY Year, Month) IS NULL THEN NULL\r\n"
-				+ "            WHEN LAG(TotalPriceSum, 1) OVER (PARTITION BY Region ORDER BY Year, Month) = 0 THEN NULL\r\n"
-				+ "            ELSE \r\n"
-				+ "                ((TotalPriceSum - LAG(TotalPriceSum, 1) OVER (PARTITION BY Region ORDER BY Year, Month)) * 1.0 / LAG(TotalPriceSum, 1) OVER (PARTITION BY Region ORDER BY Year, Month)) * 100\r\n"
-				+ "        END AS PriceGrowthPercentage,\r\n" + "        \r\n"
-				+ "        -- Calculate the percentage growth in TotalOrderQty (month-over-month growth)\r\n"
-				+ "        CASE \r\n"
-				+ "            WHEN LAG(TotalOrderQty, 1) OVER (PARTITION BY Region ORDER BY Year, Month) IS NULL THEN NULL\r\n"
-				+ "            WHEN LAG(TotalOrderQty, 1) OVER (PARTITION BY Region ORDER BY Year, Month) = 0 THEN NULL\r\n"
-				+ "            ELSE \r\n"
-				+ "                ((TotalOrderQty - LAG(TotalOrderQty, 1) OVER (PARTITION BY Region ORDER BY Year, Month)) * 1.0 / LAG(TotalOrderQty, 1) OVER (PARTITION BY Region ORDER BY Year, Month)) * 100\r\n"
-				+ "        END AS OrderQtyGrowthPercentage,\r\n" + "        \r\n"
-				+ "        -- Calculate the percentage growth in DistinctRetailerCount (month-over-month growth)\r\n"
-				+ "        CASE \r\n"
-				+ "            WHEN LAG(DistinctRetailerCount, 1) OVER (PARTITION BY Region ORDER BY Year, Month) IS NULL THEN NULL\r\n"
-				+ "            WHEN LAG(DistinctRetailerCount, 1) OVER (PARTITION BY Region ORDER BY Year, Month) = 0 THEN NULL\r\n"
-				+ "            ELSE \r\n"
-				+ "                ((DistinctRetailerCount - LAG(DistinctRetailerCount, 1) OVER (PARTITION BY Region ORDER BY Year, Month)) * 1.0 / LAG(DistinctRetailerCount, 1) OVER (PARTITION BY Region ORDER BY Year, Month)) * 100\r\n"
-				+ "        END AS RetailerGrowthPercentage,\r\n" + "\r\n"
-				+ "				  -- Calculate the growth in TotalPrice (month-over-month growth)\r\n"
-				+ "        CASE \r\n"
-				+ "            WHEN LAG(TotalPriceSum, 1) OVER (ORDER BY Year, Month) = 0 THEN NULL\r\n"
-				+ "            WHEN LAG(TotalPriceSum, 1) OVER (ORDER BY Year, Month) IS NULL THEN NULL -- Handle NULL for the first record\r\n"
-				+ "            ELSE \r\n"
-				+ "                (TotalPriceSum - LAG(TotalPriceSum, 1) OVER ( PARTITION BY Region ORDER BY Year, Month))\r\n"
-				+ "        END AS PriceGrowth,\r\n" + "\r\n"
-				+ "		 -- Calculate the growth in TotalOrderQty (month-over-month growth)\r\n" + "        CASE \r\n"
-				+ "            WHEN LAG(TotalOrderQty, 1) OVER (ORDER BY Year, Month) = 0 THEN NULL\r\n"
-				+ "            WHEN LAG(TotalOrderQty, 1) OVER (ORDER BY Year, Month) IS NULL THEN NULL -- Handle NULL for the first record\r\n"
-				+ "            ELSE \r\n"
-				+ "                (TotalOrderQty - LAG(TotalOrderQty, 1) OVER ( PARTITION BY Region ORDER BY Year, Month))\r\n"
-				+ "        END AS OrderGrowth, \r\n" + "\r\n" + "		CASE \r\n"
-				+ "            WHEN LAG(DistinctRetailerCount, 1) OVER (ORDER BY Year, Month) = 0 THEN NULL\r\n"
-				+ "            WHEN LAG(DistinctRetailerCount, 1) OVER (ORDER BY Year, Month) IS NULL THEN NULL -- Handle NULL for the first record\r\n"
-				+ "            ELSE \r\n"
-				+ "                (DistinctRetailerCount - LAG(DistinctRetailerCount, 1) OVER ( PARTITION BY Region ORDER BY Year, Month))\r\n"
-				+ "        END AS RetailerGrowth\r\n" + "\r\n" + "    FROM \r\n" + "        MonthlySummary\r\n"
-				+ "    ORDER BY\r\n" + "        Region, Year, Month;\r\n" + "";
+		String finalQuery = "WITH MonthlySummary AS (\r\n" + "    SELECT \r\n" + "        YEAR(OrderDate) AS Year,\r\n"
+				+ "        MONTH(OrderDate) AS Month,\r\n" + "        Region,\r\n"
+				+ "        SUM(TotalPrice) AS TotalPriceSum,\r\n" + "        SUM(OrderQty) AS TotalOrderQty,\r\n"
+				+ "        COUNT(DISTINCT RetailerCode) AS DistinctRetailerCount\r\n" + "    FROM \r\n"
+				+ "        MBROrders (NOLOCK)\r\n" + "    WHERE \r\n"
+				+ "         CONVERT(VARCHAR, OrderDate, 112) >= :startDate AND CONVERT(VARCHAR, OrderDate, 112) <= :endDate\r\n"
+				+ "         AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('EAST, WEST,NORTH,SOUTH 1,SOUTH 2', ','))\r\n"
+				+ "    GROUP BY \r\n" + "        YEAR(OrderDate),\r\n" + "        MONTH(OrderDate),\r\n"
+				+ "        Region\r\n" + "),\r\n" + "\r\n" + "PreviousYearSummary AS (\r\n" + "    SELECT \r\n"
+				+ "        YEAR(OrderDate) AS PreviousYear,\r\n" + "        MONTH(OrderDate) AS Month,\r\n"
+				+ "        Region,\r\n" + "        SUM(TotalPrice) AS PreviousTotalPriceSum,\r\n"
+				+ "        SUM(OrderQty) AS PreviousTotalOrderQty,\r\n"
+				+ "        COUNT(DISTINCT RetailerCode) AS PreviousDistinctRetailerCount\r\n" + "    FROM \r\n"
+				+ "        MBROrders (NOLOCK)\r\n" + "    WHERE \r\n"
+				+ "        OrderDate BETWEEN DATEADD(YEAR, -1, CAST(CONVERT(VARCHAR, :startDate) AS DATE)) \r\n"
+				+ "                      AND DATEADD(YEAR, -1, CAST(CONVERT(VARCHAR, :endDate) AS DATE))\r\n"
+				+ conditions.toString() + "    GROUP BY \r\n" + "        YEAR(OrderDate),\r\n"
+				+ "        MONTH(OrderDate),\r\n" + "        Region\r\n" + ")\r\n" + "\r\n" + "SELECT \r\n"
+				+ "    MS.Year,\r\n" + "    MS.Month,\r\n" + "    MS.Region,\r\n" + "    MS.TotalPriceSum,\r\n"
+				+ "    MS.TotalOrderQty,\r\n" + "    MS.DistinctRetailerCount,\r\n" + "    \r\n"
+				+ "    -- Retailer Growth Percentage\r\n" + "    CASE \r\n"
+				+ "        WHEN PYS.PreviousDistinctRetailerCount = 0 THEN NULL\r\n" + "        ELSE \r\n"
+				+ "            ((MS.DistinctRetailerCount - PYS.PreviousDistinctRetailerCount) * 1.0 / PYS.PreviousDistinctRetailerCount) * 100\r\n"
+				+ "    END AS RetailerGrowthPercentage,\r\n" + "\r\n" + "    -- Price Growth\r\n" + "    CASE \r\n"
+				+ "        WHEN LAG(TotalPriceSum, 1) OVER (PARTITION BY MS.Region ORDER BY MS.Year, MS.Month) IS NULL THEN (MS.TotalPriceSum - PYS.PreviousTotalPriceSum)\r\n"
+				+ "        WHEN LAG(TotalPriceSum, 1) OVER (PARTITION BY MS.Region ORDER BY MS.Year, MS.Month) = 0 THEN (MS.TotalPriceSum - PYS.PreviousTotalPriceSum)\r\n"
+				+ "        ELSE \r\n"
+				+ "            (TotalPriceSum - LAG(TotalPriceSum, 1) OVER (PARTITION BY MS.Region ORDER BY MS.Year, MS.Month))\r\n"
+				+ "    END AS PriceGrowth,\r\n" + "\r\n" + "    -- Order Growth\r\n" + "    CASE \r\n"
+				+ "        WHEN LAG(TotalOrderQty, 1) OVER (PARTITION BY MS.Region ORDER BY MS.Year, MS.Month) IS NULL THEN (MS.TotalOrderQty - PYS.PreviousTotalOrderQty)\r\n"
+				+ "        WHEN LAG(TotalOrderQty, 1) OVER (PARTITION BY MS.Region ORDER BY MS.Year, MS.Month) = 0 THEN (MS.TotalOrderQty - PYS.PreviousTotalOrderQty)\r\n"
+				+ "        ELSE \r\n"
+				+ "            (TotalOrderQty - LAG(TotalOrderQty, 1) OVER (PARTITION BY MS.Region ORDER BY MS.Year, MS.Month))\r\n"
+				+ "    END AS OrderGrowth,\r\n" + "\r\n" + "    -- Retailer Growth\r\n" + "    CASE \r\n"
+				+ "        WHEN LAG(DistinctRetailerCount, 1) OVER (PARTITION BY MS.Region ORDER BY MS.Year, MS.Month) IS NULL THEN (MS.DistinctRetailerCount - PYS.PreviousDistinctRetailerCount)\r\n"
+				+ "        WHEN LAG(DistinctRetailerCount, 1) OVER (PARTITION BY MS.Region ORDER BY MS.Year, MS.Month) = 0 THEN (MS.DistinctRetailerCount - PYS.PreviousDistinctRetailerCount)\r\n"
+				+ "        ELSE \r\n"
+				+ "            (DistinctRetailerCount - LAG(DistinctRetailerCount, 1) OVER (PARTITION BY MS.Region ORDER BY MS.Year, MS.Month))\r\n"
+				+ "    END AS RetailerGrowth,\r\n" + "\r\n" + "    -- Price Growth Percentage\r\n" + "    CASE \r\n"
+				+ "        WHEN PYS.PreviousTotalPriceSum = 0 THEN NULL\r\n" + "        ELSE \r\n"
+				+ "            ((MS.TotalPriceSum - PYS.PreviousTotalPriceSum) * 1.0 / PYS.PreviousTotalPriceSum) * 100\r\n"
+				+ "    END AS PriceGrowthPercentage,\r\n" + "\r\n" + "    -- Order Quantity Growth Percentage\r\n"
+				+ "    CASE \r\n" + "        WHEN PYS.PreviousTotalOrderQty = 0 THEN NULL\r\n" + "        ELSE \r\n"
+				+ "            ((MS.TotalOrderQty - PYS.PreviousTotalOrderQty) * 1.0 / PYS.PreviousTotalOrderQty) * 100\r\n"
+				+ "    END AS OrderQtyGrowthPercentage\r\n" + "FROM \r\n" + "    MonthlySummary MS\r\n"
+				+ "    JOIN PreviousYearSummary PYS \r\n" + "        ON MS.Month = PYS.Month \r\n"
+				+ "           AND MS.Year - 1 = PYS.PreviousYear \r\n" + "           AND MS.Region = PYS.Region\r\n"
+				+ "ORDER BY\r\n" + "    MS.Region,\r\n" + "    MS.Year,\r\n" + "    MS.Month;\r\n";
 
 		// Create a native query
 		Query query = entityManager.createNativeQuery(finalQuery);
-
+		query.setParameter("startDate", startDate);
+		query.setParameter("endDate", endDate);
 		// Set the parameters for the stored procedure call
 		// Execute the query to invoke the stored procedure
 		try {
@@ -7688,12 +7587,13 @@ public class UserDaoimpl implements UserDao {
 				data.setTotalRevenue((BigDecimal) row[3]);
 				data.setTotalQTY((Integer) row[4]);
 				data.setTotalRetailerCode((Integer) row[5]);
-				data.setPriceGrowthPercentage((BigDecimal) row[6]);
-				data.setOrderQtyGrowthPercentage((BigDecimal) row[7]);
-				data.setRetailerGrowthPercentage((BigDecimal) row[8]);
-				data.setPriceGrowth((BigDecimal) row[9]);
-				data.setOrderGrowth((Integer) row[10]);
-				data.setRetailerGrowth((Integer) row[11]);
+				data.setRetailerGrowthPercentage((BigDecimal)row[6]);
+				data.setPriceGrowth((BigDecimal)row[7]);
+				data.setOrderGrowth((Integer)row[8]);
+				data.setRetailerGrowth((Integer)row[9]);
+				data.setPriceGrowthPercentage((BigDecimal)row[10]);
+				data.setOrderQtyGrowthPercentage((BigDecimal)row[11]);
+				
 				regionWiseMonthlyGrowthData.add(data);
 				// Now, filteredData is populated with values
 			}
@@ -7986,7 +7886,7 @@ public class UserDaoimpl implements UserDao {
 		String retailerType = filter.getRetailerType(); // e.g., "Regular"
 		String cityList = filter.getSelectedCity();
 		String stateList = filter.getSelectedState();
-		String userInputTop = filter.getSize();
+		//String userInputTop = filter.getSize();
 
 		// Build dynamic conditions
 		if (startDate != null && endDate != null) {
@@ -8002,9 +7902,9 @@ public class UserDaoimpl implements UserDao {
 					.append("', ',')) ");
 		}
 
-		if (userInputTop == null || userInputTop == "" || userInputTop.isBlank() || userInputTop.isEmpty()) {
-			userInputTop = "5";
-		}
+//		if (userInputTop == null || userInputTop == "" || userInputTop.isBlank() || userInputTop.isEmpty()) {
+//			userInputTop = "5";
+//		}
 
 		if (stateList != null && !stateList.isEmpty()) {
 			conditions.append("AND State IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(stateList)
@@ -8016,9 +7916,9 @@ public class UserDaoimpl implements UserDao {
 					.append("', ',')) ");
 		}
 		// Final query
-		String finalQuery = "SELECT TOP " + userInputTop + "       SUM(OrderQty) AS TotalOrderQty, "
-				+ "       ProductCode " + "FROM MBROrders (NOLOCK) " + "WHERE " + conditions.toString()
-				+ "GROUP BY ProductCode " + "ORDER BY TotalOrderQty DESC";
+		String finalQuery = "SELECT TOP 10  SUM(OrderQty) AS TotalOrderQty, " + "       ProductCode "
+				+ "FROM MBROrders (NOLOCK) " + "WHERE " + conditions.toString() + "GROUP BY ProductCode "
+				+ "ORDER BY TotalOrderQty DESC";
 
 		// Execute query and map results
 		Query query = entityManager.createNativeQuery(finalQuery);
@@ -8053,7 +7953,7 @@ public class UserDaoimpl implements UserDao {
 		String cityList = filter.getSelectedCity();
 		String stateList = filter.getSelectedState();
 
-		String userInputTop = filter.getSize();
+		//String userInputTop = filter.getSize();
 
 		// Build dynamic conditions
 		if (startDate != null && endDate != null) {
@@ -8072,9 +7972,9 @@ public class UserDaoimpl implements UserDao {
 					.append("', ',')) ");
 		}
 
-		if (userInputTop == null || userInputTop == "" || userInputTop.isBlank() || userInputTop.isEmpty()) {
-			userInputTop = "5";
-		}
+//		if (userInputTop == null || userInputTop == "" || userInputTop.isBlank() || userInputTop.isEmpty()) {
+//			userInputTop = "5";
+//		}
 		if (stateList != null && !stateList.isEmpty()) {
 			conditions.append("AND State IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(stateList)
 					.append("', ',')) ");
@@ -8085,9 +7985,9 @@ public class UserDaoimpl implements UserDao {
 					.append("', ',')) ");
 		}
 		// Final query
-		String finalQuery = "SELECT TOP " + userInputTop + "       SUM(OrderQty) AS TotalOrderQty, "
-				+ "       ProductCode " + "FROM MBROrders (NOLOCK) " + "WHERE " + conditions.toString()
-				+ "GROUP BY ProductCode " + "ORDER BY TotalOrderQty DESC";
+		String finalQuery = "SELECT TOP 10 SUM(OrderQty) AS TotalOrderQty, " + "       ProductCode "
+				+ "FROM MBROrders (NOLOCK) " + "WHERE " + conditions.toString() + "GROUP BY ProductCode "
+				+ "ORDER BY TotalOrderQty DESC";
 
 		// Execute query and map results
 		Query query = entityManager.createNativeQuery(finalQuery);
@@ -8122,7 +8022,7 @@ public class UserDaoimpl implements UserDao {
 
 		String cityList = filter.getSelectedCity();
 		String stateList = filter.getSelectedState();
-		String userInputTop = filter.getSize();
+		//String userInputTop = filter.getSize();
 
 		// Build dynamic conditions
 		if (startDate != null && endDate != null) {
@@ -8149,9 +8049,9 @@ public class UserDaoimpl implements UserDao {
 					.append("', ',')) ");
 		}
 
-		if (userInputTop == null || userInputTop == "" || userInputTop.isBlank() || userInputTop.isEmpty()) {
-			userInputTop = "5";
-		}
+//		if (userInputTop == null || userInputTop == "" || userInputTop.isBlank() || userInputTop.isEmpty()) {
+//			userInputTop = "5";
+//		}
 
 		if (stateList != null && !stateList.isEmpty()) {
 			conditions.append("AND State IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(stateList)
@@ -8163,7 +8063,7 @@ public class UserDaoimpl implements UserDao {
 					.append("', ',')) ");
 		}
 		// Final query
-		String finalQuery = "SELECT TOP " + userInputTop + "SUM(OrderQty) AS TotalOrderQty, " + "       ProductCode "
+		String finalQuery = "SELECT TOP 10 SUM(OrderQty) AS TotalOrderQty, " + "       ProductCode "
 				+ "FROM MBROrders (NOLOCK) " + "WHERE " + conditions.toString() + "GROUP BY ProductCode "
 				+ "ORDER BY TotalOrderQty DESC";
 
@@ -8362,7 +8262,7 @@ public class UserDaoimpl implements UserDao {
 
 	@Override
 	public List<OutputGrowthOverPreviousMonth> growthOverPreviousYearMonthly(MonthlyDataFilter filter) {
-		List<OutputGrowthOverPreviousMonth> growthOverPreviousMonthData = new ArrayList<>();
+		List<OutputGrowthOverPreviousMonth> growthOverPreviousYearMonthly = new ArrayList<>();
 		StringBuilder conditions = new StringBuilder();
 
 		// Extract filter fields
@@ -8381,9 +8281,9 @@ public class UserDaoimpl implements UserDao {
 		String stateList = filter.getSelectedState();
 
 		// Add conditions dynamically
-		if (startDate != null && endDate != null) {
-			conditions.append("OrderDate IN (").append(startDate).append(",").append(endDate).append(")");
-		}
+//		if (startDate != null && endDate != null) {
+//			conditions.append("OrderDate IN (").append(startDate).append(",").append(endDate).append(")");
+//		}
 
 		if (regionList != null && !regionList.isEmpty()) {
 			conditions.append(" AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(regionList)
@@ -8474,110 +8374,84 @@ public class UserDaoimpl implements UserDao {
 //	 		+ "    MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112));\r\n"
 //	 		+ "";
 
-//String finalQuery="SELECT \r\n"
-//		+ "    YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) AS Year,\r\n"
-//		+ "    MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) AS Month,\r\n"
-//		+ "    SUM(TotalPrice) AS TotalPriceSum,\r\n"
-//		+ "    SUM(OrderQty) AS TotalOrderQty,\r\n"
-//		+ "    COUNT(DISTINCT RetailerCode) AS DistinctRetailerCount,\r\n"
-//		+ "    -- Calculate price difference\r\n"
-//		+ "    SUM(TotalPrice) - (\r\n"
-//		+ "        SELECT \r\n"
-//		+ "            SUM(TotalPrice)\r\n"
-//		+ "        FROM \r\n"
-//		+ "            MBROrders (nolock)\r\n"
-//		+ "        WHERE \r\n"
-//		+ "            YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = YEAR("+startDate+")\r\n"
-//		+ "            AND MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = MONTH("+startDate+")\r\n"
-//		+ "            AND " + conditions.toString()
-//		+ "    ) AS pricediff,\r\n"
-//		+ "    -- Calculate order quantity difference\r\n"
-//		+ "    SUM(OrderQty) - (\r\n"
-//		+ "        SELECT \r\n"
-//		+ "            SUM(OrderQty)\r\n"
-//		+ "        FROM \r\n"
-//		+ "            MBROrders (nolock)\r\n"
-//		+ "        WHERE \r\n"
-//		+ "            YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = YEAR("+startDate+")\r\n"
-//		+ "            AND MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = MONTH("+startDate+")\r\n"
-//		+ "            AND "+  conditions.toString()
-//		+ "    ) AS orderQtydiff,\r\n"
-//		+ "    -- Calculate retailer count difference\r\n"
-//		+ "    COUNT(DISTINCT RetailerCode) - (\r\n"
-//		+ "        SELECT \r\n"
-//		+ "            COUNT(DISTINCT RetailerCode)\r\n"
-//		+ "        FROM \r\n"
-//		+ "            MBROrders (nolock)\r\n"
-//		+ "        WHERE \r\n"
-//		+ "            YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = YEAR("+startDate+")\r\n"
-//		+ "            AND MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = MONTH("+startDate+") \r\n"
-//		+ "            AND " + conditions.toString()
-//		+ "    ) AS retailerdiff\r\n"
-//		+ "FROM \r\n"
-//		+ "    MBROrders (nolock)\r\n"
-//		+ "WHERE \r\n"
-//		+ "    YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = YEAR("+endDate+")\r\n"
-//		+ "    AND MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = MONTH("+endDate+")\r\n"
-//		+ "    AND " +conditions.toString()
-//		+ "GROUP BY \r\n"
-//		+ "    YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)), \r\n"
-//		+ "    MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112));\r\n"
-//		+ "";
-
-		String finalQuery = "SELECT \r\n" + "    YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) AS Year,\r\n"
-				+ "    MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) AS Month,\r\n"
-				+ "    SUM(TotalPrice) AS TotalPriceSum,\r\n" + "    SUM(OrderQty) AS TotalOrderQty,\r\n"
-				+ "    COUNT(DISTINCT RetailerCode) AS DistinctRetailerCount,\r\n"
-				+ "    -- Calculate price difference\r\n" + "    SUM(TotalPrice) - (\r\n" + "        SELECT \r\n"
-				+ "            SUM(TotalPrice)\r\n" + "        FROM \r\n" + "            MBROrders (nolock)\r\n"
-				+ "        WHERE \r\n"
-				+ "            YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = YEAR(CONVERT(DATE, '" + startDate
-				+ "', 112))\r\n"
-				+ "            AND MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = MONTH(CONVERT(DATE, '"
-				+ startDate + "', 112))\r\n" + "            AND " + conditions.toString() + "\r\n"
-				+ "    ) AS pricediff,\r\n" + "    -- Calculate order quantity difference\r\n"
-				+ "    SUM(OrderQty) - (\r\n" + "        SELECT \r\n" + "            SUM(OrderQty)\r\n"
-				+ "        FROM \r\n" + "            MBROrders (nolock)\r\n" + "        WHERE \r\n"
-				+ "            YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = YEAR(CONVERT(DATE, '" + startDate
-				+ "', 112))\r\n"
-				+ "            AND MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = MONTH(CONVERT(DATE, '"
-				+ startDate + "', 112))\r\n" + "            AND " + conditions.toString() + "\r\n"
-				+ "    ) AS orderQtydiff,\r\n" + "    -- Calculate retailer count difference\r\n"
-				+ "    COUNT(DISTINCT RetailerCode) - (\r\n" + "        SELECT \r\n"
-				+ "            COUNT(DISTINCT RetailerCode)\r\n" + "        FROM \r\n"
-				+ "            MBROrders (nolock)\r\n" + "        WHERE \r\n"
-				+ "            YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = YEAR(CONVERT(DATE, '" + startDate
-				+ "', 112))\r\n"
-				+ "            AND MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = MONTH(CONVERT(DATE, '"
-				+ startDate + "', 112)) \r\n" + "            AND " + conditions.toString() + "\r\n"
-				+ "    ) AS retailerdiff\r\n" + "FROM \r\n" + "    MBROrders (nolock)\r\n" + "WHERE \r\n"
-				+ "    YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = YEAR(CONVERT(DATE, '" + endDate
-				+ "', 112))\r\n"
-				+ "    AND MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)) = MONTH(CONVERT(DATE, '" + endDate
-				+ "', 112))\r\n" + "    AND " + conditions.toString() + "\r\n" + "GROUP BY \r\n"
-				+ "    YEAR(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112)), \r\n"
-				+ "    MONTH(CONVERT(DATE, CAST(OrderDate AS CHAR(8)), 112));";
-
+		String finalQuery = "WITH MonthlySummary AS (\r\n" + "    SELECT \r\n" + "        YEAR(OrderDate) AS Year,\r\n"
+				+ "        MONTH(OrderDate) AS Month,\r\n" + "        SUM(TotalPrice) AS TotalPriceSum,\r\n"
+				+ "        SUM(OrderQty) AS TotalOrderQty,\r\n"
+				+ "        COUNT(DISTINCT RetailerCode) AS DistinctRetailerCount\r\n" + "    FROM \r\n"
+				+ "        MBROrders (NOLOCK)\r\n" + "    WHERE \r\n"
+				+ "         CONVERT(VARCHAR, OrderDate, 112) >= :startDate AND CONVERT(VARCHAR, OrderDate, 112) <= :endDate\r\n"
+				+ conditions.toString() + "    GROUP BY \r\n" + "        YEAR(OrderDate),\r\n"
+				+ "        MONTH(OrderDate)\r\n" + "),\r\n" + "\r\n" + "PreviousYearSummary AS (\r\n"
+				+ "    SELECT \r\n" + "        YEAR(OrderDate) AS PreviousYear,\r\n"
+				+ "        MONTH(OrderDate) AS Month,\r\n" + "        SUM(TotalPrice) AS PreviousTotalPriceSum,\r\n"
+				+ "        SUM(OrderQty) AS PreviousTotalOrderQty,\r\n"
+				+ "        COUNT(DISTINCT RetailerCode) AS PreviousDistinctRetailerCount\r\n" + "    FROM \r\n"
+				+ "        MBROrders (NOLOCK)\r\n" + "    WHERE \r\n"
+				+ "        OrderDate BETWEEN DATEADD(YEAR, -1, CAST(CONVERT(VARCHAR, :startDate) AS DATE)) \r\n"
+				+ "                      AND DATEADD(YEAR, -1, CAST(CONVERT(VARCHAR, :endDate) AS DATE))\r\n"
+				+ conditions.toString() + "    GROUP BY \r\n" + "        YEAR(OrderDate),\r\n"
+				+ "        MONTH(OrderDate)\r\n" + ")\r\n" + "\r\n" + "SELECT \r\n" + "    MS.Year,\r\n"
+				+ "    MS.Month,\r\n" + "    MS.TotalPriceSum,\r\n" + "    MS.TotalOrderQty,\r\n"
+				+ "    MS.DistinctRetailerCount,\r\n" + "    \r\n" + "    -- Retailer Growth Percentage\r\n"
+				+ "    CASE \r\n" + "        WHEN PYS.PreviousDistinctRetailerCount = 0 THEN NULL\r\n"
+				+ "        ELSE \r\n"
+				+ "            ((MS.DistinctRetailerCount - PYS.PreviousDistinctRetailerCount) * 1.0 / PYS.PreviousDistinctRetailerCount) * 100\r\n"
+				+ "    END AS RetailerGrowthPercentage,\r\n" + "\r\n" + "    -- Price Growth\r\n" + "    CASE \r\n"
+				+ "        WHEN LAG(TotalPriceSum, 1) OVER (ORDER BY MS.Year, MS.Month) IS NULL THEN (MS.TotalPriceSum - PYS.PreviousTotalPriceSum)\r\n"
+				+ "        WHEN LAG(TotalPriceSum, 1) OVER (ORDER BY MS.Year, MS.Month) = 0 THEN (MS.TotalPriceSum - PYS.PreviousTotalPriceSum)\r\n"
+				+ "        ELSE \r\n"
+				+ "            (TotalPriceSum - LAG(TotalPriceSum, 1) OVER (ORDER BY MS.Year, MS.Month))\r\n"
+				+ "    END AS PriceGrowth,\r\n" + "\r\n" + "    -- Order Growth\r\n" + "    CASE \r\n"
+				+ "        WHEN LAG(TotalOrderQty, 1) OVER (ORDER BY MS.Year, MS.Month) IS NULL THEN (MS.TotalOrderQty - PYS.PreviousTotalOrderQty)\r\n"
+				+ "        WHEN LAG(TotalOrderQty, 1) OVER (ORDER BY MS.Year, MS.Month) = 0 THEN (MS.TotalOrderQty - PYS.PreviousTotalOrderQty)\r\n"
+				+ "        ELSE \r\n"
+				+ "            (TotalOrderQty - LAG(TotalOrderQty, 1) OVER (ORDER BY MS.Year, MS.Month))\r\n"
+				+ "    END AS OrderGrowth,\r\n" + "\r\n" + "    -- Retailer Growth\r\n" + "    CASE \r\n"
+				+ "        WHEN LAG(DistinctRetailerCount, 1) OVER (ORDER BY MS.Year, MS.Month) IS NULL THEN (MS.DistinctRetailerCount - PYS.PreviousDistinctRetailerCount)\r\n"
+				+ "        WHEN LAG(DistinctRetailerCount, 1) OVER (ORDER BY MS.Year, MS.Month) = 0 THEN (MS.DistinctRetailerCount - PYS.PreviousDistinctRetailerCount)\r\n"
+				+ "        ELSE \r\n"
+				+ "            (DistinctRetailerCount - LAG(DistinctRetailerCount, 1) OVER (ORDER BY MS.Year, MS.Month))\r\n"
+				+ "    END AS RetailerGrowth,\r\n" + "\r\n" + "    -- Price Growth Percentage\r\n" + "    CASE \r\n"
+				+ "        WHEN PYS.PreviousTotalPriceSum = 0 THEN NULL\r\n" + "        ELSE \r\n"
+				+ "            ((MS.TotalPriceSum - PYS.PreviousTotalPriceSum) * 1.0 / PYS.PreviousTotalPriceSum) * 100\r\n"
+				+ "    END AS PriceGrowthPercentage,\r\n" + "\r\n" + "    -- Order Quantity Growth Percentage\r\n"
+				+ "    CASE \r\n" + "        WHEN PYS.PreviousTotalOrderQty = 0 THEN NULL\r\n" + "        ELSE \r\n"
+				+ "            ((MS.TotalOrderQty - PYS.PreviousTotalOrderQty) * 1.0 / PYS.PreviousTotalOrderQty) * 100\r\n"
+				+ "    END AS OrderQtyGrowthPercentage\r\n" + "FROM \r\n" + "    MonthlySummary MS\r\n"
+				+ "    JOIN PreviousYearSummary PYS \r\n"
+				+ "        ON MS.Month = PYS.Month AND MS.Year - 1 = PYS.PreviousYear\r\n" + "ORDER BY\r\n"
+				+ "    MS.Year,\r\n" + "    MS.Month;\r\n";
 		// Execute query and map results
 		Query query = entityManager.createNativeQuery(finalQuery);
+		query.setParameter("startDate", startDate);
+		query.setParameter("endDate", endDate);
 
 		try {
 			List<Object[]> result1 = query.getResultList();
 
 			for (Object[] row : result1) {
+				// Assuming row contains values in the correct order for mapping
 				OutputGrowthOverPreviousMonth data = new OutputGrowthOverPreviousMonth();
-				data.setPriceGrowth((BigDecimal) row[5]);
-				data.setOrderGrowth((Integer) row[6]);
-				data.setRetailerGrowth((Integer) row[7]);
+				data.setYear((Integer) row[0]);
+				data.setMonth((Integer) row[1]);
+				data.setTotalRevenue((BigDecimal) row[2]);
+				data.setTotalQTY((Integer) row[3]);
+				data.setTotalRetailerCode((Integer) row[4]);
+				data.setRetailerGrowthPercentage((BigDecimal) row[5]);
+				data.setPriceGrowth((BigDecimal) row[6]);
+				data.setOrderGrowth((Integer) row[7]);
+				data.setRetailerGrowth((Integer) row[8]);
+				data.setPriceGrowthPercentage((BigDecimal) row[9]);
+				data.setOrderQtyGrowthPercentage((BigDecimal) row[10]);
 
-				growthOverPreviousMonthData.add(data);
+				growthOverPreviousYearMonthly.add(data);
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return growthOverPreviousMonthData;
+		return growthOverPreviousYearMonthly;
 	}
 
 	@Override
@@ -8659,6 +8533,156 @@ public class UserDaoimpl implements UserDao {
 		}
 
 		return outputDashboardTiles;
+
+	}
+
+	@Override
+	public List<OutputRegionWiseGrowthOverPreviousMonth> regionwiseGrowthOverPreviousYearMonthly(
+			MonthlyDataFilter filter) {
+		List<OutputRegionWiseGrowthOverPreviousMonth> regionWiseMonthlyGrowthData = new ArrayList<>();
+		StringBuilder conditions = new StringBuilder(); // Using StringBuilder for efficient string concatenation
+
+		// Assuming the user input for startDate and endDate
+		Integer startDate = filter.getStartDate(); // User-provided start date (e.g., "20240601")
+		Integer endDate = filter.getEndDate(); // User-provided end date (e.g., "20240630")
+		String regionList = filter.getRegionList();
+		String brandList = filter.getBrandList();
+		String abmNameList = filter.getAbmName();
+		String rsNameList = filter.getRsNameList();
+		String retailerType = filter.getRetailerType();
+
+		String cityList = filter.getSelectedCity();
+		String stateList = filter.getSelectedState();
+
+		// Add startDate and endDate conditions if provided
+//		if (startDate != null && endDate != null) {
+//			conditions.append("CONVERT(VARCHAR, OrderDate, 112) >= ").append(startDate)
+//					.append(" AND CONVERT(VARCHAR, OrderDate, 112) <= ").append(endDate).append(" ");
+//		}
+
+		// Assuming the user input for regionList (e.g., "North,South,East,West")
+		// User-provided region list
+		if (regionList != null && !regionList.isEmpty()) {
+			conditions.append("AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(regionList)
+					.append("', ',')) ");
+		}
+
+		// Add ABMName condition if provided
+		if (abmNameList != null && !abmNameList.isEmpty()) {
+			conditions.append("AND (\r\n").append("    '").append(abmNameList).append("' IS NOT NULL AND '")
+					.append(abmNameList).append("' <> '' AND (\r\n")
+					.append("        ABMEMM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(abmNameList)
+					.append("', ','))\r\n")
+					.append("        OR ABMKAM IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(abmNameList)
+					.append("', ','))\r\n").append("    )\r\n").append(") ");
+		}
+
+		// Add Brand condition if provided
+		if (brandList != null && !brandList.isEmpty()) {
+			conditions.append("AND Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(brandList)
+					.append("', ',')) ");
+		}
+
+		// Add RSName condition if provided
+		if (rsNameList != null && !rsNameList.isEmpty()) {
+			conditions.append("AND RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(rsNameList)
+					.append("', ',')) ");
+		}
+
+		// Add RetailerType condition if provided
+		if (retailerType != null && !retailerType.isEmpty()) {
+			conditions.append("AND RetailerCode LIKE '").append(retailerType.equals("IDD") ? "9%" : "1%").append("' ");
+		}
+		if (stateList != null && !stateList.isEmpty()) {
+			conditions.append("AND State IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(stateList)
+					.append("', ',')) ");
+		}
+
+		if (cityList != null && !cityList.isEmpty()) {
+			conditions.append("AND City IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(cityList)
+					.append("', ',')) ");
+		}
+		String finalQuery = "WITH MonthlySummary AS (\r\n" + "    SELECT \r\n" + "        YEAR(OrderDate) AS Year,\r\n"
+				+ "        MONTH(OrderDate) AS Month,\r\n" + "        Region,\r\n"
+				+ "        SUM(TotalPrice) AS TotalPriceSum,\r\n" + "        SUM(OrderQty) AS TotalOrderQty,\r\n"
+				+ "        COUNT(DISTINCT RetailerCode) AS DistinctRetailerCount\r\n" + "    FROM \r\n"
+				+ "        MBROrders (NOLOCK)\r\n" + "    WHERE \r\n"
+				+ "         CONVERT(VARCHAR, OrderDate, 112) >= :startDate AND CONVERT(VARCHAR, OrderDate, 112) <= endDate\r\n"
+				+ conditions.toString() + "    GROUP BY \r\n" + "        YEAR(OrderDate),\r\n"
+				+ "        MONTH(OrderDate),\r\n" + "        Region\r\n" + "),\r\n" + "\r\n"
+				+ "PreviousYearSummary AS (\r\n" + "    SELECT \r\n" + "        YEAR(OrderDate) AS PreviousYear,\r\n"
+				+ "        MONTH(OrderDate) AS Month,\r\n" + "        Region,\r\n"
+				+ "        SUM(TotalPrice) AS PreviousTotalPriceSum,\r\n"
+				+ "        SUM(OrderQty) AS PreviousTotalOrderQty,\r\n"
+				+ "        COUNT(DISTINCT RetailerCode) AS PreviousDistinctRetailerCount\r\n" + "    FROM \r\n"
+				+ "        MBROrders (NOLOCK)\r\n" + "    WHERE \r\n"
+				+ "        OrderDate BETWEEN DATEADD(YEAR, -1, CAST(CONVERT(VARCHAR, startDate) AS DATE)) \r\n"
+				+ "                      AND DATEADD(YEAR, -1, CAST(CONVERT(VARCHAR, endDate) AS DATE))\r\n"
+				+ conditions.toString() + "    GROUP BY \r\n" + "        YEAR(OrderDate),\r\n"
+				+ "        MONTH(OrderDate),\r\n" + "        Region\r\n" + ")\r\n" + "\r\n" + "SELECT \r\n"
+				+ "    MS.Year,\r\n" + "    MS.Month,\r\n" + "    MS.Region,\r\n" + "    MS.TotalPriceSum,\r\n"
+				+ "    MS.TotalOrderQty,\r\n" + "    MS.DistinctRetailerCount,\r\n" + "    \r\n"
+				+ "    -- Retailer Growth Percentage\r\n" + "    CASE \r\n"
+				+ "        WHEN PYS.PreviousDistinctRetailerCount = 0 THEN NULL\r\n" + "        ELSE \r\n"
+				+ "            ((MS.DistinctRetailerCount - PYS.PreviousDistinctRetailerCount) * 1.0 / PYS.PreviousDistinctRetailerCount) * 100\r\n"
+				+ "    END AS RetailerGrowthPercentage,\r\n" + "\r\n" + "    -- Price Growth\r\n" + "    CASE \r\n"
+				+ "        WHEN LAG(TotalPriceSum, 1) OVER (PARTITION BY MS.Region ORDER BY MS.Year, MS.Month) IS NULL THEN (MS.TotalPriceSum - PYS.PreviousTotalPriceSum)\r\n"
+				+ "        WHEN LAG(TotalPriceSum, 1) OVER (PARTITION BY MS.Region ORDER BY MS.Year, MS.Month) = 0 THEN (MS.TotalPriceSum - PYS.PreviousTotalPriceSum)\r\n"
+				+ "        ELSE \r\n"
+				+ "            (TotalPriceSum - LAG(TotalPriceSum, 1) OVER (PARTITION BY MS.Region ORDER BY MS.Year, MS.Month))\r\n"
+				+ "    END AS PriceGrowth,\r\n" + "\r\n" + "    -- Order Growth\r\n" + "    CASE \r\n"
+				+ "        WHEN LAG(TotalOrderQty, 1) OVER (PARTITION BY MS.Region ORDER BY MS.Year, MS.Month) IS NULL THEN (MS.TotalOrderQty - PYS.PreviousTotalOrderQty)\r\n"
+				+ "        WHEN LAG(TotalOrderQty, 1) OVER (PARTITION BY MS.Region ORDER BY MS.Year, MS.Month) = 0 THEN (MS.TotalOrderQty - PYS.PreviousTotalOrderQty)\r\n"
+				+ "        ELSE \r\n"
+				+ "            (TotalOrderQty - LAG(TotalOrderQty, 1) OVER (PARTITION BY MS.Region ORDER BY MS.Year, MS.Month))\r\n"
+				+ "    END AS OrderGrowth,\r\n" + "\r\n" + "    -- Retailer Growth\r\n" + "    CASE \r\n"
+				+ "        WHEN LAG(DistinctRetailerCount, 1) OVER (PARTITION BY MS.Region ORDER BY MS.Year, MS.Month) IS NULL THEN (MS.DistinctRetailerCount - PYS.PreviousDistinctRetailerCount)\r\n"
+				+ "        WHEN LAG(DistinctRetailerCount, 1) OVER (PARTITION BY MS.Region ORDER BY MS.Year, MS.Month) = 0 THEN (MS.DistinctRetailerCount - PYS.PreviousDistinctRetailerCount)\r\n"
+				+ "        ELSE \r\n"
+				+ "            (DistinctRetailerCount - LAG(DistinctRetailerCount, 1) OVER (PARTITION BY MS.Region ORDER BY MS.Year, MS.Month))\r\n"
+				+ "    END AS RetailerGrowth,\r\n" + "\r\n" + "    -- Price Growth Percentage\r\n" + "    CASE \r\n"
+				+ "        WHEN PYS.PreviousTotalPriceSum = 0 THEN NULL\r\n" + "        ELSE \r\n"
+				+ "            ((MS.TotalPriceSum - PYS.PreviousTotalPriceSum) * 1.0 / PYS.PreviousTotalPriceSum) * 100\r\n"
+				+ "    END AS PriceGrowthPercentage,\r\n" + "\r\n" + "    -- Order Quantity Growth Percentage\r\n"
+				+ "    CASE \r\n" + "        WHEN PYS.PreviousTotalOrderQty = 0 THEN NULL\r\n" + "        ELSE \r\n"
+				+ "            ((MS.TotalOrderQty - PYS.PreviousTotalOrderQty) * 1.0 / PYS.PreviousTotalOrderQty) * 100\r\n"
+				+ "    END AS OrderQtyGrowthPercentage\r\n" + "FROM \r\n" + "    MonthlySummary MS\r\n"
+				+ "    JOIN PreviousYearSummary PYS \r\n"
+				+ "        ON MS.Month = PYS.Month AND MS.Year - 1 = PYS.PreviousYear AND MS.Region = PYS.Region\r\n"
+				+ "ORDER BY\r\n" + "    MS.Region,\r\n" + "    MS.Year,\r\n" + "    MS.Month;";
+
+		// Create a native query
+		Query query = entityManager.createNativeQuery(finalQuery);
+
+		// Set the parameters for the stored procedure call
+		// Execute the query to invoke the stored procedure
+		try {
+			List<Object[]> result = query.getResultList();
+			// filteredData = (OutputForMontlyFilter) query.getSingleResult();
+
+			for (Object[] row : result) {
+				// Assuming row contains values in the correct order for mapping
+				OutputRegionWiseGrowthOverPreviousMonth data = new OutputRegionWiseGrowthOverPreviousMonth();
+				data.setYear((Integer) row[0]);
+				data.setMonth((Integer) row[1]);
+				data.setRegion(row[2].toString());
+				data.setTotalRevenue((BigDecimal) row[3]);
+				data.setTotalQTY((Integer) row[4]);
+				data.setTotalRetailerCode((Integer) row[5]);
+				data.setPriceGrowthPercentage((BigDecimal) row[6]);
+				data.setOrderQtyGrowthPercentage((BigDecimal) row[7]);
+				data.setRetailerGrowthPercentage((BigDecimal) row[8]);
+				data.setPriceGrowth((BigDecimal) row[9]);
+				data.setOrderGrowth((Integer) row[10]);
+				data.setRetailerGrowth((Integer) row[11]);
+				regionWiseMonthlyGrowthData.add(data);
+				// Now, filteredData is populated with values
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return regionWiseMonthlyGrowthData;
 
 	}
 }

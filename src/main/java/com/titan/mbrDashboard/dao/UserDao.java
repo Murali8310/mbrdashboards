@@ -371,5 +371,8 @@ public interface UserDao {
 			MonthlyDataFilter filter);
 
 
+	List<OutputRegionWiseGrowthOverPreviousMonth> regionwiseGrowthOverPreviousYearMonthly(MonthlyDataFilter filter);
+
+
 
 }

@@ -321,6 +321,9 @@ public interface Userservice {
 	List<OutputGrowthOverPreviousMonth> growthOverPreviousYear(MonthlyDataFilter filter);
 
 
-	List<OutputGrowthOverPreviousMonth> growthOverPreviousYearMonthly(MonthlyDataFilter filter);	
+	List<OutputGrowthOverPreviousMonth> growthOverPreviousYearMonthly(MonthlyDataFilter filter);
+
+
+	List<OutputRegionWiseGrowthOverPreviousMonth> regionwiseGrowthOverPreviousYearMonthly(MonthlyDataFilter filter);	
 
 }
