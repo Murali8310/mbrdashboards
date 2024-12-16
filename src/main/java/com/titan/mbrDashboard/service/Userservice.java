@@ -30,6 +30,7 @@ import com.titan.mbrDashboard.dto.OutputRegionWiseMonthlyAvgPerOrder;
 import com.titan.mbrDashboard.dto.OutputRegionWiseMonthlyDistribution;
 import com.titan.mbrDashboard.dto.OutputRegionWiseMonthlyDistributionNoofOrders;
 import com.titan.mbrDashboard.dto.OutputTopSKUOrderedOverall;
+import com.titan.mbrDashboard.model.user.AuditLog;
 
 public interface Userservice {
 
@@ -324,6 +325,9 @@ public interface Userservice {
 	List<OutputGrowthOverPreviousMonth> growthOverPreviousYearMonthly(MonthlyDataFilter filter);
 
 
-	List<OutputRegionWiseGrowthOverPreviousMonth> regionwiseGrowthOverPreviousYearMonthly(MonthlyDataFilter filter);	
+	List<OutputRegionWiseGrowthOverPreviousMonth> regionwiseGrowthOverPreviousYearMonthly(MonthlyDataFilter filter);
+
+
+	void auditLog(AuditLog log);	
 
 }

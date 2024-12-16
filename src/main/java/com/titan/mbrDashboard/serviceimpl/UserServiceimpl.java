@@ -53,6 +53,7 @@ import com.titan.mbrDashboard.dto.OutputRegionWiseMonthlyAvgPerOrder;
 import com.titan.mbrDashboard.dto.OutputRegionWiseMonthlyDistribution;
 import com.titan.mbrDashboard.dto.OutputRegionWiseMonthlyDistributionNoofOrders;
 import com.titan.mbrDashboard.dto.OutputTopSKUOrderedOverall;
+import com.titan.mbrDashboard.model.user.AuditLog;
 import com.titan.mbrDashboard.service.Userservice;
 
 @Service("userService")
@@ -1286,5 +1287,12 @@ public class UserServiceimpl implements Userservice {
 	public List<OutputRegionWiseGrowthOverPreviousMonth> regionwiseGrowthOverPreviousYearMonthly(MonthlyDataFilter filter) {
 		// TODO Auto-generated method stub
 		return userDao.regionwiseGrowthOverPreviousYearMonthly(filter);
+	}
+
+	@Override
+	public void auditLog(AuditLog log) {
+		// TODO Auto-generated method stub
+		userDao.auditLog(log);
+		
 	}
 }

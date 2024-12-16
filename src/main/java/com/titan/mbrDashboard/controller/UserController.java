@@ -79,6 +79,7 @@ import com.titan.mbrDashboard.dto.OutputRegionWiseMonthlyAvgPerOrder;
 import com.titan.mbrDashboard.dto.OutputRegionWiseMonthlyDistribution;
 import com.titan.mbrDashboard.dto.OutputRegionWiseMonthlyDistributionNoofOrders;
 import com.titan.mbrDashboard.dto.OutputTopSKUOrderedOverall;
+import com.titan.mbrDashboard.model.user.AuditLog;
 import com.titan.mbrDashboard.service.Userservice;
 import com.titan.util.AesUtil;
 import com.titan.util.PasswordUtils;
@@ -314,7 +315,13 @@ public class UserController {
 			session.setAttribute("storeCode", userMap.get("storeCode"));
 			session.setAttribute("accessRole", userMap.get("accessRole"));
 			// session.setAttribute("blockaccess", blockAccessStatus);
-
+			AuditLog log= new AuditLog();
+			log.setAction("Login");
+			log.setUserName((String) userMap.get("user_Name"));
+			log.setUserID((String) userMap.get("user_id"));
+			
+			userService.auditLog(log);
+			
 			return userMap;
 		} else {
 			// Set message in session and return to login page on failure

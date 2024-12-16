@@ -7587,13 +7587,13 @@ public class UserDaoimpl implements UserDao {
 				data.setTotalRevenue((BigDecimal) row[3]);
 				data.setTotalQTY((Integer) row[4]);
 				data.setTotalRetailerCode((Integer) row[5]);
-				data.setRetailerGrowthPercentage((BigDecimal)row[6]);
-				data.setPriceGrowth((BigDecimal)row[7]);
-				data.setOrderGrowth((Integer)row[8]);
-				data.setRetailerGrowth((Integer)row[9]);
-				data.setPriceGrowthPercentage((BigDecimal)row[10]);
-				data.setOrderQtyGrowthPercentage((BigDecimal)row[11]);
-				
+				data.setRetailerGrowthPercentage((BigDecimal) row[6]);
+				data.setPriceGrowth((BigDecimal) row[7]);
+				data.setOrderGrowth((Integer) row[8]);
+				data.setRetailerGrowth((Integer) row[9]);
+				data.setPriceGrowthPercentage((BigDecimal) row[10]);
+				data.setOrderQtyGrowthPercentage((BigDecimal) row[11]);
+
 				regionWiseMonthlyGrowthData.add(data);
 				// Now, filteredData is populated with values
 			}
@@ -7886,7 +7886,7 @@ public class UserDaoimpl implements UserDao {
 		String retailerType = filter.getRetailerType(); // e.g., "Regular"
 		String cityList = filter.getSelectedCity();
 		String stateList = filter.getSelectedState();
-		//String userInputTop = filter.getSize();
+		// String userInputTop = filter.getSize();
 
 		// Build dynamic conditions
 		if (startDate != null && endDate != null) {
@@ -7953,7 +7953,7 @@ public class UserDaoimpl implements UserDao {
 		String cityList = filter.getSelectedCity();
 		String stateList = filter.getSelectedState();
 
-		//String userInputTop = filter.getSize();
+		// String userInputTop = filter.getSize();
 
 		// Build dynamic conditions
 		if (startDate != null && endDate != null) {
@@ -8022,7 +8022,7 @@ public class UserDaoimpl implements UserDao {
 
 		String cityList = filter.getSelectedCity();
 		String stateList = filter.getSelectedState();
-		//String userInputTop = filter.getSize();
+		// String userInputTop = filter.getSize();
 
 		// Build dynamic conditions
 		if (startDate != null && endDate != null) {
@@ -8685,4 +8685,24 @@ public class UserDaoimpl implements UserDao {
 		return regionWiseMonthlyGrowthData;
 
 	}
+
+	
+	@Override
+	public void auditLog(AuditLog log) {
+	    try {
+	        String insertSql = "INSERT INTO AuditLog (UserName, Action, UserID) VALUES (?, ?, ?)";
+
+	        Query insertQuery = entityManager.createNativeQuery(insertSql);
+
+	        insertQuery.setParameter(1, log.getUserName());
+	        insertQuery.setParameter(2, log.getAction());
+	        insertQuery.setParameter(3, log.getUserID());
+
+	        int rowsInserted = insertQuery.executeUpdate();
+	        System.out.println("Rows inserted: " + rowsInserted);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+
 }
