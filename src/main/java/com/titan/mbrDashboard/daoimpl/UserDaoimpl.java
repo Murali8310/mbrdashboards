@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6950,7 +6951,7 @@ public class UserDaoimpl implements UserDao {
 	public List<OutputPercentageofOrdersbyDayoftheMonth> percentageofOrdersbyDayoftheMonth(MonthlyDataFilter filter) {
 		List<OutputPercentageofOrdersbyDayoftheMonth> percentageofOrdersbyDayoftheMonth = new ArrayList<>();
 		String storedProcedureCall = "EXEC PercentageofOrdersbyDayoftheMonth @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
-		//String storedProcedureCall = "EXEC PercentageofOrdersbyDayoftheMonth @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType, @CityList=:cityList, @StateList= :stateList";
+//		String storedProcedureCall = "EXEC PercentageofOrdersbyDayoftheMonth @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType, @CityList=:cityList, @StateList= :stateList";
 
 		// Create a native query
 		Query query = entityManager.createNativeQuery(storedProcedureCall);
@@ -8702,13 +8703,14 @@ public class UserDaoimpl implements UserDao {
 	@Override
 	public void auditLog(AuditLog log) {
 		try {
-			String insertSql = "INSERT INTO AuditLog (UserName, Action, UserID) VALUES (?, ?, ?)";
+			String insertSql = "INSERT INTO AuditLog (UserName, Action, UserID, ActionDateTime) VALUES (?, ?, ?,?)";
 
 			Query insertQuery = entityManager.createNativeQuery(insertSql);
-
+			log.setActionDateTime(LocalDateTime.now());
 			insertQuery.setParameter(1, log.getUserName());
 			insertQuery.setParameter(2, log.getAction());
 			insertQuery.setParameter(3, log.getUserID());
+			insertQuery.setParameter(4, log.getActionDateTime());
 
 			int rowsInserted = insertQuery.executeUpdate();
 			System.out.println("Rows inserted: " + rowsInserted);
