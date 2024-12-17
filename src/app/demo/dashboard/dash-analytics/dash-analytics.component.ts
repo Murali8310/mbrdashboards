@@ -4170,6 +4170,7 @@ this.regionwiseGrowthOverPreviousYearMonthly(MonthlyToalOrdaringPayload);
     this.RegionWiseGrowthOverPreviousMonthOptions = {};
     this.chartOptions = {};
     this.growthOverPreviousMonthYear = {};
+    this.RegionWiseGrowthOverPreviousMonthOptionsPrevYear = {};
     // Menu id 3 specific charts
     this.chartOptionslineForOrdBh = {};
     this.RegionWiseMonthlyDistibutionOptionsFOrdBh = {};
