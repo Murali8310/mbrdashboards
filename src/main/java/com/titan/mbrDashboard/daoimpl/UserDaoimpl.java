@@ -8758,7 +8758,7 @@ public class UserDaoimpl implements UserDao {
 
 			for (Object[] row : result) {
 				OutputTopSKUOrderedOverall data = new OutputTopSKUOrderedOverall();
-				data.setTotalOrderQty((Integer) row[0]);
+				data.setTotalPrice((BigDecimal) row[0]);
 				data.setProductCode(row[1].toString());
 				topSKUOrderedOverall.add(data);
 			}
@@ -8828,7 +8828,7 @@ public class UserDaoimpl implements UserDao {
 
 			for (Object[] row : result) {
 				OutputTopSKUOrderedOverall data = new OutputTopSKUOrderedOverall();
-				data.setTotalOrderQty((Integer) row[0]);
+				data.setTotalPrice((BigDecimal) row[0]);
 				data.setProductCode(row[1].toString());
 				topSKUOrderedOverall.add(data);
 			}
@@ -8907,7 +8907,7 @@ public class UserDaoimpl implements UserDao {
 
 			for (Object[] row : result) {
 				OutputTopSKUOrderedOverall data = new OutputTopSKUOrderedOverall();
-				data.setTotalOrderQty((Integer) row[0]);
+				data.setTotalPrice((BigDecimal) row[0]);
 				data.setProductCode(row[1].toString());
 				topSKUOrderedOverall.add(data);
 			}
