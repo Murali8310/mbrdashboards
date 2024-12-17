@@ -7482,6 +7482,9 @@ public class UserDaoimpl implements UserDao {
 		if(conditionalDate != null && conditionalDate.equals(20240101)) {
 			conditionalDate=20240131;
 		}
+		else {
+			conditionalDate=endDate;
+		}
 		// Add startDate and endDate conditions if provided
 //		if (startDate != null && endDate != null) {
 //			conditions.append("CONVERT(VARCHAR, OrderDate, 112) >= ").append(startDate)
@@ -8621,7 +8624,7 @@ public class UserDaoimpl implements UserDao {
 				+ "        SUM(TotalPrice) AS TotalPriceSum,\r\n" + "        SUM(OrderQty) AS TotalOrderQty,\r\n"
 				+ "        COUNT(DISTINCT RetailerCode) AS DistinctRetailerCount\r\n" + "    FROM \r\n"
 				+ "        MBROrders (NOLOCK)\r\n" + "    WHERE \r\n"
-				+ "         CONVERT(VARCHAR, OrderDate, 112) >= :startDate AND CONVERT(VARCHAR, OrderDate, 112) <= endDate\r\n"
+				+ "         CONVERT(VARCHAR, OrderDate, 112) >= :startDate AND CONVERT(VARCHAR, OrderDate, 112) <= :endDate\r\n"
 				+ conditions.toString() + "    GROUP BY \r\n" + "        YEAR(OrderDate),\r\n"
 				+ "        MONTH(OrderDate),\r\n" + "        Region\r\n" + "),\r\n" + "\r\n"
 				+ "PreviousYearSummary AS (\r\n" + "    SELECT \r\n" + "        YEAR(OrderDate) AS PreviousYear,\r\n"
@@ -8630,8 +8633,8 @@ public class UserDaoimpl implements UserDao {
 				+ "        SUM(OrderQty) AS PreviousTotalOrderQty,\r\n"
 				+ "        COUNT(DISTINCT RetailerCode) AS PreviousDistinctRetailerCount\r\n" + "    FROM \r\n"
 				+ "        MBROrders (NOLOCK)\r\n" + "    WHERE \r\n"
-				+ "        OrderDate BETWEEN DATEADD(YEAR, -1, CAST(CONVERT(VARCHAR, startDate) AS DATE)) \r\n"
-				+ "                      AND DATEADD(YEAR, -1, CAST(CONVERT(VARCHAR, endDate) AS DATE))\r\n"
+				+ "        OrderDate BETWEEN DATEADD(YEAR, -1, CAST(CONVERT(VARCHAR, :startDate) AS DATE)) \r\n"
+				+ "                      AND DATEADD(YEAR, -1, CAST(CONVERT(VARCHAR, :endDate) AS DATE))\r\n"
 				+ conditions.toString() + "    GROUP BY \r\n" + "        YEAR(OrderDate),\r\n"
 				+ "        MONTH(OrderDate),\r\n" + "        Region\r\n" + ")\r\n" + "\r\n" + "SELECT \r\n"
 				+ "    MS.Year,\r\n" + "    MS.Month,\r\n" + "    MS.Region,\r\n" + "    MS.TotalPriceSum,\r\n"
@@ -8667,7 +8670,8 @@ public class UserDaoimpl implements UserDao {
 
 		// Create a native query
 		Query query = entityManager.createNativeQuery(finalQuery);
-
+		query.setParameter("startDate", startDate);
+		query.setParameter("endDate", endDate);
 		// Set the parameters for the stored procedure call
 		// Execute the query to invoke the stored procedure
 		try {
@@ -8677,18 +8681,34 @@ public class UserDaoimpl implements UserDao {
 			for (Object[] row : result) {
 				// Assuming row contains values in the correct order for mapping
 				OutputRegionWiseGrowthOverPreviousMonth data = new OutputRegionWiseGrowthOverPreviousMonth();
+//				data.setYear((Integer) row[0]);
+//				data.setMonth((Integer) row[1]);
+//				data.setRegion(row[2].toString());
+//				data.setTotalRevenue((BigDecimal) row[3]);
+//				data.setTotalQTY((Integer)row[4]);
+//				data.setTotalRetailerCode((Integer)row[5]);
+//				data.setRetailerGrowthPercentage((BigDecimal) row[6]);
+//				data.setRetailerGrowthPercentage((BigDecimal) row[7]);
+//				data.setPriceGrowth((BigDecimal) row[8]);
+//				data.setOrderGrowth((Integer)row[9]);
+//				data.setRetailerGrowth((Integer)row[10]);
+//				data.setPriceGrowthPercentage((BigDecimal) row[11]);
+//				//data.getOrderQtyGrowthPercentage((BigDecimal) row[12]);
+				
 				data.setYear((Integer) row[0]);
 				data.setMonth((Integer) row[1]);
 				data.setRegion(row[2].toString());
 				data.setTotalRevenue((BigDecimal) row[3]);
 				data.setTotalQTY((Integer) row[4]);
 				data.setTotalRetailerCode((Integer) row[5]);
-				data.setPriceGrowthPercentage((BigDecimal) row[6]);
-				data.setOrderQtyGrowthPercentage((BigDecimal) row[7]);
-				data.setRetailerGrowthPercentage((BigDecimal) row[8]);
-				data.setPriceGrowth((BigDecimal) row[9]);
-				data.setOrderGrowth((Integer) row[10]);
-				data.setRetailerGrowth((Integer) row[11]);
+				data.setRetailerGrowthPercentage((BigDecimal)row[6]);
+				data.setPriceGrowth((BigDecimal)row[7]);
+				data.setOrderGrowth(((Integer) row[8]));
+				data.setRetailerGrowth(((Integer) row[9]));
+				data.setPriceGrowthPercentage(((BigDecimal)row[10]));
+				data.setOrderQtyGrowthPercentage(((BigDecimal)row[11]));
+				
+				
 				regionWiseMonthlyGrowthData.add(data);
 				// Now, filteredData is populated with values
 			}
