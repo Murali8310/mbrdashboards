@@ -8695,6 +8695,20 @@ public class UserDaoimpl implements UserDao {
 //				data.setPriceGrowthPercentage((BigDecimal) row[11]);
 //				//data.getOrderQtyGrowthPercentage((BigDecimal) row[12]);
 				
+//				data.setYear((Integer) row[0]);
+//				data.setMonth((Integer) row[1]);
+//				data.setRegion(row[2].toString());
+//				data.setTotalRevenue((BigDecimal) row[3]);
+//				data.setTotalQTY((Integer)row[4]);
+//				data.setTotalRetailerCode((Integer)row[5]);
+//				data.setRetailerGrowthPercentage((BigDecimal) row[6]);
+//				data.setRetailerGrowthPercentage((BigDecimal) row[7]);
+//				data.setPriceGrowth((BigDecimal) row[8]);
+//				data.setOrderGrowth((Integer)row[9]);
+//				data.setRetailerGrowth((Integer)row[10]);
+//				data.setPriceGrowthPercentage((BigDecimal) row[11]);
+//				//data.getOrderQtyGrowthPercentage((BigDecimal) row[12]);
+				
 				data.setYear((Integer) row[0]);
 				data.setMonth((Integer) row[1]);
 				data.setRegion(row[2].toString());
