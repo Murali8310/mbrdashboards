@@ -155,6 +155,23 @@ public selectedData:any = '1';
   }
 
   /**
+   * This is for geting the region wise growth over data.
+   * @param MonthlyToalOrdaringPayload 
+   * @returns 
+   */
+  public  regionwiseGrowthOverPreviousYearMonthly(MonthlyToalOrdaringPayload?:any) {
+    return this.http
+      .post<any>(
+        `${environment.apiUrl}/regionwiseGrowthOverPreviousYearMonthly`,
+        JSON.stringify(MonthlyToalOrdaringPayload),
+        {
+          headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+          observe: 'response',
+        }
+      );      
+  }
+
+  /**
    * This is for geting the region wise growth over data fro prev year.
    * @param MonthlyToalOrdaringPayload 
    * @returns 
