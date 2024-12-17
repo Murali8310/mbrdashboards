@@ -6949,7 +6949,8 @@ public class UserDaoimpl implements UserDao {
 	@Override
 	public List<OutputPercentageofOrdersbyDayoftheMonth> percentageofOrdersbyDayoftheMonth(MonthlyDataFilter filter) {
 		List<OutputPercentageofOrdersbyDayoftheMonth> percentageofOrdersbyDayoftheMonth = new ArrayList<>();
-		String storedProcedureCall = "EXEC PercentageofOrdersbyDayoftheMonth @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType, @CityList=:cityList, @StateList= :stateList";
+		String storedProcedureCall = "EXEC PercentageofOrdersbyDayoftheMonth @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
+		//String storedProcedureCall = "EXEC PercentageofOrdersbyDayoftheMonth @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType, @CityList=:cityList, @StateList= :stateList";
 
 		// Create a native query
 		Query query = entityManager.createNativeQuery(storedProcedureCall);
@@ -6963,8 +6964,8 @@ public class UserDaoimpl implements UserDao {
 		query.setParameter("abmName", filter.getAbmName());
 		query.setParameter("retailerType", filter.getRetailerType());
 		query.setParameter("retailerType", filter.getRetailerType());
-		query.setParameter("cityList", filter.getSelectedCity());
-		query.setParameter("stateList", filter.getSelectedState());
+//		query.setParameter("cityList", filter.getSelectedCity());
+//		query.setParameter("stateList", filter.getSelectedState());
 
 		// Execute the query to invoke the stored procedure
 		try {
@@ -7218,6 +7219,7 @@ public class UserDaoimpl implements UserDao {
 		String abmNameList = filter.getAbmName();
 		String rsNameList = filter.getRsNameList();
 		String retailerType = filter.getRetailerType();
+		Integer conditionalDate = filter.getStartDate();
 
 		String cityList = filter.getSelectedCity();
 		String stateList = filter.getSelectedState();
@@ -7229,6 +7231,9 @@ public class UserDaoimpl implements UserDao {
 //					.append(" AND CONVERT(VARCHAR, OrderDate, 112) <= ").append(endDate).append(" ");
 //		}
 
+		if(conditionalDate!=null && conditionalDate.equals(20240101)) {
+			conditionalDate=20240131;
+		}
 		// Assuming the user input for regionList (e.g., "North,South,East,West")
 		// User-provided region list
 		if (regionList != null && !regionList.isEmpty()) {
@@ -7289,7 +7294,7 @@ public class UserDaoimpl implements UserDao {
 				+ "        COUNT(DISTINCT RetailerCode) AS PreviousDistinctRetailerCount\r\n" + "    FROM \r\n"
 				+ "        MBROrders (NOLOCK)\r\n" + "    WHERE \r\n"
 				+ "        OrderDate BETWEEN DATEADD(MONTH, -1,CAST(CONVERT(VARCHAR, :startDate) AS DATE))\r\n"
-				+ "                      AND DATEADD(DAY, -1,  CAST(CONVERT(VARCHAR, :startDate) AS DATE))\r\n"
+				+ "                      AND DATEADD(DAY, -1,  CAST(CONVERT(VARCHAR, :conditionalDate) AS DATE))\r\n"
 				+ conditions.toString() + "    GROUP BY \r\n" + "        YEAR(OrderDate),\r\n"
 				+ "        MONTH(OrderDate)\r\n" + ")\r\n" + "\r\n" + "SELECT \r\n" + "    MS.Year,\r\n"
 				+ "    MS.Month,\r\n" + "    MS.TotalPriceSum,\r\n" + "    MS.TotalOrderQty,\r\n"
@@ -7325,6 +7330,7 @@ public class UserDaoimpl implements UserDao {
 		Query query = entityManager.createNativeQuery(finalQuery);
 		query.setParameter("startDate", startDate);
 		query.setParameter("endDate", endDate);
+		query.setParameter("conditionalDate", conditionalDate);
 		try {
 			List<Object[]> result = query.getResultList();
 			// filteredData = (OutputForMontlyFilter) query.getSingleResult();
@@ -7470,7 +7476,11 @@ public class UserDaoimpl implements UserDao {
 
 		String cityList = filter.getSelectedCity();
 		String stateList = filter.getSelectedState();
-
+		Integer conditionalDate= filter.getStartDate();
+		
+		if(conditionalDate != null && conditionalDate.equals(20240101)) {
+			conditionalDate=20240131;
+		}
 		// Add startDate and endDate conditions if provided
 //		if (startDate != null && endDate != null) {
 //			conditions.append("CONVERT(VARCHAR, OrderDate, 112) >= ").append(startDate)
@@ -7533,8 +7543,8 @@ public class UserDaoimpl implements UserDao {
 				+ "        SUM(OrderQty) AS PreviousTotalOrderQty,\r\n"
 				+ "        COUNT(DISTINCT RetailerCode) AS PreviousDistinctRetailerCount\r\n" + "    FROM \r\n"
 				+ "        MBROrders (NOLOCK)\r\n" + "    WHERE \r\n"
-				+ "        OrderDate BETWEEN DATEADD(YEAR, -1, CAST(CONVERT(VARCHAR, :startDate) AS DATE)) \r\n"
-				+ "                      AND DATEADD(YEAR, -1, CAST(CONVERT(VARCHAR, :endDate) AS DATE))\r\n"
+				+ "        OrderDate BETWEEN DATEADD(MONTH, -1, CAST(CONVERT(VARCHAR, :startDate) AS DATE)) \r\n"
+				+ "                      AND DATEADD(DAY, -1, CAST(CONVERT(VARCHAR, :conditionalDate) AS DATE))\r\n"
 				+ conditions.toString() + "    GROUP BY \r\n" + "        YEAR(OrderDate),\r\n"
 				+ "        MONTH(OrderDate),\r\n" + "        Region\r\n" + ")\r\n" + "\r\n" + "SELECT \r\n"
 				+ "    MS.Year,\r\n" + "    MS.Month,\r\n" + "    MS.Region,\r\n" + "    MS.TotalPriceSum,\r\n"
@@ -7565,13 +7575,14 @@ public class UserDaoimpl implements UserDao {
 				+ "            ((MS.TotalOrderQty - PYS.PreviousTotalOrderQty) * 1.0 / PYS.PreviousTotalOrderQty) * 100\r\n"
 				+ "    END AS OrderQtyGrowthPercentage\r\n" + "FROM \r\n" + "    MonthlySummary MS\r\n"
 				+ "    JOIN PreviousYearSummary PYS \r\n" + "        ON MS.Month = PYS.Month \r\n"
-				+ "           AND MS.Year - 1 = PYS.PreviousYear \r\n" + "           AND MS.Region = PYS.Region\r\n"
+				+ "             AND MS.Region = PYS.Region\r\n"
 				+ "ORDER BY\r\n" + "    MS.Region,\r\n" + "    MS.Year,\r\n" + "    MS.Month;\r\n";
 
 		// Create a native query
 		Query query = entityManager.createNativeQuery(finalQuery);
 		query.setParameter("startDate", startDate);
 		query.setParameter("endDate", endDate);
+		query.setParameter("conditionalDate", conditionalDate);
 		// Set the parameters for the stored procedure call
 		// Execute the query to invoke the stored procedure
 		try {
@@ -8271,14 +8282,14 @@ public class UserDaoimpl implements UserDao {
 		String abmNameList = filter.getAbmName();
 		String rsNameList = filter.getRsNameList();
 		String retailerType = filter.getRetailerType();
-
+		
 		// Extract the year from startDate and endDate
 		Integer startYear = startDate != null ? Integer.parseInt(startDate.toString().substring(0, 4)) : null;
 		Integer endYear = endDate != null ? Integer.parseInt(endDate.toString().substring(0, 4)) : null;
 
 		String cityList = filter.getSelectedCity();
 		String stateList = filter.getSelectedState();
-
+		Integer conditionalDate=filter.getStartDate();
 		// Add conditions dynamically
 //		if (startDate != null && endDate != null) {
 //			conditions.append("OrderDate IN (").append(startDate).append(",").append(endDate).append(")");
@@ -8313,6 +8324,9 @@ public class UserDaoimpl implements UserDao {
 		if (cityList != null && !cityList.isEmpty()) {
 			conditions.append("AND City IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(cityList)
 					.append("', ',')) ");
+		}
+		if(conditionalDate!=null && conditionalDate.equals(20240101)) {
+			conditionalDate=20240131;
 		}
 //	 // Build the final query
 //	 String finalQuery = "\r\n"
