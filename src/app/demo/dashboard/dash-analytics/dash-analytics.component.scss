@@ -423,8 +423,18 @@ input {
 
 ::ng-deep .apexcharts-legend {
   width: 1080px !important;
+  left: 191px !important;
 }
 
 .pointerEvents {
   pointer-events: none;
+}
+.fixedHeader {
+position: fixed;
+top: 51px;
+z-index: 22;
+width: 93%;
+}
+.container {
+  width: 98%;
 }
