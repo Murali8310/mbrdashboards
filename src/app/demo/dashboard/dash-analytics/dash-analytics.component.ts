@@ -20,7 +20,8 @@ type DropdownFlag =
   | 'isDropdownOpenForMonth'
   | 'isDropdownOpenForYear'
   | 'isDropdownOpenForState'
-  | 'isDropdownOpenForCity';
+  | 'isDropdownOpenForCity'|
+  'isDropdownOpenForSelectionType';
 
 interface Brand {
   id: number;
@@ -152,7 +153,9 @@ export default class DashAnalyticsComponent {
       targetElement.closest('#stateDropdown')||
       targetElement.closest('#stateDropdownmenu')||
       targetElement.closest('#cityDropdown') ||
-      targetElement.closest('#cityDropdownmenu')
+      targetElement.closest('#cityDropdownmenu') ||
+      targetElement.closest('#selectionTypeDropdown') ||
+      targetElement.closest('#selectionTypeDropdownMenu')
     ) {
       return; // Ignore clicks on this button and its children
     }
@@ -167,6 +170,9 @@ export default class DashAnalyticsComponent {
 
     if (this.isDropdownOpenForRetailer) {
       this.isDropdownOpenForRetailer = !this.isDropdownOpenForRetailer;
+    }
+    if(this.isDropdownOpenForSelectionType){
+      this.isDropdownOpenForSelectionType = !this.isDropdownOpenForSelectionType;
     }
     if (this.isDropdownOpenForRS) {
       this.isDropdownOpenForRS = !this.isDropdownOpenForRS;
@@ -436,6 +442,15 @@ isDropdownOpenForState = false;
 
 
 
+// to get the selection type for skus.
+
+selectedSelectionType: string | null = 'Order Wise';
+selectedSelectionTypeForUI: string | null = 'Order Wise';
+
+isDropdownOpenForSelectionType = false;
+searchInputValueForSelectionType: string = '';
+filteredSelectionTypesList: string[] = ['Order Wise', 'Value wise'];
+allSelectionTypesList: string[] = ['Order Wise', 'Value wise'];
 
 
 
@@ -1796,6 +1811,7 @@ this.GrowthOverPreviousYear(MonthlyToalOrdaringPayload);
       this.isDropdownOpenForYear = false;
       this.isDropdownOpenForState = false;
       this.isDropdownOpenForCity =false;
+      this.isDropdownOpenForSelectionType = false;
       // Open the selected dropdown
       this[selectedDropdown] = true;
     }
@@ -1999,7 +2015,12 @@ this.GrowthOverPreviousYear(MonthlyToalOrdaringPayload);
             delete MonthlyToalOrdaringPayload.selectedCity;
             delete MonthlyToalOrdaringPayload.selectedState;            
           } else if (this.dashboardService.selectedData === '5') {
-            this.topSKUOrderedOverall(MonthlyToalOrdaringPayload);
+            this.selectedSelectionTypeForUI = this.selectedSelectionType;
+            if(this.selectedSelectionTypeForUI === 'Order Wise'){
+              this.topSKUOrderedOverall(MonthlyToalOrdaringPayload);
+            } else {
+              this.topSKUOrderedOverallpriceWiseFn(MonthlyToalOrdaringPayload);
+            }
           }
         }
 
@@ -4185,6 +4206,7 @@ this.regionwiseGrowthOverPreviousYearMonthly(MonthlyToalOrdaringPayload);
     this.displayShowMore = true;
     this.displayShowMoreForRegionOrderLevel = true;
     this.displayShowMoreForRsOrderLevel = true;
+    this.selectedSelectionTypeForUI ='Order Wise';
   }
 
   // orders by day of the month.
@@ -5263,13 +5285,30 @@ this.regionwiseGrowthOverPreviousYearMonthly(MonthlyToalOrdaringPayload);
   }
 
   // Method to calculate grand total
+  calculateOverallGrandTotalForTotalPrice() {
+    this.overallGrandTotal = this.overallOrders.reduce((acc: any, order: any) => acc + order.totalPrice, 0);
+  }
+
+  
+
+  // Method to calculate grand total
   getRegionGrandTotal() {
     this.overallRegionGrandTotal = this.regionTotals.reduce((acc: any, order: any) => acc + order.totalOrderQty, 0);
   }
 
   // Method to calculate grand total
+  getRegionGrandTotalForTotalPrice() {
+    this.overallRegionGrandTotal = this.regionTotals.reduce((acc: any, order: any) => acc + order.totalPrice, 0);
+  }
+
+  // Method to calculate grand total
   getRSGrandTotal() {
     this.overallRsGrandTotal = this.rsTotals.reduce((acc: any, order: any) => acc + order.totalOrderQty, 0);
+  }
+
+  // Method to calculate grand total
+  getRSGrandTotalFortotalPrice() {
+    this.overallRsGrandTotal = this.rsTotals.reduce((acc: any, order: any) => acc + order.totalPrice, 0);
   }
 
   // This is to get the rs names data.
@@ -6039,7 +6078,11 @@ filterAvailableCities() {
     } else {
       this.overallOrders = this.overallOrders.slice(0, 5);
     }
-    this.calculateOverallGrandTotal();
+    if(this.selectedSelectionTypeForUI === 'Order Wise'){
+      this.calculateOverallGrandTotal();
+    } else {
+      this.calculateOverallGrandTotalForTotalPrice();
+    }
     this.displayShowMore = !this.displayShowMore;
   } 
 
@@ -6049,7 +6092,12 @@ filterAvailableCities() {
     } else {
       this.regionTotals = this.regionTotals.slice(0, 5);
     }
-    this.getRegionGrandTotal();
+    if(this.selectedSelectionTypeForUI === 'Order Wise'){
+      this.getRegionGrandTotal();
+    } else {
+      this.getRegionGrandTotalForTotalPrice();
+    }
+
     this.displayShowMoreForRegionOrderLevel = !this.displayShowMoreForRegionOrderLevel;
   } 
 
@@ -6059,7 +6107,12 @@ filterAvailableCities() {
     } else {
       this.rsTotals = this.rsTotals.slice(0, 5);
     }
-    this.getRSGrandTotal();
+
+    if(this.selectedSelectionTypeForUI === 'Order Wise'){
+      this.getRSGrandTotal();
+    } else {
+      this.getRSGrandTotalFortotalPrice();
+    }
     this.displayShowMoreForRsOrderLevel = !this.displayShowMoreForRsOrderLevel;
   } 
 
@@ -6430,5 +6483,175 @@ public regionwiseGrowthOverPreviousYearMonthly = (MonthlyToalOrdaringPayload?: a
     }
   );
 };
+
+
+// to get the ordercount for top 10 skus
+public topSKUOrderedOverallpriceWiseFn = (MonthlyTotalOrderingPayload?: any) => {
+  this.spinner.show();
+  this.overallOrders = [];
+  this.dashboardService.topSKUOrderedOverallpriceWise(MonthlyTotalOrderingPayload).subscribe(
+    async (response) => {
+      if (response && response.body) {
+        // this.overallOrders = response.body.map((order:any) => {
+        //   // Process productCode to remove slash if present
+        //   let result = order.productCode.includes("/") ? order.productCode.replace("/", "") : order.productCode;
+        //   // Create the image source URL based on the processed productCode
+        //   const selectedImage = `assets/skuimages/${result}.jpg`;
+        //   // Return the modified order with the new imageSrc field
+        //   return {
+        //     ...order,
+        //     imageSrc: selectedImage
+        //   };
+        // });
+
+
+       const overallOrders = await Promise.all(response.body.map(async (order: any) => {
+          // Process productCode to remove slash if present
+          let result = order.productCode.includes("/") ? order.productCode.replace("/P", "") : order.productCode;
+        
+          // Create the image source URL based on the processed productCode
+          const selectedImage = `assets/skuimages/${result}.jpg`;
+        
+          // Check if the image exists
+          const imageExists = await this.dashboardService.checkImageExists(selectedImage);
+        
+          // Return the modified order with the new imageSrc and errorImg field
+          return {
+            ...order,
+            imageSrc: selectedImage,
+            errorImg: !imageExists // If image doesn't exist, set errorImg to true
+          };
+         
+        }));
+
+        this.overAllResponseOrderLevel = overallOrders;
+        this.overallOrders = overallOrders.slice(0, 5);
+        this.selectImage(this.overallOrders[0],0);
+        this.calculateOverallGrandTotalForTotalPrice();
+        this.topSKUOrderedRegionSelectedpriceWiseFn(MonthlyTotalOrderingPayload);
+      }
+    },
+    (error) => {
+      console.error('Error fetching monthly order data:', error);
+      this.spinner.hide();
+    }
+  );
+};
+
+ // this is for getting the top sku qty.
+
+ public topSKUOrderedRegionSelectedpriceWiseFn = (MonthlyTotalOrderingPayload?: any) => {
+  this.spinner.show();
+  this.regionTotals = [];
+  this.dashboardService.topSKUOrderedRegionSelectedpriceWise(MonthlyTotalOrderingPayload).subscribe(
+    async (response) => {
+      if (response && response.body) {
+        this.regionTotals = response.body;
+
+        this.regionTotals = await Promise.all(response.body.map(async (order: any) => {
+          // Process productCode to remove slash if present
+          let result = order.productCode.includes("/") ? order.productCode.replace("/P", "") : order.productCode;
+        
+          // Create the image source URL based on the processed productCode
+          const selectedImage = `assets/skuimages/${result}.jpg`;
+        
+          // Check if the image exists
+          const imageExists = await this.dashboardService.checkImageExists(selectedImage);
+        
+          // Return the modified order with the new imageSrc and errorImg field
+          return {
+            ...order,
+            imageSrc: selectedImage,
+            errorImg: !imageExists // If image doesn't exist, set errorImg to true
+          };
+        }));
+        this.overAllResponseRegionLevel = this.regionTotals;
+        this.regionTotals = this.regionTotals.slice(0,5);
+
+        if(this.regionTotals && this.regionTotals.length>0){
+          this.selectImageforregion(this.regionTotals[0],0);
+        }
+        this.getRegionGrandTotalForTotalPrice();
+        this.topSKUOrderedRSNameSelectedpriceWiseFn(MonthlyTotalOrderingPayload);
+      }
+    },
+    (error) => {
+      console.error('Error fetching monthly order data:', error);
+      this.spinner.hide();
+    }
+  );
+};
+
+// This is to get the rs names data.
+public topSKUOrderedRSNameSelectedpriceWiseFn = (MonthlyTotalOrderingPayload?: any) => {
+  this.spinner.show();
+  this.rsTotals = [];
+  this.dashboardService.topSKUOrderedRSNameSelectedpriceWise(MonthlyTotalOrderingPayload).subscribe(
+    async (response) => {
+      if (response && response.body) {
+
+        
+        this.rsTotals = response.body;
+        this.rsTotals = await Promise.all(response.body.map(async (order: any) => {
+          // Process productCode to remove slash if present
+          let result = order.productCode.includes("/") ? order.productCode.replace("/P", "") : order.productCode;
+        
+          // Create the image source URL based on the processed productCode
+          const selectedImage = `assets/skuimages/${result}.jpg`;
+        
+          // Check if the image exists
+          const imageExists = await this.dashboardService.checkImageExists(selectedImage);
+        
+          // Return the modified order with the new imageSrc and errorImg field
+          return {
+            ...order,
+            imageSrc: selectedImage,
+            errorImg: !imageExists // If image doesn't exist, set errorImg to true
+          };
+        }));
+this.overAllResponseRsOrderLevel = this.rsTotals;
+this.rsTotals = this.rsTotals.slice(0,5);
+
+        if(this.rsTotals && this.rsTotals.length>0){
+          this.selectedImageSourceForRsFn(this.rsTotals[0],0);
+        }
+        this.getRSGrandTotalFortotalPrice();
+      }
+    },
+    (error) => {
+      console.error('Error fetching monthly order data:', error);
+      this.spinner.hide();
+    }
+  );
+};
+
+
+// Toggle dropdown visibility
+toggleDropdownVisibilityForSelectionType() {
+  this.toggleDropdownVisibility1('isDropdownOpenForSelectionType');
+    if (this.isDropdownOpenForSelectionType) {
+      this.filteredSelectionTypesList = this.filteredSelectionTypesList; // Reset filtered list on opening
+    }
+  // this.isDropdownOpenForSelectionType = !this.isDropdownOpenForSelectionType;
+}
+
+// Select a selection type
+selectSelectionType(selectionType: string) {
+  this.selectedSelectionType = selectionType;
+  this.isDropdownOpenForSelectionType = false; // Close the dropdown after selection
+}
+
+// Clear selected selection type
+clearSelectionType(event: MouseEvent) {
+  event.stopPropagation(); // Prevent dropdown from closing immediately
+  this.selectedSelectionType = null;
+}
+
+// Filter available selection types based on search input
+filterAvailableSelectionTypes() {
+  this.filteredSelectionTypesList = this.allSelectionTypesList.filter(type =>
+    type.toLowerCase().includes(this.searchInputValueForSelectionType.toLowerCase())
+  );
+}
 
 }

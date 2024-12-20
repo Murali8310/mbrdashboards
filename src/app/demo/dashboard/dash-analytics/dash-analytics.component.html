@@ -3305,6 +3305,8 @@ text-align: left;"
             </div>
           </div>
           <div class="form-group col-md-3">
+            <div class="row">
+          <div class="form-group col-md-6">
             <label style="margin-top: 10px; float: left; font-weight: 800;" class="form-label">Month</label>
             <div class="multiselect-dropdown" tabindex="0" [class.posinherit]="!isDropdownOpenForMonth">
               <div (click)="toggleDropdownVisibilityForMonth()" class="dropdown-btn" tabindex="-1" id="monthDropdown">
@@ -3341,6 +3343,42 @@ text-align: left;"
               </div>
             </div>
           </div>
+ 
+          <div class="form-group col-md-6">
+            <label style="margin-top: 10px; float: left; font-weight: 800;" class="form-label">Selection Type</label>
+            <div class="multiselect-dropdown" tabindex="0" [class.posinherit]="!isDropdownOpenForSelectionType">
+              <div (click)="toggleDropdownVisibilityForSelectionType()" class="dropdown-btn" tabindex="-1" id="selectionTypeDropdown">
+                <span style="margin-left: 5px;" *ngIf="!selectedSelectionType">Select one</span>
+                <i *ngIf="!selectedSelectionType" class="fas fa-chevron-down"></i>
+                <div *ngIf="selectedSelectionType" class="selected-item-container">
+                  <div class="selected-item">
+                    {{ selectedSelectionType }}
+                    <span class="remove-icon" (click)="clearSelectionType($event)">&#10005;</span>
+                  </div>
+                </div>
+                <span class="dropdown-multiselect--active" style="float:right !important;padding-right:4px">
+                  <span class="dropdown-multiselect__caret"></span>
+                </span>
+              </div>
+              <div class="dropdown-list" *ngIf="isDropdownOpenForSelectionType" id="selectionTypeDropdownMenu">
+                <ul class="item1">
+                  <li class="filter-textbox">
+                    <input type="text" placeholder="Search" [(ngModel)]="searchInputValueForSelectionType" (input)="filterAvailableSelectionTypes()" />
+                  </li>
+                </ul>
+                <ul class="item2" style="max-height: 197px; overflow-y: auto;">
+                  <li *ngFor="let selectionType of filteredSelectionTypesList" class="multiselect-item-checkbox">
+                    <input type="radio" [checked]="selectedSelectionType === selectionType" (change)="selectSelectionType(selectionType)" />
+                    <div style="margin-left: 10px;width: 100%; text-align: left;" (click)="selectSelectionType(selectionType)" [class.selected]="selectedSelectionType === selectionType">{{ selectionType }}</div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div> 
+            </div>
+          </div>
+          
+          
       <div class="form-group col-md-3" style="margin-top: 39px;">
         <button [disabled]="(selectedYears && selectedYears.length <= 0) || (selectedMonths && selectedMonths.length <= 0)" class="btn btn-primary w-100 fw-bold" (click)="prepareSearchData('search')">Search</button>
       <!-- </div> -->
@@ -3351,13 +3389,11 @@ text-align: left;"
           <!-- </div> -->
         <!-- </div> -->
       </div>
-      
-    </div>
-  </div>
+ 
   <!-- order-summary.component.html -->
   <div class="order-summary-container">
 
-    <app-card class="col-md-6 col-xl-12" [cardTitle]="overallOrders && overallOrders.length > 0 ? 'Over All Details Order Level' : 'Over All Details Order Level Loading...'" >
+    <app-card class="col-md-6 col-xl-12" [cardTitle]="overallOrders && overallOrders.length > 0 ? selectedSelectionTypeForUI === 'Order Wise' ? 'Over All Details Order Level' : 'Over All Details Value Level' : 'Over All Details Loading...'" >
       <!-- <h4 *ngIf="dashboardService.selectedData === '5'" style="
       text-align: center;
       /* margin-top: 12px; */
@@ -3370,7 +3406,8 @@ text-align: left;"
             <tr>
               <th>Sr No</th>
               <th>Overall</th>
-              <th>Sum of Order Qty</th>
+              <th *ngIf="selectedSelectionTypeForUI === 'Order Wise'">Count of Order Qty</th>
+              <th *ngIf="selectedSelectionTypeForUI === 'Value wise'">Sum of Order Qty</th>
               <th>Image Details</th>
             </tr>
           </thead>
@@ -3379,7 +3416,8 @@ text-align: left;"
             <tr *ngFor="let order of overallOrders;index as i" style="cursor: pointer;" [class.pointernone]="order.errorImg"  [class.green]="selectedOrder == order.productCode" (click)="selectImage(order,i)">
               <td style="text-align: left;">{{i + 1}}</td>
               <td class="allign-left">{{ order.productCode }}</td>
-              <td class="allign-left">{{ order.totalOrderQty }}</td>
+              <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Order Wise'">{{ order.totalOrderQty }}</td>
+              <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Value wise'">{{ order.totalPrice }}</td>
               <td class="allign-left">
                 <img  *ngIf="!order.errorImg" [src]="order.imageSrc" alt="logo-img" class="logo" style="height: 33px; width: 33px;border-radius: 2px;">
                 <p *ngIf="order.errorImg" style="color: red;">No image found</p>
@@ -3417,7 +3455,7 @@ text-align: left;"
 
     
 
-    <app-card class="col-md-6 col-xl-12" [cardTitle]="regionTotals && regionTotals.length > 0 ? 'Region Wise Details Order Level' : 'Region Wise Details Order Level Loading...'" >
+    <app-card class="col-md-6 col-xl-12" [cardTitle]="regionTotals && regionTotals.length > 0 ? selectedSelectionTypeForUI === 'Order Wise' ? 'Region Wise Details Order Level' : 'Region Wise Details Value Level' : 'Region Wise Details Loading...'" >
       <!-- <h4 *ngIf="dashboardService.selectedData === '5'" style="
       text-align: center;
       /* margin-top: 12px; */
@@ -3430,7 +3468,9 @@ text-align: left;"
             <tr>
               <th>Sr No</th>
               <th>Region</th>
-              <th>Sum of Order Qty</th>
+              <th *ngIf="selectedSelectionTypeForUI === 'Order Wise'">Count of Order Qty</th>
+              <th *ngIf="selectedSelectionTypeForUI === 'Value wise'">Sum of Order Qty</th>
+           
               <th>Image Details</th>
             </tr>
           </thead>
@@ -3438,7 +3478,9 @@ text-align: left;"
             <tr *ngFor="let order of regionTotals;index as rgindx" style="cursor: pointer;" [class.pointernone]="order.errorImg" [class.green]="selectedOrderForRegion == order.productCode" (click)="selectImageforregion(order,rgindx)">
                 <td style="text-align: left;">{{rgindx + 1}}</td>
               <td class="allign-left">{{ order.productCode }}</td>
-              <td class="allign-left">{{ order.totalOrderQty }}</td>
+              <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Order Wise'">{{ order.totalOrderQty }}</td>
+              <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Value wise'">{{ order.totalPrice }}</td>
+            
               <td class="allign-left">
                 <img  *ngIf="!order.errorImg" [src]="order.imageSrc" alt="logo-img" class="logo" style="height: 33px; width: 33px;border-radius: 2px;">
                 <p *ngIf="order.errorImg" style="color: red;">No image found</p>
@@ -3475,7 +3517,7 @@ text-align: left;"
    
 
 
-  <app-card class="col-md-6 col-xl-12" [cardTitle]="rsTotals && rsTotals.length > 0 ? 'RS Wise Details Order Level' : 'RS Wise Details Order Level Loading...'" >
+  <app-card class="col-md-6 col-xl-12" [cardTitle]="rsTotals && rsTotals.length > 0 ? selectedSelectionTypeForUI === 'Order Wise' ? 'RS Wise Details Order Level' : 'RS Wise Details Value Level' : 'RS Wise Details Loading...'" >
     <!-- <h4 *ngIf="dashboardService.selectedData === '5'" style="
     text-align: center;
     /* margin-top: 12px; */
@@ -3489,8 +3531,9 @@ text-align: left;"
         <tr>
           <th>Sr No</th>
           <th>RS</th>
-          <th>Sum of Order Qty</th>
-          <th>Image Details</th>
+          <th *ngIf="selectedSelectionTypeForUI === 'Order Wise'">Count of Order Qty</th>
+          <th *ngIf="selectedSelectionTypeForUI === 'Value wise'">Sum of Order Qty</th>
+        <th>Image Details</th>
         </tr>
       </thead>
       <tbody>
@@ -3499,11 +3542,11 @@ text-align: left;"
             {{rsidx + 1}}
           </td>
           <td class="allign-left">{{ order.productCode }}</td>
-          <td class="allign-left">{{ order.totalOrderQty }}</td>
+          <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Order Wise'">{{ order.totalOrderQty }}</td>
+          <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Value wise'">{{ order.totalPrice }}</td>
           <td class="allign-left">
             <img  *ngIf="!order.errorImg" [src]="order.imageSrc" alt="logo-img" class="logo" style="height: 33px; width: 33px;border-radius: 2px;">
             <p *ngIf="order.errorImg" style="color: red;">No image found</p>
-
           </td>
 
         </tr>
