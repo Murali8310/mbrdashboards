@@ -7232,8 +7232,8 @@ public class UserDaoimpl implements UserDao {
 //					.append(" AND CONVERT(VARCHAR, OrderDate, 112) <= ").append(endDate).append(" ");
 //		}
 
-		if(conditionalDate!=null && conditionalDate.equals(20240101)) {
-			conditionalDate=20240131;
+		if (conditionalDate != null && conditionalDate.equals(20240101)) {
+			conditionalDate = 20240131;
 		}
 		// Assuming the user input for regionList (e.g., "North,South,East,West")
 		// User-provided region list
@@ -7477,13 +7477,12 @@ public class UserDaoimpl implements UserDao {
 
 		String cityList = filter.getSelectedCity();
 		String stateList = filter.getSelectedState();
-		Integer conditionalDate= filter.getStartDate();
-		
-		if(conditionalDate != null && conditionalDate.equals(20240101)) {
-			conditionalDate=20240131;
-		}
-		else {
-			conditionalDate=endDate;
+		Integer conditionalDate = filter.getStartDate();
+
+		if (conditionalDate != null && conditionalDate.equals(20240101)) {
+			conditionalDate = 20240131;
+		} else {
+			conditionalDate = endDate;
 		}
 		// Add startDate and endDate conditions if provided
 //		if (startDate != null && endDate != null) {
@@ -7579,8 +7578,8 @@ public class UserDaoimpl implements UserDao {
 				+ "            ((MS.TotalOrderQty - PYS.PreviousTotalOrderQty) * 1.0 / PYS.PreviousTotalOrderQty) * 100\r\n"
 				+ "    END AS OrderQtyGrowthPercentage\r\n" + "FROM \r\n" + "    MonthlySummary MS\r\n"
 				+ "    JOIN PreviousYearSummary PYS \r\n" + "        ON MS.Month = PYS.Month \r\n"
-				+ "             AND MS.Region = PYS.Region\r\n"
-				+ "ORDER BY\r\n" + "    MS.Region,\r\n" + "    MS.Year,\r\n" + "    MS.Month;\r\n";
+				+ "             AND MS.Region = PYS.Region\r\n" + "ORDER BY\r\n" + "    MS.Region,\r\n"
+				+ "    MS.Year,\r\n" + "    MS.Month;\r\n";
 
 		// Create a native query
 		Query query = entityManager.createNativeQuery(finalQuery);
@@ -8286,14 +8285,14 @@ public class UserDaoimpl implements UserDao {
 		String abmNameList = filter.getAbmName();
 		String rsNameList = filter.getRsNameList();
 		String retailerType = filter.getRetailerType();
-		
+
 		// Extract the year from startDate and endDate
 		Integer startYear = startDate != null ? Integer.parseInt(startDate.toString().substring(0, 4)) : null;
 		Integer endYear = endDate != null ? Integer.parseInt(endDate.toString().substring(0, 4)) : null;
 
 		String cityList = filter.getSelectedCity();
 		String stateList = filter.getSelectedState();
-		Integer conditionalDate=filter.getStartDate();
+		Integer conditionalDate = filter.getStartDate();
 		// Add conditions dynamically
 //		if (startDate != null && endDate != null) {
 //			conditions.append("OrderDate IN (").append(startDate).append(",").append(endDate).append(")");
@@ -8329,8 +8328,8 @@ public class UserDaoimpl implements UserDao {
 			conditions.append("AND City IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(cityList)
 					.append("', ',')) ");
 		}
-		if(conditionalDate!=null && conditionalDate.equals(20240101)) {
-			conditionalDate=20240131;
+		if (conditionalDate != null && conditionalDate.equals(20240101)) {
+			conditionalDate = 20240131;
 		}
 //	 // Build the final query
 //	 String finalQuery = "\r\n"
@@ -8694,7 +8693,7 @@ public class UserDaoimpl implements UserDao {
 //				data.setRetailerGrowth((Integer)row[10]);
 //				data.setPriceGrowthPercentage((BigDecimal) row[11]);
 //				//data.getOrderQtyGrowthPercentage((BigDecimal) row[12]);
-				
+
 //				data.setYear((Integer) row[0]);
 //				data.setMonth((Integer) row[1]);
 //				data.setRegion(row[2].toString());
@@ -8708,21 +8707,20 @@ public class UserDaoimpl implements UserDao {
 //				data.setRetailerGrowth((Integer)row[10]);
 //				data.setPriceGrowthPercentage((BigDecimal) row[11]);
 //				//data.getOrderQtyGrowthPercentage((BigDecimal) row[12]);
-				
+
 				data.setYear((Integer) row[0]);
 				data.setMonth((Integer) row[1]);
 				data.setRegion(row[2].toString());
 				data.setTotalRevenue((BigDecimal) row[3]);
 				data.setTotalQTY((Integer) row[4]);
 				data.setTotalRetailerCode((Integer) row[5]);
-				data.setRetailerGrowthPercentage((BigDecimal)row[6]);
-				data.setPriceGrowth((BigDecimal)row[7]);
+				data.setRetailerGrowthPercentage((BigDecimal) row[6]);
+				data.setPriceGrowth((BigDecimal) row[7]);
 				data.setOrderGrowth(((Integer) row[8]));
 				data.setRetailerGrowth(((Integer) row[9]));
-				data.setPriceGrowthPercentage(((BigDecimal)row[10]));
-				data.setOrderQtyGrowthPercentage(((BigDecimal)row[11]));
-				
-				
+				data.setPriceGrowthPercentage(((BigDecimal) row[10]));
+				data.setOrderQtyGrowthPercentage(((BigDecimal) row[11]));
+
 				regionWiseMonthlyGrowthData.add(data);
 				// Now, filteredData is populated with values
 			}
@@ -8796,9 +8794,9 @@ public class UserDaoimpl implements UserDao {
 					.append("', ',')) ");
 		}
 		// Final query
-		String finalQuery = "SELECT TOP 10  SUM(TotalPrice) AS Totalprice, " + "       ProductCode "
-				+ "FROM MBROrders (NOLOCK) " + "WHERE " + conditions.toString() + "GROUP BY ProductCode "
-				+ "ORDER BY TotalPrice DESC";
+		String finalQuery = "SELECT TOP 10  SUM(TotalPrice) AS Totalprice, COUNT(orderQTY) AS TotalOrderQty"
+				+ ", ProductCode " + "FROM MBROrders (NOLOCK) " + "WHERE " + conditions.toString()
+				+ "GROUP BY ProductCode " + "ORDER BY TotalOrderQty DESC";
 
 		// Execute query and map results
 		Query query = entityManager.createNativeQuery(finalQuery);
@@ -8809,7 +8807,8 @@ public class UserDaoimpl implements UserDao {
 			for (Object[] row : result) {
 				OutputTopSKUOrderedOverall data = new OutputTopSKUOrderedOverall();
 				data.setTotalPrice((BigDecimal) row[0]);
-				data.setProductCode(row[1].toString());
+				data.setProductCode(row[2].toString());
+				data.setTotalOrderQty((Integer) row[1]);
 				topSKUOrderedOverall.add(data);
 			}
 		} catch (Exception e) {
@@ -8866,9 +8865,9 @@ public class UserDaoimpl implements UserDao {
 					.append("', ',')) ");
 		}
 		// Final query
-		String finalQuery = "SELECT TOP 10 SUM(TotalPrice) AS TotalPrice, " + "       ProductCode "
-				+ "FROM MBROrders (NOLOCK) " + "WHERE " + conditions.toString() + "GROUP BY ProductCode "
-				+ "ORDER BY TotalPrice DESC";
+		String finalQuery = "SELECT TOP 10 SUM(TotalPrice) AS TotalPrice,  COUNT(orderQTY) AS TotalOrderQty"
+				+ ", ProductCode " + "FROM MBROrders (NOLOCK) " + "WHERE " + conditions.toString()
+				+ "GROUP BY ProductCode " + "ORDER BY TotalOrderQty DESC";
 
 		// Execute query and map results
 		Query query = entityManager.createNativeQuery(finalQuery);
@@ -8879,7 +8878,8 @@ public class UserDaoimpl implements UserDao {
 			for (Object[] row : result) {
 				OutputTopSKUOrderedOverall data = new OutputTopSKUOrderedOverall();
 				data.setTotalPrice((BigDecimal) row[0]);
-				data.setProductCode(row[1].toString());
+				data.setProductCode(row[2].toString());
+				data.setTotalOrderQty((Integer) row[1]);
 				topSKUOrderedOverall.add(data);
 			}
 		} catch (Exception e) {
@@ -8945,9 +8945,9 @@ public class UserDaoimpl implements UserDao {
 					.append("', ',')) ");
 		}
 		// Final query
-		String finalQuery = "SELECT TOP 10 SUM(TotalPrice) AS TotalPrice, " + "       ProductCode "
-				+ "FROM MBROrders (NOLOCK) " + "WHERE " + conditions.toString() + "GROUP BY ProductCode "
-				+ "ORDER BY TotalPrice DESC";
+		String finalQuery = "SELECT TOP 10 SUM(TotalPrice) AS TotalPrice, COUNT(orderQTY) AS TotalOrderQty"
+				+ ", ProductCode " + "FROM MBROrders (NOLOCK) " + "WHERE " + conditions.toString()
+				+ "GROUP BY ProductCode " + "ORDER BY TotalOrderQty DESC";
 
 		// Execute query and map results
 		Query query = entityManager.createNativeQuery(finalQuery);
@@ -8958,6 +8958,71 @@ public class UserDaoimpl implements UserDao {
 			for (Object[] row : result) {
 				OutputTopSKUOrderedOverall data = new OutputTopSKUOrderedOverall();
 				data.setTotalPrice((BigDecimal) row[0]);
+				data.setProductCode(row[2].toString());
+				data.setTotalOrderQty((Integer) row[1]);
+				topSKUOrderedOverall.add(data);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return topSKUOrderedOverall;
+	}
+
+	@Override
+	public List<OutputTopSKUOrderedOverall> topRetailersOverall(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		List<OutputTopSKUOrderedOverall> topSKUOrderedOverall = new ArrayList<>();
+
+		StringBuilder conditions = new StringBuilder();
+		// Extract filter criteria
+		Integer startDate = filter.getStartDate(); // e.g., "20240401"
+		Integer endDate = filter.getEndDate(); // e.g., "20240430"
+		String brandList = filter.getBrandList(); // e.g., "EAST"
+		String retailerType = filter.getRetailerType(); // e.g., "Regular"
+		String cityList = filter.getSelectedCity();
+		String stateList = filter.getSelectedState();
+		// String userInputTop = filter.getSize();
+
+		// Build dynamic conditions
+		if (startDate != null && endDate != null) {
+			conditions.append("OrderDate BETWEEN ").append(startDate).append(" AND ").append(endDate).append(" ");
+		}
+
+		if (retailerType != null && !retailerType.isEmpty()) {
+			conditions.append("AND RetailerCode LIKE '").append(retailerType.equals("IDD") ? "9%" : "1%").append("' ");
+		}
+
+		if (brandList != null && !brandList.isEmpty()) {
+			conditions.append("AND Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(brandList)
+					.append("', ',')) ");
+		}
+
+//		if (userInputTop == null || userInputTop == "" || userInputTop.isBlank() || userInputTop.isEmpty()) {
+//			userInputTop = "5";
+//		}
+
+		if (stateList != null && !stateList.isEmpty()) {
+			conditions.append("AND State IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(stateList)
+					.append("', ',')) ");
+		}
+
+		if (cityList != null && !cityList.isEmpty()) {
+			conditions.append("AND City IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(cityList)
+					.append("', ',')) ");
+		}
+		// Final query
+		String finalQuery = "SELECT TOP 10 COUNT(orderQTY) AS TotalOrderQty, RetailerName FROM MBROrders (NOLOCK)"
+				+ "WHERE " + conditions.toString() + "GROUP BY RetailerName ORDER BY TotalOrderQty DESC";
+
+		// Execute query and map results
+		Query query = entityManager.createNativeQuery(finalQuery);
+
+		try {
+			List<Object[]> result = query.getResultList();
+
+			for (Object[] row : result) {
+				OutputTopSKUOrderedOverall data = new OutputTopSKUOrderedOverall();
+				data.setTotalOrderQty((Integer) row[0]);
 				data.setProductCode(row[1].toString());
 				topSKUOrderedOverall.add(data);
 			}
@@ -8966,4 +9031,363 @@ public class UserDaoimpl implements UserDao {
 		}
 		return topSKUOrderedOverall;
 	}
+
+	@Override
+	public List<OutputTopSKUOrderedOverall> topRetailersRegionSelected(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		List<OutputTopSKUOrderedOverall> topSKUOrderedOverall = new ArrayList<>();
+
+		StringBuilder conditions = new StringBuilder();
+		// Extract filter criteria
+		Integer startDate = filter.getStartDate(); // e.g., "20240401"
+		Integer endDate = filter.getEndDate(); // e.g., "20240430"
+		String brandList = filter.getBrandList(); // e.g., "EAST"
+		String retailerType = filter.getRetailerType(); // e.g., "Regular"
+		String regionList = filter.getRegionList();// e.g., "EAST, WEST"
+
+		String cityList = filter.getSelectedCity();
+		String stateList = filter.getSelectedState();
+
+		// String userInputTop = filter.getSize();
+
+		// Build dynamic conditions
+		if (startDate != null && endDate != null) {
+			conditions.append("OrderDate BETWEEN ").append(startDate).append(" AND ").append(endDate).append(" ");
+		}
+		if (retailerType != null && !retailerType.isEmpty()) {
+			conditions.append("AND RetailerCode LIKE '").append(retailerType.equals("IDD") ? "9%" : "1%").append("' ");
+		}
+
+		if (brandList != null && !brandList.isEmpty()) {
+			conditions.append("AND Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(brandList)
+					.append("', ',')) ");
+		}
+		if (regionList != null && !regionList.isEmpty()) {
+			conditions.append("AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(regionList)
+					.append("', ',')) ");
+		}
+
+//		if (userInputTop == null || userInputTop == "" || userInputTop.isBlank() || userInputTop.isEmpty()) {
+//			userInputTop = "5";
+//		}
+		if (stateList != null && !stateList.isEmpty()) {
+			conditions.append("AND State IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(stateList)
+					.append("', ',')) ");
+		}
+
+		if (cityList != null && !cityList.isEmpty()) {
+			conditions.append("AND City IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(cityList)
+					.append("', ',')) ");
+		}
+		// Final query
+		String finalQuery = "SELECT TOP 10 COUNT(orderQTY) AS TotalOrderQty, RetailerName FROM MBROrders (NOLOCK)"
+				+ "WHERE " + conditions.toString() + "GROUP BY RetailerName ORDER BY TotalOrderQty DESC";
+
+		// Execute query and map results
+		Query query = entityManager.createNativeQuery(finalQuery);
+
+		try {
+			List<Object[]> result = query.getResultList();
+
+			for (Object[] row : result) {
+				OutputTopSKUOrderedOverall data = new OutputTopSKUOrderedOverall();
+				data.setTotalOrderQty((Integer) row[0]);
+				data.setProductCode(row[1].toString());
+				topSKUOrderedOverall.add(data);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return topSKUOrderedOverall;
+	}
+
+	@Override
+	public List<OutputTopSKUOrderedOverall> topRetailersRSNameSelected(MonthlyDataFilter filter) {
+		List<OutputTopSKUOrderedOverall> topSKUOrderedOverall = new ArrayList<>();
+
+		StringBuilder conditions = new StringBuilder();
+		// Extract filter criteria
+		Integer startDate = filter.getStartDate(); // e.g., "20240401"
+		Integer endDate = filter.getEndDate(); // e.g., "20240430"
+		String brandList = filter.getBrandList(); // e.g., "EAST"
+		String retailerType = filter.getRetailerType(); // e.g., "Regular"
+		String regionList = filter.getRegionList();// e.g., "EAST, WEST"
+		String rsList = filter.getRsNameList();
+
+		String cityList = filter.getSelectedCity();
+		String stateList = filter.getSelectedState();
+		// String userInputTop = filter.getSize();
+
+		// Build dynamic conditions
+		if (startDate != null && endDate != null) {
+			conditions.append("OrderDate BETWEEN ").append(startDate).append(" AND ").append(endDate).append(" ");
+		}
+		if (retailerType != null && !retailerType.isEmpty()) {
+			conditions.append("AND RetailerCode LIKE '").append(retailerType.equals("IDD") ? "9%" : "1%").append("' ");
+		}
+
+		if (brandList != null && !brandList.isEmpty()) {
+			conditions.append("AND Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(brandList)
+					.append("', ',')) ");
+		}
+		if (regionList != null && !regionList.isEmpty()) {
+			conditions.append("AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(regionList)
+					.append("', ',')) ");
+		}
+//		if (regionList != null && !regionList.isEmpty()) {
+//			conditions.append("AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(regionList)
+//					.append("', ',')) ");
+//		}
+		if (rsList != null && !rsList.isEmpty()) {
+			conditions.append("AND RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(rsList)
+					.append("', ',')) ");
+		}
+
+//		if (userInputTop == null || userInputTop == "" || userInputTop.isBlank() || userInputTop.isEmpty()) {
+//			userInputTop = "5";
+//		}
+
+		if (stateList != null && !stateList.isEmpty()) {
+			conditions.append("AND State IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(stateList)
+					.append("', ',')) ");
+		}
+
+		if (cityList != null && !cityList.isEmpty()) {
+			conditions.append("AND City IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(cityList)
+					.append("', ',')) ");
+		}
+		// Final query
+		String finalQuery = "SELECT TOP 10 COUNT(orderQTY) AS TotalOrderQty, RetailerName FROM MBROrders (NOLOCK)"
+				+ "WHERE " + conditions.toString() + "GROUP BY RetailerName ORDER BY TotalOrderQty DESC";
+
+		// Execute query and map results
+		Query query = entityManager.createNativeQuery(finalQuery);
+
+		try {
+			List<Object[]> result = query.getResultList();
+
+			for (Object[] row : result) {
+				OutputTopSKUOrderedOverall data = new OutputTopSKUOrderedOverall();
+				data.setTotalOrderQty((Integer) row[0]);
+				data.setProductCode(row[1].toString());
+				topSKUOrderedOverall.add(data);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return topSKUOrderedOverall;
+	}
+
+	@Override
+	public List<OutputTopSKUOrderedOverall> topRetailersOverallsum(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		List<OutputTopSKUOrderedOverall> topSKUOrderedOverall = new ArrayList<>();
+
+		StringBuilder conditions = new StringBuilder();
+		// Extract filter criteria
+		Integer startDate = filter.getStartDate(); // e.g., "20240401"
+		Integer endDate = filter.getEndDate(); // e.g., "20240430"
+		String brandList = filter.getBrandList(); // e.g., "EAST"
+		String retailerType = filter.getRetailerType(); // e.g., "Regular"
+		String cityList = filter.getSelectedCity();
+		String stateList = filter.getSelectedState();
+		// String userInputTop = filter.getSize();
+
+		// Build dynamic conditions
+		if (startDate != null && endDate != null) {
+			conditions.append("OrderDate BETWEEN ").append(startDate).append(" AND ").append(endDate).append(" ");
+		}
+
+		if (retailerType != null && !retailerType.isEmpty()) {
+			conditions.append("AND RetailerCode LIKE '").append(retailerType.equals("IDD") ? "9%" : "1%").append("' ");
+		}
+
+		if (brandList != null && !brandList.isEmpty()) {
+			conditions.append("AND Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(brandList)
+					.append("', ',')) ");
+		}
+
+//				if (userInputTop == null || userInputTop == "" || userInputTop.isBlank() || userInputTop.isEmpty()) {
+//					userInputTop = "5";
+//				}
+
+		if (stateList != null && !stateList.isEmpty()) {
+			conditions.append("AND State IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(stateList)
+					.append("', ',')) ");
+		}
+
+		if (cityList != null && !cityList.isEmpty()) {
+			conditions.append("AND City IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(cityList)
+					.append("', ',')) ");
+		}
+		// Final query
+		String finalQuery = "SELECT TOP 10 SUM(orderQTY) AS TotalOrderQty, RetailerName FROM MBROrders (NOLOCK)"
+				+ "WHERE " + conditions.toString() + "GROUP BY RetailerName ORDER BY TotalOrderQty DESC";
+
+		// Execute query and map results
+		Query query = entityManager.createNativeQuery(finalQuery);
+
+		try {
+			List<Object[]> result = query.getResultList();
+
+			for (Object[] row : result) {
+				OutputTopSKUOrderedOverall data = new OutputTopSKUOrderedOverall();
+				data.setTotalOrderQty((Integer) row[0]);
+				data.setProductCode(row[1].toString());
+				topSKUOrderedOverall.add(data);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return topSKUOrderedOverall;
+	}
+
+
+	@Override
+	public List<OutputTopSKUOrderedOverall> topRetailersRegionSelectedsum(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		List<OutputTopSKUOrderedOverall> topSKUOrderedOverall = new ArrayList<>();
+
+		StringBuilder conditions = new StringBuilder();
+		// Extract filter criteria
+		Integer startDate = filter.getStartDate(); // e.g., "20240401"
+		Integer endDate = filter.getEndDate(); // e.g., "20240430"
+		String brandList = filter.getBrandList(); // e.g., "EAST"
+		String retailerType = filter.getRetailerType(); // e.g., "Regular"
+		String regionList = filter.getRegionList();// e.g., "EAST, WEST"
+
+		String cityList = filter.getSelectedCity();
+		String stateList = filter.getSelectedState();
+
+		// String userInputTop = filter.getSize();
+
+		// Build dynamic conditions
+		if (startDate != null && endDate != null) {
+			conditions.append("OrderDate BETWEEN ").append(startDate).append(" AND ").append(endDate).append(" ");
+		}
+		if (retailerType != null && !retailerType.isEmpty()) {
+			conditions.append("AND RetailerCode LIKE '").append(retailerType.equals("IDD") ? "9%" : "1%").append("' ");
+		}
+
+		if (brandList != null && !brandList.isEmpty()) {
+			conditions.append("AND Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(brandList)
+					.append("', ',')) ");
+		}
+		if (regionList != null && !regionList.isEmpty()) {
+			conditions.append("AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(regionList)
+					.append("', ',')) ");
+		}
+
+//		if (userInputTop == null || userInputTop == "" || userInputTop.isBlank() || userInputTop.isEmpty()) {
+//			userInputTop = "5";
+//		}
+		if (stateList != null && !stateList.isEmpty()) {
+			conditions.append("AND State IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(stateList)
+					.append("', ',')) ");
+		}
+
+		if (cityList != null && !cityList.isEmpty()) {
+			conditions.append("AND City IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(cityList)
+					.append("', ',')) ");
+		}
+		// Final query
+		String finalQuery = "SELECT TOP 10 SUM(orderQTY) AS TotalOrderQty, RetailerName FROM MBROrders (NOLOCK)"
+				+ "WHERE " + conditions.toString() + "GROUP BY RetailerName ORDER BY TotalOrderQty DESC";
+
+		// Execute query and map results
+		Query query = entityManager.createNativeQuery(finalQuery);
+
+		try {
+			List<Object[]> result = query.getResultList();
+
+			for (Object[] row : result) {
+				OutputTopSKUOrderedOverall data = new OutputTopSKUOrderedOverall();
+				data.setTotalOrderQty((Integer) row[0]);
+				data.setProductCode(row[1].toString());
+				topSKUOrderedOverall.add(data);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return topSKUOrderedOverall;
+	}
+
+	@Override
+	public List<OutputTopSKUOrderedOverall> topRetailersRSNameSelectedsum(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		List<OutputTopSKUOrderedOverall> topSKUOrderedOverall = new ArrayList<>();
+
+		StringBuilder conditions = new StringBuilder();
+		// Extract filter criteria
+		Integer startDate = filter.getStartDate(); // e.g., "20240401"
+		Integer endDate = filter.getEndDate(); // e.g., "20240430"
+		String brandList = filter.getBrandList(); // e.g., "EAST"
+		String retailerType = filter.getRetailerType(); // e.g., "Regular"
+		String regionList = filter.getRegionList();// e.g., "EAST, WEST"
+		String rsList = filter.getRsNameList();
+
+		String cityList = filter.getSelectedCity();
+		String stateList = filter.getSelectedState();
+		// String userInputTop = filter.getSize();
+
+		// Build dynamic conditions
+		if (startDate != null && endDate != null) {
+			conditions.append("OrderDate BETWEEN ").append(startDate).append(" AND ").append(endDate).append(" ");
+		}
+		if (retailerType != null && !retailerType.isEmpty()) {
+			conditions.append("AND RetailerCode LIKE '").append(retailerType.equals("IDD") ? "9%" : "1%").append("' ");
+		}
+
+		if (brandList != null && !brandList.isEmpty()) {
+			conditions.append("AND Brand IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(brandList)
+					.append("', ',')) ");
+		}
+		if (regionList != null && !regionList.isEmpty()) {
+			conditions.append("AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(regionList)
+					.append("', ',')) ");
+		}
+//		if (regionList != null && !regionList.isEmpty()) {
+//			conditions.append("AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(regionList)
+//					.append("', ',')) ");
+//		}
+		if (rsList != null && !rsList.isEmpty()) {
+			conditions.append("AND RSName IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(rsList)
+					.append("', ',')) ");
+		}
+
+//		if (userInputTop == null || userInputTop == "" || userInputTop.isBlank() || userInputTop.isEmpty()) {
+//			userInputTop = "5";
+//		}
+
+		if (stateList != null && !stateList.isEmpty()) {
+			conditions.append("AND State IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(stateList)
+					.append("', ',')) ");
+		}
+
+		if (cityList != null && !cityList.isEmpty()) {
+			conditions.append("AND City IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(cityList)
+					.append("', ',')) ");
+		}
+		// Final query
+		String finalQuery = "SELECT TOP 10 SUM(orderQTY) AS TotalOrderQty, RetailerName FROM MBROrders (NOLOCK)"
+				+ "WHERE " + conditions.toString() + "GROUP BY RetailerName ORDER BY TotalOrderQty DESC";
+
+		// Execute query and map results
+		Query query = entityManager.createNativeQuery(finalQuery);
+
+		try {
+			List<Object[]> result = query.getResultList();
+
+			for (Object[] row : result) {
+				OutputTopSKUOrderedOverall data = new OutputTopSKUOrderedOverall();
+				data.setTotalOrderQty((Integer) row[0]);
+				data.setProductCode(row[1].toString());
+				topSKUOrderedOverall.add(data);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return topSKUOrderedOverall;
+	}
+
 }

@@ -3455,7 +3455,140 @@ public List<OutputForMontlyFilter> MonthlyTrendRegular(HttpServletRequest reques
 
 	
 	
+	/*                                */
 	
+	
+	@RequestMapping(value = "topRetailersOverallcount", method = RequestMethod.POST)
+	public List<OutputTopSKUOrderedOverall> topRetailersOverall(HttpServletRequest request, HttpServletResponse response,
+			RedirectAttributes redirect, Model model, @RequestBody MonthlyDataFilter filter) {
+		List<OutputTopSKUOrderedOverall> result = new ArrayList<>();
+
+		HttpSession session = request.getSession();
+		String loginId = "";
+//			try {
+//				Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+//				loginId = (String) userMap.get("login_id");
+//			} catch (Exception er) {
+//				er.printStackTrace();
+//				//return new StringBuilder("Session is timeout, <a href='login' >click here</a> to login");
+//			}
+
+		result = userService.topRetailersOverall(filter);
+		redirect.addFlashAttribute("MESSAGE", result);
+		model.addAttribute("MESSAGE", result);
+		return result;
+	}
+	
+	
+	@RequestMapping(value = "topRetailersRegionSelectedcount", method = RequestMethod.POST)
+	public List<OutputTopSKUOrderedOverall> topRetailersRegionSelected(HttpServletRequest request, HttpServletResponse response,
+			RedirectAttributes redirect, Model model, @RequestBody MonthlyDataFilter filter) {
+		List<OutputTopSKUOrderedOverall> result = new ArrayList<>();
+
+		HttpSession session = request.getSession();
+		String loginId = "";
+//			try {
+//				Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+//				loginId = (String) userMap.get("login_id");
+//			} catch (Exception er) {
+//				er.printStackTrace();
+//				//return new StringBuilder("Session is timeout, <a href='login' >click here</a> to login");
+//			}
+
+		result = userService.topRetailersRegionSelected(filter);
+		redirect.addFlashAttribute("MESSAGE", result);
+		model.addAttribute("MESSAGE", result);
+		return result;
+	}
+	
+	
+	@RequestMapping(value = "topRetailersRSNameSelectedcount", method = RequestMethod.POST)
+	public List<OutputTopSKUOrderedOverall> topRetailersRSNameSelected(HttpServletRequest request, HttpServletResponse response,
+			RedirectAttributes redirect, Model model, @RequestBody MonthlyDataFilter filter) {
+		List<OutputTopSKUOrderedOverall> result = new ArrayList<>();
+
+		HttpSession session = request.getSession();
+		String loginId = "";
+//			try {
+//				Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+//				loginId = (String) userMap.get("login_id");
+//			} catch (Exception er) {
+//				er.printStackTrace();
+//				//return new StringBuilder("Session is timeout, <a href='login' >click here</a> to login");
+//			}
+
+		result = userService.topRetailersRSNameSelected(filter);
+		redirect.addFlashAttribute("MESSAGE", result);
+		model.addAttribute("MESSAGE", result);
+		return result;
+	}
+	
+	/*                                */
+	@RequestMapping(value = "topRetailersOverallsum", method = RequestMethod.POST)
+	public List<OutputTopSKUOrderedOverall> topRetailersOverallsum(HttpServletRequest request, HttpServletResponse response,
+			RedirectAttributes redirect, Model model, @RequestBody MonthlyDataFilter filter) {
+		List<OutputTopSKUOrderedOverall> result = new ArrayList<>();
+
+		HttpSession session = request.getSession();
+		String loginId = "";
+//			try {
+//				Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+//				loginId = (String) userMap.get("login_id");
+//			} catch (Exception er) {
+//				er.printStackTrace();
+//				//return new StringBuilder("Session is timeout, <a href='login' >click here</a> to login");
+//			}
+
+		result = userService.topRetailersOverallsum(filter);
+		redirect.addFlashAttribute("MESSAGE", result);
+		model.addAttribute("MESSAGE", result);
+		return result;
+	}
+	
+	
+	@RequestMapping(value = "topRetailersRegionSelectedsum", method = RequestMethod.POST)
+	public List<OutputTopSKUOrderedOverall> topRetailersRegionSelectedsum(HttpServletRequest request, HttpServletResponse response,
+			RedirectAttributes redirect, Model model, @RequestBody MonthlyDataFilter filter) {
+		List<OutputTopSKUOrderedOverall> result = new ArrayList<>();
+
+		HttpSession session = request.getSession();
+		String loginId = "";
+//			try {
+//				Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+//				loginId = (String) userMap.get("login_id");
+//			} catch (Exception er) {
+//				er.printStackTrace();
+//				//return new StringBuilder("Session is timeout, <a href='login' >click here</a> to login");
+//			}
+
+		result = userService.topRetailersRegionSelectedsum(filter);
+		redirect.addFlashAttribute("MESSAGE", result);
+		model.addAttribute("MESSAGE", result);
+		return result;
+	}
+	
+	
+	@RequestMapping(value = "topRetailersRSNameSelectedsum", method = RequestMethod.POST)
+	public List<OutputTopSKUOrderedOverall> topRetailersRSNameSelectedsum(HttpServletRequest request, HttpServletResponse response,
+			RedirectAttributes redirect, Model model, @RequestBody MonthlyDataFilter filter) {
+		List<OutputTopSKUOrderedOverall> result = new ArrayList<>();
+
+		HttpSession session = request.getSession();
+		String loginId = "";
+//			try {
+//				Map<String, Object> userMap = (Map) session.getAttribute("userMap");
+//				loginId = (String) userMap.get("login_id");
+//			} catch (Exception er) {
+//				er.printStackTrace();
+//				//return new StringBuilder("Session is timeout, <a href='login' >click here</a> to login");
+//			}
+
+		result = userService.topRetailersRSNameSelectedsum(filter);
+		redirect.addFlashAttribute("MESSAGE", result);
+		model.addAttribute("MESSAGE", result);
+		return result;
+	}
+	/*          */
 	
 	
 }

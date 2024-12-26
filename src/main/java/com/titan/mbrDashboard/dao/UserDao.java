@@ -387,5 +387,23 @@ public interface UserDao {
 	List<OutputTopSKUOrderedOverall> topSKUOrderedRSNameSelectedpriceWise(MonthlyDataFilter filter);
 
 
+	List<OutputTopSKUOrderedOverall> topRetailersOverall(MonthlyDataFilter filter);
+
+
+	List<OutputTopSKUOrderedOverall> topRetailersRegionSelected(MonthlyDataFilter filter);
+
+
+	List<OutputTopSKUOrderedOverall> topRetailersRSNameSelected(MonthlyDataFilter filter);
+
+
+	List<OutputTopSKUOrderedOverall> topRetailersOverallsum(MonthlyDataFilter filter);
+
+
+	List<OutputTopSKUOrderedOverall> topRetailersRegionSelectedsum(MonthlyDataFilter filter);
+
+
+	List<OutputTopSKUOrderedOverall> topRetailersRSNameSelectedsum(MonthlyDataFilter filter);
+
+
 
 }

@@ -1319,4 +1319,41 @@ public class UserServiceimpl implements Userservice {
 		// TODO Auto-generated method stub
 		return userDao.topSKUOrderedRSNameSelectedpriceWise(filter);
 	}
+
+	@Override
+	public List<OutputTopSKUOrderedOverall> topRetailersOverall(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		return userDao.topRetailersOverall(filter);
+	}
+
+	@Override
+	public List<OutputTopSKUOrderedOverall> topRetailersRegionSelected(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		return userDao.topRetailersRegionSelected(filter);
+	}
+
+	@Override
+	public List<OutputTopSKUOrderedOverall> topRetailersRSNameSelected(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		return userDao.topRetailersRSNameSelected(filter);
+
+	}
+
+	@Override
+	public List<OutputTopSKUOrderedOverall> topRetailersOverallsum(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		return userDao.topRetailersOverallsum(filter);
+	}
+
+	@Override
+	public List<OutputTopSKUOrderedOverall> topRetailersRegionSelectedsum(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		return userDao.topRetailersRegionSelectedsum(filter);
+	}
+
+	@Override
+	public List<OutputTopSKUOrderedOverall> topRetailersRSNameSelectedsum(MonthlyDataFilter filter) {
+		// TODO Auto-generated method stub
+		return userDao.topRetailersRSNameSelectedsum(filter);
+	}
 }
