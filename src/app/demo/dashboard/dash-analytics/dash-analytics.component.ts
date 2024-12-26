@@ -5286,7 +5286,7 @@ this.regionwiseGrowthOverPreviousYearMonthly(MonthlyToalOrdaringPayload);
 
   // Method to calculate grand total
   calculateOverallGrandTotalForTotalPrice() {
-    this.overallGrandTotal = this.overallOrders.reduce((acc: any, order: any) => acc + order.totalPrice, 0);
+    this.overallGrandTotal = this.overallOrders.reduce((acc: any, order: any) => acc + order.totalOrderQty, 0);
   }
 
   
@@ -5298,7 +5298,7 @@ this.regionwiseGrowthOverPreviousYearMonthly(MonthlyToalOrdaringPayload);
 
   // Method to calculate grand total
   getRegionGrandTotalForTotalPrice() {
-    this.overallRegionGrandTotal = this.regionTotals.reduce((acc: any, order: any) => acc + order.totalPrice, 0);
+    this.overallRegionGrandTotal = this.regionTotals.reduce((acc: any, order: any) => acc + order.totalOrderQty, 0);
   }
 
   // Method to calculate grand total
@@ -5308,7 +5308,7 @@ this.regionwiseGrowthOverPreviousYearMonthly(MonthlyToalOrdaringPayload);
 
   // Method to calculate grand total
   getRSGrandTotalFortotalPrice() {
-    this.overallRsGrandTotal = this.rsTotals.reduce((acc: any, order: any) => acc + order.totalPrice, 0);
+    this.overallRsGrandTotal = this.rsTotals.reduce((acc: any, order: any) => acc + order.totalOrderQty, 0);
   }
 
   // This is to get the rs names data.

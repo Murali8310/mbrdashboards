@@ -3417,7 +3417,7 @@ text-align: left;"
               <td style="text-align: left;">{{i + 1}}</td>
               <td class="allign-left">{{ order.productCode }}</td>
               <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Order Wise'">{{ order.totalOrderQty }}</td>
-              <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Value wise'">{{ order.totalPrice }}</td>
+              <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Value wise'">{{ order.totalOrderQty }}</td>
               <td class="allign-left">
                 <img  *ngIf="!order.errorImg" [src]="order.imageSrc" alt="logo-img" class="logo" style="height: 33px; width: 33px;border-radius: 2px;">
                 <p *ngIf="order.errorImg" style="color: red;">No image found</p>
@@ -3479,7 +3479,7 @@ text-align: left;"
                 <td style="text-align: left;">{{rgindx + 1}}</td>
               <td class="allign-left">{{ order.productCode }}</td>
               <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Order Wise'">{{ order.totalOrderQty }}</td>
-              <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Value wise'">{{ order.totalPrice }}</td>
+              <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Value wise'">{{ order.totalOrderQty }}</td>
             
               <td class="allign-left">
                 <img  *ngIf="!order.errorImg" [src]="order.imageSrc" alt="logo-img" class="logo" style="height: 33px; width: 33px;border-radius: 2px;">
@@ -3543,7 +3543,7 @@ text-align: left;"
           </td>
           <td class="allign-left">{{ order.productCode }}</td>
           <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Order Wise'">{{ order.totalOrderQty }}</td>
-          <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Value wise'">{{ order.totalPrice }}</td>
+          <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Value wise'">{{ order.totalOrderQty }}</td>
           <td class="allign-left">
             <img  *ngIf="!order.errorImg" [src]="order.imageSrc" alt="logo-img" class="logo" style="height: 33px; width: 33px;border-radius: 2px;">
             <p *ngIf="order.errorImg" style="color: red;">No image found</p>
