@@ -6950,8 +6950,8 @@ public class UserDaoimpl implements UserDao {
 	@Override
 	public List<OutputPercentageofOrdersbyDayoftheMonth> percentageofOrdersbyDayoftheMonth(MonthlyDataFilter filter) {
 		List<OutputPercentageofOrdersbyDayoftheMonth> percentageofOrdersbyDayoftheMonth = new ArrayList<>();
-		String storedProcedureCall = "EXEC PercentageofOrdersbyDayoftheMonth @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
-//		String storedProcedureCall = "EXEC PercentageofOrdersbyDayoftheMonth @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType, @CityList=:cityList, @StateList= :stateList";
+//String storedProcedureCall = "EXEC PercentageofOrdersbyDayoftheMonth @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
+		String storedProcedureCall = "EXEC PercentageofOrdersbyDayoftheMonth @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType, @CityList=:cityList, @StateList= :stateList";
 
 		// Create a native query
 		Query query = entityManager.createNativeQuery(storedProcedureCall);
@@ -6965,8 +6965,8 @@ public class UserDaoimpl implements UserDao {
 		query.setParameter("abmName", filter.getAbmName());
 		query.setParameter("retailerType", filter.getRetailerType());
 		query.setParameter("retailerType", filter.getRetailerType());
-//		query.setParameter("cityList", filter.getSelectedCity());
-//		query.setParameter("stateList", filter.getSelectedState());
+		query.setParameter("cityList", filter.getSelectedCity());
+		query.setParameter("stateList", filter.getSelectedState());
 
 		// Execute the query to invoke the stored procedure
 		try {
@@ -6994,8 +6994,8 @@ public class UserDaoimpl implements UserDao {
 			MonthlyDataFilter filter) {
 		// TODO Auto-generated method stub
 		List<OutputPercentageofOrdersbyWeekdayorWeekend> percentageofOrdersbyWeekdayorWeekend = new ArrayList<>();
-		String storedProcedureCall = "EXEC PercentageofOrdersbyWeekdayorWeekend @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
-
+		//String storedProcedureCall = "EXEC PercentageofOrdersbyWeekdayorWeekend @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
+		String storedProcedureCall = "EXEC PercentageofOrdersbyWeekdayorWeekend @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType, @CityList=:cityList, @StateList= :stateList";
 		// Create a native query
 		Query query = entityManager.createNativeQuery(storedProcedureCall);
 
@@ -7007,6 +7007,8 @@ public class UserDaoimpl implements UserDao {
 		query.setParameter("rsNameList", filter.getRsNameList()); // @RSNameList (e.g., '' or some value)
 		query.setParameter("abmName", filter.getAbmName());
 		query.setParameter("retailerType", filter.getRetailerType());
+		query.setParameter("cityList", filter.getSelectedCity());
+		query.setParameter("stateList", filter.getSelectedState());
 		// Execute the query to invoke the stored procedure
 		try {
 			List<Object[]> result = query.getResultList();
@@ -7033,7 +7035,8 @@ public class UserDaoimpl implements UserDao {
 	public List<OutputPercentageofOrdersByWeekdayorWeekendRegionWise> percentageofOrdersByWeekdayorWeekendRegionWise(
 			MonthlyDataFilter filter) {
 		List<OutputPercentageofOrdersByWeekdayorWeekendRegionWise> percentageofOrdersByWeekdayorWeekendRegionWise = new ArrayList<>();
-		String storedProcedureCall = "EXEC PercentageofOrdersByWeekdayorWeekendRegionWise @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
+		//String storedProcedureCall = "EXEC PercentageofOrdersByWeekdayorWeekendRegionWise @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
+		String storedProcedureCall = "EXEC PercentageofOrdersByWeekdayorWeekendRegionWise @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType, @CityList=:cityList, @StateList= :stateList";
 
 		// Create a native query
 		Query query = entityManager.createNativeQuery(storedProcedureCall);
@@ -7046,6 +7049,8 @@ public class UserDaoimpl implements UserDao {
 		query.setParameter("rsNameList", filter.getRsNameList()); // @RSNameList (e.g., '' or some value)
 		query.setParameter("abmName", filter.getAbmName());
 		query.setParameter("retailerType", filter.getRetailerType());
+		query.setParameter("cityList", filter.getSelectedCity());
+		query.setParameter("stateList", filter.getSelectedState());
 		// Execute the query to invoke the stored procedure
 		try {
 			List<Object[]> result = query.getResultList();
@@ -7538,7 +7543,7 @@ public class UserDaoimpl implements UserDao {
 				+ "        COUNT(DISTINCT RetailerCode) AS DistinctRetailerCount\r\n" + "    FROM \r\n"
 				+ "        MBROrders (NOLOCK)\r\n" + "    WHERE \r\n"
 				+ "         CONVERT(VARCHAR, OrderDate, 112) >= :startDate AND CONVERT(VARCHAR, OrderDate, 112) <= :endDate\r\n"
-				+ "         AND Region IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('EAST, WEST,NORTH,SOUTH 1,SOUTH 2', ','))\r\n"
+				+ conditions.toString()
 				+ "    GROUP BY \r\n" + "        YEAR(OrderDate),\r\n" + "        MONTH(OrderDate),\r\n"
 				+ "        Region\r\n" + "),\r\n" + "\r\n" + "PreviousYearSummary AS (\r\n" + "    SELECT \r\n"
 				+ "        YEAR(OrderDate) AS PreviousYear,\r\n" + "        MONTH(OrderDate) AS Month,\r\n"
@@ -7577,8 +7582,7 @@ public class UserDaoimpl implements UserDao {
 				+ "    CASE \r\n" + "        WHEN PYS.PreviousTotalOrderQty = 0 THEN NULL\r\n" + "        ELSE \r\n"
 				+ "            ((MS.TotalOrderQty - PYS.PreviousTotalOrderQty) * 1.0 / PYS.PreviousTotalOrderQty) * 100\r\n"
 				+ "    END AS OrderQtyGrowthPercentage\r\n" + "FROM \r\n" + "    MonthlySummary MS\r\n"
-				+ "    JOIN PreviousYearSummary PYS \r\n" + "        ON MS.Month = PYS.Month \r\n"
-				+ "             AND MS.Region = PYS.Region\r\n" + "ORDER BY\r\n" + "    MS.Region,\r\n"
+				+ "    JOIN PreviousYearSummary PYS \r\n" +"  ON MS.Month -1 = PYS.Month AND MS.Year = PYS.PreviousYear AND MS.Region = PYS.Region " + "ORDER BY\r\n" + "    MS.Region,\r\n"
 				+ "    MS.Year,\r\n" + "    MS.Month;\r\n";
 
 		// Create a native query
