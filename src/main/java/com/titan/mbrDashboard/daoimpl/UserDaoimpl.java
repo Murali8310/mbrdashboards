@@ -9015,7 +9015,7 @@ public class UserDaoimpl implements UserDao {
 					.append("', ',')) ");
 		}
 		// Final query
-		String finalQuery = "SELECT TOP 10 COUNT(orderQTY) AS TotalOrderQty, RetailerName FROM MBROrders (NOLOCK)"
+		String finalQuery = "SELECT TOP 10 SUM(orderQTY) AS TotalOrderQty, RetailerName FROM MBROrders (NOLOCK)"
 				+ "WHERE " + conditions.toString() + "GROUP BY RetailerName ORDER BY TotalOrderQty DESC";
 
 		// Execute query and map results
@@ -9084,7 +9084,7 @@ public class UserDaoimpl implements UserDao {
 					.append("', ',')) ");
 		}
 		// Final query
-		String finalQuery = "SELECT TOP 10 COUNT(orderQTY) AS TotalOrderQty, RetailerName FROM MBROrders (NOLOCK)"
+		String finalQuery = "SELECT TOP 10 SUM(orderQTY) AS TotalOrderQty, RetailerName FROM MBROrders (NOLOCK)"
 				+ "WHERE " + conditions.toString() + "GROUP BY RetailerName ORDER BY TotalOrderQty DESC";
 
 		// Execute query and map results
@@ -9161,7 +9161,7 @@ public class UserDaoimpl implements UserDao {
 					.append("', ',')) ");
 		}
 		// Final query
-		String finalQuery = "SELECT TOP 10 COUNT(orderQTY) AS TotalOrderQty, RetailerName FROM MBROrders (NOLOCK)"
+		String finalQuery = "SELECT TOP 10 SUM(orderQTY) AS TotalOrderQty, RetailerName FROM MBROrders (NOLOCK)"
 				+ "WHERE " + conditions.toString() + "GROUP BY RetailerName ORDER BY TotalOrderQty DESC";
 
 		// Execute query and map results
@@ -9225,7 +9225,7 @@ public class UserDaoimpl implements UserDao {
 					.append("', ',')) ");
 		}
 		// Final query
-		String finalQuery = "SELECT TOP 10 SUM(orderQTY) AS TotalOrderQty, RetailerName FROM MBROrders (NOLOCK)"
+		String finalQuery = "SELECT TOP 10 SUM(TotalPrice) AS TotalPrice, RetailerName FROM MBROrders (NOLOCK)"
 				+ "WHERE " + conditions.toString() + "GROUP BY RetailerName ORDER BY TotalOrderQty DESC";
 
 		// Execute query and map results
@@ -9236,7 +9236,7 @@ public class UserDaoimpl implements UserDao {
 
 			for (Object[] row : result) {
 				OutputTopSKUOrderedOverall data = new OutputTopSKUOrderedOverall();
-				data.setTotalOrderQty((Integer) row[0]);
+				data.setTotalPrice((BigDecimal) row[0]);
 				data.setProductCode(row[1].toString());
 				topSKUOrderedOverall.add(data);
 			}
@@ -9295,7 +9295,7 @@ public class UserDaoimpl implements UserDao {
 					.append("', ',')) ");
 		}
 		// Final query
-		String finalQuery = "SELECT TOP 10 SUM(orderQTY) AS TotalOrderQty, RetailerName FROM MBROrders (NOLOCK)"
+		String finalQuery = "SELECT TOP 10 SUM(TotalPrice) AS TotalPrice, RetailerName FROM MBROrders (NOLOCK)"
 				+ "WHERE " + conditions.toString() + "GROUP BY RetailerName ORDER BY TotalOrderQty DESC";
 
 		// Execute query and map results
@@ -9306,7 +9306,7 @@ public class UserDaoimpl implements UserDao {
 
 			for (Object[] row : result) {
 				OutputTopSKUOrderedOverall data = new OutputTopSKUOrderedOverall();
-				data.setTotalOrderQty((Integer) row[0]);
+				data.setTotalPrice((BigDecimal) row[0]);
 				data.setProductCode(row[1].toString());
 				topSKUOrderedOverall.add(data);
 			}
@@ -9373,7 +9373,7 @@ public class UserDaoimpl implements UserDao {
 					.append("', ',')) ");
 		}
 		// Final query
-		String finalQuery = "SELECT TOP 10 SUM(orderQTY) AS TotalOrderQty, RetailerName FROM MBROrders (NOLOCK)"
+		String finalQuery = "SELECT TOP 10 SUM(TotalPrice) AS TotalPrice, RetailerName FROM MBROrders (NOLOCK)"
 				+ "WHERE " + conditions.toString() + "GROUP BY RetailerName ORDER BY TotalOrderQty DESC";
 
 		// Execute query and map results
@@ -9384,7 +9384,7 @@ public class UserDaoimpl implements UserDao {
 
 			for (Object[] row : result) {
 				OutputTopSKUOrderedOverall data = new OutputTopSKUOrderedOverall();
-				data.setTotalOrderQty((Integer) row[0]);
+				data.setTotalPrice((BigDecimal) row[0]);
 				data.setProductCode(row[1].toString());
 				topSKUOrderedOverall.add(data);
 			}
