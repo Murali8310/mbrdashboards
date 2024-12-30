@@ -372,6 +372,8 @@ public  topSKUOrderedOverallpriceWise(MonthlyToalOrdaringPayload?:any) {
 }
 
 
+
+
 // This is for getting the data for avg orders epr month.
 public  topSKUOrderedRegionSelected(MonthlyToalOrdaringPayload?:any) {
   return this.http
@@ -384,6 +386,34 @@ public  topSKUOrderedRegionSelected(MonthlyToalOrdaringPayload?:any) {
       }
     );      
 }
+
+
+// This is for getting the data for avg orders epr month.
+public  topRetailersRegionSelectedsum(MonthlyToalOrdaringPayload?:any) {
+  return this.http
+    .post<any>(
+      `${environment.apiUrl}/topRetailersRegionSelectedsum`,
+      JSON.stringify(MonthlyToalOrdaringPayload),
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        observe: 'response',
+      }
+    );      
+}
+
+// This is for getting the data for avg orders epr month.
+public  topRetailersRegionSelectedcount(MonthlyToalOrdaringPayload?:any) {
+  return this.http
+    .post<any>(
+      `${environment.apiUrl}/topRetailersRegionSelectedcount`,
+      JSON.stringify(MonthlyToalOrdaringPayload),
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        observe: 'response',
+      }
+    );      
+}
+
 
 
 // This is for getting the data for avg orders epr month.
@@ -413,6 +443,35 @@ public  topSKUOrderedRSNameSelected(MonthlyToalOrdaringPayload?:any) {
     );      
 }
 
+
+// This is for getting the data for avg orders epr month.
+public  topRetailersRSNameSelectedsum(MonthlyToalOrdaringPayload?:any) {
+  return this.http
+    .post<any>(
+      `${environment.apiUrl}/topRetailersRSNameSelectedsum`,
+      JSON.stringify(MonthlyToalOrdaringPayload),
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        observe: 'response',
+      }
+    );      
+}
+
+
+
+// This is for getting the data for avg orders epr month.
+public  topRetailersRSNameSelectedcount(MonthlyToalOrdaringPayload?:any) {
+  return this.http
+    .post<any>(
+      `${environment.apiUrl}/topRetailersRSNameSelectedcount`,
+      JSON.stringify(MonthlyToalOrdaringPayload),
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        observe: 'response',
+      }
+    );      
+}
+
 // This is for getting the data for avg orders epr month.
 public  topSKUOrderedRSNameSelectedpriceWise(MonthlyToalOrdaringPayload?:any) {
   return this.http
@@ -433,5 +492,37 @@ checkImageExists(imageUrl: string): Promise<boolean> {
     .then((response:any) => response.status === 200)  // Image exists if status is 200
     .catch(() => false);  // If error occurs (e.g., 404), return false
 }
+
+
+
+// This is for getting the data for avg orders epr month.
+public  topRetailersOverallsum(MonthlyToalOrdaringPayload?:any) {
+  return this.http
+    .post<any>(
+      `${environment.apiUrl}/topRetailersOverallsum`,
+      JSON.stringify(MonthlyToalOrdaringPayload),
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        observe: 'response',
+      }
+    );      
+}
+
+
+// This is for getting the data for avg orders epr month.
+public  topRetailersOverallcount(MonthlyToalOrdaringPayload?:any) {
+  return this.http
+    .post<any>(
+      `${environment.apiUrl}/topRetailersOverallcount`,
+      JSON.stringify(MonthlyToalOrdaringPayload),
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        observe: 'response',
+      }
+    );      
+}
+
+
+
   
 }

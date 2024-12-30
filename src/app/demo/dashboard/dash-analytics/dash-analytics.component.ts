@@ -721,7 +721,7 @@ console.log(MonthlyToalOrdaringPayload);
       this.selectedStates = [];
        this.selectedYears = [];
 
-      if(this.dashboardService.selectedData === '4' || this.dashboardService.selectedData === '5'){
+      if(this.dashboardService.selectedData === '4' || this.dashboardService.selectedData === '5' || this.dashboardService.selectedData === '6'){
         const today = new Date();
         const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
         const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
@@ -2019,7 +2019,15 @@ this.GrowthOverPreviousYear(MonthlyToalOrdaringPayload);
             if(this.selectedSelectionTypeForUI === 'Order Wise'){
               this.topSKUOrderedOverall(MonthlyToalOrdaringPayload);
             } else {
-              this.topSKUOrderedOverallpriceWiseFn(MonthlyToalOrdaringPayload);
+              // this.topSKUOrderedOverallpriceWiseFn(MonthlyToalOrdaringPayload);
+            }
+          }
+          else if (this.dashboardService.selectedData === '6') {
+            this.selectedSelectionTypeForUI = this.selectedSelectionType;
+            if(this.selectedSelectionTypeForUI === 'Order Wise'){
+              this.topRetailersOverallcount(MonthlyToalOrdaringPayload);
+            } else {
+              this.topRetailersOverallsum(MonthlyToalOrdaringPayload);
             }
           }
         }
@@ -6673,5 +6681,281 @@ public getStatusOfDisableForAllFiltersExceptYearAndMonth(){
     return true;
   }
 }
+
+ // this is for getting the top sku qty.
+
+ public topRetailersOverallsum = (MonthlyTotalOrderingPayload?: any) => {
+  this.spinner.show();
+  this.overallOrders = [];
+  this.dashboardService.topRetailersOverallsum(MonthlyTotalOrderingPayload).subscribe(
+    async (response) => {
+      if (response && response.body) {
+        // this.overallOrders = response.body.map((order:any) => {
+        //   // Process productCode to remove slash if present
+        //   let result = order.productCode.includes("/") ? order.productCode.replace("/", "") : order.productCode;
+        //   // Create the image source URL based on the processed productCode
+        //   const selectedImage = `assets/skuimages/${result}.jpg`;
+        //   // Return the modified order with the new imageSrc field
+        //   return {
+        //     ...order,
+        //     imageSrc: selectedImage
+        //   };
+        // });
+
+
+       const overallOrders = await Promise.all(response.body.map(async (order: any) => {
+          // Process productCode to remove slash if present
+          let result = order.productCode.includes("/") ? order.productCode.replace("/P", "") : order.productCode;
+        
+          // Create the image source URL based on the processed productCode
+          const selectedImage = `assets/skuimages/${result}.jpg`;
+        
+          // Check if the image exists
+          const imageExists = await this.dashboardService.checkImageExists(selectedImage);
+        
+          // Return the modified order with the new imageSrc and errorImg field
+          return {
+            ...order,
+            imageSrc: selectedImage,
+            errorImg: !imageExists // If image doesn't exist, set errorImg to true
+          };
+         
+        }));
+
+        this.overAllResponseOrderLevel = overallOrders;
+        this.overallOrders = overallOrders.slice(0, 5);
+        this.selectImage(this.overallOrders[0],0);
+        this.calculateOverallGrandTotal();
+        this.topRetailersRegionSelectedsum(MonthlyTotalOrderingPayload);
+      }
+    },
+    (error) => {
+      console.error('Error fetching monthly order data:', error);
+      this.spinner.hide();
+    }
+  );
+};
+
+// this is for getting the top sku qty.
+
+public topRetailersOverallcount = (MonthlyTotalOrderingPayload?: any) => {
+  this.spinner.show();
+  this.overallOrders = [];
+  this.dashboardService.topRetailersOverallcount(MonthlyTotalOrderingPayload).subscribe(
+    async (response) => {
+      if (response && response.body) {
+
+       const overallOrders = await Promise.all(response.body.map(async (order: any) => {
+          // Process productCode to remove slash if present
+          let result = order.productCode.includes("/") ? order.productCode.replace("/P", "") : order.productCode;
+        
+          // Create the image source URL based on the processed productCode
+          const selectedImage = `assets/skuimages/${result}.jpg`;
+        
+          // Check if the image exists
+          const imageExists = await this.dashboardService.checkImageExists(selectedImage);
+        
+          // Return the modified order with the new imageSrc and errorImg field
+          return {
+            ...order,
+            imageSrc: selectedImage,
+            errorImg: !imageExists // If image doesn't exist, set errorImg to true
+          };
+         
+        }));
+
+        this.overAllResponseOrderLevel = overallOrders;
+        this.overallOrders = overallOrders.slice(0, 5);
+        this.selectImage(this.overallOrders[0],0);
+        this.calculateOverallGrandTotal();
+        this.topRetailersRegionSelectedcount(MonthlyTotalOrderingPayload);
+      }
+    },
+    (error) => {
+      console.error('Error fetching monthly order data:', error);
+      this.spinner.hide();
+    }
+  );
+};
+
+
+// this is for getting the top sku qty.
+
+public topRetailersRegionSelectedsum = (MonthlyTotalOrderingPayload?: any) => {
+  this.spinner.show();
+  this.regionTotals = [];
+  this.dashboardService.topRetailersRegionSelectedsum(MonthlyTotalOrderingPayload).subscribe(
+    async (response) => {
+      if (response && response.body) {
+        this.regionTotals = response.body;
+
+        this.regionTotals = await Promise.all(response.body.map(async (order: any) => {
+          // Process productCode to remove slash if present
+          let result = order.productCode.includes("/") ? order.productCode.replace("/P", "") : order.productCode;
+        
+          // Create the image source URL based on the processed productCode
+          const selectedImage = `assets/skuimages/${result}.jpg`;
+        
+          // Check if the image exists
+          const imageExists = await this.dashboardService.checkImageExists(selectedImage);
+        
+          // Return the modified order with the new imageSrc and errorImg field
+          return {
+            ...order,
+            imageSrc: selectedImage,
+            errorImg: !imageExists // If image doesn't exist, set errorImg to true
+          };
+        }));
+        this.overAllResponseRegionLevel = this.regionTotals;
+        this.regionTotals = this.regionTotals.slice(0,5);
+
+        if(this.regionTotals && this.regionTotals.length>0){
+          this.selectImageforregion(this.regionTotals[0],0);
+        }
+        this.getRegionGrandTotal();
+        this.topRetailersRSNameSelectedsum(MonthlyTotalOrderingPayload);
+      }
+    },
+    (error) => {
+      console.error('Error fetching monthly order data:', error);
+      this.spinner.hide();
+    }
+  );
+};
+
+// this is for getting the top sku qty.
+
+public topRetailersRegionSelectedcount = (MonthlyTotalOrderingPayload?: any) => {
+  this.spinner.show();
+  this.regionTotals = [];
+  this.dashboardService.topRetailersRegionSelectedcount(MonthlyTotalOrderingPayload).subscribe(
+    async (response) => {
+      if (response && response.body) {
+        this.regionTotals = response.body;
+
+        this.regionTotals = await Promise.all(response.body.map(async (order: any) => {
+          // Process productCode to remove slash if present
+          let result = order.productCode.includes("/") ? order.productCode.replace("/P", "") : order.productCode;
+        
+          // Create the image source URL based on the processed productCode
+          const selectedImage = `assets/skuimages/${result}.jpg`;
+        
+          // Check if the image exists
+          const imageExists = await this.dashboardService.checkImageExists(selectedImage);
+        
+          // Return the modified order with the new imageSrc and errorImg field
+          return {
+            ...order,
+            imageSrc: selectedImage,
+            errorImg: !imageExists // If image doesn't exist, set errorImg to true
+          };
+        }));
+        this.overAllResponseRegionLevel = this.regionTotals;
+        this.regionTotals = this.regionTotals.slice(0,5);
+
+        if(this.regionTotals && this.regionTotals.length>0){
+          this.selectImageforregion(this.regionTotals[0],0);
+        }
+        this.getRegionGrandTotal();
+        this.topRetailersRSNameSelectedcount(MonthlyTotalOrderingPayload);
+      }
+    },
+    (error) => {
+      console.error('Error fetching monthly order data:', error);
+      this.spinner.hide();
+    }
+  );
+};
+
+
+
+
+
+// This is to get the rs names data.
+public topRetailersRSNameSelectedsum = (MonthlyTotalOrderingPayload?: any) => {
+  this.spinner.show();
+  this.rsTotals = [];
+  this.dashboardService.topRetailersRSNameSelectedsum(MonthlyTotalOrderingPayload).subscribe(
+    async (response) => {
+      if (response && response.body) {
+
+        
+        this.rsTotals = response.body;
+        this.rsTotals = await Promise.all(response.body.map(async (order: any) => {
+          // Process productCode to remove slash if present
+          let result = order.productCode.includes("/") ? order.productCode.replace("/P", "") : order.productCode;
+        
+          // Create the image source URL based on the processed productCode
+          const selectedImage = `assets/skuimages/${result}.jpg`;
+        
+          // Check if the image exists
+          const imageExists = await this.dashboardService.checkImageExists(selectedImage);
+        
+          // Return the modified order with the new imageSrc and errorImg field
+          return {
+            ...order,
+            imageSrc: selectedImage,
+            errorImg: !imageExists // If image doesn't exist, set errorImg to true
+          };
+        }));
+this.overAllResponseRsOrderLevel = this.rsTotals;
+this.rsTotals = this.rsTotals.slice(0,5);
+
+        if(this.rsTotals && this.rsTotals.length>0){
+          this.selectedImageSourceForRsFn(this.rsTotals[0],0);
+        }
+        this.getRSGrandTotal();
+      }
+    },
+    (error) => {
+      console.error('Error fetching monthly order data:', error);
+      this.spinner.hide();
+    }
+  );
+};
+
+
+// This is to get the rs names data.
+public topRetailersRSNameSelectedcount = (MonthlyTotalOrderingPayload?: any) => {
+  this.spinner.show();
+  this.rsTotals = [];
+  this.dashboardService.topRetailersRSNameSelectedcount(MonthlyTotalOrderingPayload).subscribe(
+    async (response) => {
+      if (response && response.body) {
+
+        
+        this.rsTotals = response.body;
+        this.rsTotals = await Promise.all(response.body.map(async (order: any) => {
+          // Process productCode to remove slash if present
+          let result = order.productCode.includes("/") ? order.productCode.replace("/P", "") : order.productCode;
+        
+          // Create the image source URL based on the processed productCode
+          const selectedImage = `assets/skuimages/${result}.jpg`;
+        
+          // Check if the image exists
+          const imageExists = await this.dashboardService.checkImageExists(selectedImage);
+        
+          // Return the modified order with the new imageSrc and errorImg field
+          return {
+            ...order,
+            imageSrc: selectedImage,
+            errorImg: !imageExists // If image doesn't exist, set errorImg to true
+          };
+        }));
+this.overAllResponseRsOrderLevel = this.rsTotals;
+this.rsTotals = this.rsTotals.slice(0,5);
+
+        if(this.rsTotals && this.rsTotals.length>0){
+          this.selectedImageSourceForRsFn(this.rsTotals[0],0);
+        }
+        this.getRSGrandTotal();
+      }
+    },
+    (error) => {
+      console.error('Error fetching monthly order data:', error);
+      this.spinner.hide();
+    }
+  );
+};
 
 }

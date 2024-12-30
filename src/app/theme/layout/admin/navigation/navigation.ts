@@ -102,6 +102,23 @@ export const NavigationItems: NavigationItem[] = [
       
     ]
   },
+  {
+    id: 'chart',
+    title: 'Chart',
+    type: 'group',
+    icon: 'icon-group',
+    children: [
+      {
+        id: '6',
+        title: 'Top Retailers Ordered',
+        type: 'item',
+        url: '/charts',
+        classes: 'nav-item',
+        icon: 'fas fa-cart-arrow-down'
+      }
+      
+    ]
+  },
   
   // {
   //   id: 'ui-component',
