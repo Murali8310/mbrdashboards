@@ -6654,4 +6654,24 @@ filterAvailableSelectionTypes() {
   );
 }
 
+
+
+
+// this is to get the status of disable for search.
+public getStatusOfDisableForAllFiltersExceptYearAndMonth(){
+
+  if((this.selectedRegions && this.selectedRegions.length > 0) ||
+   (this.selectedAbmNames && this.selectedAbmNames.length > 0) ||
+    (this.selectedRetailerTypes && this.selectedRetailerTypes.length > 0) || 
+    (this.selectedRSNames && this.selectedRSNames.length > 0)
+     || (this.selectedBrands && this.selectedBrands.length > 0) || 
+     (this.selectedStates && this.selectedStates.length > 0)||
+     (this.selectedCities && this.selectedCities.length > 0)){
+    return false;
+  } else 
+  {
+    return true;
+  }
+}
+
 }
