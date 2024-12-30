@@ -62,7 +62,10 @@ text-align: center;
     <app-card class="col-md-12 col-xl-12" ><h4 style="text-align: center;">DashBoard</h4>
     </app-card>
 
-    <div class="container my-4">
+      <div class="container my-4" [class.pointerEvents]="isFiltersLoading">
+        <div class="loading-bar" *ngIf="isFiltersLoading">
+          <div class="progress"></div>
+        </div>
       <div class="row justify-content-center text-center">
 
         <!-- <div class="form-group col-md-3  col-lg-3">
@@ -209,7 +212,7 @@ text-align: center;
         </div> -->
     
 
-        <div class="form-group col-md-3  col-lg-3">
+        <div class="form-group col-md-3  col-lg-3" [class.pointerEvents]="selectedYears && selectedYears.length == 0">
           <label style="margin-top: 10px; float: left; font-weight: 800;" class="form-label">Month</label>
           <div class="multiselect-dropdown" tabindex="0" [class.posinherit]="!isDropdownOpenForMonth">
             <div (click)="toggleDropdownVisibilityForMonth()" class="dropdown-btn" tabindex="-1" id="monthDropdown">
@@ -340,7 +343,10 @@ text-align: center;
   This is for enabling state and city filters.
   -->
 
-  <div class="container my-4" >
+  <div class="container my-4" [class.pointerEvents]="isFiltersLoading">
+    <div class="loading-bar" *ngIf="isFiltersLoading">
+      <div class="progress"></div>
+    </div>
     <div class="row justify-content-center text-center">
       <!-- Region -->
       <div class="form-group col-md-3">
@@ -705,7 +711,7 @@ text-align: left;"
         </div>
       </div>
     </div>
-    <div class="form-group col-md-6">
+    <div class="form-group col-md-6" [class.pointerEvents]="selectedYears && selectedYears.length == 0">
       <label style="margin-top: 10px; float: left; font-weight: 800;" class="form-label">Month</label>
       <div class="multiselect-dropdown" tabindex="0" [class.posinherit]="!isDropdownOpenForMonth">
         <div (click)="toggleDropdownVisibilityForMonth()" class="dropdown-btn" tabindex="-1" id="monthDropdown">
@@ -1203,7 +1209,7 @@ text-align: left;"
       </div>
       
   
-      <div class="form-group col-md-3">
+      <div class="form-group col-md-3" [class.pointerEvents]="selectedYears && selectedYears.length == 0">
         <label style="margin-top: 10px; float: left; font-weight: 800;" class="form-label">Month</label>
         <div class="multiselect-dropdown" tabindex="0" [class.posinherit]="!isDropdownOpenForMonth">
           <div (click)="toggleDropdownVisibilityForMonth()" class="dropdown-btn" tabindex="-1" id="monthDropdown">
@@ -1720,7 +1726,7 @@ text-align: left;"
       </div>
       
   
-      <div class="form-group col-md-3">
+      <div class="form-group col-md-3" [class.pointerEvents]="selectedYears && selectedYears.length == 0">
         <label style="margin-top: 10px; float: left; font-weight: 800;" class="form-label">Month</label>
         <div class="multiselect-dropdown" tabindex="0" [class.posinherit]="!isDropdownOpenForMonth">
           <div (click)="toggleDropdownVisibilityForMonth()" class="dropdown-btn" tabindex="-1" id="monthDropdown">
@@ -1780,7 +1786,10 @@ text-align: left;"
       
     </div>
   </div>
-  <div class="container my-4" >
+    <div class="container my-4" [class.pointerEvents]="isFiltersLoading">
+      <div class="loading-bar" *ngIf="isFiltersLoading">
+        <div class="progress"></div>
+      </div>
     <div class="row justify-content-center text-center">
       <!-- Region -->
       <div class="form-group col-md-3">
@@ -2145,7 +2154,7 @@ text-align: left;"
         </div>
       </div>
     </div>
-    <div class="form-group col-md-6">
+    <div class="form-group col-md-6" [class.pointerEvents]="selectedYears && selectedYears.length == 0">
       <label style="margin-top: 10px; float: left; font-weight: 800;" class="form-label">Month</label>
       <div class="multiselect-dropdown" tabindex="0" [class.posinherit]="!isDropdownOpenForMonth">
         <div (click)="toggleDropdownVisibilityForMonth()" class="dropdown-btn" tabindex="-1" id="monthDropdown">
@@ -2413,7 +2422,10 @@ text-align: left;"
 
 <div class="row" *ngIf="dashboardService.selectedData === '4'">
  
-  <div class="container my-4">
+  <div class="container my-4" [class.pointerEvents]="isFiltersLoading">
+    <div class="loading-bar" *ngIf="isFiltersLoading">
+      <div class="progress"></div>
+    </div>    
     <div class="row justify-content-center text-center">
       <!-- Region -->
       <div class="form-group col-md-3">
@@ -2816,7 +2828,7 @@ text-align: left;"
               </div>
             </div>
           </div>
-          <div class="form-group col-md-6">
+          <div class="form-group col-md-6" [class.pointerEvents]="selectedYears && selectedYears.length == 0">
             <label style="margin-top: 10px; float: left; font-weight: 800;" class="form-label">Month</label>
             <div class="multiselect-dropdown" tabindex="0" [class.posinherit]="!isDropdownOpenForMonth">
               <div (click)="toggleDropdownVisibilityForMonth()" class="dropdown-btn" tabindex="-1" id="monthDropdown">
@@ -2855,6 +2867,137 @@ text-align: left;"
           </div>
         </div>
         </div>
+
+        <div class="form-group col-md-3">
+          <div class="row">
+        
+            
+        
+            <div class="form-group col-md-6 col-lg-6">
+              <label style="margin-top: 10px; float: left; font-weight: 800;" class="form-label">State</label>
+              <div class="multiselect-dropdown" tabindex="0" [class.posinherit]="!isDropdownOpenForState">
+                <div (click)="toggleDropdownVisibilityForState()" class="dropdown-btn" tabindex="-1" id="stateDropdown">
+                  <span style="margin-left: 5px;" *ngIf="selectedStates.length === 0">Select one</span>
+                  <i *ngIf="selectedStates.length == 0" class="fas fa-chevron-down"></i>
+                  <div *ngIf="selectedStates.length > 0" class="selected-items-container">
+                    <ng-container *ngFor="let state of selectedStates; let isLast = last">
+                      <div class="selected-item">
+                        {{ state }}
+                        <span class="remove-icon" (click)="removeSelectedState(state, $event)">&#10005;</span>
+                      </div>
+                    </ng-container>
+                  </div>
+                  <span class="dropdown-multiselect--active" style="float:right !important;padding-right:4px">
+                    <span class="dropdown-multiselect__caret"></span>
+                  </span>
+                </div>
+                <div class="dropdown-list" *ngIf="isDropdownOpenForState" id="stateDropdownmenu">
+                  <ul class="item1">
+                    <li class="multiselect-item-checkbox" (click)="selectAllStateCheckbox.click()">
+                      <input
+                        type="checkbox"
+                        #selectAllStateCheckbox
+                        (change)="toggleAllStateSelection($event)"
+                        [checked]="areAllStatesSelected"
+                      />
+                      <div style="margin-left: 10px; cursor: pointer;">Select All</div>
+                    </li>
+                    <li class="filter-textbox">
+                      <input
+                        type="text"
+                        placeholder="Search"
+                        [(ngModel)]="searchInputValueForState"
+                        (input)="filterAvailableStates()"
+                      />
+                    </li>
+                  </ul>
+                  <ul class="item2" style="max-height: 197px; overflow-y: auto;">
+                    <li *ngFor="let state of filteredStatesList" class="multiselect-item-checkbox">
+                      <input
+                        type="checkbox"
+                        #checkbox
+                        [checked]="selectedStates.includes(state)"
+                        (change)="toggleStateSelection(state)"
+                      />
+                      <div
+                        style="margin-left: 10px; cursor: pointer; width: 100%; text-align: left;"
+                        (click)="checkbox.click()"
+                        [class.selected]="selectedStates.includes(state)"
+                      >
+                        {{ state }}
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label style="margin-top: 10px; float: left; font-weight: 800;" class="form-label">City</label>
+              <div class="multiselect-dropdown" tabindex="0" [class.posinherit]="!isDropdownOpenForCity">
+                <div (click)="toggleDropdownVisibilityForCity()" class="dropdown-btn" tabindex="-1" id="cityDropdown">
+                  <span style="margin-left: 5px;" *ngIf="selectedCities.length === 0">Select one</span>
+                  <i *ngIf="selectedCities.length == 0" class="fas fa-chevron-down"></i>
+                  <div *ngIf="selectedCities.length > 0" class="selected-items-container">
+                    <ng-container *ngFor="let city of selectedCities; let isLast = last">
+                      <div class="selected-item">
+                        {{ city }}
+                        <span class="remove-icon" (click)="removeSelectedCity(city, $event)">&#10005;</span>
+                      </div>
+                    </ng-container>
+                  </div>
+                  <span class="dropdown-multiselect--active" style="float:right !important;padding-right:4px">
+                    <span class="dropdown-multiselect__caret"></span>
+                  </span>
+                </div>
+                <div class="dropdown-list" *ngIf="isDropdownOpenForCity" id="cityDropdownmenu">
+                  <ul class="item1">
+                    <li class="multiselect-item-checkbox">
+                      <input
+                        type="checkbox"
+                        (change)="toggleAllCitySelection($event)"
+                        #cityAllCheckBox
+                        [checked]="areAllCitiesSelected"
+                      />
+                      <div
+                        style="margin-left: 10px; width: 100%; text-align: left;"
+                        (click)="cityAllCheckBox.click()"
+                      >
+                        Select All
+                      </div>
+                    </li>
+                    <li class="filter-textbox">
+                      <input
+                        type="text"
+                        placeholder="Search"
+                        [(ngModel)]="searchInputValueForCity"
+                        (input)="filterAvailableCities()"
+                      />
+                    </li>
+                  </ul>
+                  <ul class="item2" style="max-height: 197px; overflow-y: auto;">
+                    <li *ngFor="let city of filteredCitiesList" class="multiselect-item-checkbox">
+                      <input
+                        type="checkbox"
+                        [checked]="selectedCities.includes(city)"
+                        #cityCheckBox
+                        (change)="toggleCitySelection(city)"
+                      />
+                      <div
+                        style="margin-left: 10px; width: 100%; text-align: left;"
+                        (click)="cityCheckBox.click()"
+                        [class.selected]="selectedCities.includes(city)"
+                      >
+                        {{ city }}
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            
+          </div>
+          </div>
       
       <!-- Search Button -->
       <!-- <div class="form-group col-md-3 d-flex align-items-end row" style="align-items: center !important;">
@@ -2865,16 +3008,21 @@ text-align: left;"
           <button class="btn btn-secondary w-100 fw-bold" (click)="prepareSearchData('reset')">Reset</button>
         </div>
       </div> -->
-      <div class="form-group col-md-3" style="margin-top: 39px;">
+      <div class="form-group col-md-3">
+      <div class="row">
+      <div class="form-group col-md-6" style="margin-top: 39px;">
         <button class="btn btn-primary w-100 fw-bold" (click)="prepareSearchData('search')">Search</button>
       <!-- </div> -->
         <!-- </div> -->
       </div>
-      <div class="form-group col-md-3" style="margin-top: 39px;">
+      <div class="form-group col-md-6" style="margin-top: 39px;">
         <button class="btn btn-secondary w-100 fw-bold"  (click)="prepareSearchData('reset')">Reset</button>
           <!-- </div> -->
         <!-- </div> -->
       </div>
+
+    </div>
+    </div>
       
     </div>
   </div>
@@ -2999,7 +3147,11 @@ text-align: left;"
 </div>
 <div class="row" *ngIf="dashboardService.selectedData === '5'">
  
-  <div class="container my-4">
+
+    <div class="container my-4" [class.pointerEvents]="isFiltersLoading">
+      <div class="loading-bar" *ngIf="isFiltersLoading">
+        <div class="progress"></div>
+      </div>
     <div class="row justify-content-center text-center">
       <!-- Region -->
       <div class="form-group col-md-3">
@@ -3315,7 +3467,7 @@ text-align: left;"
               </div>
             </div>
           </div>
-          <div class="form-group col-md-3">
+          <div class="form-group col-md-3" [class.pointerEvents]="selectedYears && selectedYears.length == 0">
             <!-- <div class="row"> -->
           <!-- <div class="form-group col-md-6"> -->
             <label style="margin-top: 10px; float: left; font-weight: 800;" class="form-label">Month</label>
@@ -3388,18 +3540,163 @@ text-align: left;"
           </div> 
             <!-- </div> -->
           </div>
-          
-          
-      <div class="form-group col-md-3" style="margin-top: 39px;">
-        <button [disabled]="(selectedYears && selectedYears.length <= 0) || (selectedMonths && selectedMonths.length <= 0)" class="btn btn-primary w-100 fw-bold" (click)="prepareSearchData('search')">Search</button>
+
+
+      <div class="form-group col-md-3">
+          <div class="row">
+        
+            
+        
+            <div class="form-group col-md-6 col-lg-6">
+              <label style="margin-top: 10px; float: left; font-weight: 800;" class="form-label">State</label>
+              <div class="multiselect-dropdown" tabindex="0" [class.posinherit]="!isDropdownOpenForState">
+                <div (click)="toggleDropdownVisibilityForState()" class="dropdown-btn" tabindex="-1" id="stateDropdown">
+                  <span style="margin-left: 5px;" *ngIf="selectedStates.length === 0">Select one</span>
+                  <i *ngIf="selectedStates.length == 0" class="fas fa-chevron-down"></i>
+                  <div *ngIf="selectedStates.length > 0" class="selected-items-container">
+                    <ng-container *ngFor="let state of selectedStates; let isLast = last">
+                      <div class="selected-item">
+                        {{ state }}
+                        <span class="remove-icon" (click)="removeSelectedState(state, $event)">&#10005;</span>
+                      </div>
+                    </ng-container>
+                  </div>
+                  <span class="dropdown-multiselect--active" style="float:right !important;padding-right:4px">
+                    <span class="dropdown-multiselect__caret"></span>
+                  </span>
+                </div>
+                <div class="dropdown-list" *ngIf="isDropdownOpenForState" id="stateDropdownmenu">
+                  <ul class="item1">
+                    <li class="multiselect-item-checkbox" (click)="selectAllStateCheckbox.click()">
+                      <input
+                        type="checkbox"
+                        #selectAllStateCheckbox
+                        (change)="toggleAllStateSelection($event)"
+                        [checked]="areAllStatesSelected"
+                      />
+                      <div style="margin-left: 10px; cursor: pointer;">Select All</div>
+                    </li>
+                    <li class="filter-textbox">
+                      <input
+                        type="text"
+                        placeholder="Search"
+                        [(ngModel)]="searchInputValueForState"
+                        (input)="filterAvailableStates()"
+                      />
+                    </li>
+                  </ul>
+                  <ul class="item2" style="max-height: 197px; overflow-y: auto;">
+                    <li *ngFor="let state of filteredStatesList" class="multiselect-item-checkbox">
+                      <input
+                        type="checkbox"
+                        #checkbox
+                        [checked]="selectedStates.includes(state)"
+                        (change)="toggleStateSelection(state)"
+                      />
+                      <div
+                        style="margin-left: 10px; cursor: pointer; width: 100%; text-align: left;"
+                        (click)="checkbox.click()"
+                        [class.selected]="selectedStates.includes(state)"
+                      >
+                        {{ state }}
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label style="margin-top: 10px; float: left; font-weight: 800;" class="form-label">City</label>
+              <div class="multiselect-dropdown" tabindex="0" [class.posinherit]="!isDropdownOpenForCity">
+                <div (click)="toggleDropdownVisibilityForCity()" class="dropdown-btn" tabindex="-1" id="cityDropdown">
+                  <span style="margin-left: 5px;" *ngIf="selectedCities.length === 0">Select one</span>
+                  <i *ngIf="selectedCities.length == 0" class="fas fa-chevron-down"></i>
+                  <div *ngIf="selectedCities.length > 0" class="selected-items-container">
+                    <ng-container *ngFor="let city of selectedCities; let isLast = last">
+                      <div class="selected-item">
+                        {{ city }}
+                        <span class="remove-icon" (click)="removeSelectedCity(city, $event)">&#10005;</span>
+                      </div>
+                    </ng-container>
+                  </div>
+                  <span class="dropdown-multiselect--active" style="float:right !important;padding-right:4px">
+                    <span class="dropdown-multiselect__caret"></span>
+                  </span>
+                </div>
+                <div class="dropdown-list" *ngIf="isDropdownOpenForCity" id="cityDropdownmenu">
+                  <ul class="item1">
+                    <li class="multiselect-item-checkbox">
+                      <input
+                        type="checkbox"
+                        (change)="toggleAllCitySelection($event)"
+                        #cityAllCheckBox
+                        [checked]="areAllCitiesSelected"
+                      />
+                      <div
+                        style="margin-left: 10px; width: 100%; text-align: left;"
+                        (click)="cityAllCheckBox.click()"
+                      >
+                        Select All
+                      </div>
+                    </li>
+                    <li class="filter-textbox">
+                      <input
+                        type="text"
+                        placeholder="Search"
+                        [(ngModel)]="searchInputValueForCity"
+                        (input)="filterAvailableCities()"
+                      />
+                    </li>
+                  </ul>
+                  <ul class="item2" style="max-height: 197px; overflow-y: auto;">
+                    <li *ngFor="let city of filteredCitiesList" class="multiselect-item-checkbox">
+                      <input
+                        type="checkbox"
+                        [checked]="selectedCities.includes(city)"
+                        #cityCheckBox
+                        (change)="toggleCitySelection(city)"
+                      />
+                      <div
+                        style="margin-left: 10px; width: 100%; text-align: left;"
+                        (click)="cityCheckBox.click()"
+                        [class.selected]="selectedCities.includes(city)"
+                      >
+                        {{ city }}
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            
+          </div>
+          </div>
+      
+      <!-- Search Button -->
+      <!-- <div class="form-group col-md-3 d-flex align-items-end row" style="align-items: center !important;">
+        <div class="col-md-6" style="margin-top: 28px;">
+          <button class="btn btn-primary w-100 fw-bold" (click)="prepareSearchData('search')">Search</button>
+        </div>
+        <div class="col-md-6" style="margin-top: 28px;">
+          <button class="btn btn-secondary w-100 fw-bold" (click)="prepareSearchData('reset')">Reset</button>
+        </div>
+      </div> -->
+      <div class="form-group col-md-3">
+      <div class="row">
+      <div class="form-group col-md-6" style="margin-top: 39px;">
+        <button class="btn btn-primary w-100 fw-bold" (click)="prepareSearchData('search')">Search</button>
       <!-- </div> -->
         <!-- </div> -->
       </div>
-      <div class="form-group col-md-3" style="margin-top: 39px;">
-        <button [disabled]="(selectedYears && selectedYears.length <= 0) || (selectedMonths && selectedMonths.length <= 0)" class="btn btn-secondary w-100 fw-bold" (click)="prepareSearchData('reset')">Reset</button>
+      <div class="form-group col-md-6" style="margin-top: 39px;">
+        <button class="btn btn-secondary w-100 fw-bold"  (click)="prepareSearchData('reset')">Reset</button>
           <!-- </div> -->
         <!-- </div> -->
       </div>
+
+    </div>
+    </div>
  
   <!-- order-summary.component.html -->
   <div class="order-summary-container">
@@ -3417,8 +3714,8 @@ text-align: left;"
             <tr>
               <th>Sr No</th>
               <th>Overall</th>
-              <th *ngIf="selectedSelectionTypeForUI === 'Order Wise'">Count of Order Qty</th>
-              <th *ngIf="selectedSelectionTypeForUI === 'Value wise'">Sum of Order Qty</th>
+              <th *ngIf="selectedSelectionTypeForUI === 'Order Wise'">Total Order Qty</th>
+              <th *ngIf="selectedSelectionTypeForUI === 'Value wise'">Total Price</th>
               <th>Image Details</th>
             </tr>
           </thead>
@@ -3437,7 +3734,6 @@ text-align: left;"
             <!-- Grand Total Row -->
             <tr class="grand-total">
               <td></td>
-              <td></td>
               <td class="allign-left"><strong>Grand Total</strong></td>
               <td class="allign-left">{{ overallGrandTotal }} 
                 <button class="btn btn-primary w-100 fw-bold" 
@@ -3446,7 +3742,8 @@ text-align: left;"
                 width: 147px !important;
                 padding: 4px;
             " (click)="addMoreOrders('oveall')"> {{displayShowMore ? 'Show More' : 'Show Less'}}</button></td>
-            </tr>
+           <td></td>
+          </tr>
           </tbody>
         </table>
       </div>
@@ -3479,9 +3776,8 @@ text-align: left;"
             <tr>
               <th>Sr No</th>
               <th>Region</th>
-              <th *ngIf="selectedSelectionTypeForUI === 'Order Wise'">Count of Order Qty</th>
-              <th *ngIf="selectedSelectionTypeForUI === 'Value wise'">Sum of Order Qty</th>
-           
+              <th *ngIf="selectedSelectionTypeForUI === 'Order Wise'">Total Order Qty</th>
+              <th *ngIf="selectedSelectionTypeForUI === 'Value wise'">Total Price</th>
               <th>Image Details</th>
             </tr>
           </thead>
@@ -3501,7 +3797,6 @@ text-align: left;"
               </tr>
             <tr class="grand-total">
               <td></td>
-              <td></td>
               <td class="allign-left"><strong>Grand Total</strong></td>
               <td class="allign-left">{{ overallRegionGrandTotal }}
                 <button class="btn btn-primary w-100 fw-bold" 
@@ -3511,6 +3806,7 @@ text-align: left;"
                 padding: 4px;
             " (click)="addMoreOrders('region')"> {{displayShowMoreForRegionOrderLevel ? 'Show More' : 'Show Less'}}</button>
               </td> <!-- Grand Total for Region -->
+              <td></td>
             </tr>
           </tbody>
         </table>
@@ -3542,8 +3838,8 @@ text-align: left;"
         <tr>
           <th>Sr No</th>
           <th>RS</th>
-          <th *ngIf="selectedSelectionTypeForUI === 'Order Wise'">Count of Order Qty</th>
-          <th *ngIf="selectedSelectionTypeForUI === 'Value wise'">Sum of Order Qty</th>
+          <th *ngIf="selectedSelectionTypeForUI === 'Order Wise'">Total Order Qty</th>
+          <th *ngIf="selectedSelectionTypeForUI === 'Value wise'">Total Price Qty</th>
         <th>Image Details</th>
         </tr>
       </thead>
@@ -3563,7 +3859,6 @@ text-align: left;"
         </tr>
         <tr class="grand-total">
           <td></td>
-          <td></td>
           <td class="allign-left"><strong>Grand Total</strong></td>
           <td class="allign-left">{{ overallRsGrandTotal }}
             <button class="btn btn-primary w-100 fw-bold" 
@@ -3573,6 +3868,8 @@ text-align: left;"
             padding: 4px;
         " (click)="addMoreOrders('rs')"> {{displayShowMoreForRsOrderLevel ? 'Show More' : 'Show Less'}}</button>
           </td> <!-- Grand Total for RS -->
+       
+          <td></td>
         </tr>
       </tbody>
     </table>
@@ -3598,7 +3895,11 @@ text-align: left;"
 
 <div class="row" *ngIf="dashboardService.selectedData === '6'">
  
-  <div class="container my-4">
+
+    <div class="container my-4" [class.pointerEvents]="isFiltersLoading">
+      <div class="loading-bar" *ngIf="isFiltersLoading">
+        <div class="progress"></div>
+      </div>
     <div class="row justify-content-center text-center">
       <!-- Region -->
       <div class="form-group col-md-3">
@@ -3916,7 +4217,7 @@ text-align: left;"
           </div>
           <div class="form-group col-md-3">
             <div class="row">
-          <div class="form-group col-md-6">
+          <div class="form-group col-md-6" [class.pointerEvents]="selectedYears && selectedYears.length == 0">
             <label style="margin-top: 10px; float: left; font-weight: 800;" class="form-label">Month</label>
             <div class="multiselect-dropdown" tabindex="0" [class.posinherit]="!isDropdownOpenForMonth">
               <div (click)="toggleDropdownVisibilityForMonth()" class="dropdown-btn" tabindex="-1" id="monthDropdown">
@@ -3989,15 +4290,160 @@ text-align: left;"
           </div>
           
           
-      <div class="form-group col-md-3" style="margin-top: 39px;">
-        <button [disabled]="(selectedYears && selectedYears.length <= 0) || (selectedMonths && selectedMonths.length <= 0)" class="btn btn-primary w-100 fw-bold" (click)="prepareSearchData('search')">Search</button>
-      <!-- </div> -->
+          <div class="form-group col-md-3">
+            <div class="row">
+          
+              
+          
+              <div class="form-group col-md-6 col-lg-6">
+                <label style="margin-top: 10px; float: left; font-weight: 800;" class="form-label">State</label>
+                <div class="multiselect-dropdown" tabindex="0" [class.posinherit]="!isDropdownOpenForState">
+                  <div (click)="toggleDropdownVisibilityForState()" class="dropdown-btn" tabindex="-1" id="stateDropdown">
+                    <span style="margin-left: 5px;" *ngIf="selectedStates.length === 0">Select one</span>
+                    <i *ngIf="selectedStates.length == 0" class="fas fa-chevron-down"></i>
+                    <div *ngIf="selectedStates.length > 0" class="selected-items-container">
+                      <ng-container *ngFor="let state of selectedStates; let isLast = last">
+                        <div class="selected-item">
+                          {{ state }}
+                          <span class="remove-icon" (click)="removeSelectedState(state, $event)">&#10005;</span>
+                        </div>
+                      </ng-container>
+                    </div>
+                    <span class="dropdown-multiselect--active" style="float:right !important;padding-right:4px">
+                      <span class="dropdown-multiselect__caret"></span>
+                    </span>
+                  </div>
+                  <div class="dropdown-list" *ngIf="isDropdownOpenForState" id="stateDropdownmenu">
+                    <ul class="item1">
+                      <li class="multiselect-item-checkbox" (click)="selectAllStateCheckbox.click()">
+                        <input
+                          type="checkbox"
+                          #selectAllStateCheckbox
+                          (change)="toggleAllStateSelection($event)"
+                          [checked]="areAllStatesSelected"
+                        />
+                        <div style="margin-left: 10px; cursor: pointer;">Select All</div>
+                      </li>
+                      <li class="filter-textbox">
+                        <input
+                          type="text"
+                          placeholder="Search"
+                          [(ngModel)]="searchInputValueForState"
+                          (input)="filterAvailableStates()"
+                        />
+                      </li>
+                    </ul>
+                    <ul class="item2" style="max-height: 197px; overflow-y: auto;">
+                      <li *ngFor="let state of filteredStatesList" class="multiselect-item-checkbox">
+                        <input
+                          type="checkbox"
+                          #checkbox
+                          [checked]="selectedStates.includes(state)"
+                          (change)="toggleStateSelection(state)"
+                        />
+                        <div
+                          style="margin-left: 10px; cursor: pointer; width: 100%; text-align: left;"
+                          (click)="checkbox.click()"
+                          [class.selected]="selectedStates.includes(state)"
+                        >
+                          {{ state }}
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label style="margin-top: 10px; float: left; font-weight: 800;" class="form-label">City</label>
+                <div class="multiselect-dropdown" tabindex="0" [class.posinherit]="!isDropdownOpenForCity">
+                  <div (click)="toggleDropdownVisibilityForCity()" class="dropdown-btn" tabindex="-1" id="cityDropdown">
+                    <span style="margin-left: 5px;" *ngIf="selectedCities.length === 0">Select one</span>
+                    <i *ngIf="selectedCities.length == 0" class="fas fa-chevron-down"></i>
+                    <div *ngIf="selectedCities.length > 0" class="selected-items-container">
+                      <ng-container *ngFor="let city of selectedCities; let isLast = last">
+                        <div class="selected-item">
+                          {{ city }}
+                          <span class="remove-icon" (click)="removeSelectedCity(city, $event)">&#10005;</span>
+                        </div>
+                      </ng-container>
+                    </div>
+                    <span class="dropdown-multiselect--active" style="float:right !important;padding-right:4px">
+                      <span class="dropdown-multiselect__caret"></span>
+                    </span>
+                  </div>
+                  <div class="dropdown-list" *ngIf="isDropdownOpenForCity" id="cityDropdownmenu">
+                    <ul class="item1">
+                      <li class="multiselect-item-checkbox">
+                        <input
+                          type="checkbox"
+                          (change)="toggleAllCitySelection($event)"
+                          #cityAllCheckBox
+                          [checked]="areAllCitiesSelected"
+                        />
+                        <div
+                          style="margin-left: 10px; width: 100%; text-align: left;"
+                          (click)="cityAllCheckBox.click()"
+                        >
+                          Select All
+                        </div>
+                      </li>
+                      <li class="filter-textbox">
+                        <input
+                          type="text"
+                          placeholder="Search"
+                          [(ngModel)]="searchInputValueForCity"
+                          (input)="filterAvailableCities()"
+                        />
+                      </li>
+                    </ul>
+                    <ul class="item2" style="max-height: 197px; overflow-y: auto;">
+                      <li *ngFor="let city of filteredCitiesList" class="multiselect-item-checkbox">
+                        <input
+                          type="checkbox"
+                          [checked]="selectedCities.includes(city)"
+                          #cityCheckBox
+                          (change)="toggleCitySelection(city)"
+                        />
+                        <div
+                          style="margin-left: 10px; width: 100%; text-align: left;"
+                          (click)="cityCheckBox.click()"
+                          [class.selected]="selectedCities.includes(city)"
+                        >
+                          {{ city }}
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              
+            </div>
+            </div>
+        
+        <!-- Search Button -->
+        <!-- <div class="form-group col-md-3 d-flex align-items-end row" style="align-items: center !important;">
+          <div class="col-md-6" style="margin-top: 28px;">
+            <button class="btn btn-primary w-100 fw-bold" (click)="prepareSearchData('search')">Search</button>
+          </div>
+          <div class="col-md-6" style="margin-top: 28px;">
+            <button class="btn btn-secondary w-100 fw-bold" (click)="prepareSearchData('reset')">Reset</button>
+          </div>
+        </div> -->
+        <div class="form-group col-md-3">
+        <div class="row">
+        <div class="form-group col-md-6" style="margin-top: 39px;">
+          <button class="btn btn-primary w-100 fw-bold" (click)="prepareSearchData('search')">Search</button>
         <!-- </div> -->
-      </div>
-      <div class="form-group col-md-3" style="margin-top: 39px;">
-        <button [disabled]="(selectedYears && selectedYears.length <= 0) || (selectedMonths && selectedMonths.length <= 0)" class="btn btn-secondary w-100 fw-bold" (click)="prepareSearchData('reset')">Reset</button>
           <!-- </div> -->
-        <!-- </div> -->
+        </div>
+        <div class="form-group col-md-6" style="margin-top: 39px;">
+          <button class="btn btn-secondary w-100 fw-bold"  (click)="prepareSearchData('reset')">Reset</button>
+            <!-- </div> -->
+          <!-- </div> -->
+        </div>
+  
+      </div>
       </div>
  
   <!-- order-summary.component.html -->
@@ -4009,16 +4455,17 @@ text-align: left;"
       /* margin-top: 12px; */
       ">{{overallOrders && overallOrders.length > 0 ? 'Over All Details' : 'Over All Details Loading...'}} </h4> -->
     <div class="row" style="margin-top: 20px;">
-      <div class="col-lg-8  col-md-12 table-responsive" *ngIf="overallOrders && overallOrders.length > 0">
+      <div class="col-lg-12  col-md-12 table-responsive" *ngIf="overallOrders && overallOrders.length > 0">
         <!-- Overall Orders Table -->
         <table class="summary-table">
           <thead>
             <tr>
               <th>Sr No</th>
-              <th>Overall</th>
-              <th *ngIf="selectedSelectionTypeForUI === 'Order Wise'">Count of Order Qty</th>
-              <th *ngIf="selectedSelectionTypeForUI === 'Value wise'">Sum of Order Qty</th>
-              <th>Image Details</th>
+              <th *ngIf="dashboardService.selectedData ==='5'">Overall</th>
+              <th *ngIf="dashboardService.selectedData ==='6'">Retailer Name</th>
+
+              <th *ngIf="selectedSelectionTypeForUI === 'Order Wise'">Total Order Qty</th>
+              <th *ngIf="selectedSelectionTypeForUI === 'Value wise'">Total Price Qty</th>
             </tr>
           </thead>
           <tbody>
@@ -4028,14 +4475,10 @@ text-align: left;"
               <td class="allign-left">{{ order.productCode }}</td>
               <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Order Wise'">{{ order.totalOrderQty }}</td>
               <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Value wise'">{{ order.totalOrderQty }}</td>
-              <td class="allign-left">
-                <img  *ngIf="!order.errorImg" [src]="order.imageSrc" alt="logo-img" class="logo" style="height: 33px; width: 33px;border-radius: 2px;">
-                <p *ngIf="order.errorImg" style="color: red;">No image found</p>
-              </td>
+              
             </tr>
             <!-- Grand Total Row -->
             <tr class="grand-total">
-              <td></td>
               <td></td>
               <td class="allign-left"><strong>Grand Total</strong></td>
               <td class="allign-left">{{ overallGrandTotal }} 
@@ -4045,20 +4488,9 @@ text-align: left;"
                 width: 147px !important;
                 padding: 4px;
             " (click)="addMoreOrders('oveall')"> {{displayShowMore ? 'Show More' : 'Show Less'}}</button></td>
-            </tr>
+        </tr>
           </tbody>
         </table>
-      </div>
-      <div class="col-lg-4 col-md-12 imgStyles" style="text-align: center;"  *ngIf="overallOrders && overallOrders.length > 0">
-       
-       <div class="headerStyles" *ngIf="false">
-       <h4 style="text-align: center;border-radius: 7px;color: white;
-       " class="ng-star-inserted">Top {{currentOverallLevel + 1}} ND2011324/P  Image Details</h4>
-       </div>
-
-        <img  src="{{selectedImageSource}}"  (error)="onImageError($event)" alt="logo-img" class="logo"
-        style="height: 200px;width: 200px;border-radius: 13px;justify-content: center;align-items: center;/* margin-top: 59px; */">
-        <!-- <img  src="assets/images/1802NL02/1802SL12_2.jpg" alt="logo-img" class="logo" style="height: 33px; width: 33px;"> -->
       </div>
     </div>
   </app-card>
@@ -4071,18 +4503,19 @@ text-align: left;"
       /* margin-top: 12px; */
       "> {{regionTotals && regionTotals.length > 0 ? 'Region Wise Details' : 'Region Wise Details Loading...'}} </h4> -->
      <div class="row" style="margin-top: 20px;">
-      <div class="col-lg-8  col-md-12 table-responsive" *ngIf="regionTotals && regionTotals.length > 0">
+      <div class="col-lg-12  col-md-12 table-responsive" *ngIf="regionTotals && regionTotals.length > 0">
         <!-- Region-wise Orders Table -->
         <table class="summary-table">
           <thead>
             <tr>
               <th>Sr No</th>
-              <th>Region</th>
-              <th *ngIf="selectedSelectionTypeForUI === 'Order Wise'">Count of Order Qty</th>
-              <th *ngIf="selectedSelectionTypeForUI === 'Value wise'">Sum of Order Qty</th>
-           
-              <th>Image Details</th>
-            </tr>
+              <!-- <th>Region</th> -->
+              <th *ngIf="dashboardService.selectedData ==='5'">Region</th>
+              <th *ngIf="dashboardService.selectedData ==='6'">Retailer Name</th>
+
+              <th *ngIf="selectedSelectionTypeForUI === 'Order Wise'">Total Order Qty</th>
+              <th *ngIf="selectedSelectionTypeForUI === 'Value wise'">Total Price Qty</th>
+           </tr>
           </thead>
           <tbody>
             <tr *ngFor="let order of regionTotals;index as rgindx" style="cursor: pointer;" [class.pointernone]="order.errorImg" [class.green]="selectedOrderForRegion == order.productCode" (click)="selectImageforregion(order,rgindx)">
@@ -4091,15 +4524,9 @@ text-align: left;"
               <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Order Wise'">{{ order.totalOrderQty }}</td>
               <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Value wise'">{{ order.totalOrderQty }}</td>
             
-              <td class="allign-left">
-                <img  *ngIf="!order.errorImg" [src]="order.imageSrc" alt="logo-img" class="logo" style="height: 33px; width: 33px;border-radius: 2px;">
-                <p *ngIf="order.errorImg" style="color: red;">No image found</p>
-  
-              </td>
           
               </tr>
             <tr class="grand-total">
-              <td></td>
               <td></td>
               <td class="allign-left"><strong>Grand Total</strong></td>
               <td class="allign-left">{{ overallRegionGrandTotal }}
@@ -4114,14 +4541,7 @@ text-align: left;"
           </tbody>
         </table>
       </div>
-      <div class="col-lg-4 col-md-12 imgStyles"  *ngIf="regionTotals && regionTotals.length > 0">
-        <!-- <div class="headerStyles">
-          <h4 style="text-align: center;border-radius: 7px;color: white;
-          " class="ng-star-inserted">Top 1 ND2011324/P  Image Details.</h4>
-          </div> -->
-                <img   src="{{selectedImageSourceForRegion}}" alt="logo-img" class="logo" style="height: 200px;width: 200px;border-radius: 13px;justify-content: center;align-items: center;/* margin-top: 59px; */">
-        <!-- <img  src="assets/images/1802NL02/1802SL12_2.jpg" alt="logo-img" class="logo" style="height: 33px; width: 33px;"> -->
-      </div>
+    
     </div>
   </app-card>
    
@@ -4134,16 +4554,18 @@ text-align: left;"
     ">{{rsTotals && rsTotals.length > 0 ? 'RS Wise Details' : 'RS Wise Details Loading...'}}  </h4> -->
  
  <div class="row" style="margin-top: 20px;">
-  <div class="col-lg-8  col-md-12 table-responsive" *ngIf="rsTotals && rsTotals.length > 0">
+  <div class="col-lg-12  col-md-12 table-responsive" *ngIf="rsTotals && rsTotals.length > 0">
     <!-- RS-wise Orders Table -->
     <table class="summary-table">
       <thead>
         <tr>
           <th>Sr No</th>
-          <th>RS</th>
-          <th *ngIf="selectedSelectionTypeForUI === 'Order Wise'">Count of Order Qty</th>
-          <th *ngIf="selectedSelectionTypeForUI === 'Value wise'">Sum of Order Qty</th>
-        <th>Image Details</th>
+          <!-- <th>RS</th> -->
+          <th *ngIf="dashboardService.selectedData ==='5'">RS</th>
+          <th *ngIf="dashboardService.selectedData ==='6'">Retailer Name</th>
+
+          <th *ngIf="selectedSelectionTypeForUI === 'Order Wise'">Total Order Qty</th>
+          <th *ngIf="selectedSelectionTypeForUI === 'Value wise'">Total Price</th>
         </tr>
       </thead>
       <tbody>
@@ -4154,14 +4576,9 @@ text-align: left;"
           <td class="allign-left">{{ order.productCode }}</td>
           <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Order Wise'">{{ order.totalOrderQty }}</td>
           <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Value wise'">{{ order.totalOrderQty }}</td>
-          <td class="allign-left">
-            <img  *ngIf="!order.errorImg" [src]="order.imageSrc" alt="logo-img" class="logo" style="height: 33px; width: 33px;border-radius: 2px;">
-            <p *ngIf="order.errorImg" style="color: red;">No image found</p>
-          </td>
 
         </tr>
         <tr class="grand-total">
-          <td></td>
           <td></td>
           <td class="allign-left"><strong>Grand Total</strong></td>
           <td class="allign-left">{{ overallRsGrandTotal }}
@@ -4175,14 +4592,6 @@ text-align: left;"
         </tr>
       </tbody>
     </table>
-  </div>
-  <div class="col-lg-4 col-md-12 imgStyles"  *ngIf="rsTotals && rsTotals.length > 0">
-    <!-- <div class="headerStyles">
-      <h4 style="text-align: center;border-radius: 7px;color: white;
-      " class="ng-star-inserted">Top 1 ND2011324/P  Image Details</h4>
-      </div> -->
-            <img  src="{{selectedImageSourceForRs}}" alt="logo-img" class="logo" style="height: 200px;width: 200px;border-radius: 13px;justify-content: center;align-items: center;/* margin-top: 59px; */">
-    <!-- <img  src="assets/images/1802NL02/1802SL12_2.jpg" alt="logo-img" class="logo" style="height: 33px; width: 33px;"> -->
   </div>
   </div>
 </app-card>

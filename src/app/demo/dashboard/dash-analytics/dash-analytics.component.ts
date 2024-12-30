@@ -452,7 +452,7 @@ searchInputValueForSelectionType: string = '';
 filteredSelectionTypesList: string[] = ['Order Wise', 'Value wise'];
 allSelectionTypesList: string[] = ['Order Wise', 'Value wise'];
 
-
+isFiltersLoading = true;
 
 
   // constructor
@@ -863,6 +863,7 @@ console.log(MonthlyToalOrdaringPayload);
   removeSelectedYear(year: number, event: any) {
     event.stopPropagation();
     this.selectedYears = this.selectedYears.filter((y) => y !== year);
+    this.triggerBodyClick();
   }
 
   // Filter years based on search input
@@ -1744,7 +1745,14 @@ this.GrowthOverPreviousYear(MonthlyToalOrdaringPayload);
   removeSelectedRegion(region: { id: number; name: string }, event: MouseEvent) {
     event.stopPropagation(); // Prevent dropdown from closing
     this.toggleRegionSelection(region); // Toggle selection
+    this.selectedAbmNames = [];
+    this.selectedRsNames = [];
+    this.triggerBodyClick();
     this.getMasterDataForFilter('search');
+  }
+
+  triggerBodyClick() {
+    document.body.click();  // Trigger a click event on the body
   }
 
   // Select or deselect all regions
@@ -1846,6 +1854,8 @@ this.GrowthOverPreviousYear(MonthlyToalOrdaringPayload);
   removeSelectedAbm(abm: { id: number; name: string }, event: MouseEvent) {
     event.stopPropagation(); // Prevent dropdown from closing
     this.toggleAbmSelection(abm); // Toggle selection
+    this.selectedRSNames = [];
+    this.triggerBodyClick();
     this.getMasterDataForFilter('search');
   }
 
@@ -1897,6 +1907,7 @@ this.GrowthOverPreviousYear(MonthlyToalOrdaringPayload);
   removeSelectedRetailer(retailer: { id: number; name: string }, event: MouseEvent) {
     event.stopPropagation(); // Prevent dropdown from closing
     this.toggleRetailerSelection(retailer); // Toggle selection
+    this.triggerBodyClick();
   }
 
   // Select or deselect all retailer types
@@ -1939,6 +1950,7 @@ this.GrowthOverPreviousYear(MonthlyToalOrdaringPayload);
   removeSelectedRS(rs: { id: number; name: string }, event: MouseEvent) {
     event.stopPropagation(); // Prevent dropdown from closing
     this.toggleRSSelection(rs); // Toggle selection
+    this.triggerBodyClick();
   }
 
   // Select or deselect all RS names
@@ -1985,6 +1997,7 @@ this.GrowthOverPreviousYear(MonthlyToalOrdaringPayload);
   removeSelectedBrand(brand: { id: number; name: string }, event: MouseEvent) {
     event.stopPropagation(); // Prevent dropdown from closing
     this.toggleBrandSelection(brand); // Toggle selection
+    this.triggerBodyClick();
   }
 
   // Select or deselect all Brands
@@ -2002,9 +2015,11 @@ this.GrowthOverPreviousYear(MonthlyToalOrdaringPayload);
 
   GetMasterData(payload: any, MonthlyToalOrdaringPayload?: any, isFromFilter?: any): void {
     // this.spinner.show();
+    this.isFiltersLoading = true;
     this.dashboardService.GetMasterData(payload).subscribe(
       (response: any) => {
         // this.spinner.hide();
+        this.isFiltersLoading = false;
         if (!isFromFilter) {
           if (this.dashboardService.selectedData === '2') {
             this.MonthlyToalOrdaring(MonthlyToalOrdaringPayload);
@@ -2012,8 +2027,8 @@ this.GrowthOverPreviousYear(MonthlyToalOrdaringPayload);
             this.chartOptionslineForOrdBhFn(MonthlyToalOrdaringPayload);
           } else if (this.dashboardService.selectedData === '4') {
             this.percentageOfOrdersOfDayInMonth(MonthlyToalOrdaringPayload);
-            delete MonthlyToalOrdaringPayload.selectedCity;
-            delete MonthlyToalOrdaringPayload.selectedState;            
+            // delete MonthlyToalOrdaringPayload.selectedCity;
+            // delete MonthlyToalOrdaringPayload.selectedState;            
           } else if (this.dashboardService.selectedData === '5') {
             this.selectedSelectionTypeForUI = this.selectedSelectionType;
             if(this.selectedSelectionTypeForUI === 'Order Wise'){
@@ -4172,6 +4187,7 @@ this.regionwiseGrowthOverPreviousYearMonthly(MonthlyToalOrdaringPayload);
     event.stopPropagation();
     this.selectedMonths = this.selectedMonths.filter((m) => m.id !== month.id);
     this.areAllMonthsSelected = this.selectedMonths.length === this.availableMonths.length;
+    this.triggerBodyClick();
   }
 
   toggleAllMonthSelection(event: any) {
@@ -6020,8 +6036,11 @@ toggleStateSelection(state: string) {
 
 removeSelectedState(state: string, event: Event) {
   event.stopPropagation();
+  this.selectedCities = [];
   this.selectedStates = this.selectedStates.filter((s) => s !== state);
   this.areAllStatesSelected = false;
+  this.getMasterDataForFilter('search');
+  this.triggerBodyClick();
 }
 
 filterAvailableStates() {
@@ -6057,7 +6076,7 @@ toggleCitySelection(city: string) {
     this.selectedCities.push(city);
   }
 
-  this.getMasterDataForFilter('search');
+  // this.getMasterDataForFilter('search');
   this.areAllCitiesSelected =
     this.selectedCities.length === this.filteredCitiesList.length;
 }
@@ -6066,6 +6085,8 @@ removeSelectedCity(city: string, event: Event) {
   event.stopPropagation();
   this.selectedCities = this.selectedCities.filter((c) => c !== city);
   this.areAllCitiesSelected = false;
+  this.getMasterDataForFilter('search');
+  this.triggerBodyClick();
 }
 
 filterAvailableCities() {
