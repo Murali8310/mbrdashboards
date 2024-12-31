@@ -4470,11 +4470,11 @@ text-align: left;"
           </thead>
           <tbody>
             <!-- Loop through each product to display its data -->
-            <tr *ngFor="let order of overallOrders;index as i" style="cursor: pointer;" [class.pointernone]="order.errorImg"  [class.green]="selectedOrder == order.productCode" (click)="selectImage(order,i)">
+            <tr *ngFor="let order of overallOrders;index as i" style="cursor: pointer;" [class.pointernone]="order.errorImg"  [class.greens]="selectedOrder == order.productCode" (click)="selectImage(order,i)">
               <td style="text-align: left;">{{i + 1}}</td>
               <td class="allign-left">{{ order.productCode }}</td>
               <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Order Wise'">{{ order.totalOrderQty }}</td>
-              <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Value wise'">{{ order.totalOrderQty }}</td>
+              <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Value wise'">{{ order.totalPrice }}</td>
               
             </tr>
             <!-- Grand Total Row -->
@@ -4518,11 +4518,11 @@ text-align: left;"
            </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let order of regionTotals;index as rgindx" style="cursor: pointer;" [class.pointernone]="order.errorImg" [class.green]="selectedOrderForRegion == order.productCode" (click)="selectImageforregion(order,rgindx)">
+            <tr *ngFor="let order of regionTotals;index as rgindx" style="cursor: pointer;" [class.pointernone]="order.errorImg" [class.greens]="selectedOrderForRegion == order.productCode" (click)="selectImageforregion(order,rgindx)">
                 <td style="text-align: left;">{{rgindx + 1}}</td>
               <td class="allign-left">{{ order.productCode }}</td>
               <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Order Wise'">{{ order.totalOrderQty }}</td>
-              <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Value wise'">{{ order.totalOrderQty }}</td>
+              <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Value wise'">{{ order.totalPrice }}</td>
             
           
               </tr>
@@ -4569,13 +4569,13 @@ text-align: left;"
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let order of rsTotals;index as rsidx" style="cursor: pointer;" [class.pointernone]="order.errorImg" [class.green]="selectedOrderForRs == order.productCode" (click)="selectedImageSourceForRsFn(order,rsidx)">
+        <tr *ngFor="let order of rsTotals;index as rsidx" style="cursor: pointer;" [class.pointernone]="order.errorImg" [class.greens]="selectedOrderForRs == order.productCode" (click)="selectedImageSourceForRsFn(order,rsidx)">
           <td style="text-align: left;">
             {{rsidx + 1}}
           </td>
-          <td class="allign-left">{{ order.productCode }}</td>
+          <td class="allign-left">{{ order.productCode }}{{selectedSelectionTypeForUI}}</td>
           <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Order Wise'">{{ order.totalOrderQty }}</td>
-          <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Value wise'">{{ order.totalOrderQty }}</td>
+          <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Value wise'">{{ order.totalPrice }}</td>
 
         </tr>
         <tr class="grand-total">

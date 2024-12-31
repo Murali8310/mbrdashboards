@@ -2036,8 +2036,7 @@ this.GrowthOverPreviousYear(MonthlyToalOrdaringPayload);
             } else {
               // this.topSKUOrderedOverallpriceWiseFn(MonthlyToalOrdaringPayload);
             }
-          }
-          else if (this.dashboardService.selectedData === '6') {
+          } else if (this.dashboardService.selectedData === '6') {
             this.selectedSelectionTypeForUI = this.selectedSelectionType;
             if(this.selectedSelectionTypeForUI === 'Order Wise'){
               this.topRetailersOverallcount(MonthlyToalOrdaringPayload);
@@ -5310,7 +5309,7 @@ this.regionwiseGrowthOverPreviousYearMonthly(MonthlyToalOrdaringPayload);
 
   // Method to calculate grand total
   calculateOverallGrandTotalForTotalPrice() {
-    this.overallGrandTotal = this.overallOrders.reduce((acc: any, order: any) => acc + order.totalOrderQty, 0);
+    this.overallGrandTotal = this.overallOrders.reduce((acc: any, order: any) => acc + order.totalPrice, 0);
   }
 
   
@@ -5322,7 +5321,7 @@ this.regionwiseGrowthOverPreviousYearMonthly(MonthlyToalOrdaringPayload);
 
   // Method to calculate grand total
   getRegionGrandTotalForTotalPrice() {
-    this.overallRegionGrandTotal = this.regionTotals.reduce((acc: any, order: any) => acc + order.totalOrderQty, 0);
+    this.overallRegionGrandTotal = this.regionTotals.reduce((acc: any, order: any) => acc + order.totalPrice, 0);
   }
 
   // Method to calculate grand total
@@ -5332,7 +5331,7 @@ this.regionwiseGrowthOverPreviousYearMonthly(MonthlyToalOrdaringPayload);
 
   // Method to calculate grand total
   getRSGrandTotalFortotalPrice() {
-    this.overallRsGrandTotal = this.rsTotals.reduce((acc: any, order: any) => acc + order.totalOrderQty, 0);
+    this.overallRsGrandTotal = this.rsTotals.reduce((acc: any, order: any) => acc + order.totalPrice, 0);
   }
 
   // This is to get the rs names data.
@@ -6746,7 +6745,7 @@ public getStatusOfDisableForAllFiltersExceptYearAndMonth(){
         this.overAllResponseOrderLevel = overallOrders;
         this.overallOrders = overallOrders.slice(0, 5);
         this.selectImage(this.overallOrders[0],0);
-        this.calculateOverallGrandTotal();
+        this.calculateOverallGrandTotalForTotalPrice();
         this.topRetailersRegionSelectedsum(MonthlyTotalOrderingPayload);
       }
     },
@@ -6833,7 +6832,7 @@ public topRetailersRegionSelectedsum = (MonthlyTotalOrderingPayload?: any) => {
         if(this.regionTotals && this.regionTotals.length>0){
           this.selectImageforregion(this.regionTotals[0],0);
         }
-        this.getRegionGrandTotal();
+        this.getRegionGrandTotalForTotalPrice();
         this.topRetailersRSNameSelectedsum(MonthlyTotalOrderingPayload);
       }
     },
@@ -6925,7 +6924,7 @@ this.rsTotals = this.rsTotals.slice(0,5);
         if(this.rsTotals && this.rsTotals.length>0){
           this.selectedImageSourceForRsFn(this.rsTotals[0],0);
         }
-        this.getRSGrandTotal();
+        this.getRSGrandTotalFortotalPrice();
       }
     },
     (error) => {
