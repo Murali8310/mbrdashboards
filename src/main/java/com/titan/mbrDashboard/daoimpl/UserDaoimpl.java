@@ -9226,7 +9226,7 @@ public class UserDaoimpl implements UserDao {
 		}
 		// Final query
 		String finalQuery = "SELECT TOP 10 SUM(TotalPrice) AS TotalPrice, RetailerName FROM MBROrders (NOLOCK)"
-				+ "WHERE " + conditions.toString() + "GROUP BY RetailerName ORDER BY TotalOrderQty DESC";
+				+ "WHERE " + conditions.toString() + "GROUP BY RetailerName ORDER BY TotalPrice DESC";
 
 		// Execute query and map results
 		Query query = entityManager.createNativeQuery(finalQuery);
@@ -9296,7 +9296,7 @@ public class UserDaoimpl implements UserDao {
 		}
 		// Final query
 		String finalQuery = "SELECT TOP 10 SUM(TotalPrice) AS TotalPrice, RetailerName FROM MBROrders (NOLOCK)"
-				+ "WHERE " + conditions.toString() + "GROUP BY RetailerName ORDER BY TotalOrderQty DESC";
+				+ "WHERE " + conditions.toString() + "GROUP BY RetailerName ORDER BY TotalPrice DESC";
 
 		// Execute query and map results
 		Query query = entityManager.createNativeQuery(finalQuery);
@@ -9374,7 +9374,7 @@ public class UserDaoimpl implements UserDao {
 		}
 		// Final query
 		String finalQuery = "SELECT TOP 10 SUM(TotalPrice) AS TotalPrice, RetailerName FROM MBROrders (NOLOCK)"
-				+ "WHERE " + conditions.toString() + "GROUP BY RetailerName ORDER BY TotalOrderQty DESC";
+				+ "WHERE " + conditions.toString() + "GROUP BY RetailerName ORDER BY TotalPrice DESC";
 
 		// Execute query and map results
 		Query query = entityManager.createNativeQuery(finalQuery);
