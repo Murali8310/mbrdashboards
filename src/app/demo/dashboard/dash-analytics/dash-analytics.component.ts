@@ -1746,7 +1746,7 @@ this.GrowthOverPreviousYear(MonthlyToalOrdaringPayload);
     event.stopPropagation(); // Prevent dropdown from closing
     this.toggleRegionSelection(region); // Toggle selection
     this.selectedAbmNames = [];
-    this.selectedRsNames = [];
+    this.selectedRSNames = [];
     this.triggerBodyClick();
     this.getMasterDataForFilter('search');
   }
