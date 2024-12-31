@@ -3839,7 +3839,7 @@ text-align: left;"
           <th>Sr No</th>
           <th>RS</th>
           <th *ngIf="selectedSelectionTypeForUI === 'Order Wise'">Total Order Qty</th>
-          <th *ngIf="selectedSelectionTypeForUI === 'Value wise'">Total Price Qty</th>
+          <th *ngIf="selectedSelectionTypeForUI === 'Value wise'">Total Price</th>
         <th>Image Details</th>
         </tr>
       </thead>
@@ -4465,7 +4465,7 @@ text-align: left;"
               <th *ngIf="dashboardService.selectedData ==='6'">Retailer Name</th>
 
               <th *ngIf="selectedSelectionTypeForUI === 'Order Wise'">Total Order Qty</th>
-              <th *ngIf="selectedSelectionTypeForUI === 'Value wise'">Total Price Qty</th>
+              <th *ngIf="selectedSelectionTypeForUI === 'Value wise'">Total Price</th>
             </tr>
           </thead>
           <tbody>
@@ -4514,7 +4514,7 @@ text-align: left;"
               <th *ngIf="dashboardService.selectedData ==='6'">Retailer Name</th>
 
               <th *ngIf="selectedSelectionTypeForUI === 'Order Wise'">Total Order Qty</th>
-              <th *ngIf="selectedSelectionTypeForUI === 'Value wise'">Total Price Qty</th>
+              <th *ngIf="selectedSelectionTypeForUI === 'Value wise'">Total Price</th>
            </tr>
           </thead>
           <tbody>
@@ -4573,7 +4573,7 @@ text-align: left;"
           <td style="text-align: left;">
             {{rsidx + 1}}
           </td>
-          <td class="allign-left">{{ order.productCode }}{{selectedSelectionTypeForUI}}</td>
+          <td class="allign-left">{{ order.productCode }}</td>
           <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Order Wise'">{{ order.totalOrderQty }}</td>
           <td class="allign-left" *ngIf="selectedSelectionTypeForUI === 'Value wise'">{{ order.totalPrice }}</td>
 

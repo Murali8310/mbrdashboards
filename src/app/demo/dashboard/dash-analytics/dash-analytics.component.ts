@@ -2110,7 +2110,9 @@ this.GrowthOverPreviousYear(MonthlyToalOrdaringPayload);
           //   };
           // });
 
-          this.availableCities = response.body.city;
+          // this.availableCities = response.body.city;
+          this.availableCities = response.body.city.filter((city:any) => city !== null && city !== '');
+
         }else {
           this.availableCities = [];
         }
@@ -2125,7 +2127,9 @@ this.GrowthOverPreviousYear(MonthlyToalOrdaringPayload);
           //   };
           // });
 
-          this.availableStates = response.body.state;
+          // this.availableStates = response.body.state;
+          this.availableStates = response.body.state.filter((state:any) => state !== null && state !== '');
+
         }else {
           this.availableStates = [];
         }
