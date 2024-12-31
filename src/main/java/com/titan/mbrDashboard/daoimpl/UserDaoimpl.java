@@ -7078,7 +7078,8 @@ public class UserDaoimpl implements UserDao {
 	public List<OutputPercentaageOfOrdersByHourOfTheDayOnWeekdayWeekend> percentaageOfOrdersByHourOfTheDayOnWeekdayWeekend(
 			MonthlyDataFilter filter) {
 		List<OutputPercentaageOfOrdersByHourOfTheDayOnWeekdayWeekend> percentaageOfOrdersByHourOfTheDayOnWeekdayWeekend = new ArrayList<>();
-		String storedProcedureCall = "EXEC PercentaageOfOrdersByHourOfTheDayOnWeekdayWeekend @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
+		//String storedProcedureCall = "EXEC PercentaageOfOrdersByHourOfTheDayOnWeekdayWeekend @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
+		String storedProcedureCall = "EXEC PercentaageOfOrdersByHourOfTheDayOnWeekdayWeekend @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType, @CityList=:cityList, @StateList= :stateList";
 
 		// Create a native query
 		Query query = entityManager.createNativeQuery(storedProcedureCall);
@@ -7091,6 +7092,8 @@ public class UserDaoimpl implements UserDao {
 		query.setParameter("rsNameList", filter.getRsNameList()); // @RSNameList (e.g., '' or some value)
 		query.setParameter("abmName", filter.getAbmName());
 		query.setParameter("retailerType", filter.getRetailerType());
+		query.setParameter("cityList", filter.getSelectedCity());
+		query.setParameter("stateList", filter.getSelectedState());
 		// Execute the query to invoke the stored procedure
 		try {
 			List<Object[]> result = query.getResultList();
