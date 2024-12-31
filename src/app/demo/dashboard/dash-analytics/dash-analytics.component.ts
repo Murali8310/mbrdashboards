@@ -2142,6 +2142,7 @@ this.GrowthOverPreviousYear(MonthlyToalOrdaringPayload);
   // this is for getting the cards data during the intial loading.
   public dashBoardInitalDataFn = async (data?: any) => {
     this.spinner.show();
+    this.isFiltersLoading = true;
     for (let i = 0; i < this.cards.length; i++) {
       this.cards[i].number = 'Loading';
       this.cards[i].qtyValue = 'Loading';
@@ -2153,7 +2154,7 @@ this.GrowthOverPreviousYear(MonthlyToalOrdaringPayload);
     this.dashboardService.dashBoardInitalData(data).subscribe(
       (response) => {
         this.spinner.hide();
-
+        this.isFiltersLoading = false;
         if (response && response.body && response.body.length > 0) {
 
 this.getLastUpdatedRecordDate = response.body &&response.body[0] &&  response.body[0].endDate;
