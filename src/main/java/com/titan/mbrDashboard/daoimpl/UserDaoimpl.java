@@ -7791,9 +7791,25 @@ public class UserDaoimpl implements UserDao {
 					.append("', ',')) ");
 		}
 
+//		if (cityList != null && !cityList.isEmpty()) {
+//			conditions.append("AND City IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(cityList)
+//					.append("', ',')) ");
+//		}
+		
+		
 		if (cityList != null && !cityList.isEmpty()) {
-			conditions.append("AND City IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(cityList)
-					.append("', ',')) ");
+			  String[] cities = cityList.split(",");
+	        StringBuilder formattedCityList = new StringBuilder();
+
+			for (int i = 0; i < cities.length; i++) {
+	            formattedCityList.append("'").append(cities[i].trim()).append("'");
+	            if (i < cities.length - 1) {
+	                formattedCityList.append(", ");
+	            }
+	        }
+//			conditions.append("AND City IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(cityList)
+//					.append("', ',')) ");
+			conditions.append("AND City IN (").append(formattedCityList).append(")");
 		}
 		if (rsNameList.isEmpty() && abmNameList.isEmpty()) {
 			// Build the final query
@@ -7819,8 +7835,7 @@ public class UserDaoimpl implements UserDao {
 					+ "        Region,\r\n" + "        SUM(OrderQty) AS RegionOrderQty,\r\n"
 					+ "        COUNT(DISTINCT OrderNo) AS DistinctOrderCount\r\n" + "    FROM \r\n"
 					+ "        MBROrders (NOLOCK)\r\n" + "    WHERE " + conditions.toString() + "\r\n" + // Exclude
-																											// region
-																											// filter
+																											// regio																		// filter
 																											// here
 					"    GROUP BY YEAR(OrderDate), MONTH(OrderDate), Region\r\n" + "),\r\n"
 					+ "MonthlyTotalOrderQty AS (\r\n" + "    SELECT \r\n" + "        OrderYear,\r\n"
