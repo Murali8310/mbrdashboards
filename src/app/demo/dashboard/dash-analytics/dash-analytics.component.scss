@@ -136,7 +136,9 @@
   /* Border for the dropdown list */
   border-radius: 4px;
   /* Border radius for the dropdown list */
-  background-color: #fff;
+  // background-color: #fff;
+  background-color: #e0fbf7;
+
   /* Background color */
   z-index: 1000;
   /* Ensure it appears above other elements */
@@ -425,8 +427,8 @@ input {
 }
 
 ::ng-deep .apexcharts-legend {
-  width: 1080px !important;
-  left: 191px !important;
+  // width: 1080px !important;
+  // left: 191px !important;
 }
 
 .pointerEvents {

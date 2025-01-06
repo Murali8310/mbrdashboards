@@ -1,5 +1,5 @@
 // angular import
-import { Component, ViewChild, NO_ERRORS_SCHEMA, AfterViewInit, HostListener } from '@angular/core';
+import { Component, ViewChild, NO_ERRORS_SCHEMA, AfterViewInit, HostListener, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApexOptions } from 'ng-apexcharts'; // Use ApexOptions instead of ChartOptions
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
@@ -128,6 +128,9 @@ export default class DashAnalyticsComponent {
   percentageofOrdersbyWeekdayorWeekendOptionsBarchart!: ApexOptions;
   percentageofOrdersByWeekdayorWeekendRegionWiseOptions!: ApexOptions;
   percentageofOrdersByHourOfTheDayOptionsBarchart!: ApexOptions;
+  uiLoadingForRsNames: boolean = true;
+  uiLoadingForRgNames: boolean =  true;
+  uiLoadingForOvNames: boolean =  true;
 
   @HostListener('window:click', ['$event'])
   onWindowClick(event: MouseEvent) {
@@ -461,7 +464,8 @@ isFiltersLoading = true;
     private spinner: NgxSpinnerService,
     private router: Router,
     private route: ActivatedRoute,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private cdr: ChangeDetectorRef
   ) {
     // this.selectedAbmNames = [];
     // this.selectedBrands = [];
@@ -1251,14 +1255,20 @@ console.log(MonthlyToalOrdaringPayload);
 
 
   // Default offsets per series index
-  const dataLabelOffsetsY = [0, 35, 0]; 
+  // const dataLabelOffsetsY = [0, 35, 0]; 
+  const dataLabelOffsetsY = [0, 0, 0]; 
+
   let offsetY;
 
   // Adjust offset dynamically based on conditions
   if (seriesIndex === 1 && dataPointIndex === w.config.series[seriesIndex].data.length - 1) {
-    offsetY = -35; // Last data point for series index 1
+    // offsetY = -35; // Last data point for series index 1    offsetY = -35; // Last data point for series index 1
+    offsetY = 0; // Last data point for series index 1
+
   } else if (seriesIndex === 2 && dataPointIndex === 0) {
     offsetY = 50; // First data point for series index 2
+    // offsetY = 0; // First data point for series index 2
+
   } else {
     offsetY = dataLabelOffsetsY[seriesIndex] || 0; // Default offsets
   }
@@ -2016,10 +2026,16 @@ this.GrowthOverPreviousYear(MonthlyToalOrdaringPayload);
   GetMasterData(payload: any, MonthlyToalOrdaringPayload?: any, isFromFilter?: any): void {
     // this.spinner.show();
     this.isFiltersLoading = true;
+    if (!isFromFilter) {
+    this.uiLoadingForOvNames = true;
+    this.uiLoadingForRgNames = true;
+    this.uiLoadingForRsNames = true;
+    }
     this.dashboardService.GetMasterData(payload).subscribe(
       (response: any) => {
         // this.spinner.hide();
         this.isFiltersLoading = false;
+        
         if (!isFromFilter) {
           if (this.dashboardService.selectedData === '2') {
             this.MonthlyToalOrdaring(MonthlyToalOrdaringPayload);
@@ -2573,8 +2589,11 @@ tooltip: {
 
         // Find the month corresponding to dataPointIndex (e.g., dataPointIndex 0 = month 4)
      let month =  dataPointIndex + 4;
-
-     if(selectedMoths &&  selectedMoths.length > 0 ){
+    
+     if(dataPointIndex > 8  ){
+      month = dataPointIndex -8; 
+     }
+         if(selectedMoths &&  selectedMoths.length > 0 ){
       // Find the earliest month and year
       const ascendingOrderData = selectedMoths.sort((a:any, b:any) => {
        return a.id - b.id;
@@ -3166,7 +3185,9 @@ this.regionwiseGrowthOverPreviousYearMonthly(MonthlyToalOrdaringPayload);
         
                 // Find the month corresponding to dataPointIndex (e.g., dataPointIndex 0 = month 4)
              let month =  dataPointIndex + 4;
-        
+             if(dataPointIndex > 8  ){
+              month = dataPointIndex -8; 
+             }
              if(selectedMoths &&  selectedMoths.length > 0 ){
               // Find the earliest month and year
               const ascendingOrderData = selectedMoths.sort((a:any, b:any) => {
@@ -3649,8 +3670,8 @@ this.regionwiseGrowthOverPreviousYearMonthly(MonthlyToalOrdaringPayload);
               // enabled: true,
               enabled: this.isMobileView ? false : true,
 
-              offsetX: -5,
-              offsetY: -5,
+              offsetX: 0,
+              offsetY: 0,
               style: {
                 fontSize: '10px',
                 fontWeight: 'normal'
@@ -3677,12 +3698,16 @@ this.regionwiseGrowthOverPreviousYearMonthly(MonthlyToalOrdaringPayload);
 
                 
   // Default offsets per series index
-  const dataLabelOffsetsY = [0, 0, 35]; 
+  // const dataLabelOffsetsY = [0, 0, 35]; 
+  const dataLabelOffsetsY = [0, 0,0]; 
+
   let offsetY;
 
   // Adjust offset dynamically based on conditions
   if (seriesIndex === 2 && dataPointIndex === w.config.series[seriesIndex].data.length - 1) {
-    offsetY = -35; // Last data point for series index 1
+    // offsetY = -35; // Last data point for series index 1
+    offsetY = 0; // Last data point for series index 1
+
   } else {
     offsetY = dataLabelOffsetsY[seriesIndex] || 0; // Default offsets
   }
@@ -4039,7 +4064,7 @@ this.regionwiseGrowthOverPreviousYearMonthly(MonthlyToalOrdaringPayload);
       ],
     legend: {
       position: 'bottom',
-      horizontalAlign: 'left',
+      horizontalAlign: 'center',
       fontSize: '12px',
       itemMargin: {
         horizontal: 5,
@@ -5214,8 +5239,10 @@ this.regionwiseGrowthOverPreviousYearMonthly(MonthlyToalOrdaringPayload);
   public topSKUOrderedOverall = (MonthlyTotalOrderingPayload?: any) => {
     this.spinner.show();
     this.overallOrders = [];
+    this.uiLoadingForOvNames = true;
     this.dashboardService.topSKUOrderedOverall(MonthlyTotalOrderingPayload).subscribe(
       async (response) => {
+       
         if (response && response.body) {
           // this.overallOrders = response.body.map((order:any) => {
           //   // Process productCode to remove slash if present
@@ -5250,13 +5277,17 @@ this.regionwiseGrowthOverPreviousYearMonthly(MonthlyToalOrdaringPayload);
           }));
 
           this.overAllResponseOrderLevel = overallOrders;
+          this.uiLoadingForOvNames = false;
           this.overallOrders = overallOrders.slice(0, 5);
           this.selectImage(this.overallOrders[0],0);
           this.calculateOverallGrandTotal();
           this.topSKUOrderedRegionSelected(MonthlyTotalOrderingPayload);
+        } else {
+          this.uiLoadingForOvNames = false;
         }
       },
       (error) => {
+        this.uiLoadingForOvNames = false;
         console.error('Error fetching monthly order data:', error);
         this.spinner.hide();
       }
@@ -5268,6 +5299,7 @@ this.regionwiseGrowthOverPreviousYearMonthly(MonthlyToalOrdaringPayload);
   public topSKUOrderedRegionSelected = (MonthlyTotalOrderingPayload?: any) => {
     this.spinner.show();
     this.regionTotals = [];
+    this.uiLoadingForRgNames = true;
     this.dashboardService.topSKUOrderedRegionSelected(MonthlyTotalOrderingPayload).subscribe(
       async (response) => {
         if (response && response.body) {
@@ -5290,6 +5322,8 @@ this.regionwiseGrowthOverPreviousYearMonthly(MonthlyToalOrdaringPayload);
               errorImg: !imageExists // If image doesn't exist, set errorImg to true
             };
           }));
+          this.uiLoadingForRgNames = false;
+
           this.overAllResponseRegionLevel = this.regionTotals;
           this.regionTotals = this.regionTotals.slice(0,5);
 
@@ -5298,9 +5332,14 @@ this.regionwiseGrowthOverPreviousYearMonthly(MonthlyToalOrdaringPayload);
           }
           this.getRegionGrandTotal();
           this.topSKUOrderedRSNameSelected(MonthlyTotalOrderingPayload);
+        } else {
+          this.uiLoadingForRgNames = false;
+
         }
       },
       (error) => {
+        this.uiLoadingForRgNames = false;
+
         console.error('Error fetching monthly order data:', error);
         this.spinner.hide();
       }
@@ -5343,11 +5382,11 @@ this.regionwiseGrowthOverPreviousYearMonthly(MonthlyToalOrdaringPayload);
   public topSKUOrderedRSNameSelected = (MonthlyTotalOrderingPayload?: any) => {
     this.spinner.show();
     this.rsTotals = [];
+    this.uiLoadingForRsNames = true;
+    this.cdr.detectChanges();
     this.dashboardService.topSKUOrderedRSNameSelected(MonthlyTotalOrderingPayload).subscribe(
       async (response) => {
         if (response && response.body) {
-
-          
           this.rsTotals = response.body;
           this.rsTotals = await Promise.all(response.body.map(async (order: any) => {
             // Process productCode to remove slash if present
@@ -5365,17 +5404,24 @@ this.regionwiseGrowthOverPreviousYearMonthly(MonthlyToalOrdaringPayload);
               imageSrc: selectedImage,
               errorImg: !imageExists // If image doesn't exist, set errorImg to true
             };
+            
           }));
 this.overAllResponseRsOrderLevel = this.rsTotals;
+this.uiLoadingForRsNames = false;
 this.rsTotals = this.rsTotals.slice(0,5);
 
           if(this.rsTotals && this.rsTotals.length>0){
             this.selectedImageSourceForRsFn(this.rsTotals[0],0);
           }
           this.getRSGrandTotal();
+        } else {
+          this.uiLoadingForRsNames = false;
+
         }
       },
       (error) => {
+        this.uiLoadingForRsNames = false;
+        this.cdr.detectChanges();
         console.error('Error fetching monthly order data:', error);
         this.spinner.hide();
       }
@@ -6394,7 +6440,9 @@ public regionwiseGrowthOverPreviousYearMonthly = (MonthlyToalOrdaringPayload?: a
       
               // Find the month corresponding to dataPointIndex (e.g., dataPointIndex 0 = month 4)
            let month =  dataPointIndex + 4;
-      
+           if(dataPointIndex > 8  ){
+            month = dataPointIndex -8; 
+           }
            if(selectedMoths &&  selectedMoths.length > 0 ){
             // Find the earliest month and year
             const ascendingOrderData = selectedMoths.sort((a:any, b:any) => {
@@ -6712,8 +6760,10 @@ public getStatusOfDisableForAllFiltersExceptYearAndMonth(){
  public topRetailersOverallsum = (MonthlyTotalOrderingPayload?: any) => {
   this.spinner.show();
   this.overallOrders = [];
+  this.uiLoadingForOvNames = true;
   this.dashboardService.topRetailersOverallsum(MonthlyTotalOrderingPayload).subscribe(
     async (response) => {
+      
       if (response && response.body) {
         // this.overallOrders = response.body.map((order:any) => {
         //   // Process productCode to remove slash if present
@@ -6748,13 +6798,17 @@ public getStatusOfDisableForAllFiltersExceptYearAndMonth(){
         }));
 
         this.overAllResponseOrderLevel = overallOrders;
+        this.uiLoadingForOvNames = false;
         this.overallOrders = overallOrders.slice(0, 5);
         this.selectImage(this.overallOrders[0],0);
         this.calculateOverallGrandTotalForTotalPrice();
         this.topRetailersRegionSelectedsum(MonthlyTotalOrderingPayload);
+      } else {
+        this.uiLoadingForOvNames = false;
       }
     },
     (error) => {
+      this.uiLoadingForOvNames = false;
       console.error('Error fetching monthly order data:', error);
       this.spinner.hide();
     }
@@ -6766,10 +6820,10 @@ public getStatusOfDisableForAllFiltersExceptYearAndMonth(){
 public topRetailersOverallcount = (MonthlyTotalOrderingPayload?: any) => {
   this.spinner.show();
   this.overallOrders = [];
+  this.uiLoadingForOvNames = true;
   this.dashboardService.topRetailersOverallcount(MonthlyTotalOrderingPayload).subscribe(
     async (response) => {
       if (response && response.body) {
-
        const overallOrders = await Promise.all(response.body.map(async (order: any) => {
           // Process productCode to remove slash if present
           let result = order.productCode.includes("/") ? order.productCode.replace("/P", "") : order.productCode;
@@ -6788,15 +6842,19 @@ public topRetailersOverallcount = (MonthlyTotalOrderingPayload?: any) => {
           };
          
         }));
+        this.uiLoadingForOvNames = false;
 
         this.overAllResponseOrderLevel = overallOrders;
         this.overallOrders = overallOrders.slice(0, 5);
         this.selectImage(this.overallOrders[0],0);
         this.calculateOverallGrandTotal();
         this.topRetailersRegionSelectedcount(MonthlyTotalOrderingPayload);
+      } else {
+        this.uiLoadingForOvNames = false;
       }
     },
     (error) => {
+      this.uiLoadingForOvNames = false;
       console.error('Error fetching monthly order data:', error);
       this.spinner.hide();
     }
@@ -6809,6 +6867,8 @@ public topRetailersOverallcount = (MonthlyTotalOrderingPayload?: any) => {
 public topRetailersRegionSelectedsum = (MonthlyTotalOrderingPayload?: any) => {
   this.spinner.show();
   this.regionTotals = [];
+  this.uiLoadingForRgNames = true;
+
   this.dashboardService.topRetailersRegionSelectedsum(MonthlyTotalOrderingPayload).subscribe(
     async (response) => {
       if (response && response.body) {
@@ -6832,6 +6892,7 @@ public topRetailersRegionSelectedsum = (MonthlyTotalOrderingPayload?: any) => {
           };
         }));
         this.overAllResponseRegionLevel = this.regionTotals;
+        this.uiLoadingForRgNames = false;
         this.regionTotals = this.regionTotals.slice(0,5);
 
         if(this.regionTotals && this.regionTotals.length>0){
@@ -6839,9 +6900,12 @@ public topRetailersRegionSelectedsum = (MonthlyTotalOrderingPayload?: any) => {
         }
         this.getRegionGrandTotalForTotalPrice();
         this.topRetailersRSNameSelectedsum(MonthlyTotalOrderingPayload);
+      } else {
+        this.uiLoadingForRgNames = false;
       }
     },
     (error) => {
+      this.uiLoadingForRgNames = false;
       console.error('Error fetching monthly order data:', error);
       this.spinner.hide();
     }
@@ -6853,8 +6917,11 @@ public topRetailersRegionSelectedsum = (MonthlyTotalOrderingPayload?: any) => {
 public topRetailersRegionSelectedcount = (MonthlyTotalOrderingPayload?: any) => {
   this.spinner.show();
   this.regionTotals = [];
+  this.uiLoadingForRgNames = true;
+
   this.dashboardService.topRetailersRegionSelectedcount(MonthlyTotalOrderingPayload).subscribe(
     async (response) => {
+
       if (response && response.body) {
         this.regionTotals = response.body;
 
@@ -6875,6 +6942,9 @@ public topRetailersRegionSelectedcount = (MonthlyTotalOrderingPayload?: any) => 
             errorImg: !imageExists // If image doesn't exist, set errorImg to true
           };
         }));
+
+        this.uiLoadingForRgNames = false;
+
         this.overAllResponseRegionLevel = this.regionTotals;
         this.regionTotals = this.regionTotals.slice(0,5);
 
@@ -6883,9 +6953,14 @@ public topRetailersRegionSelectedcount = (MonthlyTotalOrderingPayload?: any) => 
         }
         this.getRegionGrandTotal();
         this.topRetailersRSNameSelectedcount(MonthlyTotalOrderingPayload);
+      } else {
+        this.uiLoadingForRgNames = false;
+
       }
     },
     (error) => {
+      this.uiLoadingForRgNames = false;
+
       console.error('Error fetching monthly order data:', error);
       this.spinner.hide();
     }
@@ -6900,11 +6975,11 @@ public topRetailersRegionSelectedcount = (MonthlyTotalOrderingPayload?: any) => 
 public topRetailersRSNameSelectedsum = (MonthlyTotalOrderingPayload?: any) => {
   this.spinner.show();
   this.rsTotals = [];
+  this.uiLoadingForRsNames = true;
   this.dashboardService.topRetailersRSNameSelectedsum(MonthlyTotalOrderingPayload).subscribe(
     async (response) => {
       if (response && response.body) {
-
-        
+      
         this.rsTotals = response.body;
         this.rsTotals = await Promise.all(response.body.map(async (order: any) => {
           // Process productCode to remove slash if present
@@ -6924,17 +6999,21 @@ public topRetailersRSNameSelectedsum = (MonthlyTotalOrderingPayload?: any) => {
           };
         }));
 this.overAllResponseRsOrderLevel = this.rsTotals;
+this.uiLoadingForRsNames = false;
 this.rsTotals = this.rsTotals.slice(0,5);
 
         if(this.rsTotals && this.rsTotals.length>0){
           this.selectedImageSourceForRsFn(this.rsTotals[0],0);
         }
         this.getRSGrandTotalFortotalPrice();
+      } else {
+        this.uiLoadingForRsNames = false;
       }
     },
     (error) => {
       console.error('Error fetching monthly order data:', error);
       this.spinner.hide();
+      this.uiLoadingForRsNames = false;
     }
   );
 };
@@ -6944,11 +7023,12 @@ this.rsTotals = this.rsTotals.slice(0,5);
 public topRetailersRSNameSelectedcount = (MonthlyTotalOrderingPayload?: any) => {
   this.spinner.show();
   this.rsTotals = [];
+  this.uiLoadingForRsNames = true;
   this.dashboardService.topRetailersRSNameSelectedcount(MonthlyTotalOrderingPayload).subscribe(
     async (response) => {
-      if (response && response.body) {
 
-        
+      if (response && response.body) {
+        this.uiLoadingForRsNames = false;
         this.rsTotals = response.body;
         this.rsTotals = await Promise.all(response.body.map(async (order: any) => {
           // Process productCode to remove slash if present
@@ -6968,15 +7048,21 @@ public topRetailersRSNameSelectedcount = (MonthlyTotalOrderingPayload?: any) => 
           };
         }));
 this.overAllResponseRsOrderLevel = this.rsTotals;
+this.uiLoadingForRsNames = false;
+
 this.rsTotals = this.rsTotals.slice(0,5);
 
         if(this.rsTotals && this.rsTotals.length>0){
           this.selectedImageSourceForRsFn(this.rsTotals[0],0);
         }
         this.getRSGrandTotal();
+      } else {
+        this.uiLoadingForRsNames = false;
+
       }
     },
     (error) => {
+      this.uiLoadingForRsNames = false;
       console.error('Error fetching monthly order data:', error);
       this.spinner.hide();
     }

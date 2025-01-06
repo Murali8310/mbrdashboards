@@ -3701,13 +3701,15 @@ text-align: left;"
   <!-- order-summary.component.html -->
   <div class="order-summary-container">
 
-    <app-card class="col-md-6 col-xl-12" [cardTitle]="overallOrders && overallOrders.length > 0 ? selectedSelectionTypeForUI === 'Order Wise' ? 'Over All Details Order Level' : 'Over All Details Value Level' : 'Over All Details Loading...'" >
+    <app-card class="col-md-6 col-xl-12" [cardTitle]="!uiLoadingForOvNames ? selectedSelectionTypeForUI === 'Order Wise' ? 'Over All Details Order Level' : 'Over All Details Value Level' : 'Over All Details Loading...'" >
       <!-- <h4 *ngIf="dashboardService.selectedData === '5'" style="
       text-align: center;
       /* margin-top: 12px; */
       ">{{overallOrders && overallOrders.length > 0 ? 'Over All Details' : 'Over All Details Loading...'}} </h4> -->
     <div class="row" style="margin-top: 20px;">
-      <div class="col-lg-8  col-md-12 table-responsive" *ngIf="overallOrders && overallOrders.length > 0">
+      <ng-container *ngIf="overallOrders && overallOrders.length > 0; else ovnoRecords">
+
+      <div class="col-lg-6  col-md-12 table-responsive" *ngIf="overallOrders && overallOrders.length > 0">
         <!-- Overall Orders Table -->
         <table class="summary-table">
           <thead>
@@ -3747,7 +3749,17 @@ text-align: left;"
           </tbody>
         </table>
       </div>
-      <div class="col-lg-4 col-md-12 imgStyles" style="text-align: center;"  *ngIf="overallOrders && overallOrders.length > 0">
+    </ng-container>
+
+    <ng-template #ovnoRecords>
+      <div *ngIf="!uiLoadingForOvNames" class="no-records ng-star-inserted" style="
+      align-items: center;
+      text-align: center;
+      font-weight: bold;
+      font-size: 32px;
+  ">No data available</div>
+    </ng-template>
+      <div class="col-lg-6 col-md-12 imgStyles" style="text-align: center;"  *ngIf="overallOrders && overallOrders.length > 0">
        
        <div class="headerStyles" *ngIf="false">
        <h4 style="text-align: center;border-radius: 7px;color: white;
@@ -3763,13 +3775,15 @@ text-align: left;"
 
     
 
-    <app-card class="col-md-6 col-xl-12" [cardTitle]="regionTotals && regionTotals.length > 0 ? selectedSelectionTypeForUI === 'Order Wise' ? 'Region Wise Details Order Level' : 'Region Wise Details Value Level' : 'Region Wise Details Loading...'" >
+    <app-card class="col-md-6 col-xl-12" [cardTitle]="!uiLoadingForRgNames ? selectedSelectionTypeForUI === 'Order Wise' ? 'Region Wise Details Order Level' : 'Region Wise Details Value Level' : 'Region Wise Details Loading...'" >
       <!-- <h4 *ngIf="dashboardService.selectedData === '5'" style="
       text-align: center;
       /* margin-top: 12px; */
       "> {{regionTotals && regionTotals.length > 0 ? 'Region Wise Details' : 'Region Wise Details Loading...'}} </h4> -->
      <div class="row" style="margin-top: 20px;">
-      <div class="col-lg-8  col-md-12 table-responsive" *ngIf="regionTotals && regionTotals.length > 0">
+      <ng-container *ngIf="regionTotals && regionTotals.length > 0; else rgnoRecords">
+
+      <div class="col-lg-6  col-md-12 table-responsive" *ngIf="regionTotals && regionTotals.length > 0">
         <!-- Region-wise Orders Table -->
         <table class="summary-table">
           <thead>
@@ -3811,7 +3825,17 @@ text-align: left;"
           </tbody>
         </table>
       </div>
-      <div class="col-lg-4 col-md-12 imgStyles"  *ngIf="regionTotals && regionTotals.length > 0">
+    </ng-container>
+
+    <ng-template #rgnoRecords>
+      <div *ngIf="!uiLoadingForRgNames" class="no-records ng-star-inserted" style="
+      align-items: center;
+      text-align: center;
+      font-weight: bold;
+      font-size: 32px;
+  ">No data available</div>
+    </ng-template>
+      <div class="col-lg-6 col-md-12 imgStyles"  *ngIf="regionTotals && regionTotals.length > 0">
         <!-- <div class="headerStyles">
           <h4 style="text-align: center;border-radius: 7px;color: white;
           " class="ng-star-inserted">Top 1 ND2011324/P  Image Details.</h4>
@@ -3824,14 +3848,16 @@ text-align: left;"
    
 
 
-  <app-card class="col-md-6 col-xl-12" [cardTitle]="rsTotals && rsTotals.length > 0 ? selectedSelectionTypeForUI === 'Order Wise' ? 'RS Wise Details Order Level' : 'RS Wise Details Value Level' : 'RS Wise Details Loading...'" >
+  <app-card class="col-md-6 col-xl-12" [cardTitle]="!uiLoadingForRsNames ? selectedSelectionTypeForUI === 'Order Wise' ? 'RS Wise Details Order Level' : 'RS Wise Details Value Level' : 'RS Wise Details Loading...'" >
     <!-- <h4 *ngIf="dashboardService.selectedData === '5'" style="
     text-align: center;
     /* margin-top: 12px; */
     ">{{rsTotals && rsTotals.length > 0 ? 'RS Wise Details' : 'RS Wise Details Loading...'}}  </h4> -->
  
- <div class="row" style="margin-top: 20px;">
-  <div class="col-lg-8  col-md-12 table-responsive" *ngIf="rsTotals && rsTotals.length > 0">
+ <div class="row" style="margin-top: 20px;" >
+  <ng-container *ngIf="rsTotals && rsTotals.length > 0; else rsnoRecords">
+
+  <div class="col-lg-6  col-md-12 table-responsive" *ngIf="rsTotals && rsTotals.length > 0">
     <!-- RS-wise Orders Table -->
     <table class="summary-table">
       <thead>
@@ -3874,7 +3900,17 @@ text-align: left;"
       </tbody>
     </table>
   </div>
-  <div class="col-lg-4 col-md-12 imgStyles"  *ngIf="rsTotals && rsTotals.length > 0">
+</ng-container>
+
+<ng-template #rsnoRecords>
+  <div *ngIf="!uiLoadingForRsNames" class="no-records" style="
+  align-items: center;
+  text-align: center;
+  font-weight: bold;
+  font-size: 32px;
+">No data available</div>
+</ng-template>
+  <div class="col-lg-6 col-md-12 imgStyles"  *ngIf="rsTotals && rsTotals.length > 0">
     <!-- <div class="headerStyles">
       <h4 style="text-align: center;border-radius: 7px;color: white;
       " class="ng-star-inserted">Top 1 ND2011324/P  Image Details</h4>
@@ -4449,12 +4485,14 @@ text-align: left;"
   <!-- order-summary.component.html -->
   <div class="order-summary-container">
 
-    <app-card class="col-md-6 col-xl-12" [cardTitle]="overallOrders && overallOrders.length > 0 ? selectedSelectionTypeForUI === 'Order Wise' ? 'Over All Details Order Level' : 'Over All Details Value Level' : 'Over All Details Loading...'" >
+    <app-card class="col-md-6 col-xl-12" [cardTitle]="!uiLoadingForOvNames ? selectedSelectionTypeForUI === 'Order Wise' ? 'Over All Details Order Level' : 'Over All Details Value Level' : 'Over All Details Loading...'" >
       <!-- <h4 *ngIf="dashboardService.selectedData === '5'" style="
       text-align: center;
       /* margin-top: 12px; */
       ">{{overallOrders && overallOrders.length > 0 ? 'Over All Details' : 'Over All Details Loading...'}} </h4> -->
     <div class="row" style="margin-top: 20px;">
+      <ng-container *ngIf="overallOrders && overallOrders.length > 0; else rtovnoRecords">
+
       <div class="col-lg-12  col-md-12 table-responsive" *ngIf="overallOrders && overallOrders.length > 0">
         <!-- Overall Orders Table -->
         <table class="summary-table">
@@ -4492,17 +4530,29 @@ text-align: left;"
           </tbody>
         </table>
       </div>
+    </ng-container>
+
+      <ng-template #rtovnoRecords>
+        <div *ngIf="!uiLoadingForOvNames" class="no-records ng-star-inserted" style="
+        align-items: center;
+        text-align: center;
+        font-weight: bold;
+        font-size: 32px;
+    ">No data available</div>
+    </ng-template>
     </div>
   </app-card>
 
     
 
-    <app-card class="col-md-6 col-xl-12" [cardTitle]="regionTotals && regionTotals.length > 0 ? selectedSelectionTypeForUI === 'Order Wise' ? 'Region Wise Details Order Level' : 'Region Wise Details Value Level' : 'Region Wise Details Loading...'" >
+    <app-card class="col-md-6 col-xl-12" [cardTitle]="!uiLoadingForRgNames ? selectedSelectionTypeForUI === 'Order Wise' ? 'Region Wise Details Order Level' : 'Region Wise Details Value Level' : 'Region Wise Details Loading...'" >
       <!-- <h4 *ngIf="dashboardService.selectedData === '5'" style="
       text-align: center;
       /* margin-top: 12px; */
       "> {{regionTotals && regionTotals.length > 0 ? 'Region Wise Details' : 'Region Wise Details Loading...'}} </h4> -->
      <div class="row" style="margin-top: 20px;">
+      <ng-container *ngIf="regionTotals && regionTotals.length > 0; else rtrgnoRecords">
+
       <div class="col-lg-12  col-md-12 table-responsive" *ngIf="regionTotals && regionTotals.length > 0">
         <!-- Region-wise Orders Table -->
         <table class="summary-table">
@@ -4541,19 +4591,29 @@ text-align: left;"
           </tbody>
         </table>
       </div>
-    
+    </ng-container>
+    <ng-template #rtrgnoRecords>
+      <div *ngIf="!uiLoadingForRgNames" class="no-records ng-star-inserted" style="
+      align-items: center;
+      text-align: center;
+      font-weight: bold;
+      font-size: 32px;
+  ">No data available</div>
+  </ng-template>
     </div>
   </app-card>
    
 
 
-  <app-card class="col-md-6 col-xl-12" [cardTitle]="rsTotals && rsTotals.length > 0 ? selectedSelectionTypeForUI === 'Order Wise' ? 'RS Wise Details Order Level' : 'RS Wise Details Value Level' : 'RS Wise Details Loading...'" >
+  <app-card class="col-md-6 col-xl-12" [cardTitle]="!uiLoadingForRsNames? selectedSelectionTypeForUI === 'Order Wise' ? 'RS Wise Details Order Level' : 'RS Wise Details Value Level' : 'RS Wise Details Loading...'" >
     <!-- <h4 *ngIf="dashboardService.selectedData === '5'" style="
     text-align: center;
     /* margin-top: 12px; */
     ">{{rsTotals && rsTotals.length > 0 ? 'RS Wise Details' : 'RS Wise Details Loading...'}}  </h4> -->
  
  <div class="row" style="margin-top: 20px;">
+  <ng-container *ngIf="rsTotals && rsTotals.length > 0; else rtrsnoRecords">
+
   <div class="col-lg-12  col-md-12 table-responsive" *ngIf="rsTotals && rsTotals.length > 0">
     <!-- RS-wise Orders Table -->
     <table class="summary-table">
@@ -4593,6 +4653,16 @@ text-align: left;"
       </tbody>
     </table>
   </div>
+
+</ng-container>
+<ng-template #rtrsnoRecords>
+  <div *ngIf="!uiLoadingForRsNames" class="no-records ng-star-inserted" style="
+  align-items: center;
+  text-align: center;
+  font-weight: bold;
+  font-size: 32px;
+">No data available</div>
+</ng-template>
   </div>
 </app-card>
  
