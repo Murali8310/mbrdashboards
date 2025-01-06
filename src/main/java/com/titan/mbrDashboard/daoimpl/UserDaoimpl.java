@@ -6502,19 +6502,16 @@ public class UserDaoimpl implements UserDao {
 			// Execute the query and get the result list
 			List<ABMName> resultList = checkQuery.getResultList();
 
-			
-			
 			String checksql3 = "SELECT Name, UserName FROM MBRUsers WHERE Desig_Id = 5 AND Region IN (:region);";
 			Query checkQuery3 = entityManager.createNativeQuery(checksql3);
 			checkQuery3.setParameter("region", regionList);
 
 			List<RSName> resultList3 = checkQuery3.getResultList();
-			//Set RS Name to data output
-			 dataoutput.setRsName(resultList3);
-			
+			// Set RS Name to data output
+			dataoutput.setRsName(resultList3);
+
 			// Set the ABMName list into dataoutput
 			dataoutput.setAbmName(resultList);
-			
 
 			if (!data.getRegionList().isEmpty() && data.getSelectedState().isEmpty()) {
 				String checksql1 = "SELECT distinct(State) FROM MBROrders WHERE Region IN (:region);";
@@ -6622,8 +6619,7 @@ public class UserDaoimpl implements UserDao {
 			dataoutput.setState(resultList);
 			return dataoutput;
 		}
-		
-		
+
 //		if (!data.getRegionList().isEmpty() && data.getAbmName().isEmpty()) {
 //
 //			String checksql = "SELECT Name, UserName FROM MBRUsers WHERE Desig_Id = 5 AND Region IN (:region);";
@@ -6868,7 +6864,10 @@ public class UserDaoimpl implements UserDao {
 			MonthlyDataFilter filter) {
 		// TODO Auto-generated method stub
 		List<OutputPercentageofOrdersbyWeekdayorWeekend> percentageofOrdersbyWeekdayorWeekend = new ArrayList<>();
-		//String storedProcedureCall = "EXEC PercentageofOrdersbyWeekdayorWeekend @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
+		// String storedProcedureCall = "EXEC PercentageofOrdersbyWeekdayorWeekend
+		// @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate,
+		// @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName,
+		// @RetailerType = :retailerType";
 		String storedProcedureCall = "EXEC PercentageofOrdersbyWeekdayorWeekend @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType, @CityList=:cityList, @StateList= :stateList";
 		// Create a native query
 		Query query = entityManager.createNativeQuery(storedProcedureCall);
@@ -6909,7 +6908,11 @@ public class UserDaoimpl implements UserDao {
 	public List<OutputPercentageofOrdersByWeekdayorWeekendRegionWise> percentageofOrdersByWeekdayorWeekendRegionWise(
 			MonthlyDataFilter filter) {
 		List<OutputPercentageofOrdersByWeekdayorWeekendRegionWise> percentageofOrdersByWeekdayorWeekendRegionWise = new ArrayList<>();
-		//String storedProcedureCall = "EXEC PercentageofOrdersByWeekdayorWeekendRegionWise @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
+		// String storedProcedureCall = "EXEC
+		// PercentageofOrdersByWeekdayorWeekendRegionWise @RegionList = :regionList,
+		// @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList,
+		// @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType =
+		// :retailerType";
 		String storedProcedureCall = "EXEC PercentageofOrdersByWeekdayorWeekendRegionWise @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType, @CityList=:cityList, @StateList= :stateList";
 
 		// Create a native query
@@ -6952,7 +6955,11 @@ public class UserDaoimpl implements UserDao {
 	public List<OutputPercentaageOfOrdersByHourOfTheDayOnWeekdayWeekend> percentaageOfOrdersByHourOfTheDayOnWeekdayWeekend(
 			MonthlyDataFilter filter) {
 		List<OutputPercentaageOfOrdersByHourOfTheDayOnWeekdayWeekend> percentaageOfOrdersByHourOfTheDayOnWeekdayWeekend = new ArrayList<>();
-		//String storedProcedureCall = "EXEC PercentaageOfOrdersByHourOfTheDayOnWeekdayWeekend @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType";
+		// String storedProcedureCall = "EXEC
+		// PercentaageOfOrdersByHourOfTheDayOnWeekdayWeekend @RegionList = :regionList,
+		// @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList,
+		// @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType =
+		// :retailerType";
 		String storedProcedureCall = "EXEC PercentaageOfOrdersByHourOfTheDayOnWeekdayWeekend @RegionList = :regionList, @StartDate = :startDate, @EndDate = :endDate, @BrandList = :brandList, @RSNameList = :rsNameList, @ABMName = :abmName, @RetailerType = :retailerType, @CityList=:cityList, @StateList= :stateList";
 
 		// Create a native query
@@ -7114,9 +7121,24 @@ public class UserDaoimpl implements UserDao {
 //					.append(" AND CONVERT(VARCHAR, OrderDate, 112) <= ").append(endDate).append(" ");
 //		}
 
-		if (conditionalDate != null && conditionalDate.equals(20240101)) {
-			conditionalDate = 20240131;
+		if (conditionalDate != null && (conditionalDate.equals(20240101) || conditionalDate.equals(20250101))) {
+			if (conditionalDate.equals(20240101)) {
+				conditionalDate = 20240131;
+			} else if (conditionalDate.equals(20250101)) {
+				conditionalDate = 20250131;
+			}
 		}
+
+//		if (conditionalDate != null && conditionalDate.equals(startDate)) {
+//		    // Extract the year and month from the date
+//		    int year = conditionalDate / 10000;
+//		    int month = (conditionalDate % 10000) / 100;
+//
+//		    if (month == 1) { // Check if it's January
+//		        year -= 1; // Move to the previous year
+//		        conditionalDate = (year * 10000) + 1231; // Set to December 1st of the previous year
+//		    }
+//		}
 		// Assuming the user input for regionList (e.g., "North,South,East,West")
 		// User-provided region list
 		if (regionList != null && !regionList.isEmpty()) {
@@ -7206,8 +7228,10 @@ public class UserDaoimpl implements UserDao {
 				+ "    CASE \r\n" + "        WHEN PDS.PreviousTotalOrderQty = 0 THEN NULL\r\n" + "        ELSE \r\n"
 				+ "            ((MS.TotalOrderQty - PDS.PreviousTotalOrderQty) * 1.0 / PDS.PreviousTotalOrderQty) * 100\r\n"
 				+ "    END AS OrderQtyGrowthPercentage\r\n" + "FROM \r\n" + "    MonthlySummary MS\r\n"
-				+ "     JOIN PreviousMonthlySummary PDS ON MS.Year = PDS.Year \r\n" + "ORDER BY\r\n"
-				+ "    MS.Year,\r\n" + "    MS.Month;";
+				+ "     JOIN PreviousMonthlySummary PDS ON  MS.Year = CASE \r\n"
+				+ "                WHEN MS.Month = 1 THEN PDS.Year + 1 -- Use the previous year's data if the month is January\r\n"
+				+ "                ELSE PDS.Year                       -- Use the same year otherwise\r\n"
+				+ "             END\r\n" + "ORDER BY\r\n" + "    MS.Year,\r\n" + "    MS.Month;";
 
 		// Create a native query and execute it
 		Query query = entityManager.createNativeQuery(finalQuery);
@@ -7361,11 +7385,22 @@ public class UserDaoimpl implements UserDao {
 		String stateList = filter.getSelectedState();
 		Integer conditionalDate = filter.getStartDate();
 
-		if (conditionalDate != null && conditionalDate.equals(20240101)) {
-			conditionalDate = 20240131;
+//		if (conditionalDate != null && conditionalDate.equals(20240101)) {
+//			conditionalDate = 20240131;
+//		} else {
+//			conditionalDate = endDate;
+//		}
+
+		if (conditionalDate != null && (conditionalDate.equals(20240101) || conditionalDate.equals(20250101))) {
+			if (conditionalDate.equals(20240101)) {
+				conditionalDate = 20240131;
+			} else if (conditionalDate.equals(20250101)) {
+				conditionalDate = 20250131;
+			}
 		} else {
 			conditionalDate = endDate;
 		}
+//		}
 		// Add startDate and endDate conditions if provided
 //		if (startDate != null && endDate != null) {
 //			conditions.append("CONVERT(VARCHAR, OrderDate, 112) >= ").append(startDate)
@@ -7420,11 +7455,11 @@ public class UserDaoimpl implements UserDao {
 				+ "        COUNT(DISTINCT RetailerCode) AS DistinctRetailerCount\r\n" + "    FROM \r\n"
 				+ "        MBROrders (NOLOCK)\r\n" + "    WHERE \r\n"
 				+ "         CONVERT(VARCHAR, OrderDate, 112) >= :startDate AND CONVERT(VARCHAR, OrderDate, 112) <= :endDate\r\n"
-				+ conditions.toString()
-				+ "    GROUP BY \r\n" + "        YEAR(OrderDate),\r\n" + "        MONTH(OrderDate),\r\n"
-				+ "        Region\r\n" + "),\r\n" + "\r\n" + "PreviousYearSummary AS (\r\n" + "    SELECT \r\n"
-				+ "        YEAR(OrderDate) AS PreviousYear,\r\n" + "        MONTH(OrderDate) AS Month,\r\n"
-				+ "        Region,\r\n" + "        SUM(TotalPrice) AS PreviousTotalPriceSum,\r\n"
+				+ conditions.toString() + "    GROUP BY \r\n" + "        YEAR(OrderDate),\r\n"
+				+ "        MONTH(OrderDate),\r\n" + "        Region\r\n" + "),\r\n" + "\r\n"
+				+ "PreviousYearSummary AS (\r\n" + "    SELECT \r\n" + "        YEAR(OrderDate) AS PreviousYear,\r\n"
+				+ "        MONTH(OrderDate) AS Month,\r\n" + "        Region,\r\n"
+				+ "        SUM(TotalPrice) AS PreviousTotalPriceSum,\r\n"
 				+ "        SUM(OrderQty) AS PreviousTotalOrderQty,\r\n"
 				+ "        COUNT(DISTINCT RetailerCode) AS PreviousDistinctRetailerCount\r\n" + "    FROM \r\n"
 				+ "        MBROrders (NOLOCK)\r\n" + "    WHERE \r\n"
@@ -7459,8 +7494,11 @@ public class UserDaoimpl implements UserDao {
 				+ "    CASE \r\n" + "        WHEN PYS.PreviousTotalOrderQty = 0 THEN NULL\r\n" + "        ELSE \r\n"
 				+ "            ((MS.TotalOrderQty - PYS.PreviousTotalOrderQty) * 1.0 / PYS.PreviousTotalOrderQty) * 100\r\n"
 				+ "    END AS OrderQtyGrowthPercentage\r\n" + "FROM \r\n" + "    MonthlySummary MS\r\n"
-				+ "    JOIN PreviousYearSummary PYS \r\n" +"  ON MS.Month -1 = PYS.Month AND MS.Year = PYS.PreviousYear AND MS.Region = PYS.Region " + "ORDER BY\r\n" + "    MS.Region,\r\n"
-				+ "    MS.Year,\r\n" + "    MS.Month;\r\n";
+				+ "    JOIN PreviousYearSummary PYS \r\n" + " ON MS.Year = CASE \r\n"
+				+ "                WHEN MS.Month = 1 THEN PYS.PreviousYear + 1 -- Use the previous year's data if the month is January\r\n"
+				+ "                ELSE PYS.PreviousYear                       -- Use the same year otherwise\r\n"
+				+ "             END\r\n" + "			 AND \r\n" + "	MS.Region = PYS.Region ORDER BY\r\n"
+				+ "    MS.Region,\r\n" + "    MS.Year,\r\n" + "    MS.Month;";
 
 		// Create a native query
 		Query query = entityManager.createNativeQuery(finalQuery);
@@ -7669,18 +7707,17 @@ public class UserDaoimpl implements UserDao {
 //			conditions.append("AND City IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(cityList)
 //					.append("', ',')) ");
 //		}
-		
-		
+
 		if (cityList != null && !cityList.isEmpty()) {
-			  String[] cities = cityList.split(",");
-	        StringBuilder formattedCityList = new StringBuilder();
+			String[] cities = cityList.split(",");
+			StringBuilder formattedCityList = new StringBuilder();
 
 			for (int i = 0; i < cities.length; i++) {
-	            formattedCityList.append("'").append(cities[i].trim()).append("'");
-	            if (i < cities.length - 1) {
-	                formattedCityList.append(", ");
-	            }
-	        }
+				formattedCityList.append("'").append(cities[i].trim()).append("'");
+				if (i < cities.length - 1) {
+					formattedCityList.append(", ");
+				}
+			}
 //			conditions.append("AND City IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT('").append(cityList)
 //					.append("', ',')) ");
 			conditions.append("AND City IN (").append(formattedCityList).append(")");
@@ -7709,7 +7746,8 @@ public class UserDaoimpl implements UserDao {
 					+ "        Region,\r\n" + "        SUM(OrderQty) AS RegionOrderQty,\r\n"
 					+ "        COUNT(DISTINCT OrderNo) AS DistinctOrderCount\r\n" + "    FROM \r\n"
 					+ "        MBROrders (NOLOCK)\r\n" + "    WHERE " + conditions.toString() + "\r\n" + // Exclude
-																											// regio																		// filter
+																											// regio //
+																											// filter
 																											// here
 					"    GROUP BY YEAR(OrderDate), MONTH(OrderDate), Region\r\n" + "),\r\n"
 					+ "MonthlyTotalOrderQty AS (\r\n" + "    SELECT \r\n" + "        OrderYear,\r\n"
@@ -9137,7 +9175,6 @@ public class UserDaoimpl implements UserDao {
 		}
 		return topSKUOrderedOverall;
 	}
-
 
 	@Override
 	public List<OutputTopSKUOrderedOverall> topRetailersRegionSelectedsum(MonthlyDataFilter filter) {
